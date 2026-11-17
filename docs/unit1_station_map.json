@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "unit": 1,
+  "backend_entrypoint": "Core_Engine/app.py",
+  "forbidden_touch": [
+    "Print_Canvas/js/erp-nav.js",
+    "Print_Canvas/js/erp-suite.js",
+    "Print_Canvas/dashboard.html"
+  ],
+  "strangler_surface": [
+    "Print_Canvas/app-journey.html",
+    "Print_Canvas/js/app-journey.js",
+    "Print_Canvas/js/app-journey-*.js",
+    "Print_Canvas/css/app-journey.css"
+  ],
+  "stations": [
+    {
+      "id": "foundation",
+      "title_ar": "التأسيس والإعدادات المركزية",
+      "journey_views": [
+        "view-school",
+        "view-leadership",
+        "view-committees",
+        "view-import-center",
+        "view-noor-import",
+        "view-calendar",
+        "view-occasions",
+        "view-letterhead",
+        "view-backup",
+        "view-accounts",
+        "view-permissions",
+        "view-trash",
+        "view-audit",
+        "view-health"
+      ],
+      "legacy_shadows": ["facility", "noor", "leadership", "settings.html", "setup.html"]
+    },
+    {
+      "id": "planning",
+      "title_ar": "الخطط المدرسية",
+      "journey_views": [
+        "view-planning",
+        "view-smart-planning",
+        "view-program-add",
+        "view-plan-details",
+        "view-deliverables",
+        "view-staff",
+        "view-students-lists",
+        "view-student-registry"
+      ],
+      "legacy_shadows": ["programs", "school-plan", "my-plan-app.html", "plans.html"]
+    },
+    {
+      "id": "registers",
+      "title_ar": "السجلات والمحاضر والشواهد",
+      "journey_views": [
+        "view-execution",
+        "view-council-details",
+        "view-visits",
+        "view-visits-plan",
+        "view-evidence",
+        "view-env-evidence",
+        "view-license-form",
+        "view-practice-evidence"
+      ],
+      "legacy_shadows": ["councils", "visits", "registers.html", "attendance", "absence"]
+    },
+    {
+      "id": "measurement",
+      "title_ar": "القياس والاعتماد المدرسي",
+      "journey_views": [
+        "view-performance",
+        "view-external-eval",
+        "view-soft-follow",
+        "view-desk",
+        "view-tasks",
+        "view-task-details"
+      ],
+      "legacy_shadows": ["measurement-center", "indicators", "nafs", "improvement", "command-board"]
+    }
+  ],
+  "critical_conflicts": ["C1", "C2", "C3", "C4", "C5", "C6", "C7"],
+  "report": "docs/unit1_four_stations_conflict_inventory.md"
+}
