@@ -5137,7 +5137,7 @@
 
   window.AjDates = {
     hijri: function (iso) {
-      return formatCouncilHijri(iso);
+      return oneEraMark(formatCouncilHijri(iso), "هـ");
     },
     gregorian: function (iso) {
       return oneEraMark(softGregorian(iso), "م");

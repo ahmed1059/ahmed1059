@@ -82,7 +82,90 @@
     if (text.indexOf("أحي") !== -1 || text.indexOf("احي") !== -1 || text.indexOf("فيز") !== -1 || text.indexOf("كيم") !== -1 || text.indexOf("علوم") !== -1) {
       return "العلوم";
     }
+    if (text.indexOf("رياض") !== -1 || text.indexOf("حساب") !== -1) {
+      return "رياضيات";
+    }
+    if (text.indexOf("لغتي") !== -1 || text.indexOf("عربي") !== -1 || text.indexOf("لغةعربية") !== -1 || text.indexOf("اللغةالعربية") !== -1) {
+      return "اللغة العربية";
+    }
     return String(value || "").trim();
+  }
+
+  function subjectBankKey(value) {
+    var normalized = subjectOf(value);
+    var bank = (phraseBank && phraseBank.subjects) || {};
+    if (normalized && bank[normalized]) {
+      return normalized;
+    }
+    var raw = String(value || "").trim();
+    if (raw && bank[raw]) {
+      return raw;
+    }
+    var compact = raw.replace(/\s+/g, "");
+    if (compact.indexOf("لغتي") !== -1 && bank["لغتي"]) {
+      return "لغتي";
+    }
+    if ((compact.indexOf("عربي") !== -1 || compact.indexOf("لغةعربية") !== -1 || compact.indexOf("اللغةالعربية") !== -1) && bank["اللغة العربية"]) {
+      return "اللغة العربية";
+    }
+    if (compact.indexOf("رياض") !== -1 && bank["رياضيات"]) {
+      return "رياضيات";
+    }
+    if ((compact.indexOf("علوم") !== -1 || compact.indexOf("أحي") !== -1 || compact.indexOf("احي") !== -1 || compact.indexOf("فيز") !== -1 || compact.indexOf("كيم") !== -1) && bank["العلوم"]) {
+      return "العلوم";
+    }
+    return "";
+  }
+
+  function visitContext() {
+    function value(id) {
+      var node = document.getElementById(id);
+      return node ? String(node.value || "").trim() : "";
+    }
+    return {
+      subject: value("aj-visit-subject"),
+      lesson: value("aj-visit-lesson") || "الدرس",
+      visitType: value("aj-visit-type")
+    };
+  }
+
+  function fillTokens(text, ctx) {
+    var lesson = (ctx && ctx.lesson) || "الدرس";
+    var subject = subjectOf((ctx && ctx.subject) || "") || "المادة";
+    return String(text || "")
+      .replace(/\{\{\s*lesson\s*\}\}/g, lesson)
+      .replace(/\{\{\s*subject\s*\}\}/g, subject);
+  }
+
+  function mapFill(list, ctx) {
+    return (list || []).map(function (sentence) {
+      return fillTokens(sentence, ctx);
+    });
+  }
+
+  function cleanHijri(text) {
+    return String(text || "")
+      .replace(/هـ\s*هـ/g, "هـ")
+      .replace(/(هـ)+/g, "هـ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function normalizeOverlap(a, b) {
+    var left = String(a || "").replace(/\s+/g, " ").trim();
+    var right = String(b || "").replace(/\s+/g, " ").trim();
+    if (!left || !right) {
+      return false;
+    }
+    if (left === right) {
+      return true;
+    }
+    if (left.indexOf(right) >= 0 || right.indexOf(left) >= 0) {
+      return true;
+    }
+    var leftCore = left.replace(/[0-9.\-–—]/g, " ").replace(/\s+/g, " ").trim();
+    var rightCore = right.replace(/[0-9.\-–—]/g, " ").replace(/\s+/g, " ").trim();
+    return leftCore && rightCore && (leftCore === rightCore || leftCore.indexOf(rightCore) >= 0 || rightCore.indexOf(leftCore) >= 0);
   }
 
   function options(list, selected, placeholder) {
@@ -107,34 +190,65 @@
     return found;
   }
 
-  function linePack(id, level) {
-    var entry = ((phraseBank && phraseBank.phrases) || {})[id] || {};
+  function phraseEntry(id, subject) {
+    var key = subjectBankKey(subject);
+    var subjectEntry = key && phraseBank && phraseBank.subjects && phraseBank.subjects[key]
+      ? ((phraseBank.subjects[key].phrases || {})[id] || null)
+      : null;
+    if (subjectEntry && subjectEntry.lines) {
+      return subjectEntry;
+    }
+    return ((phraseBank && phraseBank.phrases) || {})[id] || {};
+  }
+
+  function linePack(id, level, ctx) {
+    ctx = ctx || visitContext();
+    var entry = phraseEntry(id, ctx.subject);
     var lines = (entry.lines || {})[level] || {};
-    var observe = lines.observe || [];
+    var observe = mapFill(lines.observe || [], ctx);
     if (!observe.length) {
       var legacy = (state.phrases[id] || {})[level];
       if (legacy) {
-        observe = [legacy];
+        observe = [fillTokens(legacy, ctx)];
       }
     }
     return {
       observe: observe,
-      strength: lines.strength || [],
-      feedback: lines.feedback || [],
-      need: lines.need || []
+      strength: mapFill(lines.strength || [], ctx),
+      feedback: mapFill(lines.feedback || [], ctx),
+      need: mapFill(lines.need || [], ctx)
     };
   }
 
-  function knownPhrase(id, text) {
+  function knownPhrase(id, text, ctx) {
+    ctx = ctx || visitContext();
+    var filled = String(text || "").trim();
+    if (!filled) {
+      return true;
+    }
+    var lesson = (ctx && ctx.lesson) || "الدرس";
+    var asTemplate = lesson && lesson !== "الدرس"
+      ? filled.split(lesson).join("{{lesson}}")
+      : filled;
     var book = state.phrases[id] || {};
     if (Object.keys(book).some(function (key) {
-      return book[key] === text;
+      var legacy = book[key];
+      return fillTokens(legacy, ctx) === filled || legacy === filled || legacy === asTemplate;
     })) {
       return true;
     }
-    var entry = ((phraseBank && phraseBank.phrases) || {})[id] || {};
-    return Object.keys(entry.lines || {}).some(function (level) {
-      return ((entry.lines[level] || {}).observe || []).indexOf(text) >= 0;
+    var packs = [phraseEntry(id, ctx.subject), ((phraseBank && phraseBank.phrases) || {})[id] || {}];
+    var subjects = (phraseBank && phraseBank.subjects) || {};
+    Object.keys(subjects).forEach(function (key) {
+      packs.push((subjects[key].phrases || {})[id] || {});
+    });
+    return packs.some(function (pack) {
+      return Object.keys((pack && pack.lines) || {}).some(function (level) {
+        var observes = ((pack.lines[level] || {}).observe || []);
+        return observes.some(function (raw) {
+          return fillTokens(raw, ctx) === filled || raw === filled || raw === asTemplate;
+        });
+      });
     });
   }
 
@@ -170,20 +284,33 @@
     }
   }
 
-  function syncPhrase(row, force) {
+  function syncPhrase(row, force, ctx) {
+    ctx = ctx || visitContext();
     var id = row.getAttribute("data-visit-row");
     var level = row.querySelector("[data-visit-level]").value;
     var area = row.querySelector("[data-visit-phrase]");
     var choice = row.querySelector("[data-visit-choice]");
-    var pack = linePack(id, level);
+    var pack = linePack(id, level, ctx);
     var current = area.value.trim();
     var selected = pack.observe.indexOf(current) >= 0 ? current : (pack.observe[0] || "");
     if (choice) {
       choice.innerHTML = options(pack.observe, selected, "");
     }
-    if (force || !current || knownPhrase(id, current)) {
+    if (force || !current || knownPhrase(id, current, ctx)) {
       area.value = selected;
     }
+  }
+
+  function refreshPhrases(force) {
+    var form = document.getElementById("aj-visit-form");
+    var ctx = visitContext();
+    if (!form) {
+      return;
+    }
+    form.querySelectorAll("[data-visit-row]").forEach(function (row) {
+      syncPhrase(row, !!force, ctx);
+    });
+    writeAdvice(!!force);
   }
 
   function field(label, control) {
@@ -218,9 +345,14 @@
     if (subjectValue && subjects.indexOf(subjectValue) < 0) {
       subjects.push(subjectValue);
     }
+    var formCtx = {
+      subject: subjectValue,
+      lesson: item.lesson || "الدرس",
+      visitType: item.visit_type || ""
+    };
     var rows = state.criteria.map(function (spec) {
       var current = saved[spec.id] || {};
-      var pack = linePack(spec.id, current.level || "");
+      var pack = linePack(spec.id, current.level || "", formCtx);
       var phrase = current.phrase || pack.observe[0] || "";
       return "<tr data-visit-row=\"" + escapeHtml(spec.id) + "\" data-weight=\"" + spec.weight + "\">"
         + "<td>" + escapeHtml(spec.label) + "</td>"
@@ -246,18 +378,23 @@
       + field("المادة", "<select id=\"aj-visit-subject\">" + options(subjects, subjectValue, "") + "</select>")
       + field("الحصة", "<select id=\"aj-visit-period\">" + options(["1", "2", "3", "4", "5", "6", "7"], item.period_no, "") + "</select>")
       + field("موضوع الدرس", "<input id=\"aj-visit-lesson\" type=\"text\" value=\"" + escapeHtml(item.lesson || "") + "\">")
-      + field("تاريخ الزيارة", "<span class=\"aj-visit-dates\"><input id=\"aj-visit-date\" type=\"date\" value=\"" + escapeHtml(item.visit_date || "") + "\"><input id=\"aj-visit-hijri\" type=\"text\" value=\"" + escapeHtml(item.visit_date_hijri || "") + "\" placeholder=\"التاريخ الهجري\"></span>")
+      + field("تاريخ الزيارة", "<span class=\"aj-visit-dates\"><input id=\"aj-visit-date\" type=\"date\" value=\"" + escapeHtml(item.visit_date || "") + "\"><input id=\"aj-visit-hijri\" type=\"text\" value=\"" + escapeHtml(cleanHijri(item.visit_date_hijri || "")) + "\" placeholder=\"التاريخ الهجري\"></span>")
       + "</div>"
       + "<h2 class=\"aj-group-title\">بنود التقويم</h2>"
       + "<table class=\"aj-visit-table\"><thead><tr><th>البند</th><th>الوزن</th><th>المستوى</th><th>الدرجة</th><th>العبارة</th></tr></thead><tbody>"
       + rows
       + "</tbody></table>"
       + "<p class=\"aj-summary\">المجموع <strong id=\"aj-visit-total\">" + (item.total != null && item.band ? item.total : "") + "</strong> <span id=\"aj-visit-band\">" + escapeHtml(item.band || "") + "</span></p>"
-      + field("افتتاحية الزائر", "<select id=\"aj-visit-intro\">" + options((phraseBank && phraseBank.intros) || [], item.visit_intro || "", "") + "</select>")
+      + field("افتتاحية الزائر", "<select id=\"aj-visit-intro\">" + options((function () {
+        var survey = /استطلاع/.test(String(item.visit_type || ""));
+        var surveyList = (phraseBank && phraseBank.intros_survey) || [];
+        var generalList = (phraseBank && phraseBank.intros) || [];
+        return survey ? surveyList.concat(generalList) : generalList;
+      })(), item.visit_intro || "", "") + "</select>")
       + field("أبرز جوانب التميز", "<select id=\"aj-visit-strength-pick\">" + options([], "", "النص المرتبط بالمستويات") + "</select><textarea id=\"aj-visit-strengths\" rows=\"2\">" + escapeHtml(item.strengths || "") + "</textarea>")
       + field("التغذية الراجعة المقدمة", "<select id=\"aj-visit-feedback-pick\">" + options([], "", "النص المرتبط بالمستويات") + "</select><textarea id=\"aj-visit-notes\" rows=\"2\">" + escapeHtml(item.recommendations || "") + "</textarea>")
       + field("خطة التحسين", "<textarea id=\"aj-visit-plan\" rows=\"2\">" + escapeHtml(item.improvement || "") + "</textarea>")
-      + field("موعد المتابعة", "<span class=\"aj-visit-dates\"><input id=\"aj-visit-follow-g\" type=\"date\" value=\"" + escapeHtml(item.follow_gregorian || "") + "\"><input id=\"aj-visit-follow-h\" type=\"text\" value=\"" + escapeHtml(item.follow_hijri || "") + "\" placeholder=\"التاريخ الهجري\"></span>")
+      + field("موعد المتابعة", "<span class=\"aj-visit-dates\"><input id=\"aj-visit-follow-g\" type=\"date\" value=\"" + escapeHtml(item.follow_gregorian || "") + "\"><input id=\"aj-visit-follow-h\" type=\"text\" value=\"" + escapeHtml(cleanHijri(item.follow_hijri || "")) + "\" placeholder=\"التاريخ الهجري\"></span>")
       + "<div class=\"aj-visit-actions\">"
       + "<button type=\"submit\" class=\"aj-detail-btn\">حفظ</button>"
       + "<button type=\"button\" class=\"aj-detail-btn aj-detail-btn-secondary\" id=\"aj-visit-full\">توليد الدرجة الكاملة</button>"
@@ -329,12 +466,12 @@
       lesson: value("aj-visit-lesson"),
       teacher_rank: value("aj-visit-rank"),
       visit_date: value("aj-visit-date"),
-      visit_date_hijri: value("aj-visit-hijri"),
+      visit_date_hijri: cleanHijri(value("aj-visit-hijri")),
       visit_intro: value("aj-visit-intro"),
       strengths: value("aj-visit-strengths"),
       recommendations: value("aj-visit-notes"),
       improvement: value("aj-visit-plan"),
-      follow_hijri: value("aj-visit-follow-h"),
+      follow_hijri: cleanHijri(value("aj-visit-follow-h")),
       follow_gregorian: value("aj-visit-follow-g"),
       criteria: readCriteria()
     };
@@ -357,7 +494,7 @@
       }
       return response.json();
     }).then(function (pack) {
-      phraseBank = pack && pack.phrases ? pack : { phrases: {} };
+      phraseBank = pack && (pack.phrases || pack.subjects) ? pack : { phrases: {} };
       return phraseBank;
     }).catch(function () {
       phraseBank = { phrases: {} };
@@ -365,45 +502,81 @@
     });
   }
 
-  function textFromLevels(rows) {
+  function pickIntro(ctx) {
+    var survey = /استطلاع/.test(String((ctx && ctx.visitType) || ""));
+    var list = survey
+      ? ((phraseBank && phraseBank.intros_survey) || []).concat((phraseBank && phraseBank.intros) || [])
+      : ((phraseBank && phraseBank.intros) || []);
+    return list[0] || "";
+  }
+
+  function textFromLevels(rows, ctx) {
+    ctx = ctx || visitContext();
+    var ranked = rows.filter(function (row) {
+      return row.level;
+    }).slice().sort(function (a, b) {
+      return (RATIO[a.level] || 0) - (RATIO[b.level] || 0);
+    });
     var strengths = [];
     var feedback = [];
     var improvement = [];
     var picks = { strength: [], feedback: [] };
-    rows.forEach(function (row) {
-      if (!row.level) {
-        return;
-      }
-      var pack = linePack(row.id, row.level);
+    var usedFeedback = [];
+    ranked.forEach(function (row) {
+      var pack = linePack(row.id, row.level, ctx);
       pack.strength.forEach(function (sentence) {
-        if (picks.strength.indexOf(sentence) < 0) {
+        if (sentence && picks.strength.indexOf(sentence) < 0) {
           picks.strength.push(sentence);
         }
       });
       pack.feedback.forEach(function (sentence) {
-        if (picks.feedback.indexOf(sentence) < 0) {
+        if (sentence && picks.feedback.indexOf(sentence) < 0) {
           picks.feedback.push(sentence);
         }
       });
-      if (pack.strength[0]) {
+      if (pack.strength[0] && strengths.indexOf(pack.strength[0]) < 0 && strengths.length < 3) {
         strengths.push(pack.strength[0]);
       }
-      if (pack.feedback[0]) {
-        feedback.push(pack.feedback[0]);
+      var tip = pack.feedback[0] || "";
+      if (tip && usedFeedback.indexOf(tip) < 0 && feedback.length < 5) {
+        feedback.push(tip);
+        usedFeedback.push(tip);
       }
-      if (pack.need[0]) {
-        improvement.push(pack.need[0]);
+      var need = pack.need[0] || "";
+      if (need && improvement.length < 3) {
+        var clash = feedback.some(function (line) {
+          return normalizeOverlap(line, need);
+        }) || improvement.some(function (line) {
+          return normalizeOverlap(line, need);
+        });
+        if (!clash) {
+          improvement.push(need);
+        }
       }
     });
-    var intro = ((phraseBank && phraseBank.intros) || [])[0] || "";
+    if (feedback.length < 4) {
+      picks.feedback.forEach(function (sentence) {
+        if (feedback.length >= 5) {
+          return;
+        }
+        if (sentence && usedFeedback.indexOf(sentence) < 0) {
+          feedback.push(sentence);
+          usedFeedback.push(sentence);
+        }
+      });
+    }
+    var intro = pickIntro(ctx);
     if (!strengths.length && !feedback.length && !improvement.length && !intro) {
       return null;
     }
+    var numbered = improvement.map(function (step, index) {
+      return (index + 1) + ". " + step;
+    });
     return {
       intro: intro,
       strengths: strengths.join(" "),
-      recommendations: feedback.join(" "),
-      improvement: improvement.join(" "),
+      recommendations: feedback.slice(0, 5).join(" "),
+      improvement: numbered.join(" "),
       picks: picks
     };
   }
@@ -428,7 +601,7 @@
     if (!rows.length) {
       return null;
     }
-    return textFromLevels(rows);
+    return textFromLevels(rows, visitContext());
   }
 
   function fillPick(id, sentences) {
@@ -517,7 +690,7 @@
     if (!date || !hijri || !date.value || !window.AjDates) {
       return;
     }
-    var text = window.AjDates.hijri(date.value);
+    var text = cleanHijri(window.AjDates.hijri(date.value));
     if (text) {
       hijri.value = text;
     }
@@ -601,11 +774,12 @@
   }
 
   function dateLine(hijri, iso) {
+    var clean = cleanHijri(hijri);
     var gregorian = iso && window.AjDates ? window.AjDates.gregorian(iso) : "";
-    if (hijri && gregorian) {
-      return hijri + "، الموافق " + gregorian;
+    if (clean && gregorian) {
+      return clean + "، الموافق " + gregorian;
     }
-    return hijri || gregorian || "";
+    return clean || gregorian || "";
   }
 
   function printRecord(record) {
@@ -625,7 +799,12 @@
       return { signatures: {} };
     }).then(function (payload) {
       var signs = payload.signatures || {};
-      var spoken = textFromLevels(record.criteria || []);
+      var printCtx = {
+        subject: record.subject || "",
+        lesson: record.lesson || "الدرس",
+        visitType: record.visit_type || ""
+      };
+      var spoken = textFromLevels(record.criteria || [], printCtx);
       var recAuto = isAutoText(record.recommendations);
       var planAuto = isAutoText(record.improvement);
       if (spoken && recAuto) {
@@ -636,13 +815,28 @@
       } else if (spoken && planAuto) {
         record.improvement = spoken.improvement;
       }
+      if (spoken && record.recommendations && record.improvement) {
+        var feedbackBits = String(record.recommendations).split(/[.؟!]\s+/).filter(Boolean);
+        var planBits = String(record.improvement).split(/\s*(?=\d+\.\s)/).filter(Boolean);
+        var uniquePlan = planBits.filter(function (step) {
+          return !feedbackBits.some(function (line) {
+            return normalizeOverlap(line, step);
+          });
+        });
+        if (uniquePlan.length) {
+          record.improvement = uniquePlan.map(function (step, index) {
+            var cleaned = String(step).replace(/^\d+\.\s*/, "").trim();
+            return (index + 1) + ". " + cleaned;
+          }).join(" ");
+        }
+      }
       var rows = (record.criteria || []).map(function (row) {
         return "<tr><td style=\"width:24%;padding:1mm 1.5mm;border:1px solid #9db8b2;font-size:11px;\">" + escapeHtml(row.label) + "</td>"
           + "<td style=\"width:14%;padding:1mm;border:1px solid #9db8b2;font-size:11px;\">" + escapeHtml(levelName(row.level)) + "</td>"
-          + "<td style=\"width:52%;padding:1mm;border:1px solid #9db8b2;font-size:11px;\">" + escapeHtml(row.phrase || "") + "</td>"
+          + "<td style=\"width:52%;padding:1mm;border:1px solid #9db8b2;font-size:11px;\">" + escapeHtml(fillTokens(row.phrase || "", printCtx)) + "</td>"
           + "<td style=\"width:10%;padding:1mm;border:1px solid #9db8b2;font-size:11px;text-align:center;\">" + escapeHtml(row.points) + "</td></tr>";
       }).join("");
-      var meta = [
+      var metaPairs = [
         ["المعلم", record.teacher_name],
         ["المسمى الوظيفي", record.teacher_rank || rankMatch(record.teacher_id)],
         ["المادة", subjectOf(record.subject)],
@@ -655,21 +849,29 @@
         ["الزائر", [record.visitor_role, record.visitor_name].filter(Boolean).join(" · ")]
       ].filter(function (pair) {
         return String(pair[1] || "").trim();
-      }).map(function (pair) {
-        return "<p class=\"tpl-p\"><strong>" + escapeHtml(pair[0]) + ":</strong> " + escapeHtml(pair[1]) + "</p>";
-      }).join("");
+      });
+      var metaCells = metaPairs.map(function (pair) {
+        return "<td style=\"width:50%;padding:0.6mm 1.2mm;border:1px solid #9db8b2;font-size:11px;vertical-align:top;\">"
+          + "<strong>" + escapeHtml(pair[0]) + ":</strong> " + escapeHtml(pair[1]) + "</td>";
+      });
+      var metaRows = [];
+      for (var mi = 0; mi < metaCells.length; mi += 2) {
+        metaRows.push("<tr>" + metaCells[mi] + (metaCells[mi + 1] || "<td style=\"width:50%;border:1px solid #9db8b2;\"></td>") + "</tr>");
+      }
+      var meta = "<table style=\"width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 2mm;\">"
+        + metaRows.join("") + "</table>";
       var extra = "";
       if (record.visit_intro) {
-        extra += "<p class=\"tpl-p\">" + escapeHtml(record.visit_intro) + "</p>";
+        extra += "<p class=\"tpl-p\" style=\"margin:1mm 0;\">" + escapeHtml(record.visit_intro) + "</p>";
       }
       if (record.strengths) {
-        extra += "<p class=\"tpl-p\"><strong>أبرز جوانب التميز:</strong> " + escapeHtml(record.strengths) + "</p>";
+        extra += "<p class=\"tpl-p\" style=\"margin:1mm 0;\"><strong>أبرز جوانب التميز:</strong> " + escapeHtml(record.strengths) + "</p>";
       }
       if (record.recommendations) {
-        extra += "<p class=\"tpl-p\"><strong>التغذية الراجعة المقدمة:</strong> " + escapeHtml(record.recommendations) + "</p>";
+        extra += "<p class=\"tpl-p\" style=\"margin:1mm 0;\"><strong>التغذية الراجعة المقدمة:</strong> " + escapeHtml(record.recommendations) + "</p>";
       }
       if (record.improvement) {
-        extra += "<p class=\"tpl-p\"><strong>خطة التحسين:</strong> " + escapeHtml(record.improvement) + "</p>";
+        extra += "<p class=\"tpl-p\" style=\"margin:1mm 0;\"><strong>خطة التحسين:</strong> " + escapeHtml(record.improvement) + "</p>";
       }
       var follow = dateLine(record.follow_hijri, record.follow_gregorian);
       if (follow) {
@@ -829,7 +1031,16 @@
             subject.insertAdjacentHTML("beforeend", "<option value=\"" + escapeHtml(taught) + "\">" + escapeHtml(taught) + "</option>");
           }
           subject.value = taught;
+          refreshPhrases(false);
         }
+      }
+      if (event.target.id === "aj-visit-subject" || event.target.id === "aj-visit-type") {
+        refreshPhrases(false);
+      }
+    });
+    form.addEventListener("input", function (event) {
+      if (event.target && event.target.id === "aj-visit-lesson") {
+        refreshPhrases(false);
       }
     });
     form.addEventListener("click", function (event) {
