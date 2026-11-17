@@ -203,9 +203,9 @@
       <section id="view-visits-plan" class="aj-view wash-board" hidden>
         <h1>الخطة السنوية للزيارات الصفية</h1>
         <p class="aj-lede">صف لكل معلم من السجل. زيارتان في السنة، والثالثة عند الحاجة. التاريخ من أسابيع التقويم المحفوظة، وإن لم تُحفظ يبقى فارغاً.</p>
-        <p class="aj-status" id="aj-plan-status" role="status" aria-live="polite"></p>
+        <p class="aj-status" id="aj-visit-plan-status" role="status" aria-live="polite"></p>
         <div class="aj-plan-wrap">
-          <table class="aj-plan-table" id="aj-plan-table">
+          <table class="aj-plan-table" id="aj-visit-plan-table">
             <thead>
               <tr>
                 <th>م</th>
@@ -218,13 +218,13 @@
                 <th>ملحوظات</th>
               </tr>
             </thead>
-            <tbody id="aj-plan-body"></tbody>
+            <tbody id="aj-visit-plan-body"></tbody>
           </table>
         </div>
         <div class="aj-detail-actions">
-          <button type="button" class="aj-detail-btn" id="aj-plan-distribute">توزيع تلقائي</button>
-          <button type="button" class="aj-detail-btn" id="aj-plan-save">حفظ الخطة</button>
-          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-plan-print">طباعة الخطة</button>
+          <button type="button" class="aj-detail-btn" id="aj-visit-plan-distribute">توزيع تلقائي</button>
+          <button type="button" class="aj-detail-btn" id="aj-visit-plan-save">حفظ الخطة</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-visit-plan-print">طباعة الخطة</button>
           <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-desk">العودة</a>
         </div>
       </section>
@@ -1720,7 +1720,7 @@
   <script src="/cores/consistency-core.js?v=c282"></script>
   <script src="/cores/evaluation-core.js?v=c284"></script>
   <script src="/cores/template-engine.js?v=c286"></script>
-  <script src="js/app-journey.js?v=aj187"></script>
+  <script src="js/app-journey.js?v=aj188"></script>
   <script src="js/app-journey-indicator-files.js?v=aj1"></script>
   <script src="js/app-journey-deliverable-file.js?v=c298"></script>
   <script src="js/app-journey-plan-111.js?v=aj175"></script>
@@ -1734,6 +1734,6 @@
   <script src="js/app-journey-student-registry.js?v=aj145"></script>
   <script src="js/app-journey-evaluation.js?v=c284"></script>
   <script src="js/app-journey-visits.js?v=aj9"></script>
-  <script src="js/app-journey-visit-plan.js?v=aj2"></script>
+  <script src="js/app-journey-visit-plan.js?v=aj3"></script>
 </body>
 </html>

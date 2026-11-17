@@ -336,7 +336,7 @@
   var planDetailErrorEl = document.getElementById("aj-plan-detail-error");
   var planApproveBtn = document.getElementById("aj-plan-approve");
   var planEditBtn = document.getElementById("aj-plan-edit");
-  var planPrintBtn = document.getElementById("aj-plan-print");
+  var planPrintBtn = document.querySelector("#view-plan-details #aj-plan-print");
   var planPrint122Btn = document.getElementById("aj-plan-print-122");
   var planPrint131Btn = document.getElementById("aj-plan-print-131");
   var planWitness131Btn = document.getElementById("aj-plan-witness-131");
@@ -3028,6 +3028,10 @@
   }
   if (planPrintBtn) {
     planPrintBtn.addEventListener("click", function () {
+      var details = document.getElementById("view-plan-details");
+      if (!details || details.hidden || !details.classList.contains("is-active")) {
+        return;
+      }
       if (String(pendingPlanDetailId) === "operational-plan" && window.Plan111 && typeof window.Plan111.open === "function") {
         window.Plan111.open().catch(function (error) {
           showToast((error && error.message) || "تعذر تجهيز حزمة الخطة.", "error");
@@ -4256,6 +4260,9 @@
       showToast("لوحة المعاينة غير موجودة.", "error");
       return;
     }
+    /* امسح أي معاينة سابقة فوراً حتى لا تبقى بطاقة برنامج قديمة ظاهرة */
+    printStagePageEl.innerHTML = "";
+    officialPreviewFiles = [];
     officialPreviewArm = opts.arm || {};
     officialPreviewHtml = html || "";
     var smartName = "";
@@ -4292,8 +4299,13 @@
     officialPreviewFiles = Array.isArray(opts.files) ? opts.files : [];
     appendPreviewFilesStrip(officialPreviewFiles);
     printStageEl.hidden = false;
+    printStageEl.style.removeProperty("display");
+    printStageEl.style.removeProperty("visibility");
+    printStagePageEl.style.removeProperty("display");
+    printStagePageEl.style.removeProperty("visibility");
     printStageEl.scrollTop = 0;
     document.body.classList.add("is-print-preview");
+    document.body.classList.remove("print-official-core", "print-official-list", "print-official-multi", "print-official-landscape");
   }
 
   if (printStageGoBtn) {
