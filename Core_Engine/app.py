@@ -245,6 +245,16 @@ def _token(x_session_token: str) -> str:
     return str(x_session_token or "").strip()
 
 
+def _auth_user(x_session_token: str):
+    """يشترط جلسة صالحة؛ يرفض الطلب بلا توكن أو بتوكن باطل."""
+    from .access import require_user
+
+    try:
+        return require_user(_token(x_session_token))
+    except PermissionError as error:
+        raise HTTPException(status_code=401, detail=str(error)) from error
+
+
 @app.post("/api/login")
 def login_api(body: LoginBody):
     """يدخل برقم الهوية وكلمة المرور المخزّنة كبصمة."""
@@ -945,8 +955,9 @@ def _store_noor(kind: str, records: list[dict]) -> int:
 
 
 @app.get("/api/noor/staff")
-def noor_staff():
+def noor_staff(x_session_token: str = Header(default="")):
     """أسماء المعلمين المدخلة من ملف نور، لتغذية القوائم المنسدلة."""
+    _auth_user(x_session_token)
     connection = connect()
     try:
         rows = connection.execute(
@@ -983,8 +994,9 @@ class NoorStaffEdit(BaseModel):
 
 
 @app.post("/api/noor/staff")
-def save_noor_staff(body: NoorStaffEdit):
+def save_noor_staff(body: NoorStaffEdit, x_session_token: str = Header(default="")):
     """يحفظ الاسم والصفة والتخصص. التعديل لا ينشئ صفًا إن غاب الرقم."""
+    _auth_user(x_session_token)
     national_id = body.national_id.strip()
     name = body.name.strip()
     if not national_id or not name:
@@ -1038,8 +1050,9 @@ def save_noor_staff(body: NoorStaffEdit):
 
 
 @app.delete("/api/noor/staff/{national_id}")
-def delete_noor_staff(national_id: str):
+def delete_noor_staff(national_id: str, x_session_token: str = Header(default="")):
     """يحذف منسوبًا من سجل الملف المستورد."""
+    _auth_user(x_session_token)
     connection = connect()
     try:
         from .retention import hide
@@ -1449,15 +1462,21 @@ def _allowed_committee_names():
 
 
 @app.get("/api/committees")
-def committees_portal():
+def committees_portal(x_session_token: str = Header(default="")):
     """يعيد قرارات اللجان مع التشكيل المحفوظ."""
+    _auth_user(x_session_token)
     bank = _read_json(REGISTERS_DIR / "school_committees_governance.json", {"committees": []})
     return {"committees": bank.get("committees", []), "formations": _read_json(_formation_path(), {})}
 
 
 @app.post("/api/committees/{committee_id}")
-def save_committee_formation(committee_id: str, body: CommitteeFormationBody):
+def save_committee_formation(
+    committee_id: str,
+    body: CommitteeFormationBody,
+    x_session_token: str = Header(default=""),
+):
     """يحفظ تشكيل لجنة واحدة دون المساس بإعدادات المدرسة."""
+    _auth_user(x_session_token)
     bank = _read_json(REGISTERS_DIR / "school_committees_governance.json", {"committees": []})
     known = {item.get("id") for item in bank.get("committees", [])}
     if committee_id not in known:
@@ -1484,8 +1503,9 @@ def _councils_path():
 
 
 @app.get("/api/councils")
-def get_councils():
+def get_councils(x_session_token: str = Header(default="")):
     """يعيد محاضر المجالس المحفوظة على الخادم."""
+    _auth_user(x_session_token)
     payload = _read_json(_councils_path(), {"minutes": []})
     minutes = payload.get("minutes") if isinstance(payload, dict) else []
     if not isinstance(minutes, list):
@@ -1494,8 +1514,9 @@ def get_councils():
 
 
 @app.post("/api/councils")
-def save_councils(body: CouncilsBody):
+def save_councils(body: CouncilsBody, x_session_token: str = Header(default="")):
     """يحفظ قائمة محاضر المجالس كاملة (مزامنة من الواجهة)."""
+    _auth_user(x_session_token)
     cleaned = []
     for item in body.minutes:
         if not isinstance(item, dict):
@@ -1525,8 +1546,9 @@ def roles():
 
 
 @app.post("/api/generate-plans")
-def generate_plans_api(body: GeneratePlansRequest):
+def generate_plans_api(body: GeneratePlansRequest, x_session_token: str = Header(default="")):
     """يولّد الخطط ويعيدها دون حفظها في قاعدة البيانات."""
+    _auth_user(x_session_token)
     calendar = _calendar_year()
     if body.region not in calendar:
         raise HTTPException(status_code=400, detail="المنطقة غير مدعومة")
@@ -1602,8 +1624,9 @@ def _content_error(error):
 
 
 @app.get("/api/content/{role}")
-def get_role_content(role: str):
+def get_role_content(role: str, x_session_token: str = Header(default="")):
     """يعيد محتوى الدور بعد دمج التعديلات على النص الافتراضي."""
+    _auth_user(x_session_token)
     try:
         return load_role_content(role)
     except ContentError as error:
@@ -1611,8 +1634,9 @@ def get_role_content(role: str):
 
 
 @app.post("/api/content/{role}")
-def post_role_content(role: str, body: OverrideBody):
+def post_role_content(role: str, body: OverrideBody, x_session_token: str = Header(default="")):
     """يحفظ تعديل حقل واحد ولا يغيّر ملف البنك."""
+    _auth_user(x_session_token)
     try:
         save_override(role, body.field_path, body.value)
     except ContentError as error:
@@ -1621,8 +1645,9 @@ def post_role_content(role: str, body: OverrideBody):
 
 
 @app.delete("/api/content/{role}/all")
-def delete_role_content(role: str):
+def delete_role_content(role: str, x_session_token: str = Header(default="")):
     """يحذف كل تعديلات الدور فيستعيد الواجهة النص الافتراضي."""
+    _auth_user(x_session_token)
     try:
         reset_all_overrides(role)
     except ContentError as error:
@@ -1631,8 +1656,9 @@ def delete_role_content(role: str):
 
 
 @app.post("/api/deck/seat")
-def seat_deck(body: SeatDeckBody):
+def seat_deck(body: SeatDeckBody, x_session_token: str = Header(default="")):
     """يبني شرائح خطة المدير مرة واحدة. التنقل بعدها من ذاكرة المتصفح."""
+    _auth_user(x_session_token)
     if body.gender not in _GENDERS:
         raise HTTPException(status_code=400, detail="جنس المدرسة غير مدعوم")
     if body.role not in _DECK_ROLES:
@@ -1685,8 +1711,9 @@ def seat_deck(body: SeatDeckBody):
 
 
 @app.post("/api/deck/cell")
-def save_deck_cell(body: DeckCellBody):
+def save_deck_cell(body: DeckCellBody, x_session_token: str = Header(default="")):
     """يحفظ نص الخلية في content_overrides بلا تصريف."""
+    _auth_user(x_session_token)
     if body.field_path.startswith("swot."):
         try:
             stored = save_swot_override(body.field_path, body.value)
@@ -1709,8 +1736,9 @@ def save_deck_cell(body: DeckCellBody):
 
 
 @app.post("/api/deck/tombstone")
-def tombstone_deck_item(body: DeckTombstoneBody):
+def tombstone_deck_item(body: DeckTombstoneBody, x_session_token: str = Header(default="")):
     """يثبت شاهد الحذف للبند حتى يتخطاه التسكين التالي."""
+    _auth_user(x_session_token)
     _principal_only(body.role)
     code = body.task_code.strip()
     try:
@@ -1727,8 +1755,9 @@ def tombstone_deck_item(body: DeckTombstoneBody):
 
 
 @app.post("/api/deck/custom")
-def add_deck_custom_item(body: SeatDeckBody):
+def add_deck_custom_item(body: SeatDeckBody, x_session_token: str = Header(default="")):
     """يضيف بندًا فارغًا بالرمز التالي custom.N قبل أي تقسيم."""
+    _auth_user(x_session_token)
     _principal_only(body.role)
     try:
         overrides = list_task_overrides(body.role)
@@ -2191,8 +2220,9 @@ def post_facility_bank(body: FacilityBankBody, x_session_token: str = Header(def
 
 
 @app.get("/api/settings")
-def get_settings():
+def get_settings(x_session_token: str = Header(default="")):
     """يعيد بيانات المدرسة ولجنة التخطيط مع أسماء ملف الشواهد الرسمي."""
+    _auth_user(x_session_token)
     principal, teachers, deputies, participants = _evidence_directory()
     payload = _saved_settings(principal.get("name", ""))
     payload["principal_name"] = principal.get("name", "")
@@ -2207,8 +2237,9 @@ def get_settings():
 
 
 @app.post("/api/settings")
-def post_settings(body: SettingsBody):
+def post_settings(body: SettingsBody, x_session_token: str = Header(default="")):
     """يستبدل صف إعدادات المدرسة بالكامل."""
+    _auth_user(x_session_token)
     if body.school.building_type not in _BUILDING_TYPES:
         raise HTTPException(status_code=400, detail="طبيعة المبنى غير مدعومة")
     _principal, teachers, _deputies, _participants = _evidence_directory()
@@ -2293,8 +2324,9 @@ class SavePlanItemsBody(BaseModel):
 
 
 @app.get("/api/get-plan-items")
-def get_plan_items(role: str = "principal"):
+def get_plan_items(role: str = "principal", x_session_token: str = Header(default="")):
     """يعيد البنود المحفوظة للدور، أو قائمة فارغة إن لم يُحفظ شيء."""
+    _auth_user(x_session_token)
     connection = connect()
     try:
         row = connection.execute(
@@ -2309,8 +2341,9 @@ def get_plan_items(role: str = "principal"):
 
 
 @app.post("/api/save-plan-items")
-def save_plan_items(body: SavePlanItemsBody):
+def save_plan_items(body: SavePlanItemsBody, x_session_token: str = Header(default="")):
     """يستبدل بنود الدور المحفوظة بالكامل."""
+    _auth_user(x_session_token)
     if not body.role.strip():
         raise HTTPException(status_code=400, detail="الدور غير محدد")
     payload = json.dumps(
@@ -2336,8 +2369,9 @@ def save_plan_items(body: SavePlanItemsBody):
 
 
 @app.delete("/api/content/{role}")
-def delete_role_field(role: str, field_path: str):
+def delete_role_field(role: str, field_path: str, x_session_token: str = Header(default="")):
     """يحذف تعديل حقل واحد حسب field_path."""
+    _auth_user(x_session_token)
     try:
         reset_override(role, field_path)
     except ContentError as error:

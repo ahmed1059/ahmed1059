@@ -1,0 +1,8 @@
+{
+  "enabled": false,
+  "title": "إطلاق تجريبي",
+  "seed_accounts": false,
+  "overwrite_passwords": false,
+  "open_all_windows": false,
+  "note": "ضع كلمة التجربة في متغير البيئة TRIAL_PASSWORD فقط."
+}
