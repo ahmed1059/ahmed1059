@@ -47,4 +47,8 @@ Thumbs.db
 .vscode/
 *~
 School_Data/school_1059.db
-School_Data/assets/
+School_Data/assets/ico_*.jpg
+School_Data/assets/ico_*.png
+School_Data/assets/pen_*.png
+School_Data/assets/ص*.jpg
+School_Data/assets/صورة2.jpg
