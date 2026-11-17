@@ -48,6 +48,8 @@
 - زر الطباعة و`beforeprint` يستدعيان تجهيز المرحلة ثم `window.print()`.
 - `event-bus.js`: محاولة WebSocket واحدة ثم التحويل الصامت إلى الاستطلاع دون إعادة اتصال متكررة.
 - إصلاح تعارض `id="aj-plan-print"` بين خطة الزيارات وبطاقة البرنامج؛ طباعة الزيارات تستخدم `aj-visit-plan-print` فقط.
+- بروتوكول دخان استكشافي: `scripts/smoke_journey_exploratory.mjs` + `docs/unit3_smoke_protocol.md` (يُشغَّل قبل أي رابط معاينة).
+- إصلاح `softFetch` لإرسال توكن الجلسة (اكتشاف الفحص الآلي).
 
 ---
 

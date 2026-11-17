@@ -557,7 +557,7 @@
   }
 
   function softFetch(url) {
-    return fetch(url, { cache: "no-store" }).then(
+    return fetch(url, { headers: authHeaders(), cache: "no-store" }).then(
       function (response) {
         return response.ok ? response.json() : null;
       },

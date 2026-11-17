@@ -1,0 +1,12 @@
+{
+  "name": "school-journey-smoke",
+  "private": true,
+  "type": "module",
+  "description": "Automated smoke & exploratory checks for app-journey.html",
+  "scripts": {
+    "smoke": "node smoke_journey_exploratory.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.65.1"
+  }
+}
