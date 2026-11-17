@@ -4177,17 +4177,25 @@
     return Promise.all(jobs);
   }
 
-  function printOfficialPreview() {
+  function prepareOfficialPrintStage() {
     var core = window.OfficialFrameCore;
     if (!printStagePageEl || !officialPreviewHtml) {
-      showToast("لا معاينة للطباعة.", "error");
-      return;
+      return false;
     }
     if (printStageEl) {
       printStageEl.hidden = false;
+      printStageEl.style.display = "block";
+      printStageEl.style.visibility = "visible";
     }
+    if (printStagePageEl) {
+      printStagePageEl.style.display = "block";
+      printStagePageEl.style.visibility = "visible";
+    }
+    document.body.classList.add("is-print-preview");
     if (core && typeof core.armPrintPage === "function") {
       core.armPrintPage(officialPreviewArm || {});
+    } else {
+      document.body.classList.add("print-official-core");
     }
     Array.prototype.forEach.call(printStagePageEl.querySelectorAll("img.sig-image"), function (img) {
       img.removeAttribute("onerror");
@@ -4196,6 +4204,14 @@
       img.style.visibility = "visible";
       img.style.opacity = "1";
     });
+    return true;
+  }
+
+  function printOfficialPreview() {
+    if (!prepareOfficialPrintStage()) {
+      showToast("لا معاينة للطباعة.", "error");
+      return;
+    }
     materializeBlobImages(printStagePageEl).then(function () {
       waitOfficialPreviewImages(printStagePageEl, function () {
         var named = printStagePageEl.querySelector(".pm-document");
@@ -4226,6 +4242,12 @@
     }
   }
 
+  window.addEventListener("beforeprint", function () {
+    if (!document.body.classList.contains("is-print-preview")) {
+      return;
+    }
+    prepareOfficialPrintStage();
+  });
   window.addEventListener("afterprint", restorePreviewChrome);
 
   function showOfficialPreview(html, opts) {

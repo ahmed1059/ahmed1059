@@ -40,9 +40,13 @@
 
 الكشف عبر `matchMedia('(max-width: 1023px)')` + أصناف `aj-mode-field` / `aj-mode-admin`.
 
-## 4) الطباعة
+## 4) الطباعة (تحديث معاينة PR #7)
 
-قواعد `@media print` و`print-official-core` وأزرار المعاينة في `aj-print-stage` لم تُغيَّر وظيفياً.
+- `#aj-print-stage` و`#aj-print-stage-page` تُجبر على `display:block` / `visibility:visible` في `@media print`.
+- أُزيل فخ `height:0` الذي أنتج صفحة بيضاء في بعض المتصفحات.
+- الرسالة الإرشادية الخضراء تُزاح لأسفل أثناء المعاينة حتى لا تغطي زر «طباعة».
+- زر الطباعة و`beforeprint` يستدعيان تجهيز المرحلة ثم `window.print()`.
+- `event-bus.js`: محاولة WebSocket واحدة ثم التحويل الصامت إلى الاستطلاع دون إعادة اتصال متكررة.
 
 ---
 

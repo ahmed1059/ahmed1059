@@ -1867,6 +1867,7 @@ body.aj-modal-open {
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
+  align-items: center;
   padding: 10px 12px;
   background: #0b5e56;
 }
@@ -1876,17 +1877,37 @@ body.aj-modal-open {
     display: flex !important;
   }
 
+  /* زر الإغلاق جانباً دون تغطية زر «طباعة» في الوسط */
   body.app-journey.is-print-preview #aj-print-preview-close {
-    position: fixed;
-    top: 10px;
-    left: 12px;
-    z-index: 5100;
+    position: static;
+    order: 99;
+    margin-inline-start: auto;
+    z-index: auto;
+  }
+
+  /* الرسالة الإرشادية الخضراء أسفل الشريط حتى لا تغطي زر الطباعة */
+  body.app-journey.is-print-preview .aj-toast {
+    top: auto;
+    bottom: 24px;
+    left: 16px;
+    right: auto;
+    transform: none;
+    z-index: 5200;
+    max-width: min(22rem, calc(100% - 32px));
   }
 }
 
 .aj-print-preview-bar .aj-detail-btn {
   background: #ffffff;
   color: #0b5e56;
+  position: relative;
+  z-index: 3;
+}
+
+#aj-print-preview-go {
+  order: -1;
+  font-weight: 800;
+  box-shadow: 0 0 0 2px #ffffff;
 }
 
 .aj-print-file-name {
@@ -1995,6 +2016,7 @@ body.aj-modal-open {
     margin: 0 !important;
     height: auto !important;
     min-height: 0 !important;
+    overflow: visible !important;
   }
 
   .aj-skip,
@@ -2039,6 +2061,45 @@ body.aj-modal-open {
     display: none !important;
   }
 
+  /* إجبار حاوية المعاينة على الظهور عند الطباعة — لا تُخفيها قواعد العزل */
+  body.app-journey.is-print-preview #aj-print-stage:not([hidden]),
+  body.app-journey.print-official-core #aj-print-stage:not([hidden]) {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    inset: auto !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    z-index: auto !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.app-journey.is-print-preview #aj-print-stage:not([hidden]) #aj-print-stage-page,
+  body.app-journey.print-official-core #aj-print-stage:not([hidden]) #aj-print-stage-page {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 0 auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+  }
+
+  body.app-journey.is-print-preview #aj-print-stage:not([hidden]) #aj-print-stage-page *,
+  body.app-journey.print-official-core #aj-print-stage:not([hidden]) #aj-print-stage-page * {
+    visibility: visible !important;
+  }
+
+  body.app-journey.is-print-preview .aj-shell,
+  body.app-journey.print-official-core .aj-shell {
+    display: none !important;
+  }
+
   #view-council-details,
   .aj-council-doc,
   .aj-council-attendance,
@@ -2075,6 +2136,7 @@ body.aj-modal-open {
 
   body.app-journey.print-official-core .aj-print-stage {
     display: block !important;
+    visibility: visible !important;
     background: #ffffff !important;
   }
 
@@ -2100,12 +2162,13 @@ body.aj-modal-open {
     page-break-after: auto;
   }
 
+  /* تجنّب height:0 الذي يُنتج صفحة بيضاء في بعض المتصفحات */
   html:has(body.app-journey.print-official-core:not(.print-official-multi):not(.print-official-list)),
   body.app-journey.print-official-core:not(.print-official-multi):not(.print-official-list) {
-    height: 0 !important;
+    height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -2113,18 +2176,20 @@ body.aj-modal-open {
   body.app-journey.print-official-core:not(.print-official-multi):not(.print-official-list) .aj-print-stage,
   body.app-journey.print-official-core:not(.print-official-multi):not(.print-official-list) .aj-print-stage-page {
     display: block !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
+    visibility: visible !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
     right: auto !important;
     width: 210mm !important;
     max-width: 210mm !important;
-    height: 297mm !important;
-    margin: 0 !important;
+    height: auto !important;
+    min-height: 297mm !important;
+    margin: 0 auto !important;
     padding: 0 !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     background: #ffffff !important;
-    z-index: 1 !important;
+    z-index: auto !important;
     box-sizing: border-box !important;
     scrollbar-width: none !important;
   }
