@@ -188,25 +188,49 @@ body.app-journey:not(.aj-auth-ready) .aj-backdrop {
   text-decoration: none;
 }
 
+/* رابط النظام السابق — زاوية هادئة أسفل الشريط، لا يزاحم المحطات */
 .aj-legacy-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 40px;
-  margin: 0 0 20px;
-  padding: 0 12px;
-  border: 2px solid var(--aj-teal);
-  background: #ffffff;
-  color: var(--aj-teal);
+  display: block;
+  width: auto;
+  margin: 28px 8px 8px;
+  padding: 6px 4px;
+  border: 0;
+  border-top: 1px solid var(--aj-border);
+  background: transparent;
+  color: var(--aj-muted);
   font: inherit;
-  font-weight: 800;
-  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   box-sizing: border-box;
+  opacity: 0.72;
 }
 
 .aj-legacy-link:hover {
-  background: #e8f3f1;
+  background: transparent;
+  color: var(--aj-ink);
+  opacity: 1;
+}
+
+.aj-legacy-quiet {
+  margin-top: 28px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--aj-border);
+}
+
+.aj-legacy-quiet-note {
+  margin: 0 0 8px;
+  color: var(--aj-muted);
+  font-size: 0.82rem;
+}
+
+.aj-legacy-quiet-link {
+  color: var(--aj-muted);
+  font-size: 0.82rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .aj-stages {
@@ -233,7 +257,9 @@ body.app-journey:not(.aj-auth-ready) .aj-backdrop {
   background: transparent;
   color: var(--aj-ink);
   font: inherit;
+  font-size: 0.95rem;
   font-weight: 700;
+  line-height: 1.35;
   text-align: right;
   cursor: pointer;
 }
@@ -1082,7 +1108,7 @@ body.app-journey:not(.aj-auth-ready) .aj-backdrop {
     left: 0;
     z-index: 40;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     height: var(--aj-bottom-h);
     background: #ffffff;
     border-top: 1px solid var(--aj-border);
@@ -1095,11 +1121,14 @@ body.app-journey:not(.aj-auth-ready) .aj-backdrop {
     justify-content: center;
     margin: 0;
     border: 0;
+    padding: 0 2px;
     background: transparent;
     color: var(--aj-teal);
     font: inherit;
-    font-size: 0.85rem;
+    font-size: 0.72rem;
     font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
     text-decoration: none;
     cursor: pointer;
   }
