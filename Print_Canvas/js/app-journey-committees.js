@@ -280,7 +280,7 @@
   function load() {
     var staffLoad = window.AjCommittees.staff
       ? Promise.resolve(window.AjCommittees.staff)
-      : fetch("/api/noor/staff", { cache: "no-store" }).then(function (response) {
+      : fetch("/api/noor/staff", { headers: authHeaders(), cache: "no-store" }).then(function (response) {
         return response.json();
       }).then(function (body) {
         window.AjCommittees.staff = (body && body.people) || [];

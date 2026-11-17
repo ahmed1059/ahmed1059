@@ -10,6 +10,15 @@
     window.fetch = function (input, init) {
       return nativeFetch(input, init).then(function (response) {
         var url = typeof input === "string" ? input : (input && input.url) || "";
+        var headerBag = init && init.headers;
+        var sentToken = "";
+        if (headerBag && typeof headerBag.get === "function") {
+          sentToken = String(headerBag.get("X-Session-Token") || headerBag.get("x-session-token") || "");
+        } else if (headerBag && typeof headerBag === "object") {
+          sentToken = String(
+            headerBag["X-Session-Token"] || headerBag["x-session-token"] || ""
+          );
+        }
         if (
           response &&
           response.status === 403 &&
@@ -20,10 +29,12 @@
           sessionRedirected = true;
           window.location.replace("login.html?change=1");
         }
+        /* لا تُسقط الجلسة إلا إذا أُرسل توكن صريح ورُفض — طلب بلا توكن لا يُخرج المستخدم */
         if (
           response &&
           response.status === 401 &&
           String(url).indexOf("/api/") === 0 &&
+          sentToken &&
           !sessionRedirected
         ) {
           sessionRedirected = true;
@@ -5434,7 +5445,7 @@
       .catch(function (error) {
         setTextStatus(status, (error && error.message) || "تعذر قراءة سجل المنسوبين.", true);
       });
-    fetch("/api/settings", { cache: "no-store" })
+    fetch("/api/settings", { headers: authHeaders(), cache: "no-store" })
       .then(function (response) {
         return response.json();
       })
@@ -6425,7 +6436,7 @@
     if (evidenceDeliverYearEl && String(evidenceDeliverYearEl.value || "").trim()) {
       return Promise.resolve(String(evidenceDeliverYearEl.value || "").trim());
     }
-    return fetch("/api/settings", { cache: "no-store" })
+    return fetch("/api/settings", { headers: authHeaders(), cache: "no-store" })
       .then(function (response) {
         return response.json();
       })

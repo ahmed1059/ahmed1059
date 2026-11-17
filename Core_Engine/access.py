@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import os
 import re
 import secrets
 import sqlite3
@@ -9,6 +10,33 @@ from datetime import datetime
 from pathlib import Path
 
 BACKUP_NAME = re.compile(r"^school_1059_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}(?:-\d{2})?\.db$")
+
+
+def trial_password_from_env():
+    """كلمة تجربة من البيئة فقط — لا تُقرأ من ملف مرفوع."""
+    return str(os.environ.get("TRIAL_PASSWORD") or "").strip()
+
+
+def initial_admin_password():
+    """كلمة المدير الأول من البيئة، أو عشوائية تُحفظ محلياً مرة واحدة خارج الحزمة."""
+    configured = str(os.environ.get("INITIAL_ADMIN_PASSWORD") or "").strip()
+    if configured:
+        return configured
+    marker = _db_path().parent / ".initial_admin_password"
+    if marker.is_file():
+        saved = marker.read_text(encoding="utf-8").strip()
+        if saved:
+            return saved
+    generated = secrets.token_urlsafe(16)
+    try:
+        marker.write_text(generated + "\n", encoding="utf-8")
+        try:
+            marker.chmod(0o600)
+        except OSError:
+            pass
+    except OSError:
+        pass
+    return generated
 
 
 def _connect():
@@ -35,7 +63,11 @@ def load_trial_config():
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return {"enabled": False}
-    return data if isinstance(data, dict) else {"enabled": False}
+    if not isinstance(data, dict):
+        return {"enabled": False}
+    cleaned = dict(data)
+    cleaned.pop("password", None)
+    return cleaned
 
 
 def seed_trial_accounts(connection=None, password=None, overwrite=False):
@@ -48,9 +80,9 @@ def seed_trial_accounts(connection=None, password=None, overwrite=False):
     skipped = 0
     try:
         cfg = load_trial_config()
-        secret = str(password or cfg.get("password") or "1448")
-        if len(secret) < 4:
-            raise ValueError("كلمة المرور قصيرة")
+        secret = str(password or trial_password_from_env() or "").strip()
+        if len(secret) < 8:
+            raise ValueError("عيّن TRIAL_PASSWORD في البيئة (8 أحرف على الأقل)")
         stored = hash_password(secret)
         rows = connection.execute(
             """
@@ -100,7 +132,7 @@ def seed_trial_accounts(connection=None, password=None, overwrite=False):
             "updated": updated,
             "skipped": skipped,
             "total": len(rows),
-            "password_set": secret,
+            "password_set": True,
         }
     finally:
         if own:
@@ -175,7 +207,13 @@ def prepare_access(connection):
                 national_id, name, role, specialty, password_hash, failed_attempts
             ) VALUES (?, ?, ?, ?, ?, 0)
             """,
-            (principal[0], principal[1], principal[2], principal[3] or "", hash_password("admin")),
+            (
+                principal[0],
+                principal[1],
+                principal[2],
+                principal[3] or "",
+                hash_password(initial_admin_password()),
+            ),
         )
     for (national_id,) in connection.execute("SELECT national_id FROM noor_students"):
         text = str(national_id or "").strip()
@@ -204,10 +242,10 @@ def prepare_access(connection):
             "UPDATE school_programs SET is_deleted = 1 WHERE id = 3 AND COALESCE(is_deleted, 0) = 0"
         )
     cfg = load_trial_config()
-    if cfg.get("enabled") and cfg.get("seed_accounts"):
+    if cfg.get("enabled") and cfg.get("seed_accounts") and trial_password_from_env():
         seed_trial_accounts(
             connection,
-            password=cfg.get("password"),
+            password=trial_password_from_env(),
             overwrite=bool(cfg.get("overwrite_passwords")),
         )
 
@@ -417,7 +455,7 @@ def change_own_password(national_id, password):
     secret = str(password or "")
     if len(secret) < 6:
         raise ValueError("كلمة المرور لا تقل عن 6 أحرف")
-    trial = str(load_trial_config().get("password") or "")
+    trial = trial_password_from_env()
     if trial and secrets.compare_digest(secret, trial):
         raise ValueError("اختر كلمة غير كلمة التجربة")
     connection = _connect()

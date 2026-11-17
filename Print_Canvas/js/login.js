@@ -138,7 +138,7 @@ function enterSession(person, role) {
         roles: person.roles,
         token: person.token || ""
     }));
-    window.location.href = "dashboard.html";
+    window.location.href = "app-journey.html#view-desk";
 }
 
 function findPerson() {
