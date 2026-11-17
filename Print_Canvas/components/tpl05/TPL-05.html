@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>TPL-05 — سجل متابعة تشغيلي</title>
+  <link rel="stylesheet" href="../../css/media-governance.css">
+  <link rel="stylesheet" href="../../css/print.css">
+  <style id="tpl-shell"></style>
+</head>
+<body class="tpl-sample">
+  <div class="tpl-toolbar no-print">
+    <strong>TPL-05</strong>
+    <span class="note" id="tpl-status">جاري التحميل…</span>
+    <button type="button" id="btn-print">طباعة</button>
+    <a href="../preview-hub.html" style="color:#fff;margin-inline-start:auto">مركز المعاينة</a>
+  </div>
+  <div id="official-frame-host" class="official-frame-host" hidden></div>
+  <script>
+  (function(){
+    try {
+      var raw = sessionStorage.getItem('sessionUser');
+      var ok = false;
+      if (raw) { var s = JSON.parse(raw); ok = !!(s && s.token && s.id); }
+      if (!ok) sessionStorage.setItem('sessionUser', JSON.stringify({token:'tpl-preview',id:'tpl05',name:'معاينة TPL-05'}));
+    } catch (e) {}
+  })();
+  </script>
+  <script src="../../js/dashboard.js"></script>
+  <script src="../../js/official-frame-core.js"></script>
+  <script src="../_shared/tpl-common.js"></script>
+  <script src="TPL-05.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    var st = document.getElementById('tpl-status');
+    if (window.TplCommon && window.TplCommon.SHELL_CSS) {
+      document.getElementById('tpl-shell').textContent = window.TplCommon.SHELL_CSS;
+    }
+    var api = window["TPL05"] || window["TPL-05"];
+    if (!api) { st.textContent = 'فشل تحميل TPL-05'; return; }
+    api.mount({
+      identityUrl: '../_shared/identity.json',
+      indicatorsUrl: '../_shared/indicators.json',
+      committeesUrl: '../_shared/committees.json',
+      programsUrl: '../_shared/programs.json',
+      statusEl: st
+    }).catch(function (err) { st.textContent = String(err && err.message ? err.message : err); });
+    document.getElementById('btn-print').addEventListener('click', function () { api.printOfficial(); });
+  })();
+  </script>
+</body>
+</html>

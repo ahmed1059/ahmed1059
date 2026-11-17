@@ -1,0 +1,101 @@
+/* متغيرات الألوان والخط المحلي، والطباعة A4 أفقي — دون Google Fonts */
+
+:root {
+    --primary-color: #00A19B;
+    --text-color: #000000;
+    --border-color: #B0BEC5;
+    --global-font: "Cairo", "Tajawal", "Amiri", "Dubai", "Almarai", "Kufam", "Tahoma", sans-serif;
+}
+
+@page {
+    size: A4 landscape;
+    margin: 12mm;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    direction: rtl;
+}
+
+body {
+    margin: 0;
+    font-family: var(--global-font);
+    color: var(--text-color);
+    background: #ECEFF1;
+}
+
+.login-shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-top: 4px solid var(--primary-color);
+    padding: 28px 24px;
+}
+
+.login-card h1 {
+    margin: 0 0 8px;
+    font-size: 22px;
+    color: var(--primary-color);
+}
+
+.login-card p {
+    margin: 0 0 20px;
+    color: #546E7A;
+    font-size: 14px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+input {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    font-family: var(--global-font);
+    font-size: 16px;
+    color: var(--text-color);
+    background: #ffffff;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    background: var(--primary-color);
+    color: #ffffff;
+    font-family: var(--global-font);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+thead.running-header {
+    display: table-header-group;
+}
+
+tr,
+td,
+th {
+    page-break-inside: avoid;
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+}

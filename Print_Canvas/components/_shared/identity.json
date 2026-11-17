@@ -1,0 +1,298 @@
+{
+  "meta": {
+    "source": "06_identity_expansion.csv",
+    "filter": "person_name non-empty AND confidence in high|medium",
+    "count": 41,
+    "generated_at": "2026-11-01",
+    "purpose": "dropdown options — no invented names"
+  },
+  "persons": [
+    {
+      "person_id": "PERS-001",
+      "name": "احمد بن سعيد بن سلمي العوفي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-002",
+      "name": "احمد بن صالح بن رجاء العوفي",
+      "role": "رئيساً — لجنة مصادر التعلم",
+      "confidence": "high",
+      "source": "committee_formations.json"
+    },
+    {
+      "person_id": "PERS-003",
+      "name": "احمد عبدالله عريج الحربي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-004",
+      "name": "احمد علي الشهري",
+      "role": "معلم (نموذج أداء وظيفي)",
+      "confidence": "medium",
+      "source": "external:نموذج الأداء الوظيفي معلم.txt"
+    },
+    {
+      "person_id": "PERS-005",
+      "name": "احمد علي هيازع الشهري",
+      "role": "عضواً — لجنة مصادر التعلم",
+      "confidence": "high",
+      "source": "committee_formations.json"
+    },
+    {
+      "person_id": "PERS-006",
+      "name": "انس عبدالرحمن صالح الرحيلي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-007",
+      "name": "ايمن سليم محمد البلادي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-008",
+      "name": "بدر بن سليم بن حمود الترجمي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-009",
+      "name": "بندر بن عائد بن محمد الاحمدي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-010",
+      "name": "بندر حمدان سمران المحمدي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-011",
+      "name": "حسن بن نافع بن مساعد الهرساني",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-012",
+      "name": "حميد قاسم ضفيدع الصاعدي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-013",
+      "name": "خالد بن سعود بن مسعود الأحمدي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-014",
+      "name": "خالد بن علي بن حجري العمري",
+      "role": "عضواً — لجنة التوجيه",
+      "confidence": "high",
+      "source": "committee_formations.json"
+    },
+    {
+      "person_id": "PERS-015",
+      "name": "راشد حمد محمد الصاعدي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-016",
+      "name": "زهير بن عتيق بن عوده الحجيلي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-017",
+      "name": "صالح بن فالح بن صالح الحربي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-018",
+      "name": "عبدالرحمن بن حامد بن حمد العوفي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-019",
+      "name": "عبدالمجيد محمد رميزان المرواني",
+      "role": "عضواً — لجنة التحصيل",
+      "confidence": "high",
+      "source": "committee_formations.json"
+    },
+    {
+      "person_id": "PERS-020",
+      "name": "عبدالمحسن بن حسين بن حسن الحربي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-021",
+      "name": "عدنان صلاح بن عويد الحربي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-022",
+      "name": "فائز حمدان حميد الترجمي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-023",
+      "name": "فهد حنيف بن محمد العمري",
+      "role": "رئيساً — لجنة التوجيه",
+      "confidence": "high",
+      "source": "committee_formations.json"
+    },
+    {
+      "person_id": "PERS-024",
+      "name": "فواز بن علي بن سليم الحربي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-025",
+      "name": "ماجد الغامدي",
+      "role": "منسق موهوبين",
+      "confidence": "medium",
+      "source": "external_filename:سجل (منسق الموهوبين) في مدارس (التعليم العام) - العام الدراسي (1447 هـ - 2025 م) - أ- ماجد الغامدي.txt"
+    },
+    {
+      "person_id": "PERS-026",
+      "name": "ماجد طلال عوض الحجيلي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-027",
+      "name": "ماجد فهد محمد الحربي",
+      "role": "عضواً — لجنة التحصيل",
+      "confidence": "high",
+      "source": "committee_formations.json"
+    },
+    {
+      "person_id": "PERS-028",
+      "name": "محمد بن فايز بن هلال الحربي",
+      "role": "عضواً ومقرراً — لجنة التميز",
+      "confidence": "high",
+      "source": "committee_formations.json"
+    },
+    {
+      "person_id": "PERS-029",
+      "name": "محمد بن نافع بن نويفع الصاعدي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-030",
+      "name": "محمد حامد عماش السهلي",
+      "role": "رائد نشاط",
+      "confidence": "high",
+      "source": "nour:teachers-3-GetEmployeeDataListرائد النشاط .xlsx"
+    },
+    {
+      "person_id": "PERS-031",
+      "name": "محمد عايد نغيمش الجهني",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-032",
+      "name": "مطيع بن طلال بن غازي الصاعدي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-033",
+      "name": "منور بن محمد بن عليان اللهيبي",
+      "role": "عضواً — لجنة التوجيه",
+      "confidence": "high",
+      "source": "committee_formations.json"
+    },
+    {
+      "person_id": "PERS-034",
+      "name": "نائف ابن سمير ابن حجيف الحربي",
+      "role": "مدير مدرسة",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمدير مدرسة .xlsx"
+    },
+    {
+      "person_id": "PERS-035",
+      "name": "نايف بن سمير حجيف المخلفي",
+      "role": "رئيساً — لجنة التميز",
+      "confidence": "high",
+      "source": "committee_formations.json"
+    },
+    {
+      "person_id": "PERS-036",
+      "name": "هاشم بن راشد بن دهيكل البرقاني الجهني",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-037",
+      "name": "هاني مسعود سعيد الأحمدي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-038",
+      "name": "ياسر دخيل الله بن حمود السهلي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-039",
+      "name": "ياسر فالح مسعد السحيمي",
+      "role": "عضواً — لجنة مصادر التعلم",
+      "confidence": "high",
+      "source": "committee_formations.json"
+    },
+    {
+      "person_id": "PERS-040",
+      "name": "يوسف بن عواد بن عويد العوفي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    },
+    {
+      "person_id": "PERS-041",
+      "name": "يوسف مقبل مانع الصاعدي",
+      "role": "معلم",
+      "confidence": "high",
+      "source": "nour:teachers-5-GetEmployeeDataListمعلم .xlsx"
+    }
+  ]
+}

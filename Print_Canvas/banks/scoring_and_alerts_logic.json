@@ -1,0 +1,90 @@
+{
+  "composite": {
+    "formula": "(Tasks * 0.40) + (Evidence * 0.30) + (Punctuality * 0.20) + (Participation * 0.10)",
+    "weights": {
+      "tasks": 0.4,
+      "evidence": 0.3,
+      "punctuality": 0.2,
+      "participation": 0.1
+    },
+    "sources": {
+      "tasks": "متوسط تعبئة السجلات المحفوظة في الجلسة، وإلا صفر",
+      "evidence": "درجة توثيق الشاهد للموظف: 100 إن ورد في ردود الشواهد وإلا صفر",
+      "punctuality": "لا سجل تأخير محفوظ، فالقيمة صفر",
+      "participation": "لا سجل مشاركة مستقل محفوظ، فالقيمة صفر"
+    },
+    "levels": [
+      {"min": 90, "label": "متميز", "icon": "🏆"},
+      {"min": 80, "label": "جيد جداً", "icon": "⭐"},
+      {"min": 70, "label": "جيد", "icon": "✓"},
+      {"min": 60, "label": "نامٍ", "icon": "⚠"},
+      {"min": 0, "label": "يحتاج تدخل", "icon": "🔴"}
+    ]
+  },
+  "templates": [
+    {
+      "id": "outcomes_gap",
+      "priority": 1,
+      "audience": ["full", "supervision"],
+      "title": "فجوة نواتج التعلم",
+      "body": "نواتج التعلم دون المستهدف المعتمد.",
+      "view": "measurement"
+    },
+    {
+      "id": "evidence_gap",
+      "priority": 1,
+      "audience": ["full"],
+      "title": "نقص توثيق شواهد الكادر",
+      "body": "نسبة توثيق شواهد الكادر دون نصف الكادر.",
+      "view": "measurement"
+    },
+    {
+      "id": "care_followup",
+      "priority": 2,
+      "audience": ["full", "supervision"],
+      "title": "متابعة الرعاية التحصيلية",
+      "body": "سجل الرعاية يحتاج رصد الدرجة القبلية والبعدية.",
+      "register": "academic_care"
+    },
+    {
+      "id": "behavior_case",
+      "priority": 1,
+      "audience": ["full", "supervision"],
+      "title": "حالة سلوكية بانتظار المعالجة",
+      "body": "سجل الحالات السلوكية جاهز لتوثيق الواقعة وقرار اللجنة.",
+      "register": "behavior_cases"
+    },
+    {
+      "id": "lab_mastery",
+      "priority": 3,
+      "audience": ["full", "supervision"],
+      "title": "إتقان التجارب المخبرية",
+      "body": "سجل التجارب ينتظر نسبة إتقان الطلاب.",
+      "register": "lab_register"
+    },
+    {
+      "id": "activity_participation",
+      "priority": 3,
+      "audience": ["full", "supervision"],
+      "title": "مشاركة البرامج والأنشطة",
+      "body": "قارن المستهدفين المخطط لهم بالمشاركين الفعليين.",
+      "register": "activity_plan"
+    },
+    {
+      "id": "classroom_visit",
+      "priority": 2,
+      "audience": ["full", "self", "supervision"],
+      "title": "تقرير زيارة صفية",
+      "body": "تقارير الزيارات الصفية المعتمدة بانتظار الاطلاع.",
+      "register": "class_followup"
+    },
+    {
+      "id": "composite_low",
+      "priority": 1,
+      "audience": ["full", "self", "supervision"],
+      "title": "مؤشر الإنجاز المركب",
+      "body": "المؤشر المركب الحالي دون مستوى النماء.",
+      "view": "measurement"
+    }
+  ]
+}

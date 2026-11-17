@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>معاينة بطاقة اليوم اللاصفية</title>
+  <link rel="stylesheet" href="css/erp-nav.css?v=erp141">
+  <style>
+    body { margin: 0; padding: 24px; background: #eef4f2; font-family: Tajawal, sans-serif; }
+    .wrap { max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 12px 30px rgba(8,40,36,.12); }
+    h1 { color: #0b5e56; margin: 0 0 8px; font-size: 22px; }
+    .wash-hint { color: #5c675f; margin: 0 0 14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap soft-periods-board">
+    <h1>الفترات اللاصفية — معاينة بطاقة اليوم</h1>
+    <p class="wash-hint">جدول 3 صفوف + شريط أوامر + رفع شاهد موحّد (محاكاة بصرية).</p>
+    <div class="soft-week-picker">
+      <label class="soft-term-field"><span>الفصل</span>
+        <select><option>الفصل الأول</option><option>الفصل الثاني</option><option selected>كل الأسابيع</option></select>
+      </label>
+      <div class="soft-week-chips">
+        <button type="button" class="soft-week-chip"><strong>أسبوع 1</strong><small>23 أغسطس — 27 أغسطس</small></button>
+        <button type="button" class="soft-week-chip is-on"><strong>أسبوع 10</strong><small>25 أكتوبر — 29 أكتوبر</small></button>
+        <button type="button" class="soft-week-chip"><strong>أسبوع 11</strong><small>1 نوفمبر — 5 نوفمبر</small></button>
+      </div>
+      <button type="button" class="wash-save">اليوم</button>
+    </div>
+    <div class="soft-day-chips">
+      <button type="button" class="soft-day-chip"><strong>الأحد</strong><small>25 أكتوبر</small></button>
+      <button type="button" class="soft-day-chip is-on is-today"><strong>الإثنين</strong><small>26 أكتوبر</small></button>
+      <button type="button" class="soft-day-chip"><strong>الثلاثاء</strong><small>27 أكتوبر</small></button>
+    </div>
+    <div class="daily-toolbar soft-day-toolbar">
+      <button type="button" class="wash-save">حفظ اليوم</button>
+      <button type="button" class="wash-add">معاينة</button>
+      <button type="button" class="wash-save">طباعة</button>
+      <button type="button" class="wash-add">تعبئة اليوم</button>
+    </div>
+    <article class="soft-day-card">
+      <header class="soft-day-card-head">
+        <div><strong>الإثنين</strong><span>26 أكتوبر 2026م</span></div>
+        <em class="soft-day-badge">اليوم</em>
+      </header>
+      <div class="program-table-wrap">
+        <table class="program-table data-table soft-day-table">
+          <thead><tr><th>الفترة</th><th>التنفيذ</th><th>الشاهد</th><th>المرفق</th><th>ملاحظة</th></tr></thead>
+          <tbody>
+            <tr class="soft-day-row is-ready is-selected">
+              <td class="is-name"><strong>الاصطفاف الصباحي</strong><small class="program-meta">15 د</small></td>
+              <td>منفّذ</td><td>مرفوع</td>
+              <td><div class="soft-day-thumbs"><figure class="soft-day-thumb"><span class="soft-day-file-kind">صورة</span><button class="soft-day-thumb-del" type="button">×</button></figure></div></td>
+              <td>—</td>
+            </tr>
+            <tr class="soft-day-row is-warn">
+              <td class="is-name"><strong>الاستراحة</strong><small class="program-meta">20 د</small></td>
+              <td>منفّذ</td><td>ناقص</td>
+              <td><span class="soft-day-empty-media">—</span></td>
+              <td>بانتظار صورة</td>
+            </tr>
+            <tr class="soft-day-row is-muted">
+              <td class="is-name"><strong>الصلاة</strong><small class="program-meta">25 د</small></td>
+              <td>قيد التنفيذ</td><td>غير مطلوب</td>
+              <td><span class="soft-day-empty-media">—</span></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="soft-day-tools">
+        <div class="soft-upload-menu">
+          <button type="button" class="wash-save">رفع شاهد ▾</button>
+        </div>
+        <span class="soft-upload-hint">الرفع لـ: الاصطفاف</span>
+      </div>
+    </article>
+  </div>
+</body>
+</html>
+

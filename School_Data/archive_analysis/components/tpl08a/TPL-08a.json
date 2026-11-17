@@ -1,0 +1,30 @@
+{
+  "template_id": "TPL-08a",
+  "title": "توثيق عمل تطوعي",
+  "structure_ref": "08_template_structure.md#TPL-08",
+  "default_indicator_codes": [
+    "1-3-1-3",
+    "1-3-1-2",
+    "3-2-1-4"
+  ],
+  "permissions": {
+    "approved_by": "activity_leader",
+    "rapporteur_vacant": false,
+    "needs_expert_review": true
+  },
+  "print": {
+    "engine": "OfficialFrameCore",
+    "orientation": "portrait",
+    "strictIdentity": true,
+    "barcode_required": false
+  },
+  "fields_from_structure_only": true,
+  "dynamic": {
+    "persons": "identity.json",
+    "indicators": "indicators.json",
+    "committees": null,
+    "programs": null,
+    "dual_date": true,
+    "dynamic_title": false
+  }
+}

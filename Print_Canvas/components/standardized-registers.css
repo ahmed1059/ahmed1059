@@ -1,0 +1,86 @@
+.standard-register {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.std-section {
+    padding: 12px;
+    border: 1px solid var(--border-subtle, #e2e8f0);
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.std-section h4 {
+    margin: 0 0 10px;
+    color: #115e59;
+}
+
+.std-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.std-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    font-size: 14px;
+}
+
+.std-grid input,
+.std-grid select,
+.std-grid textarea,
+.std-signoff input,
+.std-signoff select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.std-computed {
+    background: #f0fdfa;
+    font-weight: 700;
+}
+
+.std-signoff {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    text-align: center;
+}
+
+.std-signoff.cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.std-signoff > div {
+    min-width: 0;
+}
+
+.std-signoff strong,
+.std-signoff span {
+    display: block;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.std-signoff img {
+    display: block;
+    max-height: 16mm;
+    margin: 4px auto;
+    background: transparent;
+}
+
+@media print {
+    body.printing-register .official-signoff.std-signoff.cols-4 {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+
+    body.printing-register .official-signoff.std-signoff.cols-3 {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}

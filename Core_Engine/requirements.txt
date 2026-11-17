@@ -1,0 +1,9 @@
+# متطلبات تشغيل — Python 3.10+
+# SQLite من المكتبة القياسية ولا يُدرج هنا
+fastapi
+uvicorn
+python-multipart
+openpyxl
+xlrd
+Pillow
+hijri-converter

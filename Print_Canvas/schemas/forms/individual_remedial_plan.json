@@ -1,0 +1,149 @@
+{
+  "id": "individual_remedial_plan",
+  "title": "خطة علاجية فردية",
+  "description": "توثيق خطة علاجية لطالب متعثر، مع قوائم الخيارات والشواهد والتوقيعات.",
+  "storageKey": "board1059.form.individual_remedial_plan",
+  "washImage": "/assets/dashboard/board-leadership.jpg",
+  "print": {
+    "kind": "portrait-official",
+    "title": "خطة علاجية فردية",
+    "frameClass": "tpl-portrait-official tpl-remedial-plan"
+  },
+  "sections": [
+    {
+      "id": "header",
+      "label": "عنوان التقرير",
+      "fields": [
+        {
+          "id": "report_title",
+          "label": "عنوان التقرير",
+          "type": "text",
+          "required": true,
+          "default": "خطة علاجية فردية"
+        }
+      ]
+    },
+    {
+      "id": "basics",
+      "label": "المعلومات الأساسية",
+      "fields": [
+        { "id": "grade_class", "label": "الصف / الفصل", "type": "text", "placeholder": "مثال: أول متوسط / أ" },
+        { "id": "subject", "label": "المادة", "type": "text", "placeholder": "مثال: الرياضيات" },
+        {
+          "id": "improvement",
+          "label": "نتيجة التحسن",
+          "type": "select",
+          "hint": "سريع — جيد جدًا — جيد — بطيء",
+          "options": ["سريع", "جيد جدًا", "جيد", "بطيء"]
+        },
+        { "id": "student_name", "label": "اسم الطالب", "type": "text", "required": true },
+        {
+          "id": "follow_hijri",
+          "label": "تاريخ المتابعة (هجري)",
+          "type": "hijri",
+          "pairWith": "follow_gregorian",
+          "placeholder": "مثال: 17 ربيع الأول 1448هـ"
+        },
+        {
+          "id": "follow_gregorian",
+          "label": "تاريخ المتابعة (ميلادي)",
+          "type": "gregorian",
+          "pairWith": "follow_hijri",
+          "placeholder": "مثال: 30 أغسطس 2026م"
+        }
+      ]
+    },
+    {
+      "id": "lists",
+      "label": "القوائم",
+      "fields": [
+        {
+          "id": "weaknesses",
+          "label": "نقاط الضعف",
+          "type": "checklist",
+          "allowCustom": true,
+          "customHint": "أكتب خيارات إضافية — سطرٌ لكل خيار",
+          "options": [
+            "قلة المشاركة الصفية",
+            "ضعف المستوى التحصيلي",
+            "إهمال الواجبات المنزلية",
+            "كثرة الغياب",
+            "ظروف أسرية",
+            "عدم متابعة الأسرة",
+            "ضعف حاسة البصر",
+            "ضعف حاسة السمع",
+            "عوامل نفسية وبيولوجية"
+          ]
+        },
+        {
+          "id": "remedial_plans",
+          "label": "الخطط العلاجية",
+          "type": "checklist",
+          "allowCustom": true,
+          "customHint": "أكتب خيارات إضافية — سطرٌ لكل خيار",
+          "options": [
+            "أوراق عمل إضافية",
+            "التشجيع على المشاركة",
+            "إسناد دور للطالب في مجموعة",
+            "تغيير مجموعة الطالب",
+            "التعلم بالأقران",
+            "الابتكار والتجديد في طرق التدريس",
+            "تنويع الأسئلة وأساليب التقويم",
+            "تقديم حوافز متنوعة",
+            "الإشراك في مجاميع التقوية",
+            "استخدام التعزيز"
+          ]
+        },
+        {
+          "id": "actions_taken",
+          "label": "الإجراءات المتخذة",
+          "type": "checklist",
+          "allowCustom": true,
+          "customHint": "أكتب خيارات إضافية — سطرٌ لكل خيار",
+          "options": [
+            "لقاء فردي",
+            "لقاء مع الموجه الطلابي",
+            "لقاء أو تواصل مع ولي الأمر"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "content",
+      "label": "محتوى التقرير",
+      "fields": [
+        {
+          "id": "notes",
+          "label": "ملاحظات",
+          "type": "textarea",
+          "rows": 5,
+          "hint": "دوّن متابعة الخطة وأثرها",
+          "default": "يُتابع الطالب أسبوعياً في المهارة المستهدفة، ويُرصد أثر الخطة في درجات التقويم القصير وفي مشاركته الصفية والتزامه بالواجبات. وما لم يتحسّن المستوى بعد أربعة أسابيع تُراجَع الخطة وتُبدَّل أساليبها، ويُبلَّغ ولي الأمر بما تحقّق."
+        }
+      ]
+    },
+    {
+      "id": "signatures",
+      "label": "التوقيعات",
+      "fields": [
+        { "id": "sig_right", "label": "توقيع يمين", "type": "text", "default": "المعلم / ", "placeholder": "المعلم / اسم المعلم" },
+        { "id": "sig_mid", "label": "توقيع وسط", "type": "text", "placeholder": "اضف الاسم هنا" },
+        { "id": "sig_left", "label": "توقيع يسار", "type": "text", "default": "مدير المدرسة / ", "placeholder": "مدير المدرسة / اسم المدير" }
+      ]
+    },
+    {
+      "id": "evidence",
+      "label": "إضافة شواهد (صور)",
+      "fields": [
+        {
+          "id": "evidence_files",
+          "label": "الشواهد المصورة",
+          "type": "evidence",
+          "max": 10,
+          "accept": "image/*",
+          "compressHint": "محاولة تصغير الشواهد للحصول على صفحة واحدة"
+        }
+      ]
+    }
+  ]
+}

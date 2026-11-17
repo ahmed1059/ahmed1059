@@ -1,0 +1,116 @@
+{
+  "roles": [
+    {
+      "id": "principal",
+      "label": "مدير المدرسة",
+      "preview": "مدير المدرسة",
+      "match": "مدير",
+      "scope": "full",
+      "registers": "*",
+      "widgets": ["alerts", "charts", "staff", "registers", "plans", "committees"],
+      "permissions": ["approve", "export"],
+      "holder": "نايف بن سمير حجيف المخلفي"
+    },
+    {
+      "id": "system_lead",
+      "label": "مسؤول النظام والقيادة الشاملة",
+      "preview": "مسؤول النظام",
+      "match": "مسؤول النظام",
+      "scope": "full",
+      "registers": "*",
+      "widgets": ["alerts", "charts", "staff", "registers", "plans", "committees"],
+      "permissions": ["approve", "export"]
+    },
+    {
+      "id": "vice_academic",
+      "label": "وكيل الشؤون التعليمية",
+      "preview": "وكيل الشؤون التعليمية",
+      "match": "الشؤون التعليمية",
+      "scope": "supervision",
+      "registers": ["results_analysis", "exam_committees", "kpi_monitoring", "academic_care", "class_followup", "schedule_and_substitution_register"],
+      "widgets": ["alerts", "charts", "registers"],
+      "permissions": []
+    },
+    {
+      "id": "vice_students",
+      "label": "وكيل شؤون الطلاب",
+      "preview": "وكيل شؤون الطلاب",
+      "match": "شؤون الطلاب",
+      "scope": "supervision",
+      "registers": ["discipline_register", "behavior_cases", "student_leave"],
+      "widgets": ["alerts", "registers"],
+      "permissions": []
+    },
+    {
+      "id": "counselor",
+      "label": "الموجه الطلابي",
+      "preview": "الموجه الطلابي",
+      "match": "موجه",
+      "scope": "supervision",
+      "registers": ["academic_care", "gifted_care", "case_study", "counseling_programs", "behavior_cases"],
+      "widgets": ["alerts", "registers"],
+      "permissions": []
+    },
+    {
+      "id": "activity",
+      "label": "رائد النشاط",
+      "preview": "رائد النشاط",
+      "match": "نشاط",
+      "scope": "supervision",
+      "registers": ["activity_plan", "competitions_register"],
+      "widgets": ["alerts", "registers"],
+      "permissions": []
+    },
+    {
+      "id": "gifted",
+      "label": "منسق الموهوبين",
+      "preview": "منسق الموهوبين",
+      "match": "موهوب",
+      "scope": "supervision",
+      "registers": ["gifted_care", "competitions_register"],
+      "widgets": ["alerts", "registers"],
+      "permissions": []
+    },
+    {
+      "id": "lab",
+      "label": "محضر المختبر",
+      "preview": "محضر المختبر",
+      "match": "محضر",
+      "scope": "supervision",
+      "registers": ["lab_register"],
+      "widgets": ["alerts", "registers"],
+      "permissions": []
+    },
+    {
+      "id": "resources",
+      "label": "أمين مصادر التعلم",
+      "preview": "أمين مصادر التعلم",
+      "match": "مصادر",
+      "scope": "supervision",
+      "registers": ["learning_resources_register", "lrr_learning_resources"],
+      "widgets": ["alerts", "registers"],
+      "permissions": []
+    },
+    {
+      "id": "admin_assistant",
+      "label": "المساعد الإداري",
+      "preview": "المساعد الإداري",
+      "match": "مساعد",
+      "scope": "supervision",
+      "registers": ["leave_register", "admin_communications", "personal_leave", "employee_leave_register", "school_fund_register"],
+      "widgets": ["alerts", "registers"],
+      "permissions": []
+    },
+    {
+      "id": "teacher",
+      "label": "المعلم",
+      "preview": "المعلم",
+      "match": "معلم",
+      "scope": "self",
+      "registers": ["class_followup", "teacher_portfolio", "personal_leave"],
+      "widgets": ["self", "registers", "rank", "visits"],
+      "permissions": [],
+      "anonymous_rank": true
+    }
+  ]
+}

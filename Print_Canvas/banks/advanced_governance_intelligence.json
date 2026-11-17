@@ -1,0 +1,137 @@
+{
+  "advanced_governance_intelligence": {
+    "version": "1.0.0",
+    "installed_from": "request-rules-and-suite-minutes",
+    "readiness": {
+      "formula": "Readiness = (0.35 * evidence) + (0.30 * nafes) + (0.20 * attendance) + (0.15 * interventions)",
+      "weights": {
+        "evidence": 0.35,
+        "nafes": 0.3,
+        "attendance": 0.2,
+        "interventions": 0.15
+      }
+    },
+    "critical_pulse": {
+      "condition": "sudden_class_absence_percent_gt",
+      "threshold": 25
+    },
+    "nafes_care": {
+      "subjects": [
+        "لغتي",
+        "الرياضيات",
+        "العلوم"
+      ],
+      "skill_below": 60,
+      "register_id": "academic_care",
+      "loss_type": "مهاري",
+      "delay_degree": "عميق"
+    },
+    "evidence_portal": {
+      "url": "https://script.google.com/macros/s/AKfycbxv401T2f7sORF2jEwnlG1u1rhfj9nqfXAkfQf6TFC1PPWqObugF600p3HCMd_-lDdc/exec",
+      "token": "autologin",
+      "params": [
+        "token",
+        "nid",
+        "etec"
+      ]
+    },
+    "intervention_recommendations": [
+      {
+        "id": 1,
+        "committee_key": "accreditation_and_excellence",
+        "committee_id": "quality",
+        "committee_code": "ACC",
+        "etec": "leadership",
+        "text": "استكمال رفع {evidence_count} شاهداً على المنصة الرقمية قبل تاريخ {deadline}."
+      },
+      {
+        "id": 2,
+        "committee_key": "accreditation_and_excellence",
+        "committee_id": "quality",
+        "committee_code": "ACC",
+        "etec": "leadership",
+        "text": "تنفيذ زيارة ميدانية داخلية شاملة يوم {internal_visit_date} برئاسة مدير المدرسة."
+      },
+      {
+        "id": 3,
+        "committee_key": "accreditation_and_excellence",
+        "committee_id": "quality",
+        "committee_code": "ACC",
+        "etec": "leadership",
+        "text": "اعتماد تقرير الجاهزية الحالي برفع النسبة إلى {target_percentage}% بنهاية الفصل."
+      },
+      {
+        "id": 4,
+        "committee_key": "academic_achievement_and_nafes",
+        "committee_id": "achievement",
+        "committee_code": "AAN",
+        "etec": "outcomes",
+        "text": "تكثيف حصص التقوية في {weak_subject} بمعدل {sessions_per_week} حصص أسبوعياً."
+      },
+      {
+        "id": 5,
+        "committee_key": "academic_achievement_and_nafes",
+        "committee_id": "achievement",
+        "committee_code": "AAN",
+        "etec": "outcomes",
+        "text": "تشكيل مجتمعات تعلم مصغرة لمعلمي {target_subjects} لمتابعة الخطط العلاجية."
+      },
+      {
+        "id": 6,
+        "committee_key": "academic_achievement_and_nafes",
+        "committee_id": "achievement",
+        "committee_code": "AAN",
+        "etec": "outcomes",
+        "text": "تنفيذ اختبار محاكي لنافس في الأسبوع {test_week} ورفع نتائجه للجنة."
+      },
+      {
+        "id": 7,
+        "committee_key": "student_guidance_and_care",
+        "committee_id": "guidance",
+        "committee_code": "SGC",
+        "etec": "outcomes",
+        "text": "إحالة {case_count} حالة إلى جلسات إرشادية فردية مع المرشد الطلابي."
+      },
+      {
+        "id": 8,
+        "committee_key": "student_guidance_and_care",
+        "committee_id": "guidance",
+        "committee_code": "SGC",
+        "etec": "outcomes",
+        "text": "تفعيل برنامج {program_name} للحد من ظاهرة {phenomenon} في الفصل الدراسي."
+      },
+      {
+        "id": 9,
+        "committee_key": "student_guidance_and_care",
+        "committee_id": "guidance",
+        "committee_code": "SGC",
+        "etec": "outcomes",
+        "text": "تكريم {honored_count} طالباً متميزاً سلوكياً في حفل نهاية الفصل."
+      },
+      {
+        "id": 10,
+        "committee_key": "national_events_and_activities",
+        "committee_id": "activity",
+        "committee_code": "NEA",
+        "etec": "outcomes",
+        "text": "تنفيذ برنامج احتفالي لليوم الوطني يوم {national_day_date} بمشاركة {student_count} طالباً."
+      },
+      {
+        "id": 11,
+        "committee_key": "national_events_and_activities",
+        "committee_id": "activity",
+        "committee_code": "NEA",
+        "etec": "outcomes",
+        "text": "ترشيح {nominated_count} طالباً للمشاركة في مسابقة {competition_name} على مستوى الإدارة."
+      },
+      {
+        "id": 12,
+        "committee_key": "national_events_and_activities",
+        "committee_id": "activity",
+        "committee_code": "NEA",
+        "etec": "outcomes",
+        "text": "تنظيم معرض {exhibition_name} في الأسبوع {week} بمشاركة {participant_count} طالباً."
+      }
+    ]
+  }
+}

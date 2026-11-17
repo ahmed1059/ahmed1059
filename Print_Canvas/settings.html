@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>الإعدادات — منظومة الخطط المدرسية</title>
+    <link rel="stylesheet" href="css/fonts.css?v=font1">
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/dashboard.css?v=space1">
+    <link rel="stylesheet" href="css/print.css">
+    <link rel="stylesheet" href="css/theme-core.css?v=space2">
+    <link rel="stylesheet" href="css/opening-surface.css?v=open4">
+    <link rel="stylesheet" href="css/page-nav.css?v=nav1">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="settings-page">
+    <header class="app-header">
+        <div class="header-right">
+            <img src="/assets/ministry_logo.png" class="header-logo" alt="وزارة التعليم">
+            <a class="header-title home-title" href="dashboard.html#home"><strong>متوسطة سعد بن الربيع الأنصاري</strong><span class="home-caption">الصفحة الرئيسية</span></a>
+        </div>
+        <div class="header-left">
+            <button class="icon-btn" type="button" title="الإشعارات">🔔</button>
+            <button class="icon-btn" type="button" title="الحساب">👤</button>
+        </div>
+        <nav class="page-nav" aria-label="تعريف المدرسة">
+            <a href="identity.html#about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6.5 19c.8-2.8 2.8-4.2 5.5-4.2s4.7 1.4 5.5 4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>من نحن</a>
+            <a href="identity.html#vision"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>الرؤية والرسالة</a>
+            <a href="identity.html#goals"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>أهدافنا</a>
+            <a href="identity.html#partners"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.8 18c.7-2.4 2.4-3.6 4.2-3.6s3.5 1.2 4.2 3.6M12 18c.6-2 2-3.2 3.8-3.2 1.7 0 3.1 1.1 3.8 3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>شركاؤنا</a>
+            <a href="identity.html#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 8l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>تواصل معنا</a>
+        </nav>
+    </header>
+
+    <div class="app-body">
+        <aside class="app-sidebar">
+            <nav>
+                <a href="dashboard.html" class="nav-item">
+                    <i data-lucide="home"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="bar-chart"></i>
+                    <span>لوحة المعلومات</span>
+                </a>
+                <a href="dashboard.html" class="nav-item">
+                    <i data-lucide="calendar"></i>
+                    <span>الخطط</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="users"></i>
+                    <span>المستخدمون</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="folder"></i>
+                    <span>الملفات</span>
+                </a>
+                <a href="settings.html" class="nav-item active">
+                    <i data-lucide="settings"></i>
+                    <span>الإعدادات</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="app-main">
+            <div class="top-action-bar no-print">
+                <h2>الإعدادات</h2>
+                <a class="btn-unified-back" href="dashboard.html">رجوع</a>
+            </div>
+            <div class="official-header">
+                <div class="official-right">
+                    <img src="/assets/ministry_logo.png" alt="وزارة التعليم">
+                </div>
+                <div class="official-center">
+                    <div>المملكة العربية السعودية</div>
+                    <div>وزارة التعليم</div>
+                    <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                    <div class="header-office" id="official-office"></div>
+                    <div class="official-school" id="official-school">متوسطة سعد بن الربيع الأنصاري</div>
+                </div>
+                <div class="official-left">
+                    <img src="/assets/vision_2030.png" alt="رؤية 2030">
+                </div>
+            </div>
+
+            <form id="settings-form">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>بيانات المدرسة العامة</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div>
+                                <label for="education-administration">الإدارة العامة / المنطقة التعليمية</label>
+                                <select id="education-administration" class="form-input"></select>
+                                <input id="education-administration-custom" class="form-input" type="text" hidden placeholder="اكتب اسم الإدارة العامة">
+                            </div>
+                            <div>
+                                <label for="school-name">اسم المدرسة</label>
+                                <input id="school-name" type="text" value="متوسطة سعد بن الربيع الأنصاري">
+                            </div>
+                            <div>
+                                <label for="statistical-number">الرقم الإحصائي</label>
+                                <input id="statistical-number" type="text">
+                            </div>
+                            <div>
+                                <label for="office_name">مكتب التعليم</label>
+                                <input id="office_name" type="text" placeholder="اختياري">
+                            </div>
+                            <div>
+                                <label for="building-type">طبيعة المبنى</label>
+                                <select id="building-type">
+                                    <option value="حكومي" selected>حكومي</option>
+                                    <option value="مستأجر">مستأجر</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="classrooms">عدد الفصول</label>
+                                <input id="classrooms" type="number" min="0">
+                            </div>
+                            <div>
+                                <label for="labs">عدد المعامل</label>
+                                <input id="labs" type="number" min="0">
+                            </div>
+                            <div>
+                                <label for="sports-halls">الصالات الرياضية</label>
+                                <input id="sports-halls" type="number" min="0">
+                            </div>
+                            <div>
+                                <label for="total-students">إجمالي الطلاب</label>
+                                <input id="total-students" type="number" min="0">
+                            </div>
+                            <div>
+                                <label for="total-staff">إجمالي المعلمين والإداريين</label>
+                                <input id="total-staff" type="number" min="0">
+                            </div>
+                            <div>
+                                <label for="term_weeks_count">عدد أسابيع الفصل الدراسي</label>
+                                <select id="term_weeks_count" class="form-input">
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18" selected>18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>فريق إعداد الخطة المدرسية (لجنة التميز والجودة)</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-grid">
+                            <div>
+                                <label for="chair-name">الرئيس: مدير المدرسة</label>
+                                <input id="chair-name" type="text" value="نايف بن سمير حجيف المخلفي" readonly>
+                            </div>
+                        </div>
+                        <table class="data-table settings-table">
+                            <thead>
+                                <tr>
+                                    <th>اختيار</th>
+                                    <th>المعلم</th>
+                                    <th>دوره في اللجنة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teacher-rows"></tbody>
+                        </table>
+                        <div class="form-grid committee-extra">
+                            <div>
+                                <label>ممثل أولياء الأمور</label>
+                                <div id="parents-list"></div>
+                                <button id="add-parent" class="btn-secondary" type="button">+ إضافة ولي أمر</button>
+                            </div>
+                            <div>
+                                <label>ممثل الطلاب</label>
+                                <div id="students-list"></div>
+                                <button id="add-student" class="btn-secondary" type="button">+ إضافة طالب</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>اعتماد التقارير</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>المنفّذ يوقّع يمينًا. الوكيل الذي يعتمد تقريره هو صاحب القائمة التي ينتمي إليها اسمه. اعتماد مدير المدرسة ثابت.</p>
+                        <div id="approval-authorities"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>مراجع ومصادر بناء الخطة</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="sources-list"></div>
+                        <button id="add-source" class="btn-secondary" type="button">+ إضافة مصدر</button>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="save-settings" class="btn-primary" type="button">حفظ الإعدادات</button>
+                    <button id="apply-settings" class="btn-secondary" type="button">تطبيق الإعدادات على الكتيب</button>
+                </div>
+                <p id="settings-message" class="form-message"></p>
+            </form>
+            <div class="card" id="students-import-card">
+                <div class="card-header">
+                    <h2>تحديث قاعدة بيانات الطلاب (نظام نور)</h2>
+                </div>
+                <div class="card-body">
+                    <label for="students-excel">ملف الطلاب (.xlsx أو .xls)</label>
+                    <input id="students-excel" type="file" accept=".xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                    <div class="form-actions">
+                        <button id="import-students" class="btn-primary" type="button">استيراد وتحديث القاعدة</button>
+                    </div>
+                    <p id="students-import-message" class="form-message"></p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/xlsx.full.min.js"></script>
+    <script src="js/students-registry.js?v=cascade4"></script>
+    <script src="js/settings.js?v=approval1"></script>
+    <script>lucide.createIcons();</script>
+<script src="js/page-nav.js?v=nav1"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+/* PoC: تجاوب سجل المنسوبين — مقيّد بـ #staff-form فقط.
+   صفر تعديل JS. سطح المكتب دون قواعد مغيّرة للمظهر.
+   بلا :has() · بلا position:sticky (قرار طوارئ بعد تعليق الجوال). */
+
+/* ── الجوال: بطاقات فوق نفس الجدول ── */
+@media (max-width: 768px) {
+    #staff-form .staff-toolbar {
+        background: #ffffff;
+        padding-bottom: 8px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid var(--border-subtle, #e2e8f0);
+    }
+
+    #staff-form .staff-toolbar-row {
+        flex-wrap: wrap;
+    }
+
+    #staff-form .staff-add {
+        flex: 1 1 auto;
+        min-width: 9rem;
+        text-align: center;
+    }
+
+    #staff-form .staff-table,
+    #staff-form .staff-table tbody,
+    #staff-form .staff-table tr,
+    #staff-form .staff-table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #staff-form .staff-table {
+        border-collapse: collapse;
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    #staff-form .staff-table thead {
+        display: none;
+    }
+
+    /* فاصل بصري بين بطاقات المنسوبين */
+    #staff-form .staff-table tbody tr {
+        margin: 0 0 12px;
+        padding: 12px 14px;
+        border: 1px solid var(--border-subtle, #e2e8f0);
+        border-radius: 8px;
+        background: #ffffff;
+        text-align: right;
+    }
+
+    #staff-form .staff-table tbody tr:last-child {
+        margin-bottom: 0;
+    }
+
+    #staff-form .staff-table td {
+        border: 0;
+        border-bottom: 1px solid var(--color-neutral-100, #f1f5f9);
+        padding: 8px 0;
+        text-align: right;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        background: transparent;
+    }
+
+    #staff-form .staff-table tbody tr:nth-child(even) td,
+    #staff-form .staff-table tbody tr:hover td {
+        background: transparent;
+    }
+
+    #staff-form .staff-table td:last-child {
+        border-bottom: 0;
+        padding-top: 12px;
+    }
+
+    /* تسميات الأعمدة السبعة — مطابقة لترتيب render() */
+    #staff-form .staff-table td:nth-child(1)::before {
+        content: "الاسم:";
+    }
+
+    #staff-form .staff-table td:nth-child(2)::before {
+        content: "السجل المدني:";
+    }
+
+    #staff-form .staff-table td:nth-child(3)::before {
+        content: "المسمى الوظيفي:";
+    }
+
+    #staff-form .staff-table td:nth-child(4)::before {
+        content: "التخصص:";
+    }
+
+    #staff-form .staff-table td:nth-child(5)::before {
+        content: "رقم الجوال:";
+    }
+
+    #staff-form .staff-table td:nth-child(6)::before {
+        content: "حالة الحساب:";
+    }
+
+    #staff-form .staff-table td:nth-child(7)::before {
+        content: "الإجراءات:";
+    }
+
+    #staff-form .staff-table td::before {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--text-secondary, #64748b);
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* الاسم كعنوان بارز داخل البطاقة */
+    #staff-form .staff-table td:nth-child(1) {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--color-primary, #0d6e68);
+        padding-top: 0;
+    }
+
+    /* فراغ النتائج: خلية واحدة colSpan=7 — أخفِ التسمية فقط */
+    #staff-form .staff-table td.staff-empty::before {
+        display: none;
+    }
+
+    #staff-form .staff-table td.staff-empty {
+        border-bottom: 0;
+        text-align: center;
+        color: var(--text-secondary, #64748b);
+        font-weight: 600;
+    }
+
+    #staff-form .staff-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-start;
+    }
+
+    /* تركيز مرئي واضح داخل اللوح */
+    #staff-form .staff-toolbar-row input:focus,
+    #staff-form .staff-toolbar-row select:focus,
+    #staff-form .staff-add:focus,
+    #staff-form .staff-toolbar-row .wash-back:focus,
+    #staff-form .staff-icon:focus,
+    #staff-form .wash-save:focus,
+    #staff-form .wash-cancel:focus {
+        outline: 2px solid var(--color-primary, #0d6e68);
+        outline-offset: 2px;
+    }
+}

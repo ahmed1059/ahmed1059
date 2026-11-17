@@ -1,0 +1,206 @@
+/* سطح الشاشات على نسق افتتاحية الدخول. الطباعة ووثيقة الاعتماد خارج هذا الملف. */
+
+@media screen {
+    body {
+        background: #f7f5f0 !important;
+    }
+
+    .app-shell {
+        grid-template-rows: 72px 1fr !important;
+        background: #f7f5f0 !important;
+    }
+
+    .app-header,
+    .app-header.command-bar {
+        height: 72px !important;
+        min-height: 72px !important;
+        max-height: 72px !important;
+        background: #ffffff !important;
+        color: #1c1917 !important;
+        border-bottom: 1px solid #efeae2 !important;
+        box-shadow: none !important;
+    }
+
+    .app-header::after {
+        content: none !important;
+        display: none !important;
+    }
+
+    .app-header .header-logo {
+        width: auto !important;
+        height: 44px !important;
+        max-height: 44px !important;
+        max-width: 120px !important;
+    }
+
+    .command-school-name,
+    .header-title {
+        color: #1c1917 !important;
+        font-weight: 800 !important;
+    }
+
+    .command-principal strong,
+    .command-principal span,
+    .sidebar-mark {
+        color: #57534e !important;
+    }
+
+    .command-exit {
+        color: #57534e !important;
+        font-weight: 700;
+        background: transparent !important;
+    }
+
+    .app-header .icon-btn {
+        background: transparent !important;
+        color: #1c1917 !important;
+        border-radius: 999px !important;
+    }
+
+    .app-main {
+        height: calc(100dvh - 72px) !important;
+        background: #f7f5f0 !important;
+    }
+
+    .app-sidebar {
+        background: #ffffff !important;
+        border-color: #efeae2 !important;
+    }
+
+    .app-sidebar .nav-item {
+        border-radius: 999px !important;
+        min-height: 44px !important;
+    }
+
+    .app-sidebar .nav-item:hover {
+        background: #f4f1ea !important;
+        color: #005a53 !important;
+    }
+
+    .app-sidebar .nav-item.active,
+    .app-sidebar .nav-item[aria-current="page"] {
+        background: #e7f3f1 !important;
+        color: #005a53 !important;
+    }
+
+    .card,
+    .kpi-card,
+    .top-action-bar,
+    .official-header {
+        background: #ffffff !important;
+        border: 1px solid #ece7df !important;
+        border-radius: 24px !important;
+        box-shadow: 0 12px 32px rgba(28, 25, 23, 0.06) !important;
+    }
+
+    body.view-home #home-registers .reg-card {
+        border: 1px solid #ece7df !important;
+        border-radius: 24px !important;
+        box-shadow: 0 12px 32px rgba(28, 25, 23, 0.06) !important;
+    }
+
+    body.view-home #home-registers .reg-card button {
+        border-radius: 999px !important;
+        background: #f4f1ea !important;
+        color: #005a53 !important;
+    }
+
+    .card-header {
+        background: #ffffff !important;
+        border-bottom-color: #efeae2 !important;
+    }
+
+    .card-header h2,
+    .top-action-bar h2 {
+        color: #005a53 !important;
+        font-weight: 800;
+    }
+
+    .btn-unified-primary,
+    .settings-page .btn-primary,
+    .setup-page .btn-primary {
+        border: 0 !important;
+        border-radius: 999px !important;
+        background: #005a53 !important;
+        color: #ffffff !important;
+        box-shadow: none !important;
+    }
+
+    .btn-unified-back,
+    .settings-page .btn-secondary,
+    .setup-page .btn-secondary,
+    .setup-page .btn-back {
+        border-radius: 999px !important;
+        border: 1px solid #e7e2d8 !important;
+        background: #ffffff !important;
+        color: #005a53 !important;
+        box-shadow: none !important;
+    }
+
+    .settings-page .card input,
+    .settings-page .card select,
+    .setup-page .card input,
+    .setup-page .card select {
+        height: 48px;
+        border: 1px solid #e7e2d8 !important;
+        border-radius: 999px !important;
+        background: #ffffff;
+    }
+
+    .settings-page .card textarea,
+    .setup-page .card textarea {
+        border: 1px solid #e7e2d8 !important;
+        border-radius: 16px !important;
+        background: #ffffff;
+    }
+
+    .isolated-page-main {
+        padding: 24px !important;
+        box-sizing: border-box;
+    }
+
+    .page-title-banner,
+    .plan-generator-card,
+    .plan-form-card {
+        background: #ffffff !important;
+        border: 1px solid #ece7df !important;
+        border-radius: 24px !important;
+        box-shadow: 0 12px 32px rgba(28, 25, 23, 0.06) !important;
+    }
+
+    .page-title-banner {
+        margin: 0 0 16px;
+        padding: 20px 24px;
+    }
+
+    .page-title-banner h2 {
+        margin: 0 0 6px;
+        color: #005a53 !important;
+        font-weight: 800;
+    }
+
+    .plan-generator-card,
+    .plan-form-card {
+        padding: 24px;
+    }
+
+    .plan-generator-card input:not([type="file"]),
+    .plan-generator-card select,
+    .plan-form-card input:not([type="file"]),
+    .plan-form-card select {
+        height: 48px;
+        border: 1px solid #e7e2d8 !important;
+        border-radius: 999px !important;
+        background: #ffffff;
+        padding: 0 16px;
+    }
+
+    .btn-primary-action {
+        height: 48px;
+        border: 0 !important;
+        border-radius: 999px !important;
+        background: #005a53 !important;
+        color: #ffffff !important;
+        font-weight: 800;
+    }
+}

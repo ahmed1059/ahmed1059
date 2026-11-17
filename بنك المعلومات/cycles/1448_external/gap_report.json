@@ -1,0 +1,520 @@
+{
+  "meta": {
+    "wave": "A-SSOT-correct",
+    "date": "2026-11-01",
+    "programs_total": 47,
+    "decision_approved_count": 15,
+    "program_bindings_count": 13,
+    "prep_indicators": [
+      "1-3-1-3",
+      "2-1-1-7",
+      "4-1-1-1",
+      "4-1-1-3"
+    ],
+    "not_touched": [
+      "programs.json",
+      "كتيب تشغيلي",
+      "خ6/خ7"
+    ]
+  },
+  "gaps": {
+    "no_program_binding": [
+      "discipline",
+      "career",
+      "gifted",
+      "safety",
+      "visits",
+      "plc",
+      "evacuation",
+      "irtiqaa",
+      "volunteer",
+      "planning",
+      "pd",
+      "comm_skills",
+      "study_skills",
+      "basic_mastery",
+      "subject_support_teacher",
+      "creative_writing",
+      "creative_writing_club",
+      "rifq",
+      "green_school",
+      "tree_season",
+      "disciplined_class",
+      "reading_for_all",
+      "reading_club",
+      "free_reading_week",
+      "sources_research",
+      "library_free_reading",
+      "seerah_reading_contest",
+      "reading_contest",
+      "white_cane_day",
+      "speech_contest",
+      "sports_contests",
+      "calligraphy_speech_contest",
+      "physics_med_day",
+      "digital_transform"
+    ],
+    "no_saved_indicator_codes": [
+      "loss",
+      "discipline",
+      "career",
+      "gifted",
+      "partnership",
+      "safety",
+      "nafs",
+      "support",
+      "visits",
+      "plc",
+      "evacuation",
+      "building",
+      "parent_meet",
+      "irtiqaa",
+      "volunteer",
+      "planning",
+      "pd",
+      "green_school",
+      "tree_season",
+      "physics_med_day",
+      "lab_setup",
+      "digital_transform"
+    ],
+    "decision_approved_without_binding": [
+      "rifq",
+      "disciplined_class",
+      "reading_for_all",
+      "reading_club",
+      "free_reading_week",
+      "sources_research",
+      "library_free_reading",
+      "white_cane_day",
+      "speech_contest",
+      "sports_contests",
+      "calligraphy_speech_contest"
+    ]
+  },
+  "rows": [
+    {
+      "id": "loss",
+      "name": "معالجة الفاقد التعليمي والرفع التحصيلي",
+      "owner": "vice_teachers",
+      "has_saved_codes": false,
+      "in_program_bindings": true,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "discipline",
+      "name": "تعزيز الانضباط المدرسي والحد من الغياب",
+      "owner": "vice_students",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "career",
+      "name": "التوجيه المهني والتعليمي",
+      "owner": "student_counselor",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "gifted",
+      "name": "رعاية الموهوبين والمبتكرين",
+      "owner": "activity_leader",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "partnership",
+      "name": "الشراكة المجتمعية لدعم التعلم",
+      "owner": "principal",
+      "has_saved_codes": false,
+      "in_program_bindings": true,
+      "decision_approved": false,
+      "serves_prep": true
+    },
+    {
+      "id": "safety",
+      "name": "الأمن والسلامة المدرسية",
+      "owner": "vice_students",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "nafs",
+      "name": "نافس للاستعداد للاختبارات الوطنية",
+      "owner": "vice_teachers",
+      "has_saved_codes": false,
+      "in_program_bindings": true,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "support",
+      "name": "حصص الدعم والتقوية",
+      "owner": "vice_teachers",
+      "has_saved_codes": false,
+      "in_program_bindings": true,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "visits",
+      "name": "الزيارات الصفية الاستطلاعية والتقويمية",
+      "owner": "vice_teachers",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "plc",
+      "name": "مجتمعات التعلم المهنية (PLCs)",
+      "owner": "vice_teachers",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "evacuation",
+      "name": "فرضيات الإخلاء الدورية",
+      "owner": "vice_students",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "building",
+      "name": "صيانة المبنى والمرافق",
+      "owner": "vice_students",
+      "has_saved_codes": false,
+      "in_program_bindings": true,
+      "decision_approved": false,
+      "serves_prep": true
+    },
+    {
+      "id": "parent_meet",
+      "name": "لقاء الشراكة مع أولياء الأمور",
+      "owner": "principal",
+      "has_saved_codes": false,
+      "in_program_bindings": true,
+      "decision_approved": false,
+      "serves_prep": true
+    },
+    {
+      "id": "irtiqaa",
+      "name": "رائد الشراكة المجتمعية (ارتقاء)",
+      "owner": "activity_leader",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "volunteer",
+      "name": "العمل التطوعي الطلابي",
+      "owner": "activity_leader",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "planning",
+      "name": "التخطيط الاستراتيجي المدرسي",
+      "owner": "principal",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "pd",
+      "name": "التطوير المهني الداخلي",
+      "owner": "vice_teachers",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "fun_math",
+      "name": "مبادرة الرياضيات الممتعة",
+      "owner": "teacher",
+      "has_saved_codes": true,
+      "in_program_bindings": true,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "comm_skills",
+      "name": "برنامج مهارات التواصل",
+      "owner": "teacher",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "study_skills",
+      "name": "برنامج مهارات المذاكرة",
+      "owner": "teacher",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "basic_mastery",
+      "name": "برنامج إتقان المهارات الأساسية",
+      "owner": "teacher",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "subject_support_teacher",
+      "name": "برنامج دعم في المواد الأساسية",
+      "owner": "teacher",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "critical_thinking",
+      "name": "برنامج التفكير الناقد",
+      "owner": "teacher",
+      "has_saved_codes": true,
+      "in_program_bindings": true,
+      "decision_approved": false,
+      "serves_prep": true
+    },
+    {
+      "id": "creative_writing",
+      "name": "برنامج الكتابة الإبداعية",
+      "owner": "teacher",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "creative_writing_club",
+      "name": "نادي الكتابة الإبداعية",
+      "owner": "teacher",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "rifq",
+      "name": "برنامج رفق للحد من التنمر",
+      "owner": "vice_students",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": false
+    },
+    {
+      "id": "green_school",
+      "name": "مبادرة مدرسة خضراء",
+      "owner": "vice_students",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "tree_season",
+      "name": "مبادرة موسم التشجير الوطني",
+      "owner": "vice_students",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "disciplined_class",
+      "name": "مسابقة الفصل المنضبط",
+      "owner": "vice_students",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": false
+    },
+    {
+      "id": "reading_init",
+      "name": "مبادرة القراءة",
+      "owner": "librarian",
+      "has_saved_codes": true,
+      "in_program_bindings": true,
+      "decision_approved": true,
+      "serves_prep": false
+    },
+    {
+      "id": "reading_for_all",
+      "name": "مبادرة القراءة للجميع",
+      "owner": "librarian",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": false
+    },
+    {
+      "id": "reading_club",
+      "name": "نادي القراءة",
+      "owner": "librarian",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": false
+    },
+    {
+      "id": "free_reading_week",
+      "name": "أسبوع القراءة الحرة",
+      "owner": "librarian",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": false
+    },
+    {
+      "id": "sources_research",
+      "name": "برنامج البحث في المصادر",
+      "owner": "librarian",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": false
+    },
+    {
+      "id": "library_free_reading",
+      "name": "برنامج القراءة الحرة في حصص المكتبة",
+      "owner": "librarian",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": false
+    },
+    {
+      "id": "seerah_reading_contest",
+      "name": "مسابقة القراءة في السيرة النبوية",
+      "owner": "librarian",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "reading_contest",
+      "name": "مسابقة القراءة",
+      "owner": "librarian",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "national_day",
+      "name": "برنامج اليوم الوطني",
+      "owner": "activity_leader",
+      "has_saved_codes": true,
+      "in_program_bindings": true,
+      "decision_approved": true,
+      "serves_prep": true
+    },
+    {
+      "id": "school_broadcast",
+      "name": "برنامج الإذاعة المدرسية",
+      "owner": "activity_leader",
+      "has_saved_codes": true,
+      "in_program_bindings": true,
+      "decision_approved": true,
+      "serves_prep": true
+    },
+    {
+      "id": "radio_program",
+      "name": "برنامج إذاعي",
+      "owner": "activity_leader",
+      "has_saved_codes": true,
+      "in_program_bindings": true,
+      "decision_approved": true,
+      "serves_prep": true
+    },
+    {
+      "id": "white_cane_day",
+      "name": "مبادرة اليوم العالمي للعصا البيضاء",
+      "owner": "activity_leader",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": true
+    },
+    {
+      "id": "speech_contest",
+      "name": "مسابقة الإلقاء",
+      "owner": "activity_leader",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": true
+    },
+    {
+      "id": "sports_contests",
+      "name": "برنامج المسابقات الرياضية",
+      "owner": "activity_leader",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": true
+    },
+    {
+      "id": "calligraphy_speech_contest",
+      "name": "مسابقة الخط والإلقاء · مطوية «لغتي هويتي»",
+      "owner": "activity_leader",
+      "has_saved_codes": true,
+      "in_program_bindings": false,
+      "decision_approved": true,
+      "serves_prep": true
+    },
+    {
+      "id": "physics_med_day",
+      "name": "اليوم العالمي للفيزياء الطبية ودور ماري كوري",
+      "owner": "lab_tech",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    },
+    {
+      "id": "lab_setup",
+      "name": "مبادرة تجهيز معمل العلوم",
+      "owner": "lab_tech",
+      "has_saved_codes": false,
+      "in_program_bindings": true,
+      "decision_approved": false,
+      "serves_prep": true
+    },
+    {
+      "id": "digital_transform",
+      "name": "مبادرة التحول الرقمي",
+      "owner": "admin_assistant",
+      "has_saved_codes": false,
+      "in_program_bindings": false,
+      "decision_approved": false,
+      "serves_prep": false
+    }
+  ]
+}

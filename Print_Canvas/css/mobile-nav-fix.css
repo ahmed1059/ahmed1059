@@ -1,0 +1,113 @@
+/* مؤقت — وصول PoC فقط · لا تصميم نهائي للقائمة
+   الهدف: إظهار .erp-ops على الجوال للوصول إلى الإعدادات ← سجل المنسوبين
+   السبب المحتمل للإخفاء: max-height/overflow على .command-bar يقص الصف الثاني */
+
+@media screen and (max-width: 900px) {
+    /* فك قص الشريط والأصداف */
+    body.erp-shell .app-shell {
+        grid-template-rows: auto 1fr !important;
+    }
+
+    body.erp-shell .app-header.command-bar,
+    body.erp-shell .app-header {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        grid-template-rows: auto auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        align-items: stretch !important;
+    }
+
+    body.erp-shell .command-brand {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    body.erp-shell .command-tools {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    /* إظهار شريط القوائم كاملًا تحت الشعار */
+    body.erp-shell .erp-ops {
+        grid-column: 1 / -1 !important;
+        grid-row: 2 !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
+        justify-content: flex-start !important;
+        gap: 6px !important;
+        height: auto !important;
+        min-height: 44px !important;
+        max-height: none !important;
+        overflow: visible !important;
+        padding: 6px 0 8px !important;
+        width: 100% !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 35 !important;
+        background: #ffffff !important;
+        border-top: 1px solid #e7e2d8;
+    }
+
+    body.erp-shell .erp-ops .erp-item {
+        display: flex !important;
+        height: auto !important;
+        flex: 1 1 calc(50% - 6px);
+        min-width: 7.5rem;
+        max-width: 100%;
+    }
+
+    /* لا نفرض إظهار [hidden] من الصلاحيات — فقط العناصر غير المخفية */
+
+    body.erp-shell .erp-ops .erp-trigger {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+        padding: 8px 10px;
+        border: 1px solid #d5e4df;
+        border-radius: 10px;
+        background: #f7faf9;
+        font-weight: 700;
+        color: #0b5e56;
+    }
+
+    /* اللوحة المنسدلة: عمود واحد قابل للتمرير تحت الشريط */
+    body.erp-shell .erp-item.is-open .erp-panel {
+        display: grid !important;
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-height: min(70vh, 520px) !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        grid-auto-flow: row !important;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        padding: 16px !important;
+        z-index: 60 !important;
+        background: #ffffff !important;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    body.erp-shell #erp-panel-settings,
+    body.erp-shell #erp-panel-registers {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.erp-shell .erp-item.is-open .erp-panel > div {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    body.erp-shell .erp-item.is-open .erp-panel a {
+        display: flex !important;
+        min-height: 48px;
+        padding: 10px 8px;
+        border-bottom: 1px solid #eef2f0;
+    }
+}

@@ -1,0 +1,375 @@
+/* موجة أجهزة — قرار 172
+   لا يمس .official-document-frame / .doc-official-header / .doc-signoff-block */
+
+/* ——— شريط الأوامر: منع تداخل الاسم مع الشعار ——— */
+@media screen and (max-width: 900px) {
+    body.erp-shell .app-shell {
+        grid-template-rows: auto 1fr !important;
+    }
+
+    body.erp-shell .app-header.command-bar {
+        height: auto !important;
+        min-height: 56px !important;
+        max-height: none !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        grid-template-rows: auto auto !important;
+        padding: 8px 12px !important;
+        gap: 8px 12px !important;
+        overflow: hidden !important;
+    }
+
+    body.erp-shell .command-brand {
+        grid-column: 1;
+        grid-row: 1;
+        min-width: 0;
+        max-width: 100%;
+        gap: 8px;
+    }
+
+    body.erp-shell .command-brand .header-logo {
+        height: 36px !important;
+        width: auto !important;
+        max-width: 72px !important;
+        flex: 0 0 auto;
+    }
+
+    body.erp-shell .command-brand .school-name {
+        white-space: normal !important;
+        font-size: 13px !important;
+        line-height: 1.25 !important;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        word-break: break-word;
+    }
+
+    body.erp-shell .command-tools {
+        grid-column: 2;
+        grid-row: 1;
+        gap: 6px !important;
+    }
+
+    body.erp-shell .erp-ops {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        height: 44px !important;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        gap: 6px 10px;
+        scrollbar-width: thin;
+    }
+
+    body.erp-shell .erp-ops .erp-item {
+        height: 44px;
+        flex: 0 0 auto;
+    }
+
+    body.erp-shell .erp-trigger,
+    body.erp-shell .command-tools a,
+    body.erp-shell .command-tools button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* ——— إخفاء «لماذا؟» فقط على الشاشات الصغيرة؛ تلميحات العناوين والحقول تبقى ظاهرة ——— */
+@media screen and (max-width: 820px) {
+    /* لماذا؟ مخفي افتراضيًا — يظهر فقط إن وُضع داخل details مفتوح */
+    body.erp-shell .command-card__why {
+        display: none !important;
+    }
+
+    body.erp-shell details.command-why-more {
+        margin-top: 6px;
+    }
+
+    body.erp-shell details.command-why-more > summary {
+        cursor: pointer;
+        color: #0b5e56;
+        font-size: 12px;
+        font-weight: 700;
+        list-style: none;
+    }
+
+    body.erp-shell details.command-why-more[open] .command-card__why {
+        display: block !important;
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: #5c675f;
+    }
+}
+
+/* ——— ترويسة الهوية داخل الشاشات (ليست الطباعة الرسمية المحصّنة) ——— */
+@media screen and (max-width: 820px) {
+    body.erp-shell:not(.is-print-preview):not(.print-official-core):not(.print-book):not(.print-council) .print-header-table {
+        display: grid !important;
+        grid-template-columns: 56px minmax(0, 1fr) 56px !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-bottom: 12px !important;
+        padding-bottom: 8px !important;
+    }
+
+    body.erp-shell:not(.is-print-preview):not(.print-official-core):not(.print-book):not(.print-council) .print-header-table > .plan-seat-side,
+    body.erp-shell:not(.is-print-preview):not(.print-official-core):not(.print-book):not(.print-council) .print-header-table > .print-header-logo {
+        flex: none !important;
+        width: auto !important;
+        max-width: none !important;
+    }
+
+    body.erp-shell:not(.is-print-preview):not(.print-official-core):not(.print-book):not(.print-council) .identity-stack {
+        font-size: 11px !important;
+        line-height: 1.35 !important;
+        word-break: normal !important;
+        overflow-wrap: anywhere;
+    }
+
+    body.erp-shell:not(.is-print-preview):not(.print-official-core):not(.print-book):not(.print-council) .print-header-logo {
+        height: 40px !important;
+    }
+
+    body.erp-shell:not(.is-print-preview):not(.print-official-core):not(.print-book):not(.print-council) .print-header-logo img {
+        width: 56px !important;
+        height: 36px !important;
+        max-width: 56px !important;
+        max-height: 36px !important;
+    }
+}
+
+/* ——— مقاييس SSOT: مؤشر أساسي ظاهر + بقية عند الطلب (NN/G progressive disclosure) ——— */
+@media screen and (max-width: 820px) {
+    body.erp-shell .ssot-metrics {
+        position: relative;
+        z-index: 3;
+        margin: 8px 10px 0;
+        padding: 10px;
+        max-height: none;
+    }
+
+    body.erp-shell .ssot-metrics__strip {
+        display: flex !important;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    body.erp-shell .ssot-metric--primary {
+        width: 100%;
+        padding: 10px 12px;
+    }
+
+    body.erp-shell .ssot-metric--primary .n {
+        font-size: 22px;
+    }
+
+    body.erp-shell .ssot-metrics-more {
+        display: block !important;
+        border: 1px solid rgba(11, 94, 86, 0.18);
+        border-radius: 10px;
+        background: #fff;
+        padding: 0 10px;
+    }
+
+    body.erp-shell .ssot-metrics-more > summary {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        min-height: 44px;
+        cursor: pointer;
+        list-style: none;
+        color: #0b5e56;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    body.erp-shell .ssot-metrics-more > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    body.erp-shell .ssot-metrics-more__count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 999px;
+        background: #e8f6f3;
+        color: #0b5e56;
+        font-size: 12px;
+    }
+
+    body.erp-shell .ssot-metrics__rest {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        padding: 0 0 10px;
+    }
+
+    body.erp-shell .ssot-metric .n {
+        font-size: 16px;
+    }
+
+    body.erp-shell .ssot-metric .l,
+    body.erp-shell .ssot-metric span:not(.n) {
+        font-size: 11px;
+    }
+
+    /* نمط عام للوحات الكثيفة المشابهة */
+    body.erp-shell .device-dense-panel {
+        max-height: none;
+    }
+
+    body.erp-shell .command-attention__actions,
+    body.erp-shell .command-card__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    body.erp-shell .command-attention__actions button,
+    body.erp-shell .command-card__actions button {
+        min-height: 44px;
+        padding: 0 12px;
+    }
+
+    body.erp-shell .command-room-fab {
+        inset-inline-end: 12px;
+        bottom: 14px;
+        min-height: 48px;
+    }
+
+    body.erp-shell .command-attention.command-attention--drawer {
+        inset-inline-end: 12px;
+        bottom: 72px;
+        width: calc(100vw - 24px);
+        max-height: min(62vh, 440px);
+    }
+}
+
+@media screen and (max-width: 420px) {
+    body.erp-shell .ssot-metrics__strip {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
+
+/* ——— النماذج والجداول ——— */
+@media screen and (max-width: 820px) {
+    body.erp-shell .wash-board-sheet,
+    body.erp-shell .ffe-fields,
+    body.erp-shell .form-grid,
+    body.erp-shell .date-pair {
+        max-width: 100%;
+    }
+
+    body.erp-shell .ffe-fields,
+    body.erp-shell .form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.erp-shell .table-scroll,
+    body.erp-shell .wash-board .table-wrapper,
+    body.erp-shell .erp-pane .table-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+    }
+
+    body.erp-shell .wash-board table {
+        min-width: 520px;
+    }
+}
+
+/* ——— بوابة المعاينة والطباعة: واجهة مستخدم لا مطوّر ——— */
+body.erp-shell .witness-gate-advanced {
+    margin: 8px 0 0;
+    border: 1px solid #e2ebe8;
+    border-radius: 10px;
+    background: #f7faf9;
+    padding: 0 10px;
+}
+
+body.erp-shell .witness-gate-advanced > summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 10px 0;
+    color: #0b5e56;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+body.erp-shell .witness-gate-advanced > summary::-webkit-details-marker {
+    display: none;
+}
+
+body.erp-shell .witness-gate-advanced[open] {
+    padding-bottom: 10px;
+}
+
+body.erp-shell .witness-editor-card header > #witness-editor-entity,
+body.erp-shell .witness-editor-card header > #witness-editor-kind,
+body.erp-shell .witness-editor-card header > .witness-gate-help {
+    display: none;
+}
+
+@media screen and (max-width: 820px) {
+    body.erp-shell .witness-editor {
+        padding: 0;
+        align-items: stretch;
+    }
+
+    body.erp-shell .witness-editor-card {
+        width: 100%;
+        max-height: 100dvh;
+        height: 100dvh;
+        border-radius: 0;
+        padding: 12px;
+        gap: 10px;
+    }
+
+    body.erp-shell .witness-editor-sheet {
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.erp-shell .witness-editor-sheet table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.erp-shell .witness-editor-card footer {
+        position: sticky;
+        bottom: 0;
+        background: #fff;
+        padding-top: 8px;
+        justify-content: stretch;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    body.erp-shell .witness-editor-card footer button {
+        flex: 1 1 calc(50% - 8px);
+        min-height: 48px;
+        height: 48px;
+        border-radius: 12px;
+        font-size: 14px;
+    }
+
+    body.erp-shell .witness-editor-card footer button[data-witness-act="print"] {
+        flex: 1 1 100%;
+        order: -1;
+    }
+}
+
+/* سطح المكتب أيضًا: البوابة تبدأ بسيطة */
+@media screen and (min-width: 821px) {
+    body.erp-shell .witness-editor-card header > #witness-editor-entity,
+    body.erp-shell .witness-editor-card header > #witness-editor-kind {
+        display: none;
+    }
+}

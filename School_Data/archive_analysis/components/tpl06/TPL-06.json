@@ -1,0 +1,29 @@
+{
+  "template_id": "TPL-06",
+  "title": "كشف / قائمة تشغيلية",
+  "structure_ref": "08_template_structure.md#TPL-06",
+  "default_indicator_codes": [
+    "1-3-1-2",
+    "2-1-1-5"
+  ],
+  "permissions": {
+    "approved_by": "optional",
+    "rapporteur_vacant": false,
+    "needs_expert_review": false
+  },
+  "print": {
+    "engine": "OfficialFrameCore",
+    "orientation": "portrait",
+    "strictIdentity": true,
+    "barcode_required": false
+  },
+  "fields_from_structure_only": true,
+  "dynamic": {
+    "persons": "identity.json",
+    "indicators": "indicators.json",
+    "committees": null,
+    "programs": null,
+    "dual_date": true,
+    "dynamic_title": true
+  }
+}

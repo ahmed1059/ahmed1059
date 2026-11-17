@@ -1,0 +1,15 @@
+{
+  "id": "teacher_portfolio",
+  "title": "ملف إنجاز المعلم",
+  "orientation": "portrait",
+  "columns": [
+    "البند",
+    "الوصف",
+    "الشاهد"
+  ],
+  "fixed": {
+    "school": "متوسطة سعد بن الربيع الأنصاري",
+    "principal": "نايف بن سمير حجيف المخلفي",
+    "year": "1448هـ"
+  }
+}

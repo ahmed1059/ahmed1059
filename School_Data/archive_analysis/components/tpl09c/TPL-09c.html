@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>TPL-09c — تقارير فريدة — توثيق</title>
+  <link rel="stylesheet" href="../../../Print_Canvas/css/media-governance.css">
+  <link rel="stylesheet" href="../../../Print_Canvas/css/print.css">
+  <style id="tpl-shell"></style>
+</head>
+<body class="tpl-sample">
+  <div class="tpl-toolbar no-print">
+    <strong>TPL-09c</strong>
+    <span class="note" id="tpl-status">جاري التحميل…</span>
+    <button type="button" id="btn-print">طباعة</button>
+    <a href="../preview-hub.html" style="color:#fff;margin-inline-start:auto">مركز المعاينة</a>
+  </div>
+  <div id="official-frame-host" class="official-frame-host" hidden></div>
+  <script>
+  (function(){
+    try {
+      var raw = sessionStorage.getItem('sessionUser');
+      var ok = false;
+      if (raw) { var s = JSON.parse(raw); ok = !!(s && s.token && s.id); }
+      if (!ok) sessionStorage.setItem('sessionUser', JSON.stringify({token:'tpl-preview',id:'tpl09c',name:'معاينة TPL-09c'}));
+    } catch (e) {}
+  })();
+  </script>
+  <script src="../../../Print_Canvas/js/dashboard.js"></script>
+  <script src="../../../Print_Canvas/js/official-frame-core.js"></script>
+  <script src="../_shared/tpl-common.js"></script>
+  <script src="TPL-09c.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    var st = document.getElementById('tpl-status');
+    if (window.TplCommon && window.TplCommon.SHELL_CSS) {
+      document.getElementById('tpl-shell').textContent = window.TplCommon.SHELL_CSS;
+    }
+    var api = window["TPL09c"] || window["TPL-09c"];
+    if (!api) { st.textContent = 'فشل تحميل TPL-09c'; return; }
+    api.mount({
+      identityUrl: '../_shared/identity.json',
+      indicatorsUrl: '../_shared/indicators.json',
+      committeesUrl: '../_shared/committees.json',
+      programsUrl: '../_shared/programs.json',
+      statusEl: st
+    }).catch(function (err) { st.textContent = String(err && err.message ? err.message : err); });
+    document.getElementById('btn-print').addEventListener('click', function () { api.printOfficial(); });
+  })();
+  </script>
+</body>
+</html>

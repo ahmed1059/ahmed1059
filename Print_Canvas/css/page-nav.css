@@ -1,0 +1,168 @@
+/* ألوان الشريط العلوي. غيّر القيم هنا مباشرة. */
+:root {
+    --nav-strip-bg: #ffffff;
+    --nav-strip-text: #44403c;
+    --nav-strip-line: #efeae2;
+    --nav-strip-active: #005a53;
+    --nav-strip-hover: #e7f3f1;
+    --nav-page-bg: #f7f5f0;
+    --nav-card-bg: #ffffff;
+}
+
+@media print {
+    .page-nav {
+        display: none !important;
+    }
+}
+
+@media screen {
+    .app-header.command-bar,
+    .settings-page .app-header,
+    .setup-page .app-header,
+    .identity-page .app-header {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        grid-template-rows: 72px 46px !important;
+        align-items: center !important;
+        height: 118px !important;
+        min-height: 118px !important;
+        max-height: 118px !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        background: var(--nav-strip-bg) !important;
+    }
+
+    .app-shell {
+        grid-template-rows: 118px 1fr !important;
+    }
+
+    .app-main {
+        height: calc(100dvh - 118px) !important;
+    }
+
+    .command-brand,
+    .header-right {
+        grid-column: 1;
+        grid-row: 1;
+        min-width: 0;
+        padding-inline-start: 22px;
+    }
+
+    .command-tools,
+    .header-left,
+    .identity-page .command-exit {
+        grid-column: 2;
+        grid-row: 1;
+        padding-inline-end: 22px;
+    }
+
+    a.command-school-name,
+    a.header-title,
+    a.home-title {
+        color: #1c1917 !important;
+        text-decoration: none;
+    }
+
+    a.header-title {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.35;
+    }
+
+    a.header-title strong,
+    .opening-brand a {
+        color: #1c1917;
+        font-size: 16px;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .home-caption {
+        display: block;
+        color: var(--nav-strip-active);
+        font-size: 12px;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .page-nav {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        height: 46px;
+        margin: 0;
+        padding: 0 16px;
+        background: var(--nav-strip-bg);
+        border-top: 1px solid var(--nav-strip-line);
+        overflow-x: auto;
+    }
+
+    .page-nav a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        flex: 0 0 auto;
+        height: 34px;
+        padding: 0 14px;
+        border-radius: 999px;
+        color: var(--nav-strip-text);
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .page-nav a svg {
+        width: 18px;
+        height: 18px;
+        color: var(--nav-strip-active);
+    }
+
+    .page-nav a:hover,
+    .page-nav a[aria-current="page"] {
+        background: var(--nav-strip-hover);
+        color: var(--nav-strip-active);
+    }
+
+    .opening-stage > .page-nav {
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    .identity-main {
+        width: min(1080px, 100%);
+        margin: 0 auto;
+        padding: 28px 20px 48px;
+        box-sizing: border-box;
+    }
+
+    .identity-main section {
+        margin: 0 0 16px;
+        padding: 24px 28px;
+        background: var(--nav-card-bg);
+        border: 1px solid var(--nav-strip-line);
+        border-radius: 24px;
+        scroll-margin-top: 132px;
+    }
+
+    .identity-main h2 {
+        margin: 0 0 12px;
+        color: var(--nav-strip-active);
+        font-size: 26px;
+    }
+
+    .identity-main p,
+    .identity-main li {
+        color: #1c1917;
+        line-height: 1.8;
+    }
+
+    .identity-main ul {
+        margin: 0;
+        padding-inline-start: 18px;
+    }
+}

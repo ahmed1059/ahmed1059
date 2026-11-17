@@ -1,0 +1,18 @@
+/* رموز الشاشة المشتركة. بلا محددات عناصر. إطار الطباعة يبقى في media-governance. */
+:root {
+  --ds-green: #0b5e56;
+  --ds-green-deep: #004d46;
+  --ds-frame: #005a53;
+  --ds-gold: #c5a572;
+  --ds-ink: #0b0c0c;
+  --ds-muted: #5c675f;
+  --ds-canvas: #f3f2f1;
+  --ds-font: "Tajawal", "Cairo", "Segoe UI", Tahoma, sans-serif;
+  --ds-title: 22px;
+  --ds-group: 16px;
+  --ds-label: 13px;
+  --ds-btn-h: 44px;
+  --ds-btn-border: 2px;
+  --ds-gap: 10px;
+  --ds-radius: 8px;
+}

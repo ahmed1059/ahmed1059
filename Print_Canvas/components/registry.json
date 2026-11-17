@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "wave": "خ-مك-2",
+    "decision": 139,
+    "count": 15,
+    "engine": "OfficialFrameCore"
+  },
+  "templates": [
+    {
+      "id": "TPL-01",
+      "folder": "tpl01",
+      "title": "تقرير برنامج / مسابقة / مبادرة",
+      "kind": "report",
+      "html": "tpl01/TPL-01.html",
+      "status": "dynamic"
+    },
+    {
+      "id": "TPL-02",
+      "folder": "tpl02",
+      "title": "خطة تربوية / تشغيلية",
+      "kind": "plan",
+      "html": "tpl02/TPL-02.html",
+      "status": "dynamic"
+    },
+    {
+      "id": "TPL-03",
+      "folder": "tpl03",
+      "title": "محضر لجنة / اجتماع",
+      "kind": "minutes",
+      "html": "tpl03/TPL-03.html",
+      "status": "dynamic"
+    },
+    {
+      "id": "TPL-04",
+      "folder": "tpl04",
+      "title": "قرار تشكيل لجنة / فريق",
+      "kind": "decision",
+      "html": "tpl04/TPL-04.html",
+      "status": "dynamic"
+    },
+    {
+      "id": "TPL-05",
+      "folder": "tpl05",
+      "title": "سجل متابعة تشغيلي",
+      "kind": "register",
+      "html": "tpl05/TPL-05.html",
+      "status": "dynamic"
+    },
+    {
+      "id": "TPL-06",
+      "folder": "tpl06",
+      "title": "كشف / قائمة تشغيلية",
+      "kind": "roster",
+      "html": "tpl06/TPL-06.html",
+      "status": "dynamic"
+    },
+    {
+      "id": "TPL-07",
+      "folder": "tpl07",
+      "title": "استمارة تقويم / قياس أثر",
+      "kind": "form",
+      "html": "tpl07/TPL-07.html",
+      "status": "dynamic"
+    },
+    {
+      "id": "TPL-08a",
+      "folder": "tpl08a",
+      "title": "توثيق عمل تطوعي",
+      "kind": "volunteer",
+      "html": "tpl08a/TPL-08a.html",
+      "status": "dynamic"
+    },
+    {
+      "id": "TPL-08b",
+      "folder": "tpl08b",
+      "title": "توثيق شراكة مجتمعية",
+      "kind": "partnership",
+      "html": "tpl08b/TPL-08b.html",
+      "status": "dynamic"
+    },
+    {
+      "id": "TPL-09a",
+      "folder": "tpl09a",
+      "title": "نماذج فريدة — توثيق بلا توحيد",
+      "kind": "stub",
+      "html": "tpl09a/TPL-09a.html",
+      "status": "documentation_stub"
+    },
+    {
+      "id": "TPL-09b",
+      "folder": "tpl09b",
+      "title": "تعريفات أدوار — مرجع",
+      "kind": "stub",
+      "html": "tpl09b/TPL-09b.html",
+      "status": "documentation_stub"
+    },
+    {
+      "id": "TPL-09c",
+      "folder": "tpl09c",
+      "title": "تقارير فريدة — توثيق",
+      "kind": "stub",
+      "html": "tpl09c/TPL-09c.html",
+      "status": "documentation_stub"
+    },
+    {
+      "id": "TPL-09d",
+      "folder": "tpl09d",
+      "title": "أغلفة/فهرس/فواصل — عرض",
+      "kind": "stub",
+      "html": "tpl09d/TPL-09d.html",
+      "status": "documentation_stub"
+    },
+    {
+      "id": "TPL-09e",
+      "folder": "tpl09e",
+      "title": "خطابات/إشعارات — توثيق",
+      "kind": "stub",
+      "html": "tpl09e/TPL-09e.html",
+      "status": "documentation_stub"
+    },
+    {
+      "id": "TPL-09f",
+      "folder": "tpl09f",
+      "title": "بطاقات — توثيق",
+      "kind": "stub",
+      "html": "tpl09f/TPL-09f.html",
+      "status": "documentation_stub"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>معاينة منتقي الأسابيع — الأسبوع 19 اختبارات</title>
+  <link rel="stylesheet" href="css/erp-nav.css?v=erp145">
+  <style>
+    body { margin: 0; padding: 20px; background: #eef4f2; font-family: Tajawal, "Segoe UI", sans-serif; }
+    .wrap { max-width: 980px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 12px 30px rgba(8,40,36,.12); }
+    h1 { color: #0b5e56; margin: 0 0 6px; font-size: 22px; border-bottom: 2px solid #0b5e56; padding-bottom: 6px; }
+    .wash-hint { color: #5c675f; margin: 0 0 14px; font-size: 13px; }
+    .wash-save { border: 0; border-radius: 10px; padding: 8px 12px; font: inherit; font-weight: 700; cursor: pointer; background: #0b5e56; color: #fff; }
+    .soft-term-field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #5c675f; }
+    .soft-term-field select { height: 34px; border: 1px solid #d5e4df; border-radius: 10px; padding: 0 8px; font: inherit; }
+    .note-box { margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: #fff8ee; border: 1px solid #e7c48a; color: #8a4b00; font-size: 13px; }
+    .note-box b { display: block; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+  <div class="wrap soft-periods-board soft-day-board">
+    <h1>منتقي الأسابيع — مربوط بالتقويم المعتمد</h1>
+    <p class="wash-hint">من بداية العام (30 أغسطس 2026م / 17 ربيع الأول 1448هـ) إلى بداية الاختبارات (3 يناير 2027م / 25 رجب 1448هـ) = <b>19 أسبوعًا</b>.</p>
+
+    <div class="soft-week-strip">
+      <div class="soft-week-strip-top">
+        <label class="soft-term-field"><span>الفصل</span>
+          <select aria-label="الفصل الدراسي">
+            <option>كل الأسابيع</option>
+            <option selected>الفصل الأول</option>
+            <option>الفصل الثاني</option>
+          </select>
+        </label>
+        <div class="soft-week-mid">
+          <div class="soft-week-mid-row">
+            <select id="soft-week-select" class="soft-week-select is-exam" aria-label="اختيار الأسبوع">
+              <option>أسبوع 1</option>
+              <option>أسبوع 17</option>
+              <option>أسبوع 18</option>
+              <option selected>أسبوع 19 — اختبارات</option>
+            </select>
+            <button type="button" class="soft-cal-toggle" aria-pressed="true" title="عرض التاريخ الميلادي">هـ</button>
+          </div>
+          <span class="soft-week-range is-exam">25 / 07 / 1448 هـ — 29 / 07 / 1448 هـ · اختبارات</span>
+        </div>
+        <button type="button" class="wash-save">اليوم</button>
+      </div>
+      <div class="soft-week-strip-row">
+        <button type="button" class="soft-week-nav" aria-label="السابق">‹</button>
+        <div class="soft-day-strip">
+          <button type="button" class="soft-day-chip soft-day-strip-chip is-on"><strong>الأحد</strong><small>25 / 07 / 1448 هـ</small><span class="soft-day-dots"><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+          <button type="button" class="soft-day-chip soft-day-strip-chip"><strong>الإثنين</strong><small>26 / 07 / 1448 هـ</small><span class="soft-day-dots"><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+          <button type="button" class="soft-day-chip soft-day-strip-chip"><strong>الثلاثاء</strong><small>27 / 07 / 1448 هـ</small><span class="soft-day-dots"><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+          <button type="button" class="soft-day-chip soft-day-strip-chip"><strong>الأربعاء</strong><small>28 / 07 / 1448 هـ</small><span class="soft-day-dots"><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+          <button type="button" class="soft-day-chip soft-day-strip-chip"><strong>الخميس</strong><small>29 / 07 / 1448 هـ</small><span class="soft-day-dots"><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+        </div>
+        <button type="button" class="soft-week-nav" disabled aria-label="التالي">›</button>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <b>الترابط</b>
+      حفظ «التقويم المعتمد» يطلق `dataChanged` بمصدر `calendar`، فيُعاد بناء منتقي الأسابيع تلقائيًا بعدد الأسابيع من بداية العام حتى بداية الاختبارات، مع تمييز أسبوع الاختبارات بلون كهرماني ونص «اختبارات».
+    </div>
+  </div>
+</body>
+</html>

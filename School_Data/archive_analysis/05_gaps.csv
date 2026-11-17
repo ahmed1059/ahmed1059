@@ -1,0 +1,31 @@
+﻿gap_type,body_id,body_name,detail,severity
+not_in_formations,admin,اللجنة الإدارية,موجودة في الأرشيف وغير مُشكَّلة بالاسم في committee_formations.json,identity
+no_rapporteur_named,exams,لجنة التحصيل الدراسي / الاختبارات,في التشكيلات المحفوظة: بلا مقرّر بالاسم,admin
+no_rapporteur_named,guidance,لجنة التوجيه الطلابي,في التشكيلات المحفوظة: بلا مقرّر بالاسم,admin
+no_rapporteur_named,resources,لجنة مصادر التعلم,في التشكيلات المحفوظة: بلا مقرّر بالاسم,admin
+mentioned_no_structure,resources,لجنة مصادر التعلم,موجودة في التشكيلات فقط — بلا تعريف/قرار تشكيل مستقل في عناوين الأرشيف المفهرسة,documentation
+no_rapporteur_role,fund,فريق عمل الصندوق المدرسي,لا دور مقرر في التعريف المستخرج ولا مقرّر بالاسم في التشكيلات,admin
+no_chair,fund,فريق عمل الصندوق المدرسي,لا رئيس في التعريف ولا في التشكيلات,admin
+not_in_formations,fund,فريق عمل الصندوق المدرسي,موجودة في الأرشيف وغير مُشكَّلة بالاسم في committee_formations.json,identity
+not_in_formations,disability,فريق عمل الطلاب ذوي الإعاقة,موجودة في الأرشيف وغير مُشكَّلة بالاسم في committee_formations.json,identity
+no_rapporteur_role,volunteer,فريق العمل التطوعي,لا دور مقرر في التعريف المستخرج ولا مقرّر بالاسم في التشكيلات,admin
+no_chair,volunteer,فريق العمل التطوعي,لا رئيس في التعريف ولا في التشكيلات,admin
+not_in_formations,volunteer,فريق العمل التطوعي,موجودة في الأرشيف وغير مُشكَّلة بالاسم في committee_formations.json,identity
+no_rapporteur_role,partnership,فريق الشراكة المجتمعية,لا دور مقرر في التعريف المستخرج ولا مقرّر بالاسم في التشكيلات,admin
+no_chair,partnership,فريق الشراكة المجتمعية,لا رئيس في التعريف ولا في التشكيلات,admin
+not_in_formations,partnership,فريق الشراكة المجتمعية,موجودة في الأرشيف وغير مُشكَّلة بالاسم في committee_formations.json,identity
+not_in_formations,gifted,رعاية الموهوبين (مسار/معلم),موجودة في الأرشيف وغير مُشكَّلة بالاسم في committee_formations.json,identity
+not_in_formations,discipline,لجنة الانضباط المدرسي,مذكورة في عناوين الأرشيف — بلا تعريف/تشكيل مستقل مفهرس كقرار,identity
+mentioned_no_structure,discipline,لجنة الانضباط المدرسي,مذكورة في عناوين الأرشيف — بلا تعريف/تشكيل مستقل مفهرس كقرار,documentation
+not_in_formations,admission,لجنة المفاضلة وقبول الطلبة,مذكورة في عناوين الأرشيف — بلا هيكل أدوار مستخرج,identity
+mentioned_no_structure,admission,لجنة المفاضلة وقبول الطلبة,مذكورة في عناوين الأرشيف — بلا هيكل أدوار مستخرج,documentation
+not_in_formations,school_council,مجلس المدرسة,مذكور في العناوين — بلا هيكل أدوار مستخرج,identity
+mentioned_no_structure,school_council,مجلس المدرسة,مذكور في العناوين — بلا هيكل أدوار مستخرج,documentation
+not_in_formations,parents_council,مجلس أولياء الأمور,مذكور في العناوين — بلا هيكل أدوار مستخرج,identity
+mentioned_no_structure,parents_council,مجلس أولياء الأمور,مذكور في العناوين — بلا هيكل أدوار مستخرج,documentation
+not_in_formations,students_council,المجلس الطلابي,مذكور في العناوين — بلا هيكل أدوار مستخرج,identity
+mentioned_no_structure,students_council,المجلس الطلابي,مذكور في العناوين — بلا هيكل أدوار مستخرج,documentation
+orphan_identity_role,identity,وكيل المدرسة لشؤون الطلاب,تعريف [199] · ≈20 مهمة · بلا شاغل في طبقة الهوية,identity
+orphan_identity_role,identity,وكيل المدرسة للشؤون التعليمية,تعريف [236] · ≈25 مهمة · بلا شاغل في طبقة الهوية,identity
+orphan_identity_role,identity,وكيل المدرسة للشؤون المدرسية,تعريف [277] · ≈18 مهمة · بلا شاغل في طبقة الهوية,identity
+orphan_identity_role,identity,الموجه الصحي,تعريف [161] · ≈14 مهمة · بلا شاغل في طبقة الهوية,identity

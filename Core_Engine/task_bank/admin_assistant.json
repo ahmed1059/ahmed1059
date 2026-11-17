@@ -1,0 +1,17 @@
+[
+  {
+    "task_code": "ADM-01",
+    "week_target": 1,
+    "title": "مبادرة التحول الرقمي (مرشّح معرفة #74)",
+    "execution_method": "تنسيق",
+    "execution_time": "مستمر",
+    "evidence": "سجل قيادة / TPL-05",
+    "category": "مرشحو المساعد الإداري",
+    "archive_ref": 74,
+    "task_type": "administrative",
+    "goal_id": "G6",
+    "program_id": "digital_transform",
+    "seasonal": false,
+    "cadence": "ongoing"
+  }
+]

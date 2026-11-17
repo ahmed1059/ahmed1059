@@ -1,0 +1,65 @@
+---
+description: عقد طباعة الوثيقة الرسمية A4 — بطاقة البرنامج والإطار الرسمي (لا تُعاد دوامة الهوامش)
+globs: Print_Canvas/css/{media-governance,print,polish}.css,Print_Canvas/js/{official-frame-core,print-templates,print-preview}.js
+alwaysApply: true
+---
+
+# عقد طباعة الوثيقة الرسمية (A4 Portrait)
+
+لا تُعاد دوامة «هوامش عملاقة / صفحتان / توقيعات مفقودة / شاهد مصغّر». هذه الإعدادات معتمدة بعد التشخيص والمطابقة مع بطاقة توثيق الشاهد المرجعية.
+
+## الأبعاد والهوامش
+- الورقة: A4 طولي فقط `210mm × 297mm`.
+- `.official-document-frame`: `width: 210mm; height/min-height: 297mm; padding: 15mm; box-sizing: border-box; margin: 0`.
+- ممنوع أي `max-width` أو حاوية تُصغّر عرض الصفحة.
+- الهامش البصري ≈ 15mm داخل الإطار (مرجع الشاهد ≈ 14–16mm من حافة الورقة للإطار).
+
+## سبب الفشل الذي لا يُكرَّر
+- في `print.css` قاعدة عامة: `@page { size: A4 landscape; margin: 16mm; }`.
+- إن طُبّقت مع `padding: 15mm` و`height: 297mm` ينتج هامش علوي مضاعف وصفحة ثانية (غالبًا شريط التذييل وحده في الصفحة 2).
+- الحل المعتمد:
+  - `@page official-core-a4 { size: A4 portrait; margin: 0; }`
+  - `page: official-core-a4` على `body.print-official-core` والإطار
+  - استدعاء `OfficialFrameCore.armPrintPage()` قبل كل `window.print` لمسار الإطار الرسمي
+
+## صفحة واحدة فقط (Chrome)
+- Chrome يتجاهل `overflow: hidden` عند تجزئة الطباعة.
+- أثناء الطباعة (`print-official-core`):
+  - `body` بارتفاع تدفق `0` (لا يولّد صفحة ثانية)
+  - `#official-frame-host` والإطار: `position: fixed; top:0; width:210mm; height:297mm; overflow:hidden`
+- لا تُرجع لـ `min-height: 100vh` أو `page-break-after: always` على بطاقة البرنامج.
+
+## التوقيعات (دائمًا ظاهرة)
+- `.doc-signoff-block` في أسفل الإطار: `margin-top: auto` — ثلاثة أعمدة: منفّذ / وكيل / مدير.
+- صور `.sig-image` مع احتياطي دوري عبر `data-fallback`:
+  - `signatures/sig_teachers.png`
+  - `signatures/sig_students.png`
+  - `signatures/sig_manager.png`
+- لا تعتمد على `signatures/sig_{الهوية}.png` وحده؛ إن فشل المسار يُستخدم الاحتياطي ثم يُحذف العنصر.
+
+## الشاهد البصري
+- خانة `.tpl-evidence-tile.is-centered`: عرض `100%` من منطقة المحتوى، ارتفاع كافٍ (~55–72mm).
+- الصورة: `width/height: 100%; object-fit: cover`.
+- استثنِ `.tpl-evidence-tile img` من سقف شعار الترويسة (52×140) في قاعدة `ministry_logo` / `vision_2030`.
+
+## ما لا يُفعل إلا بطلب صريح
+- تحويل البطاقة إلى جدول `thead/tfoot` أو `position: running()` — غير مطلوب لبطاقة صفحة واحدة؛ الحل هو `OfficialFrameCore` + `PrintTemplates`.
+- تعديل محددات الإطار المحصّنة دون كلمة «موافق» (عقد الحوكمة البصرية).
+
+## تعليمات الطباعة للمستخدم (Chrome)
+- الهوامش: **بلا / None** (ليس «تلقائي»).
+- تفعيل **رسومات الخلفية**.
+
+## الملفات المرجعية
+- `Print_Canvas/css/media-governance.css` — قواعد `print-official-core`
+- `Print_Canvas/css/print.css` — `@page official-core-a4`
+- `Print_Canvas/js/official-frame-core.js` — `armPrintPage` + توقيعات باحتياطي
+- `Print_Canvas/js/print-templates.js` — بطاقة البرنامج
+- `Print_Canvas/js/print-preview.js` — زر طباعة يستدعي `armPrintPage`
+
+## موجة توحيد الطباعة (معتمدة 2026-10-31)
+- كل مسار `print-official-core` يستدعي `OfficialFrameCore.armPrintPage(opts)` قبل `window.print`.
+- `opts.orientation: landscape` للشاهد اللاصفي والجداول العريضة؛ `opts.multiPage: true` للمحاضر.
+- `officialIdentityHeader()` يفوّض إلى `OfficialFrameCore.header({ strictIdentity: true })` — لا تُرجع `print-header-table`.
+- نماذج `PrintTemplates`: Portrait, Program Card, Landscape, Card, Table.
+- مسارات موحّدة: `openWitnessPrint`, `openCouncilPrint`, `print-soft-witness`, سجل الدوام عبر `renderTable`.

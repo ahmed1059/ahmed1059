@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>معاينة — خطة علاجية فردية</title>
+  <link rel="stylesheet" href="css/erp-nav.css?v=erp146">
+  <link rel="stylesheet" href="css/media-governance.css?v=mg1">
+  <link rel="stylesheet" href="css/print.css?v=p1">
+  <style>
+    body { margin: 0; padding: 16px; background: #eef4f2; font-family: Tajawal, "Segoe UI", sans-serif; }
+    .preview-shell { max-width: 1100px; margin: 0 auto; }
+    .preview-toolbar {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;
+      align-items: center;
+    }
+    .preview-toolbar a, .preview-toolbar button {
+      border: 0; border-radius: 10px; padding: 8px 12px; font: inherit; font-weight: 700;
+      background: #0b5e56; color: #fff; text-decoration: none; cursor: pointer;
+    }
+    .preview-toolbar .is-ghost { background: #2f7f76; }
+    .preview-note {
+      margin: 0 0 12px; padding: 10px 12px; border-radius: 10px;
+      background: #e8f6f3; color: #0b5e56; font-size: 13px;
+    }
+    body.is-print-preview .preview-shell { display: none !important; }
+    body.is-print-preview .official-frame-host {
+      display: block !important;
+      width: 210mm !important;
+      max-width: 210mm !important;
+      margin: 12px auto 40px !important;
+    }
+  </style>
+</head>
+<body class="erp-shell">
+  <div class="preview-shell">
+    <div class="preview-toolbar">
+      <button type="button" id="btn-sample">تعبئة نموذجية</button>
+      <button type="button" class="is-ghost" id="btn-preview">معاينة الطباعة</button>
+      <button type="button" id="btn-print">طباعة</button>
+      <a href="/dashboard.html">لوحة النظام</a>
+    </div>
+    <p class="preview-note">المخطط: <code>/schemas/forms/individual_remedial_plan.json</code> — التعبئة عبر <code>FormFillEngine</code> — الطباعة عبر <code>OfficialFrameCore</code>.</p>
+    <div id="mount"></div>
+  </div>
+
+  <script>
+    /* معاينة مستقلة بلا تحويل لصفحة الدخول */
+    if (!sessionStorage.getItem("sessionUser")) {
+      sessionStorage.setItem("sessionUser", JSON.stringify({ name: "معاينة", role: "مسؤول النظام" }));
+    }
+  </script>
+  <script src="js/official-frame-core.js?v=frame6"></script>
+  <script src="js/print-templates.js?v=tpl7"></script>
+  <script src="js/form-fill-engine.js?v=ffe1"></script>
+  <script>
+    var engineApi = null;
+    var sample = {
+      values: {
+        report_title: "خطة علاجية فردية",
+        grade_class: "أول متوسط / أ",
+        subject: "الرياضيات",
+        improvement: "جيد جدًا",
+        student_name: "طالب تجريبي",
+        follow_hijri: "12 ذو الحجة 1446هـ",
+        follow_gregorian: "8 يونيو 2025م",
+        weaknesses: ["قلة المشاركة الصفية", "ضعف المستوى التحصيلي", "إهمال الواجبات المنزلية"],
+        remedial_plans: ["أوراق عمل إضافية", "التشجيع على المشاركة", "التعلم بالأقران"],
+        actions_taken: ["لقاء فردي"],
+        notes: "يُتابع الطالب أسبوعياً في المهارة المستهدفة، ويُرصد أثر الخطة في درجات التقويم القصير وفي مشاركته الصفية والتزامه بالواجبات. وما لم يتحسّن المستوى بعد أربعة أسابيع تُراجَع الخطة وتُبدَّل أساليبها، ويُبلَّغ ولي الأمر بما تحقّق.",
+        sig_right: "المعلم / معلم الرياضيات",
+        sig_mid: "الموجه الطلابي",
+        sig_left: "مدير المدرسة / نايف بن سمير حجيف المخلفي"
+      },
+      evidence: []
+    };
+
+    FormFillEngine.mountFromUrl(document.getElementById("mount"), "/schemas/forms/individual_remedial_plan.json")
+      .then(function (api) {
+        engineApi = api;
+        FormFillEngine.apply(api.root, api.schema, sample);
+      })
+      .catch(function (error) {
+        document.getElementById("mount").textContent = error.message || "تعذر التحميل";
+      });
+
+    document.getElementById("btn-sample").addEventListener("click", function () {
+      if (!engineApi) return;
+      FormFillEngine.apply(engineApi.root, engineApi.schema, sample);
+    });
+    document.getElementById("btn-preview").addEventListener("click", function () {
+      if (engineApi) engineApi.print(false);
+    });
+    document.getElementById("btn-print").addEventListener("click", function () {
+      if (engineApi) engineApi.print(true);
+    });
+  </script>
+</body>
+</html>

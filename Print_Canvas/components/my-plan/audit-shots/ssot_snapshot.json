@@ -1,0 +1,547 @@
+{
+  "meta": {
+    "title": "مركز بيانات الأداء — مصدر الحقيقة الواحد",
+    "school": "متوسطة سعد بن الربيع الأنصاري",
+    "ministry_id": "S-40341",
+    "stage": "المتوسطة",
+    "gender": "بنين",
+    "students_total": 354,
+    "evaluation_cycle": "الدورة الأولى للتقويم الخارجي · 1448هـ",
+    "updated": "2026-11-01",
+    "wave": "A-SSOT-correct",
+    "rule": "لا تُكتب هذه الأرقام يدويًا في HTML/JS؛ تُقرأ من هذا الملف فقط",
+    "sources": {
+      "nafes": "1448 تحليل بطاقة نافس.pdf · ثالث متوسط · S-40341",
+      "external_evaluation": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ",
+      "improvement_plan": "خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448",
+      "reality_swot": "تحليل_واقع_متوسطة_سعد_بن_الربيع.pdf",
+      "algorithm": "بنك المعلومات/بنك معلومات النظام 2.txt · موجة أ"
+    },
+    "level_vocabulary": [
+      "تهيئة",
+      "انطلاق",
+      "تقدم",
+      "تميز"
+    ],
+    "sustainability_adopted": false,
+    "canonical_path": "config/performance_metrics.json",
+    "serve_mirror": "Print_Canvas/components/_shared/performance_metrics.json",
+    "corrections_from_prior_wave": [
+      "إلغاء aliases الخاطئة 3-1-3-1 و7-1-1-2 و1-1-1-4 كرموز تهيئة",
+      "اعتماد التهيئة الرسمية: 1-3-1-3 · 2-1-1-7 · 4-1-1-1 · 4-1-1-3",
+      "إثراء نافس بأرقام البطاقة التفصيلية (101 مختبرًا)"
+    ]
+  },
+  "code_aliases": {
+    "note": "أخطاء ترقيم سابقة (محادثة) → الرمز الرسمي في إطار ETEC / خطة التحسين",
+    "map": [
+      {
+        "wrong_or_legacy": "3-1-3-1",
+        "etec_code": "1-3-1-3",
+        "label": "الشراكة المجتمعية",
+        "level": "تهيئة"
+      },
+      {
+        "wrong_or_legacy": "7-1-1-2",
+        "etec_code": "2-1-1-7",
+        "label": "مهارات التفكير العليا",
+        "level": "تهيئة"
+      },
+      {
+        "wrong_or_legacy": "1-1-1-4",
+        "etec_code": "4-1-1-1",
+        "label": "تنظيم المبنى المدرسي",
+        "level": "تهيئة"
+      },
+      {
+        "wrong_or_legacy": "3-1-1-4",
+        "etec_code": "4-1-1-3",
+        "label": "المرافق المساندة وذوو الإعاقة",
+        "level": "تهيئة",
+        "note": "كان مرشّحًا خطأً؛ الرسمي في خطة التحسين 4-1-1-3"
+      }
+    ]
+  },
+  "school_profile": {
+    "name": "متوسطة سعد بن الربيع الأنصاري",
+    "ministry_id": "S-40341",
+    "education_admin": "الإدارة العامة للتعليم بمنطقة المدينة المنورة",
+    "students_total": 354,
+    "nafes_tested": 101,
+    "source": "1448 تحليل بطاقة نافس.pdf · ثالث متوسط · S-40341 · تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+  },
+  "nafes": {
+    "meta": {
+      "grade": "ثالث متوسط",
+      "tested_count": 101,
+      "triple_domains_mastery_pct": 5.0,
+      "triple_domains_mastery_approx_students": 5,
+      "triple_domains_mastery_delta_points": -11.2,
+      "average_mastery_pct": 29.7,
+      "source": "1448 تحليل بطاقة نافس.pdf · ثالث متوسط · S-40341"
+    },
+    "math": {
+      "score": 18.8,
+      "target": 25.0,
+      "unit": "%",
+      "label": "نسبة الإتقان — الرياضيات",
+      "binding_key": "nafes.math",
+      "delta_points": -10,
+      "low_or_very_low_pct": 81.2,
+      "weakest_subskill": {
+        "name": "الجبر",
+        "score": 28.7
+      },
+      "below_admin_and_kingdom_avg": true,
+      "etec_indicator": "3-1-1-2",
+      "source": "1448 تحليل بطاقة نافس.pdf · ثالث متوسط · S-40341",
+      "target_source": "مستهدف تشغيلي معتمد من رئيس المشروع (موجة سابقة) · يُراجع عند تحديث خطة نافس"
+    },
+    "reading": {
+      "score": 27.7,
+      "target": 35.0,
+      "unit": "%",
+      "label": "نسبة الإتقان — القراءة",
+      "binding_key": "nafes.reading",
+      "delta_points": -25.5,
+      "low_or_very_low_pct": 72.3,
+      "weakest_subskill": {
+        "name": "دلالات الألفاظ",
+        "score": 23.8
+      },
+      "above_admin_and_kingdom_avg": true,
+      "etec_indicator": "3-1-1-1",
+      "source": "1448 تحليل بطاقة نافس.pdf · ثالث متوسط · S-40341",
+      "target_source": "مستهدف تشغيلي معتمد من رئيس المشروع (موجة سابقة)"
+    },
+    "science": {
+      "score": 42.5,
+      "target": 50.0,
+      "unit": "%",
+      "label": "نسبة الإتقان — العلوم",
+      "binding_key": "nafes.science",
+      "delta_points": -5.3,
+      "low_or_very_low_pct": 59.4,
+      "weakest_subskill": {
+        "name": "العلوم الفيزيائية والكيميائية",
+        "score": 30.7
+      },
+      "etec_indicator": "3-1-1-3",
+      "source": "1448 تحليل بطاقة نافس.pdf · ثالث متوسط · S-40341",
+      "target_source": "مستهدف تشغيلي معتمد من رئيس المشروع (موجة سابقة)"
+    }
+  },
+  "external_evaluation": {
+    "overall": {
+      "score": 71.0,
+      "unit": "%",
+      "level": "انطلاق",
+      "label": "الدرجة الكلية للتقرير الخارجي",
+      "binding_key": "external.overall",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "administration": {
+      "score": 78.75,
+      "unit": "%",
+      "level": "تقدم",
+      "gap_to_excellence_pp": 11.25,
+      "label": "مجال الإدارة المدرسية",
+      "binding_key": "external.administration",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "outcomes": {
+      "score": 74.75,
+      "unit": "%",
+      "level": "انطلاق",
+      "gap_to_progress_pp": 0.25,
+      "label": "مجال نواتج التعلم",
+      "binding_key": "external.outcomes",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "teaching": {
+      "score": 65.5,
+      "unit": "%",
+      "level": "انطلاق",
+      "gap_to_progress_pp": 9.5,
+      "label": "مجال التعليم والتعلم",
+      "binding_key": "external.teaching",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "environment": {
+      "score": 60.5,
+      "unit": "%",
+      "level": "انطلاق",
+      "gap_to_progress_pp": 14.5,
+      "label": "مجال البيئة المدرسية",
+      "binding_key": "external.environment",
+      "priority": "قصوى",
+      "domain_target_pct": 75.0,
+      "domain_target_source": "خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "indicator_distribution": {
+      "total": 41,
+      "excellence": 6,
+      "progress": 13,
+      "launch": 18,
+      "preparation": 4,
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    }
+  },
+  "indicators": {
+    "1-3-1-3": {
+      "text": "تعزز المدرسة الشراكة المجتمعية لدعم التعلم والتأثير الإيجابي في المجتمع المحلي.",
+      "level_current": "تهيئة",
+      "level_target": "انطلاق",
+      "score_note": "أقل من 50%",
+      "priority": "عاجلة",
+      "domain": "الإدارة المدرسية",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ · خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448"
+    },
+    "2-1-1-7": {
+      "text": "تنمي المدرسة مهارات التفكير العليا لدى المتعلمين.",
+      "level_current": "تهيئة",
+      "level_target": "انطلاق",
+      "score_note": "أقل من 50%",
+      "priority": "عاجلة",
+      "domain": "التعليم والتعلم",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ · خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448",
+      "provisional": false
+    },
+    "4-1-1-1": {
+      "text": "تنظيم مبنى المدرسة ملائم لعدد المتعلمين والمرحلة العمرية.",
+      "level_current": "تهيئة",
+      "level_target": "انطلاق",
+      "score_note": "أقل من 50%",
+      "priority": "عاجلة",
+      "domain": "البيئة المدرسية",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ · خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448",
+      "provisional": false
+    },
+    "4-1-1-3": {
+      "text": "تلبي المرافق والخدمات المساندة احتياجات المتعلمين بمن فيهم ذوو الإعاقة.",
+      "level_current": "تهيئة",
+      "level_target": "انطلاق",
+      "score_note": "أقل من 50%",
+      "priority": "عاجلة",
+      "domain": "البيئة المدرسية",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ · خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448",
+      "provisional": false
+    },
+    "1-3-1-1": {
+      "score": 78.75,
+      "level_current": "تميز",
+      "level_target": "تميز",
+      "target_note": "الحفاظ على التميز",
+      "text": "تعزز المدرسة بناء العلاقات الإيجابية والتعاون في المجتمع المدرسي.",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "1-4-1-3": {
+      "score": 78.75,
+      "level_current": "تميز",
+      "level_target": "تميز",
+      "target_note": "الحفاظ على التميز",
+      "text": "تطبق المدرسة التقويم الذاتي المبني على المعايير المعتمدة من الهيئة.",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "3-2-1-1": {
+      "score": 78.75,
+      "level_current": "تميز",
+      "level_target": "تميز",
+      "target_note": "الحفاظ على التميز",
+      "text": "يظهر المتعلمون الاعتزاز بالقيم والهوية الوطنية.",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "3-2-1-2": {
+      "score": 78.75,
+      "level_current": "تميز",
+      "level_target": "تميز",
+      "target_note": "الحفاظ على التميز",
+      "text": "يظهر المتعلمون اتجاهات إيجابية نحو ذواتهم.",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "3-2-1-3": {
+      "score": 78.75,
+      "level_current": "تميز",
+      "level_target": "تميز",
+      "target_note": "الحفاظ على التميز",
+      "text": "يظهر المتعلمون التزامًا بالممارسات الصحية السليمة.",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "3-2-1-7": {
+      "score": 78.75,
+      "level_current": "تميز",
+      "level_target": "تميز",
+      "target_note": "الحفاظ على التميز",
+      "text": "يظهر المتعلمون اعتزازًا بثقافتهم واحترامًا للتنوع الثقافي.",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "4-2-1-3": {
+      "level_current": "تميز",
+      "level_target": "تميز",
+      "target_note": "الحفاظ على التميز — نقطة قوة تُبنى عليها في مجال البيئة",
+      "text": "تعمل المدرسة على نظافة المبنى المدرسي وجميع مرافقه بانتظام.",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ · تحليل_واقع_متوسطة_سعد_بن_الربيع.pdf"
+    },
+    "3-1-1-1": {
+      "level_current": "تقدم",
+      "level_target": "تميز",
+      "score_approx_from_card": 82,
+      "score_note": "≈ من بطاقة التحليل الخارجي لمؤشر القراءة · التفاصيل من نافس أدق",
+      "nafes_binding": "nafes.reading",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "3-1-1-2": {
+      "level_current": "انطلاق",
+      "level_target": "تقدم",
+      "score_approx_from_card": 62,
+      "nafes_binding": "nafes.math",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    },
+    "3-1-1-3": {
+      "level_current": "انطلاق",
+      "level_target": "تقدم",
+      "score_approx_from_card": 62,
+      "nafes_binding": "nafes.science",
+      "source": "تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    }
+  },
+  "improvement_goals": {
+    "partnership": {
+      "text": "إطلاق مبادرات شراكة مجتمعية فعلية (مؤسسات محلية، أولياء أمور) لدعم التعلم.",
+      "binds_indicators": [
+        "1-3-1-3"
+      ],
+      "duration": "العام الدراسي كاملاً",
+      "implementers": [
+        "مدير المدرسة"
+      ],
+      "shared_with": [
+        "لجنة التميز"
+      ],
+      "external_support": "فارغ معتمد",
+      "source": "خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448"
+    },
+    "higher_thinking": {
+      "text": "تنويع استراتيجيات التدريس ودمج التقنية وتنمية مهارات التفكير العليا ضمن الأنشطة الصفية.",
+      "binds_indicators": [
+        "2-1-1-7"
+      ],
+      "duration": "فصل دراسي",
+      "implementers": [
+        "وكيل الشؤون التعليمية",
+        "جميع المعلمين"
+      ],
+      "shared_with": [
+        "مجتمعات التعلم المهنية"
+      ],
+      "external_support": "فارغ معتمد",
+      "source": "خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448",
+      "provisional_etec": false
+    },
+    "building": {
+      "text": "متابعة الجهات ذات العلاقة لتطوير تنظيم المبنى وتجهيز الفصول والمعامل بما يراعي ذوي الإعاقة.",
+      "binds_indicators": [
+        "4-1-1-1"
+      ],
+      "duration": "فصل دراسي كامل",
+      "implementers": [
+        "مدير المدرسة",
+        "وكيل المدرسة"
+      ],
+      "shared_with": [
+        "فريق الأمن والسلامة"
+      ],
+      "external_support": "الدفاع المدني، صيانة المباني، الإدارة العامة للتعليم",
+      "source": "خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448",
+      "provisional_etec": false
+    },
+    "disability_facilities": {
+      "text": "توفير مرافق وخدمات مساندة ملائمة تلبي احتياجات جميع المتعلمين بمن فيهم ذوو الإعاقة.",
+      "binds_indicators": [
+        "4-1-1-3"
+      ],
+      "duration": "فصل دراسي كامل",
+      "implementers": [
+        "مدير المدرسة",
+        "وكيل المدرسة"
+      ],
+      "shared_with": [
+        "فارغ معتمد"
+      ],
+      "external_support": "فارغ معتمد",
+      "source": "خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448",
+      "provisional_etec": false
+    },
+    "math_science_reading_boost": {
+      "text": "بناء خطط علاجية عاجلة منفصلة للقراءة والرياضيات والعلوم تستهدف المجالات الفرعية الأضعف (دلالات الألفاظ، الجبر، العلوم الفيزيائية والكيميائية).",
+      "binds_indicators": [
+        "3-1-1-1",
+        "3-1-1-2",
+        "3-1-1-3"
+      ],
+      "duration": "فصل دراسي",
+      "implementers": [
+        "معلمو اللغة العربية والرياضيات والعلوم",
+        "وكيل الشؤون التعليمية",
+        "المرشد الطلابي"
+      ],
+      "shared_with": [
+        "مجتمعات التعلم المهنية"
+      ],
+      "external_support": "فارغ معتمد",
+      "success_binding": [
+        "nafes.math",
+        "nafes.reading",
+        "nafes.science"
+      ],
+      "first_action": "اجتماع عاجل لمعلمي الرياضيات لمراجعة أداء الجبر وخطة علاجية سريعة",
+      "source": "خطة_التحسين_متوسطة_سعد_بن_الربيع.pdf + خطة تحسين تقرير الخارجي 1448"
+    }
+  },
+  "program_bindings": {
+    "national_day": {
+      "indicator_codes": [
+        "1-3-1-3",
+        "3-2-1-1"
+      ],
+      "improvement_goal_key": "partnership",
+      "metrics_keys": [
+        "external.administration",
+        "indicators.1-3-1-3",
+        "indicators.3-2-1-1"
+      ]
+    },
+    "school_broadcast": {
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "improvement_goal_key": "partnership",
+      "metrics_keys": [
+        "external.administration",
+        "indicators.1-3-1-3"
+      ]
+    },
+    "radio_program": {
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "improvement_goal_key": "partnership",
+      "metrics_keys": [
+        "external.administration",
+        "indicators.1-3-1-3"
+      ],
+      "duplicate_tagged": true
+    },
+    "partnership": {
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "improvement_goal_key": "partnership",
+      "metrics_keys": [
+        "indicators.1-3-1-3"
+      ]
+    },
+    "parent_meet": {
+      "indicator_codes": [
+        "1-3-1-2",
+        "1-3-1-3"
+      ],
+      "improvement_goal_key": "partnership",
+      "metrics_keys": [
+        "indicators.1-3-1-3"
+      ]
+    },
+    "critical_thinking": {
+      "indicator_codes": [
+        "2-1-1-7"
+      ],
+      "improvement_goal_key": "higher_thinking",
+      "metrics_keys": [
+        "indicators.2-1-1-7",
+        "external.teaching"
+      ]
+    },
+    "lab_setup": {
+      "indicator_codes": [
+        "4-1-1-1",
+        "4-1-1-3"
+      ],
+      "improvement_goal_key": "building",
+      "metrics_keys": [
+        "indicators.4-1-1-1",
+        "external.environment"
+      ]
+    },
+    "building": {
+      "indicator_codes": [
+        "4-1-1-1",
+        "4-2-1-2"
+      ],
+      "improvement_goal_key": "building",
+      "metrics_keys": [
+        "indicators.4-1-1-1",
+        "external.environment"
+      ]
+    },
+    "fun_math": {
+      "indicator_codes": [
+        "3-1-1-2",
+        "2-1-1-6"
+      ],
+      "improvement_goal_key": "math_science_reading_boost",
+      "metrics_keys": [
+        "nafes.math"
+      ]
+    },
+    "nafs": {
+      "indicator_codes": [
+        "3-1-1-1",
+        "3-1-1-2",
+        "3-1-1-3"
+      ],
+      "improvement_goal_key": "math_science_reading_boost",
+      "metrics_keys": [
+        "nafes.math",
+        "nafes.reading",
+        "nafes.science"
+      ]
+    },
+    "support": {
+      "indicator_codes": [
+        "3-1-1-2",
+        "3-1-1-3",
+        "2-1-1-6"
+      ],
+      "improvement_goal_key": "math_science_reading_boost",
+      "metrics_keys": [
+        "nafes.math",
+        "nafes.science"
+      ]
+    },
+    "loss": {
+      "indicator_codes": [
+        "3-1-1-1",
+        "3-1-1-2",
+        "3-1-1-3"
+      ],
+      "improvement_goal_key": "math_science_reading_boost",
+      "metrics_keys": [
+        "nafes.math",
+        "nafes.reading",
+        "nafes.science"
+      ]
+    },
+    "reading_init": {
+      "indicator_codes": [
+        "2-1-1-2",
+        "2-1-1-6",
+        "3-1-1-1"
+      ],
+      "improvement_goal_key": "math_science_reading_boost",
+      "metrics_keys": [
+        "nafes.reading"
+      ]
+    }
+  }
+}

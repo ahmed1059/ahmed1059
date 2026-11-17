@@ -1,0 +1,1700 @@
+/* ==========================================================================
+   دستور الحوكمة البصرية وقالب الوثيقة الرسمي المعتمد (Master Document Template)
+   ========================================================================== */
+
+/* 1. ضبط وتحجيم الشعارات ومنع انفجارها البصري نهائياً
+   (لا تُطبَّق على صور الشواهد داخل .tpl-evidence-tile) */
+img[src*="ministry_logo"]:not(.tpl-evidence-tile img),
+img[src*="vision_2030"]:not(.tpl-evidence-tile img),
+.header-logo,
+.official-header img,
+.doc-official-header img,
+header img:not(.tpl-evidence-tile img):not(.sig-image) {
+    max-height: 52px !important;
+    max-width: 140px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: inline-block !important;
+}
+
+/* صور الشواهد تملأ الخانة العريضة ولا تخضع لسقف شعار الترويسة */
+.tpl-evidence-tile img,
+.tpl-evidence-tile.is-centered img {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 72mm !important;
+    min-height: 48mm !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+}
+
+/* 2. إطار الوثيقة الرسمي المعتمد — A4 (210×297) بهوامش داخلية 15mm وفق المرجع */
+.official-document-frame {
+    border: 2px solid #005a53 !important;
+    padding: 15mm !important;
+    background: #ffffff !important;
+    box-sizing: border-box !important;
+    margin: 0 auto !important;
+    width: 210mm !important;
+    max-width: none !important;
+    min-height: 297mm !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important;
+}
+
+/* الترويسة الثلاثية المعتمدة */
+.doc-official-header {
+    display: grid !important;
+    grid-template-columns: 140px 1fr 140px !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding-bottom: 8px !important;
+    border-bottom: 2px solid #005a53 !important;
+    margin-bottom: 8px !important;
+}
+
+.doc-official-header .header-logo-right { text-align: right !important; }
+.doc-official-header .header-logo-left { text-align: left !important; }
+
+.doc-official-header .header-center-titles {
+    color: #005a53 !important;
+    font-weight: bold !important;
+    line-height: 1.4 !important;
+    font-size: 0.88rem !important;
+}
+
+.doc-official-header .header-center-titles .school-name-title {
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+}
+
+.header-divider-bar {
+    height: 6px !important;
+    background: #e2e8f0 !important;
+    border: 1px solid #cbd5e1 !important;
+    margin-bottom: 12px !important;
+}
+
+/* جدول وشريط التوقيعات والاعتمادات الثلاثي المتساوي */
+.doc-signoff-block {
+    margin-top: auto !important;
+    width: 100% !important;
+    border-top: 2px solid #005a53 !important;
+    padding-top: 0 !important;
+}
+
+.doc-signoff-block .signoff-title-bar {
+    background: #004d46 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    font-size: 0.82rem !important;
+    padding: 3px 0 !important;
+}
+
+.doc-signoff-block .signoff-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    border: 1px solid #005a53 !important;
+    border-top: none !important;
+    text-align: center !important;
+    background: #ffffff !important;
+}
+
+.doc-signoff-block .signoff-col {
+    padding: 8px 6px !important;
+    border-left: 1px solid #005a53 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    min-height: 85px !important;
+}
+
+.doc-signoff-block .signoff-col:last-child {
+    border-left: none !important;
+}
+
+.doc-signoff-block .role-title {
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: #004d46 !important;
+}
+
+.doc-signoff-block .sig-placeholder {
+    height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 3px 0 !important;
+}
+
+.doc-signoff-block .sig-placeholder img {
+    max-height: 44px !important;
+    max-width: 120px !important;
+    object-fit: contain !important;
+}
+
+/* قرار محمي: التوقيع يلائم خانته في أي مستند، ولا يمدد الصف، ولا يخرج عن الإطار. */
+img.sig-image {
+    max-height: 12mm !important;
+    max-width: 32mm !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+}
+
+.sig-placeholder,
+.aj-sign-slot {
+    overflow: hidden !important;
+}
+
+.doc-signoff-block .person-name {
+    font-size: 0.76rem !important;
+    color: #1e293b !important;
+    font-weight: 600 !important;
+}
+
+.doc-signoff-block .sig-placeholder .sig-line {
+    display: block;
+    width: 72%;
+    height: 36px;
+    margin: 0 auto;
+    border-bottom: 1px solid #1c1917;
+}
+
+.doc-bottom-bar {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-top: 1px solid #005a53 !important;
+    margin-top: 4px !important;
+    padding: 4px 6px !important;
+    font-size: 0.72rem !important;
+    color: #005a53 !important;
+    font-weight: bold !important;
+}
+
+/* متن الوثيقة داخل النواة — يتمدد بين الترويسة والاعتماد دون المساس بالإطار المحصّن */
+.doc-official-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Portrait Official — منطقة المحتوى فوق النواة */
+.tpl-portrait-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.tpl-meta-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.tpl-meta-table th,
+.tpl-meta-table td {
+    border: 1px solid #005a53;
+    padding: 6px 8px;
+    vertical-align: top;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #1c1917;
+}
+
+.tpl-meta-table th {
+    width: 28%;
+    background: #e7f6f1;
+    color: #0b5e56;
+    font-weight: 700;
+    text-align: right;
+}
+
+.tpl-section-title {
+    margin: 0 0 6px;
+    color: #0b5e56;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.tpl-list {
+    margin: 0;
+    padding: 0 18px 0 0;
+    color: #24302c;
+    font-size: 12.5px;
+    line-height: 1.55;
+}
+
+.tpl-list li + li {
+    margin-top: 2px;
+}
+
+.tpl-section-body .tpl-p {
+    margin: 0 0 6px;
+    color: #1c1917;
+    font-size: 14px;
+    line-height: 1.85;
+    white-space: pre-wrap;
+}
+
+.tpl-empty {
+    margin: 0;
+    color: #5c675f;
+    font-size: 13px;
+}
+
+.tpl-evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.tpl-evidence-tile {
+    margin: 0;
+    border: 1px solid #c5ddd6;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tpl-evidence-tile img {
+    display: block;
+    width: 100%;
+    max-height: 160px;
+    object-fit: contain;
+}
+
+.tpl-evidence-tile.is-file {
+    padding: 12px;
+    font-size: 13px;
+}
+
+.tpl-evidence-tile.is-empty {
+    min-height: 55mm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #0b5e56;
+    background: #ffffff;
+    color: #5c675f;
+    font-size: 13px;
+}
+
+.tpl-evidence-tile.is-pdf {
+    padding: 0;
+    min-height: 72mm;
+}
+
+.tpl-evidence-tile.is-pdf iframe {
+    display: block;
+    width: 100%;
+    height: 72mm;
+    border: 0;
+    background: #ffffff;
+}
+
+.tpl-evidence-tile.is-pdf figcaption {
+    margin: 2mm 4px 4px;
+    color: #0b5e56;
+    font-size: 12px;
+    text-align: center;
+}
+
+.tpl-evidence-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.tpl-evidence-stack.is-centered .tpl-evidence-tile.is-centered,
+.tpl-evidence-tile.is-centered {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border: 1px solid #c5ddd6;
+    background: #ffffff;
+    min-height: 52mm;
+    flex: 1 1 auto;
+}
+
+.tpl-evidence-tile.is-centered img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 72mm;
+    min-height: 48mm;
+    margin: 0 auto;
+    object-fit: cover;
+    object-position: center;
+}
+
+.tpl-pair-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 8px;
+}
+
+.tpl-pair {
+    display: grid;
+    grid-template-columns: 34% 66%;
+    border: 1px solid #005a53;
+    min-height: 0;
+}
+
+.tpl-pair-k,
+.tpl-pair-v {
+    padding: 3px 6px;
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.tpl-pair-k {
+    background: #e7f6f1;
+    color: #0b5e56;
+    font-weight: 700;
+    border-left: 1px solid #005a53;
+}
+
+.tpl-pair-v {
+    color: #1c1917;
+    word-break: break-word;
+}
+
+.tpl-more {
+    margin: 0;
+    color: #5c675f;
+    font-size: 11px;
+}
+
+/* بطاقة البرنامج — وضع مضغوط لصفحة A4 واحدة */
+.tpl-program-card {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+.tpl-program-card .doc-official-title {
+    margin: 0 0 4px;
+    font-size: 16px;
+    padding-bottom: 3px;
+}
+
+.tpl-program-card .tpl-portrait-body {
+    gap: 4px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.tpl-program-card .tpl-section-title {
+    margin: 0 0 1px;
+    font-size: 11px;
+}
+
+.tpl-program-card .tpl-section-body .tpl-p {
+    margin: 0 0 1px;
+    font-size: 10.5px;
+    line-height: 1.35;
+}
+
+.tpl-program-card .tpl-empty {
+    font-size: 10.5px;
+}
+
+.tpl-program-card .tpl-section-body {
+    max-height: 18mm;
+    overflow: hidden;
+}
+
+.tpl-program-card .tpl-section:has(.tpl-evidence-stack) {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.tpl-program-card .tpl-section:has(.tpl-evidence-stack) .tpl-section-body {
+    flex: 1 1 auto;
+    max-height: none;
+    min-height: 52mm;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.tpl-program-card .tpl-section:has(.tpl-evidence-stack) .tpl-evidence-stack {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.tpl-program-card .tpl-pair-k,
+.tpl-program-card .tpl-pair-v {
+    padding: 2px 5px;
+    font-size: 10.5px;
+    line-height: 1.3;
+}
+
+.tpl-program-card .doc-signoff-block {
+    margin-top: auto !important;
+    flex-shrink: 0 !important;
+}
+
+.tpl-program-card .doc-official-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.doc-official-title {
+    margin: 4px 0 10px;
+    text-align: center;
+    color: #0b5e56;
+    font-size: 22px;
+    font-weight: 700;
+    border-bottom: 2px solid #0b5e56;
+    padding-bottom: 6px;
+}
+
+.doc-core-demo-note {
+    margin: 0;
+    color: #1c1917;
+    font-size: 15px;
+    line-height: 1.9;
+    text-align: center;
+}
+
+.doc-core-demo-slot {
+    flex: 1 1 auto;
+    min-height: 120px;
+    border: 1px dashed #c5ddd6;
+    border-radius: 12px;
+    background: #f7fbf9;
+}
+
+.official-frame-host {
+    display: none;
+}
+
+body.erp-shell.is-print-preview.print-official-core .app-shell,
+body.erp-shell.is-print-preview.print-official-core .wash-board {
+    display: none !important;
+}
+
+body.erp-shell.is-print-preview.print-official-core .official-frame-host {
+    display: block !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 12px auto 80px !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+body.erp-shell.is-print-preview.print-official-core .official-frame-host .official-document-frame {
+    width: 210mm !important;
+    max-width: none !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    padding: 15mm !important;
+    box-shadow: none !important;
+}
+
+body.erp-shell.is-print-preview.print-official-core.print-official-landscape .official-frame-host,
+body.erp-shell.is-print-preview.print-official-core.print-official-landscape .official-frame-host .official-document-frame,
+body.erp-shell.is-print-preview.print-official-core.print-official-landscape .pm-document.pm-landscape {
+    width: 297mm !important;
+    max-width: 297mm !important;
+    min-height: 210mm !important;
+}
+
+/*
+ * صفحة طباعة مسمّاة لبطاقة الإطار الرسمي.
+ * تكسر تعارض print.css العام (@page landscape + margin:16mm)
+ * الذي كان يضاعف الهامش العلوي ويدفع المحتوى لصفحة ثانية.
+ */
+@page official-core-a4 {
+    size: A4 portrait;
+    margin: 0;
+}
+
+@page official-core-a4-landscape {
+    size: A4 landscape;
+    margin: 0;
+}
+
+@page official-list-a4 {
+    size: A4 portrait;
+    margin: 15mm;
+}
+
+/* نماذج Landscape / Card / Table فوق النواة */
+.tpl-landscape-official {
+    width: 297mm !important;
+    min-height: 210mm !important;
+}
+
+.tpl-landscape-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.tpl-landscape-table-wrap,
+.tpl-table-wrap {
+    width: 100%;
+    overflow: hidden;
+}
+
+.tpl-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    font-size: 10.5px;
+}
+
+.tpl-data-table col.col-serial,
+.tpl-data-table .col-serial {
+    width: 10mm;
+    max-width: 12mm;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.tpl-data-table th,
+.tpl-data-table td {
+    border: 1px solid #005a53;
+    padding: 3px 5px;
+    text-align: right;
+    vertical-align: top;
+    word-break: break-word;
+}
+
+.tpl-plan-111 .tpl-plan-blank td {
+    height: 8mm;
+}
+
+.tpl-data-table th {
+    background: #e7f6f1;
+    color: #0b5e56;
+    font-weight: 700;
+}
+
+.tpl-card-official .tpl-portrait-body {
+    gap: 3px;
+}
+
+.tpl-card-official .tpl-section-body {
+    max-height: 14mm;
+}
+
+@media print {
+    /*
+     * Chrome يتجاهل overflow:hidden عند التجزئة؛ أي بكسل زائد يولّد صفحة ثانية
+     * فيها شريط التذييل فقط. الحل: body بلا ارتفاع تدفق + إطار position:fixed
+     * على ورقة واحدة (نفس أسلوب الوثائق أحادية الصفحة المعتمد عمليًا).
+     */
+    html:has(body.erp-shell.print-official-core),
+    body.erp-shell.print-official-core,
+    body.erp-shell.print-official-core.is-print-preview,
+    body.erp-shell.print-mode.print-official-core {
+        page: official-core-a4;
+        direction: rtl !important;
+        width: 210mm !important;
+        min-width: 210mm !important;
+        max-width: 210mm !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        overflow: visible !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* أفقي */
+    body.erp-shell.print-official-core.print-official-landscape {
+        page: official-core-a4-landscape;
+        width: 297mm !important;
+        min-width: 297mm !important;
+        max-width: 297mm !important;
+    }
+
+    /* متعدد الصفحات (محضر): تدفق عادي مع كسر صفحات — بلا fixed صفحة واحدة */
+    body.erp-shell.print-official-core.print-official-multi {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    body.erp-shell.print-official-core .app-shell,
+    body.erp-shell.print-official-core .wash-board,
+    body.erp-shell.print-official-core .print-preview-bar,
+    body.erp-shell.print-official-core .no-print {
+        display: none !important;
+    }
+
+    body.erp-shell.print-official-core .official-frame-host {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        width: 210mm !important;
+        max-width: 210mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        overflow: hidden !important;
+        z-index: 1 !important;
+    }
+
+    body.erp-shell.print-official-core.print-official-landscape .official-frame-host {
+        width: 297mm !important;
+        max-width: 297mm !important;
+        height: 210mm !important;
+    }
+
+    body.erp-shell.print-official-core.print-official-multi .official-frame-host,
+    body.erp-shell.print-official-core.print-official-multi .council-print-host {
+        position: relative !important;
+        display: block !important;
+        width: 210mm !important;
+        max-width: 210mm !important;
+        height: auto !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body.erp-shell.print-official-core.print-official-multi.print-official-landscape .official-frame-host {
+        width: 297mm !important;
+        max-width: 297mm !important;
+    }
+
+    body.erp-shell.print-official-core.print-council .council-print-host {
+        display: block !important;
+    }
+
+    body.erp-shell.print-official-core.print-soft-witness .official-frame-host {
+        display: none !important;
+    }
+
+    body.erp-shell.print-official-core.print-soft-witness .soft-witness-print-host {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        width: 297mm !important;
+        height: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        z-index: 2 !important;
+    }
+
+    /* شاهد لاصفي عبر النواة: إطار محصّن داخل soft-witness-print-host (A4 أفقي) */
+    body.erp-shell.print-official-core.print-soft-witness .soft-witness-print-host .official-document-frame.soft-witness-core-frame {
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        width: 297mm !important;
+        max-width: 297mm !important;
+        height: 210mm !important;
+        min-height: 210mm !important;
+        max-height: 210mm !important;
+        margin: 0 !important;
+        padding: 12mm !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+        page: official-core-a4-landscape;
+        z-index: 2 !important;
+    }
+
+    body.erp-shell.print-official-core.print-soft-witness .soft-witness-core-body {
+        min-height: 0 !important;
+        flex: 1 1 auto !important;
+    }
+
+    /* معاينة الشاشة: إطار النواة بحجم الورقة الأفقية دون صنف الورقة القديمة */
+    body.erp-shell.preview-soft-witness .soft-witness-core-frame {
+        width: 297mm;
+        height: 210mm;
+        max-width: 297mm;
+        margin: 0 auto;
+        box-shadow: 0 18px 40px rgba(8, 40, 36, 0.18);
+    }
+
+    body.erp-shell.print-official-core .official-frame-host .official-document-frame,
+    body.erp-shell.print-official-core .tpl-program-card {
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        width: 210mm !important;
+        max-width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+        margin: 0 !important;
+        padding: 15mm !important;
+        box-sizing: border-box !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+        page: official-core-a4;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-before: avoid !important;
+        break-before: avoid !important;
+        z-index: 2 !important;
+    }
+
+    body.erp-shell.print-official-core.print-official-landscape .official-frame-host .official-document-frame,
+    body.erp-shell.print-official-core .tpl-landscape-official {
+        width: 297mm !important;
+        max-width: 297mm !important;
+        height: 210mm !important;
+        min-height: 210mm !important;
+        max-height: 210mm !important;
+        padding: 12mm !important;
+        page: official-core-a4-landscape;
+    }
+
+    body.erp-shell.print-official-core.print-official-multi .official-document-frame,
+    body.erp-shell.print-official-core.print-official-multi .council-official-page {
+        position: relative !important;
+        top: auto !important;
+        right: auto !important;
+        left: auto !important;
+        width: 210mm !important;
+        height: auto !important;
+        min-height: 297mm !important;
+        max-height: none !important;
+        overflow: visible !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        z-index: auto !important;
+    }
+
+    body.erp-shell.print-official-core.print-official-multi .official-document-frame:last-child,
+    body.erp-shell.print-official-core.print-official-multi .council-official-page:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
+    }
+
+    body.erp-shell.print-official-core.print-official-multi .doc-official-body {
+        overflow: visible !important;
+    }
+
+    body.erp-shell.print-official-core .tpl-data-table {
+        font-size: 9.5px !important;
+    }
+
+    body.erp-shell.print-official-core .doc-official-header {
+        margin-bottom: 4px !important;
+        padding-bottom: 4px !important;
+    }
+
+    body.erp-shell.print-official-core .header-divider-bar {
+        margin-bottom: 6px !important;
+    }
+
+    body.erp-shell.print-official-core .doc-signoff-block {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        margin-top: auto !important;
+        flex-shrink: 0 !important;
+    }
+
+    body.erp-shell.print-official-core .doc-official-body,
+    body.erp-shell.print-official-core .tpl-portrait-body {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+    }
+
+    body.erp-shell.print-official-core .tpl-program-card .tpl-section:has(.tpl-evidence-stack) {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+    }
+
+    body.erp-shell.print-official-core .tpl-program-card .tpl-section:has(.tpl-evidence-stack) .tpl-section-body {
+        flex: 1 1 auto !important;
+        max-height: none !important;
+        min-height: 55mm !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    body.erp-shell.print-official-core .tpl-program-card .tpl-evidence-stack.is-centered {
+        flex: 1 1 auto !important;
+        width: 100% !important;
+    }
+
+    body.erp-shell.print-official-core .tpl-program-card .tpl-evidence-tile.is-centered {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 55mm !important;
+        height: 100% !important;
+    }
+
+    body.erp-shell.print-official-core .tpl-program-card .tpl-evidence-tile.is-centered img {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100% !important;
+        max-height: 70mm !important;
+        min-height: 55mm !important;
+        object-fit: cover !important;
+        object-position: center !important;
+    }
+
+    body.erp-shell.print-official-core .doc-signoff-block .sig-placeholder,
+    body.erp-shell.print-official-core .doc-signoff-block .sig-placeholder img.sig-image {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    body.erp-shell.print-official-core .doc-signoff-block .sig-placeholder img.sig-image {
+        display: block !important;
+        max-height: 16mm !important;
+        max-width: 85% !important;
+    }
+
+    body.erp-shell.print-official-core .tpl-program-card .tpl-section-risk {
+        display: none !important;
+    }
+
+    /* ضمان صفحة واحدة: قص النصوص الطويلة بدل التمدد لصفحة ثانية */
+    body.erp-shell.print-official-core .tpl-program-card .tpl-section-body {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+        overflow: hidden;
+    }
+
+    body.erp-shell.print-official-core .tpl-program-card .tpl-section-body .tpl-p {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
+}
+
+/* 3. العزل الصارم لمنع تداخل الأقسام */
+body.view-isolated-record #landing-portal,
+body.view-isolated-record #registers-hub,
+body.view-isolated-record #analytics-hub,
+body.view-isolated-record .app-sidebar,
+body.view-isolated-record .app-header {
+    display: none !important;
+}
+
+/* تصحيح عرض مركز القياس والمؤشرات */
+#analytics-hub, .analytics-container, #measurement-center {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+@media print {
+    body { background: transparent !important; margin: 0 !important; padding: 0 !important; }
+    body.erp-shell:not(.print-official-core) .official-document-frame {
+        border: 2px solid #005a53 !important;
+        width: 210mm !important;
+        max-width: 210mm !important;
+        min-height: 297mm !important;
+        margin: 0 auto !important;
+        page-break-after: always !important;
+        break-after: page !important;
+    }
+    .no-print, .app-sidebar, .app-header, .dash-toolbar, .btn-back { display: none !important; }
+}
+
+
+/* ==========================================================================
+   عزل قسم توليد الخطة تماماً عن السجلات والوثائق الرسمية
+   ========================================================================== */
+body.view-registers #plan-generator,
+body.view-registers .plan-generator-section,
+body.view-isolated-record #plan-generator {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
+
+/* تنسيق شبكة الأبواب الأربعة في الصفحة الأولى */
+.portal-grid, .doors-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+    max-width: 1100px !important;
+    margin: 30px auto !important;
+}
+
+@media (max-width: 900px) {
+    .portal-grid, .doors-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+
+/* مظهر صفحة توليد الخطط المعزولة المطابقة للأصل */
+body.view-plans-isolated #landing-portal,
+body.view-plans-isolated #registers-hub,
+body.view-plans-isolated #registers-portal,
+body.view-plans-isolated .registers-container {
+    display: none !important;
+}
+
+body.view-plans-isolated #plan-generator {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    max-width: 1000px !important;
+    margin: 30px auto !important;
+    background: #ffffff !important;
+    padding: 25px 30px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+
+/* تنسيق أبواب quiet-doors الأربعة */
+.quiet-doors {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+    max-width: 1050px !important;
+    margin: 0 auto !important;
+}
+
+@media (max-width: 850px) {
+    .quiet-doors {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+
+/* ==========================================================================
+   إعادة ضبط بهو الواجهة بنمط شبكة متناظرة (2x2 Grid) وأزرار القائمة الجانبية
+   ========================================================================== */
+#quiet-lobby {
+    max-width: 860px !important;
+    margin: 40px auto !important;
+    text-align: center !important;
+}
+
+#quiet-lobby h1 {
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+    color: #004d46 !important;
+    margin-bottom: 6px !important;
+}
+
+#quiet-lobby p {
+    font-size: 1.05rem !important;
+    color: #64748b !important;
+    margin-bottom: 30px !important;
+}
+
+.quiet-doors {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 22px !important;
+    max-width: 780px !important;
+    margin: 0 auto !important;
+}
+
+.quiet-doors button {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    padding: 24px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease-in-out !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+    min-height: 150px !important;
+}
+
+.quiet-doors button:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 10px 22px rgba(0, 90, 83, 0.08) !important;
+    border-color: #005a53 !important;
+}
+
+.quiet-doors button b {
+    font-size: 2.2rem !important;
+    margin-bottom: 12px !important;
+    display: block !important;
+}
+
+.quiet-doors button span {
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    margin-bottom: 6px !important;
+}
+
+.quiet-doors button small {
+    font-size: 0.85rem !important;
+    color: #64748b !important;
+}
+
+/* زر العودة الثابت بالقائمة اليمنى */
+.sidebar-return-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    background: #f1f5f9 !important;
+    color: #005a53 !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    margin-bottom: 15px !important;
+    border: 1px solid #cbd5e1 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.sidebar-return-btn:hover {
+    background: #005a53 !important;
+    color: #ffffff !important;
+    border-color: #004d46 !important;
+}
+
+
+/* ==========================================================================
+   إعادة ضبط بهو الواجهة بنمط شبكة متناظرة (2x2 Grid) وأزرار القائمة الجانبية
+   ========================================================================== */
+#quiet-lobby {
+    max-width: 860px !important;
+    margin: 40px auto !important;
+    text-align: center !important;
+}
+
+#quiet-lobby h1 {
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+    color: #004d46 !important;
+    margin-bottom: 6px !important;
+}
+
+#quiet-lobby p {
+    font-size: 1.05rem !important;
+    color: #64748b !important;
+    margin-bottom: 30px !important;
+}
+
+.quiet-doors {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 22px !important;
+    max-width: 780px !important;
+    margin: 0 auto !important;
+}
+
+.quiet-doors button {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    padding: 24px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease-in-out !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+    min-height: 150px !important;
+}
+
+.quiet-doors button:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 10px 22px rgba(0, 90, 83, 0.08) !important;
+    border-color: #005a53 !important;
+}
+
+.quiet-doors button b {
+    font-size: 2.2rem !important;
+    margin-bottom: 12px !important;
+    display: block !important;
+}
+
+.quiet-doors button span {
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    margin-bottom: 6px !important;
+}
+
+.quiet-doors button small {
+    font-size: 0.85rem !important;
+    color: #64748b !important;
+}
+
+/* زر العودة الثابت بالقائمة اليمنى */
+.sidebar-return-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    background: #f1f5f9 !important;
+    color: #005a53 !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    margin-bottom: 15px !important;
+    border: 1px solid #cbd5e1 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.sidebar-return-btn:hover {
+    background: #005a53 !important;
+    color: #ffffff !important;
+    border-color: #004d46 !important;
+}
+
+
+/* ==========================================================================
+   إصلاح شبكة 2x2 وعزل شاشة الخطط ومنع تفريغ الشاشة
+   ========================================================================== */
+
+#quiet-lobby {
+    display: block !important;
+    max-width: 860px !important;
+    margin: 40px auto !important;
+    text-align: center !important;
+}
+
+/* فرض التناظر التام 2 في الأعلى و 2 في الأسفل */
+.quiet-doors {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+    max-width: 760px !important;
+    margin: 0 auto !important;
+}
+
+.quiet-doors button {
+    width: 100% !important;
+    min-height: 145px !important;
+}
+
+/* عند فتح قسم الخطط: حجب السجلات والمخططات نهائياً */
+body.view-plans #quiet-lobby,
+body.view-plans #registers-portal,
+body.view-plans #measurement-center,
+body.view-plans .charts-container,
+body.view-plans .registers-grid {
+    display: none !important;
+}
+
+body.view-plans #plan-generator {
+    display: block !important;
+    visibility: visible !important;
+    max-width: 960px !important;
+    margin: 30px auto !important;
+}
+
+
+/* ==========================================================================
+   فرض شبكة 2x2 المتناظرة هندسياً وعزل الصفحات المستقلة
+   ========================================================================== */
+
+#quiet-lobby {
+    display: block !important;
+    max-width: 820px !important;
+    margin: 50px auto !important;
+    text-align: center !important;
+}
+
+#quiet-lobby h1 {
+    font-size: 2.2rem !important;
+    font-weight: 800 !important;
+    color: #004d46 !important;
+    margin-bottom: 8px !important;
+}
+
+#quiet-lobby p {
+    font-size: 1.1rem !important;
+    color: #64748b !important;
+    margin-bottom: 35px !important;
+}
+
+/* شبكة 2x2 الصارمة */
+.quiet-doors {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+    max-width: 760px !important;
+    margin: 0 auto !important;
+}
+
+.portal-door-btn {
+    background: #ffffff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    padding: 26px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
+    min-height: 155px !important;
+}
+
+.portal-door-btn:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 24px rgba(0, 90, 83, 0.1) !important;
+    border-color: #005a53 !important;
+}
+
+.portal-door-btn b {
+    font-size: 2.4rem !important;
+    margin-bottom: 12px !important;
+    display: block !important;
+}
+
+.portal-door-btn span {
+    font-size: 1.2rem !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    margin-bottom: 6px !important;
+}
+
+.portal-door-btn small {
+    font-size: 0.88rem !important;
+    color: #64748b !important;
+}
+
+/* تنسيق بطاقة الخطط في الصفحة المستقلة */
+.isolated-page-main {
+    max-width: 1050px !important;
+    margin: 30px auto !important;
+    padding: 0 20px !important;
+}
+
+.page-title-banner {
+    background: #ffffff !important;
+    border-right: 4px solid #005a53 !important;
+    padding: 16px 20px !important;
+    border-radius: 8px !important;
+    margin-bottom: 25px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+}
+
+.page-title-banner h2 { margin: 0 0 5px 0 !important; color: #004d46 !important; font-size: 1.3rem !important; }
+.page-title-banner p { margin: 0 !important; color: #64748b !important; font-size: 0.9rem !important; }
+
+.plan-generator-card {
+    background: #ffffff !important;
+    padding: 30px !important;
+    border-radius: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04) !important;
+}
+
+.form-row { display: flex !important; gap: 20px !important; }
+.form-group { flex: 1 !important; display: flex !important; flex-direction: column !important; }
+.form-group label { font-size: 0.88rem !important; font-weight: 700 !important; color: #334155 !important; margin-bottom: 6px !important; }
+.form-group input, .form-group select {
+    padding: 10px 12px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    font-size: 0.92rem !important;
+}
+.btn-primary-action {
+    background: #005a53 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    padding: 11px 24px !important;
+    border: none !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    font-size: 0.95rem !important;
+}
+.btn-primary-action:hover { background: #00433d !important; }
+
+
+/* ==========================================================================
+   فرض شبكة 2x2 المتناظرة هندسياً وعزل الصفحات المستقلة
+   ========================================================================== */
+
+#quiet-lobby {
+    display: block !important;
+    max-width: 820px !important;
+    margin: 50px auto !important;
+    text-align: center !important;
+}
+
+#quiet-lobby h1 {
+    font-size: 2.2rem !important;
+    font-weight: 800 !important;
+    color: #004d46 !important;
+    margin-bottom: 8px !important;
+}
+
+#quiet-lobby p {
+    font-size: 1.1rem !important;
+    color: #64748b !important;
+    margin-bottom: 35px !important;
+}
+
+/* شبكة 2x2 الصارمة */
+.quiet-doors {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+    max-width: 760px !important;
+    margin: 0 auto !important;
+}
+
+.portal-door-btn {
+    background: #ffffff !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    padding: 26px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
+    min-height: 155px !important;
+}
+
+.portal-door-btn:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 24px rgba(0, 90, 83, 0.1) !important;
+    border-color: #005a53 !important;
+}
+
+.portal-door-btn b {
+    font-size: 2.4rem !important;
+    margin-bottom: 12px !important;
+    display: block !important;
+}
+
+.portal-door-btn span {
+    font-size: 1.2rem !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    margin-bottom: 6px !important;
+}
+
+.portal-door-btn small {
+    font-size: 0.88rem !important;
+    color: #64748b !important;
+}
+
+/* تنسيق بطاقة الخطط في الصفحة المستقلة */
+.isolated-page-main {
+    max-width: 1050px !important;
+    margin: 30px auto !important;
+    padding: 0 20px !important;
+}
+
+.page-title-banner {
+    background: #ffffff !important;
+    border-right: 4px solid #005a53 !important;
+    padding: 16px 20px !important;
+    border-radius: 8px !important;
+    margin-bottom: 25px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+}
+
+.page-title-banner h2 { margin: 0 0 5px 0 !important; color: #004d46 !important; font-size: 1.3rem !important; }
+.page-title-banner p { margin: 0 !important; color: #64748b !important; font-size: 0.9rem !important; }
+
+.plan-generator-card {
+    background: #ffffff !important;
+    padding: 30px !important;
+    border-radius: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04) !important;
+}
+
+.form-row { display: flex !important; gap: 20px !important; }
+.form-group { flex: 1 !important; display: flex !important; flex-direction: column !important; }
+.form-group label { font-size: 0.88rem !important; font-weight: 700 !important; color: #334155 !important; margin-bottom: 6px !important; }
+.form-group input, .form-group select {
+    padding: 10px 12px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    font-size: 0.92rem !important;
+}
+.btn-primary-action {
+    background: #005a53 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    padding: 11px 24px !important;
+    border: none !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    font-size: 0.95rem !important;
+}
+.btn-primary-action:hover { background: #00433d !important; }
+
+
+/* ==========================================================================
+   معمارية العزل الصارم وضبط الأبواب الأربعة (2x2 Balanced Grid)
+   ========================================================================== */
+
+#quiet-lobby {
+    max-width: 820px !important;
+    margin: 45px auto !important;
+    text-align: center !important;
+}
+
+#quiet-lobby h1 {
+    font-size: 2.2rem !important;
+    font-weight: 800 !important;
+    color: #004d46 !important;
+    margin-bottom: 6px !important;
+}
+
+#quiet-lobby p {
+    font-size: 1.05rem !important;
+    color: #64748b !important;
+    margin-bottom: 30px !important;
+}
+
+.quiet-doors {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 22px !important;
+    max-width: 780px !important;
+    margin: 0 auto !important;
+}
+
+.door-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    padding: 24px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.03) !important;
+    min-height: 155px !important;
+    width: 100% !important;
+    outline: none !important;
+}
+
+.door-card:hover {
+    transform: translateY(-4px) !important;
+    border-color: #005a53 !important;
+    box-shadow: 0 10px 24px rgba(0, 90, 83, 0.09) !important;
+}
+
+.door-icon {
+    font-size: 2.3rem !important;
+    margin-bottom: 10px !important;
+    display: block !important;
+}
+
+.door-title {
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    margin-bottom: 4px !important;
+    display: block !important;
+}
+
+.door-desc {
+    font-size: 0.85rem !important;
+    color: #64748b !important;
+    display: block !important;
+}
+
+/* تنسيق شاشة الخطط المعزولة لتطابق هوية المنظومة */
+#view-plans-container {
+    max-width: 1000px !important;
+    margin: 30px auto !important;
+    padding: 0 15px !important;
+}
+
+.page-title-banner {
+    background: #ffffff !important;
+    border-right: 4px solid #005a53 !important;
+    padding: 16px 20px !important;
+    border-radius: 8px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+}
+
+.page-title-banner h2 {
+    margin: 0 0 4px 0 !important;
+    color: #005a53 !important;
+    font-size: 1.25rem !important;
+}
+
+.page-title-banner p {
+    margin: 0 !important;
+    color: #64748b !important;
+    font-size: 0.88rem !important;
+}
+
+.plan-form-card {
+    background: #ffffff !important;
+    border-radius: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 28px !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.04) !important;
+}
+
+.form-grid-row {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+    margin-bottom: 20px !important;
+}
+
+.file-upload-row {
+    grid-template-columns: 2.5fr 1.5fr !important;
+    align-items: flex-end !important;
+    margin-bottom: 0 !important;
+}
+
+.input-box {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.input-box label {
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+    margin-bottom: 6px !important;
+}
+
+.input-box input, .input-box select {
+    padding: 10px 12px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    font-size: 0.92rem !important;
+}
+
+.btn-execute-plan {
+    background: #005a53 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    padding: 11px 18px !important;
+    border: none !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    font-size: 0.95rem !important;
+    width: 100% !important;
+    transition: background 0.2s ease !important;
+}
+
+.btn-execute-plan:hover {
+    background: #00433d !important;
+}
+
+/* قرار 289 — هوية الشاشة الصغيرة. لا يمس الإطار ولا الترويسة ولا شريط الاعتماد. */
+@media screen and (max-width: 1099px) {
+  body.app-journey .aj-view.wash-board {
+    background: #ffffff;
+    box-shadow: inset 0 4px 0 #0b5e56;
+  }
+}
+
+/* معاينة الشاشة: الصفحة تتمرر، وزر الإغلاق يبقى أعلى الشاشة. لا يمس الطباعة. */
+@media screen {
+  html:has(body.erp-shell.is-print-preview),
+  body.erp-shell.is-print-preview {
+    height: auto !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: scroll !important;
+  }
+
+  body.erp-shell.is-print-preview.print-official-core .official-frame-host {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    max-height: 90vh !important;
+    margin-top: 64px !important;
+  }
+
+  body.erp-shell.is-print-preview #print-preview-bar {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: auto !important;
+    left: 0 !important;
+    z-index: 8000 !important;
+    display: flex !important;
+    justify-content: center;
+    margin: 0 !important;
+  }
+
+  body.erp-shell.is-print-preview #print-preview-close {
+    position: fixed !important;
+    top: 10px !important;
+    left: 12px !important;
+    z-index: 8001 !important;
+  }
+
+  body.erp-shell .erp-pane.is-board.is-booklet {
+    height: calc(100dvh - 72px) !important;
+    max-height: calc(100dvh - 72px) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  body.erp-shell .erp-pane.is-booklet .booklet-page,
+  body.erp-shell .erp-pane.is-booklet #edition-tables {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+}

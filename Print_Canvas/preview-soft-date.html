@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>معاينة تاريخ رأس النموذج</title>
+  <link rel="stylesheet" href="css/erp-nav.css?v=erp143">
+  <style>
+    body { margin: 0; padding: 24px; background: #eef4f2; font-family: Tajawal, sans-serif; }
+    .card { max-width: 760px; margin: 0 auto; background: #fff; border-radius: 14px; padding: 18px; box-shadow: 0 10px 24px rgba(0,0,0,.08); }
+    h1 { color: #0b5e56; font-size: 20px; margin: 0 0 12px; }
+    .note { color: #5c675f; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>رأس نموذج المتابعة — التاريخ الهجري</h1>
+    <div class="soft-witness-doc-meta">
+      <div><b>الأسبوع</b>الأسبوع 1</div>
+      <div><b>اليوم</b>الأحد</div>
+      <div><b>التاريخ</b><span id="date-line">…</span></div>
+    </div>
+    <p class="note" id="note"></p>
+  </div>
+  <script>
+    function pad2(value) {
+      return String(value).padStart(2, "0");
+    }
+    function hijriParts(iso) {
+      var date = new Date(iso + "T12:00:00");
+      var parts = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", {
+        year: "numeric", month: "2-digit", day: "2-digit"
+      }).formatToParts(date);
+      function pick(type) {
+        var found = parts.filter(function (part) { return part.type === type; })[0];
+        return found ? found.value : "";
+      }
+      return {
+        day: pick("day"),
+        month: pick("month"),
+        year: String(pick("year")).replace(/[^\d]/g, "")
+      };
+    }
+    var months = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+    function gregorianFromDate(iso) {
+      var d = new Date(iso + "T12:00:00");
+      return d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear() + "م";
+    }
+    var iso = "2025-08-24";
+    var hp = hijriParts(iso);
+    var line = pad2(hp.day) + " / " + pad2(hp.month) + " / " + hp.year + " هـ — " + gregorianFromDate(iso);
+    document.getElementById("date-line").textContent = line;
+    document.getElementById("note").textContent = "نفس منطق النظام (hijriParts أم القرى) لتاريخ " + iso;
+  </script>
+</body>
+</html>

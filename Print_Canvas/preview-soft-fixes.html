@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>معاينة إصلاحات نموذج المتابعة</title>
+  <link rel="stylesheet" href="css/erp-nav.css?v=erp143">
+  <link rel="stylesheet" href="css/media-governance.css?v=frame13">
+  <style>
+    body { margin: 0; padding: 16px; background: #e8efec; font-family: Tajawal, sans-serif; }
+    h1 { color: #0b5e56; font-size: 20px; }
+    .wash-save, .wash-add { border:0; border-radius:10px; padding:8px 12px; background:#0b5e56; color:#fff; font:inherit; font-weight:700; }
+    .panel { background:#fff; border-radius:14px; padding:14px; margin-bottom:16px; box-shadow:0 8px 20px rgba(0,0,0,.08); }
+  </style>
+</head>
+<body>
+  <div class="panel soft-day-board">
+    <h1>1) شريط الأسبوع — قائمة منسدلة للأسابيع</h1>
+    <div class="soft-week-strip">
+      <div class="soft-week-strip-top">
+        <label class="soft-term-field"><span>الفصل</span><select><option>الفصل الثاني</option></select></label>
+        <div class="soft-week-mid">
+          <select class="soft-week-select" id="demo-week">
+            <option>أسبوع 1</option>
+            <option selected>أسبوع 10</option>
+            <option>أسبوع 15</option>
+          </select>
+          <span class="soft-week-range" id="demo-range">25 أكتوبر — 29 أكتوبر</span>
+        </div>
+        <button type="button" class="wash-save">اليوم</button>
+      </div>
+      <div class="soft-week-strip-row">
+        <button type="button" class="soft-week-nav">‹</button>
+        <div class="soft-day-strip">
+          <button type="button" class="soft-day-chip is-on"><strong>الإثنين</strong><small>26 أكتوبر</small><span class="soft-day-dots"><span class="soft-dot is-ready"></span><span class="soft-dot is-ready"></span><span class="soft-dot is-warn"></span></span></button>
+          <button type="button" class="soft-day-chip"><strong>الثلاثاء</strong><small>27 أكتوبر</small><span class="soft-day-dots"><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+          <button type="button" class="soft-day-chip"><strong>الأربعاء</strong><small>28 أكتوبر</small><span class="soft-day-dots"><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+          <button type="button" class="soft-day-chip"><strong>الخميس</strong><small>29 أكتوبر</small><span class="soft-day-dots"><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+          <button type="button" class="soft-day-chip"><strong>الأحد</strong><small>25 أكتوبر</small><span class="soft-day-dots"><span class="soft-dot is-warn"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+        </div>
+        <button type="button" class="soft-week-nav">›</button>
+      </div>
+    </div>
+    <div class="soft-day-tools" style="margin-top:12px;">
+      <div class="soft-upload-menu">
+        <button type="button" class="wash-save" id="demo-toggle">رفع شاهد ▾</button>
+        <div class="soft-upload-panel" id="demo-panel" hidden>
+          <button type="button" data-demo-item>ملف</button>
+          <button type="button" data-demo-item>كاميرا</button>
+          <button type="button" data-demo-item>رابط</button>
+        </div>
+      </div>
+      <span class="soft-upload-hint">القائمة تُغلق بعد الاختيار أو النقر خارجها</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h1>2) نموذج الطباعة — رأس + صور contain</h1>
+    <article class="official-document-frame tpl-landscape-official soft-witness-core-frame" style="width:297mm;max-width:100%;height:auto;min-height:210mm;margin:0 auto;">
+      <header class="doc-official-header">
+        <div class="header-logo-right"><img src="assets/ministry_logo.png" alt=""></div>
+        <div class="header-center-titles">
+          <div>المملكة العربية السعودية</div><div>وزارة التعليم</div>
+          <div>الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+          <div class="school-name-title">متوسطة سعد بن الربيع الأنصاري</div>
+        </div>
+        <div class="header-logo-left"><img src="assets/vision_2030.png" alt=""></div>
+      </header>
+      <div class="header-divider-bar"></div>
+      <div class="doc-official-body">
+        <h1 class="doc-official-title">نموذج متابعة (الاصطفاف والاستراحة والصلاة)</h1>
+        <div class="soft-witness-doc-meta">
+          <div><b>الأسبوع</b>الأسبوع 10</div>
+          <div><b>اليوم</b>الإثنين</div>
+          <div><b>التاريخ</b><span id="print-date-line">…</span></div>
+        </div>
+        <table class="soft-witness-periods" style="width:100%;border-collapse:collapse;table-layout:fixed;">
+          <thead><tr><th style="border:1px solid #005a53;padding:6px;">الاصطفاف</th><th style="border:1px solid #005a53;padding:6px;">الاستراحة</th><th style="border:1px solid #005a53;padding:6px;">الصلاة</th></tr></thead>
+          <tbody>
+            <tr><td style="border:1px solid #005a53;text-align:center;">منفّذ</td><td style="border:1px solid #005a53;text-align:center;">منفّذ</td><td style="border:1px solid #005a53;text-align:center;">ناقص</td></tr>
+            <tr>
+              <td style="border:1px solid #005a53;padding:4px;height:72mm;">
+                <div class="soft-witness-col-stage">
+                  <figure class="soft-witness-tile is-image"><span class="soft-witness-fit-frame">
+                    <img src="assets/ministry_logo.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain;">
+                  </span></figure>
+                </div>
+              </td>
+              <td style="border:1px solid #005a53;padding:4px;height:72mm;">
+                <div class="soft-witness-col-stage">
+                  <figure class="soft-witness-tile is-image"><span class="soft-witness-fit-frame">
+                    <img src="assets/vision_2030.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain;">
+                  </span></figure>
+                </div>
+              </td>
+              <td style="border:1px solid #005a53;text-align:center;color:#8a948e;">بلا مرفق</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <footer class="doc-signoff-block">
+        <div class="signoff-title-bar">التوقيعات والاعتمادات</div>
+        <div class="signoff-grid">
+          <div class="signoff-col"><span class="role-title">وكيل الشؤون التعليمية</span><div class="sig-placeholder"></div><span class="person-name">محمد بن فايز</span></div>
+          <div class="signoff-col"><span class="role-title">وكيل شؤون الطلاب</span><div class="sig-placeholder"></div><span class="person-name">خالد بن علي</span></div>
+          <div class="signoff-col"><span class="role-title">مدير المدرسة</span><div class="sig-placeholder"></div><span class="person-name">نايف بن سمير</span></div>
+        </div>
+      </footer>
+    </article>
+  </div>
+  <script>
+    var toggle = document.getElementById("demo-toggle");
+    var panel = document.getElementById("demo-panel");
+    var week = document.getElementById("demo-week");
+    var range = document.getElementById("demo-range");
+    var ranges = {
+      "أسبوع 1": "23 أغسطس — 27 أغسطس",
+      "أسبوع 10": "25 أكتوبر — 29 أكتوبر",
+      "أسبوع 15": "29 نوفمبر — 3 ديسمبر"
+    };
+    toggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      panel.hidden = !panel.hidden;
+    });
+    panel.addEventListener("click", function (e) {
+      if (e.target.closest("[data-demo-item]")) {
+        panel.hidden = true;
+      }
+    });
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".soft-upload-menu")) {
+        panel.hidden = true;
+      }
+    });
+    week.addEventListener("change", function () {
+      range.textContent = ranges[week.value] || "";
+    });
+    (function () {
+      function pad2(value) { return String(value).padStart(2, "0"); }
+      var iso = "2025-08-24";
+      var parts = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", {
+        year: "numeric", month: "2-digit", day: "2-digit"
+      }).formatToParts(new Date(iso + "T12:00:00"));
+      function pick(type) {
+        var found = parts.filter(function (part) { return part.type === type; })[0];
+        return found ? found.value : "";
+      }
+      var line = pad2(pick("day")) + " / " + pad2(pick("month")) + " / "
+        + String(pick("year")).replace(/[^\d]/g, "") + " هـ — 24 أغسطس 2025م";
+      var el = document.getElementById("print-date-line");
+      if (el) { el.textContent = line; }
+    }());
+  </script>
+</body>
+</html>

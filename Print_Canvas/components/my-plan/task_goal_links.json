@@ -1,0 +1,1806 @@
+{
+  "meta": {
+    "decision": 155,
+    "wave": "م3+م4",
+    "rule": "goal_id ∈ G1–G7 أو unmapped · لا اختراع",
+    "sources": [
+      "Core_Engine/task_bank/*",
+      "programs.json goal_ref",
+      "DB task_goal_links إن وُجد",
+      "كلمات مفتاحية→مفاتيح برامج النواة فقط"
+    ],
+    "stats": {
+      "mapped": 44,
+      "unmapped": 123,
+      "by_role": {
+        "principal": {
+          "total": 19,
+          "mapped": 11,
+          "unmapped": 8
+        },
+        "vice_teachers": {
+          "total": 54,
+          "mapped": 8,
+          "unmapped": 46
+        },
+        "vice_students": {
+          "total": 37,
+          "mapped": 11,
+          "unmapped": 26
+        },
+        "student_counselor": {
+          "total": 20,
+          "mapped": 4,
+          "unmapped": 16
+        },
+        "activity_leader": {
+          "total": 18,
+          "mapped": 2,
+          "unmapped": 16
+        },
+        "teacher": {
+          "total": 8,
+          "mapped": 8,
+          "unmapped": 0
+        },
+        "librarian": {
+          "total": 8,
+          "mapped": 0,
+          "unmapped": 8
+        },
+        "lab_tech": {
+          "total": 2,
+          "mapped": 0,
+          "unmapped": 2
+        },
+        "admin_assistant": {
+          "total": 1,
+          "mapped": 0,
+          "unmapped": 1
+        }
+      },
+      "teacher_gap": false,
+      "teacher_note": "م4: teacher.json = 8 بنود مربوطة بـ goal_ref البرامج"
+    },
+    "teacher_programs": [
+      {
+        "program_id": "fun_math",
+        "name": "مبادرة الرياضيات الممتعة",
+        "goal_id": "G3",
+        "note": "goal على البرنامج · لا بند task_bank"
+      },
+      {
+        "program_id": "comm_skills",
+        "name": "برنامج مهارات التواصل",
+        "goal_id": "G2",
+        "note": "goal على البرنامج · لا بند task_bank"
+      },
+      {
+        "program_id": "study_skills",
+        "name": "برنامج مهارات المذاكرة",
+        "goal_id": "G3",
+        "note": "goal على البرنامج · لا بند task_bank"
+      },
+      {
+        "program_id": "basic_mastery",
+        "name": "برنامج إتقان المهارات الأساسية",
+        "goal_id": "G3",
+        "note": "goal على البرنامج · لا بند task_bank"
+      },
+      {
+        "program_id": "subject_support_teacher",
+        "name": "برنامج دعم في المواد الأساسية",
+        "goal_id": "G3",
+        "note": "goal على البرنامج · لا بند task_bank"
+      },
+      {
+        "program_id": "critical_thinking",
+        "name": "برنامج التفكير الناقد",
+        "goal_id": "G2",
+        "note": "goal على البرنامج · لا بند task_bank"
+      },
+      {
+        "program_id": "creative_writing",
+        "name": "برنامج الكتابة الإبداعية",
+        "goal_id": "G3",
+        "note": "goal على البرنامج · لا بند task_bank"
+      },
+      {
+        "program_id": "creative_writing_club",
+        "name": "نادي الكتابة الإبداعية",
+        "goal_id": "G3",
+        "note": "goal على البرنامج · لا بند task_bank"
+      }
+    ],
+    "light_roles": [
+      "vice_admin",
+      "health_counselor",
+      "librarian",
+      "lab_tech",
+      "admin_assistant"
+    ],
+    "light_roles_note": "لا task_bank لهذه الأدوار · بانتظار م4/م5"
+  },
+  "links": [
+    {
+      "role": "principal",
+      "task_code": "EXE-001",
+      "title": "اجتماعات الجاهزية للكادر الإداري والتعليمي",
+      "category": "إداري",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-002",
+      "title": "استلام المبنى والكتب",
+      "category": "إداري",
+      "goal_id": "G4",
+      "status": "mapped",
+      "source": "rule:keyword→building",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-003",
+      "title": "توزيع الجداول الدراسية",
+      "category": "إداري",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-004",
+      "title": "تنفيذ الاختبارات التشخيصية",
+      "category": "إداري",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→loss",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-005",
+      "title": "فعاليات اليوم الوطني",
+      "category": "إداري",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-006",
+      "title": "انطلاق برنامج رفق",
+      "category": "إداري",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-007",
+      "title": "تشكيل خطط الدعم العلاجي وبدء الزيارات الإشرافية",
+      "category": "إداري",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→support",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-008",
+      "title": "برامج الاستعداد لاختبارات نافس",
+      "category": "إداري",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:program_name:nafs",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-009",
+      "title": "لقاء أولياء الأمور",
+      "category": "إداري",
+      "goal_id": "G7",
+      "status": "mapped",
+      "source": "rule:program_name:parent_meet",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-010",
+      "title": "فرضية الإخلاء ورصد الفترة الأولى",
+      "category": "إداري",
+      "goal_id": "G4",
+      "status": "mapped",
+      "source": "rule:keyword→evacuation",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-011",
+      "title": "مجتمعات التعلم المهنية",
+      "category": "إداري",
+      "goal_id": "G2",
+      "status": "mapped",
+      "source": "rule:program_name:plc",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-012",
+      "title": "قياس مؤشرات الانضباط",
+      "category": "إداري",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:program_name:discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-013",
+      "title": "تبادل الزيارات الصفية",
+      "category": "إداري",
+      "goal_id": "G2",
+      "status": "mapped",
+      "source": "rule:program_name:visits",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-014",
+      "title": "مراجعة معايير التقويم المدرسي",
+      "category": "إداري",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→support",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-015",
+      "title": "التجهيز للاختبارات النهائية",
+      "category": "إداري",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-016",
+      "title": "لجان الرصد",
+      "category": "إداري",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-017",
+      "title": "لجان التحكم",
+      "category": "إداري",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-018",
+      "title": "متابعة أعمال التصحيح في نور",
+      "category": "إداري",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "principal",
+      "task_code": "EXE-019",
+      "title": "تقرير تقويم الأداء الفصلي",
+      "category": "إداري",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→support",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-01",
+      "title": "مراعاة العدل بين المعلمين عند إعداد الجداول وفي توزيع الحصص الأولى والأخيرة",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-02",
+      "title": "عدم تكرار حصص المادة في اليوم أكثر من حصة أو حصتين متتاليتين إلا إذا اقتضت طبيعة المادة ذلك",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-03",
+      "title": "عدم تجزئة المادة الواحدة للفصل بين أكثر من معلم وتوزيع المعلمين حسب تخصصاتهم",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-04",
+      "title": "توزيع الحصص على الجدول الدراسي مع مراعاة عدد الحصص الدراسية لكل مادة",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-05",
+      "title": "عرض الجدول الدراسي على المعلمين والتعرف على ملحوظاتهم ومعالجتها",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-06",
+      "title": "رفع جدول الحصص المدرسي المقترح إلى قائد المدرسة لاعتماده",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-07",
+      "title": "وضع الجدول في مكان بارز في مكتب قائد المدرسة ووكلاء المدرسة وغرف المعلمين",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-08",
+      "title": "توزيع جدول الحصص على المعلمين",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-09",
+      "title": "تزويد وكيل شؤون الطلاب بجدول الحصص الدراسية",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-10",
+      "title": "إعداد سجل توزيع حصص الانتظار وفق نموذج و.ت.ع.ن 01-01 أو عبر البرنامج الحاسوبي",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-11",
+      "title": "إعداد ومراجعة جدول حصص الانتظار والتأكد من الاعتبارات السابقة ورفعه لقائد المدرسة",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-12",
+      "title": "تدوين حصص الانتظار في جدول الحصص الدراسية وجدول المعلم",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-13",
+      "title": "تحديد المعلمين الغائبين بشكل يومي",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-14",
+      "title": "تحديد الحصص التي تدرج في قائمة الانتظار للمعلمين الغائبين",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-15",
+      "title": "تعبئة وتدوين حصص المعلم الغائب في سجل حصص الانتظار",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-16",
+      "title": "التعرف على رغبات المعلمين في الإشراف اليومي وفي اختيار الأيام المناسبة والزميل",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-17",
+      "title": "تحديد المعلمين الذين يتم تكليفهم بالإشراف اليومي",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-18",
+      "title": "توزيع الإشراف على المعلمين بالأيام وفق نموذج و.ت.ع.ن 02-01",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-19",
+      "title": "إبلاغ المعلمين بجدول الإشراف اليومي وتوزيعه عليهم",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-20",
+      "title": "تدوين جدول الإشراف اليومي في جدول الحصص الأسبوعي",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-21",
+      "title": "وضع جدول الإشراف اليومي في غرفة المدير والوكلاء وغرف المعلمين",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-22",
+      "title": "الإعلان اليومي عن أسماء المشرفين في اليوم التالي ومواقع الإشراف لكل معلم",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-23",
+      "title": "إعداد تقرير أسبوعي عن سير الإشراف اليومي ورفعه لقائد المدرسة",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-24",
+      "title": "التعرف على رغبات المعلمين ومقترحاتهم في اختيار أيام المناوبة",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-25",
+      "title": "مراجعة أسماء المناوبة والتأكد منها مع مراعاة الاعتبارات السابقة",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-26",
+      "title": "تحديد أيام المناوبة خلال العام الدراسي وتحديد المعلمين المناوبين",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-27",
+      "title": "متابعة المعلمين في المناوبة",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-28",
+      "title": "مراجعة التقارير اليومية المقدمة من المعلم المناوب",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-29",
+      "title": "تزويد وكيل شؤون الطلاب بالتقارير اليومية وملحوظات الطلاب قبل الدوام وبعده",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-01-30",
+      "title": "إعداد تقارير أسبوعية عن المناوبة ورفعها لقائد المدرسة",
+      "category": "إعداد الجداول المدرسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-02-01",
+      "title": "الإشراف على تنفيذ خطة رعاية الموهوبين وتقويمها والإسهام في تطويرها",
+      "category": "رعاية الطلاب الموهوبين",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:program_name:gifted",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-02-02",
+      "title": "تزويد الطلاب الموهوبين بالمطبوعات والنشرات والوسائل والأدوات التي تنمي مواهبهم",
+      "category": "رعاية الطلاب الموهوبين",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→gifted",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-02-03",
+      "title": "ترشيح الموهوبين للمناسبات والمسابقات والبرامج المحلية والعالمية وتوفير متطلباتهم",
+      "category": "رعاية الطلاب الموهوبين",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→gifted",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-02-04",
+      "title": "توعية الأسرة والمجتمع بأهمية رعاية الموهوبين",
+      "category": "رعاية الطلاب الموهوبين",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:program_name:gifted",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-02-05",
+      "title": "إبراز إنجازات الطلاب الموهوبين في المعارض والأنشطة ولوحات الشرف بالتنسيق مع رائد النشاط",
+      "category": "رعاية الطلاب الموهوبين",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→gifted",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-02-06",
+      "title": "تنظيم لقاءات دورية مع أولياء أمور الطلاب الموهوبين لتكامل الرعاية داخل المدرسة وخارجها",
+      "category": "رعاية الطلاب الموهوبين",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→gifted",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-03-01",
+      "title": "مراجعة التقرير الشهري لذوي الاحتياجات الخاصة وتقديمه لقائد المدرسة",
+      "category": "رعاية ذوي الاحتياجات الخاصة",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-04-01",
+      "title": "دراسة الخطط الأسبوعية والفصلية للمعلمين ومناقشتها معهم ورفعها لقائد المدرسة",
+      "category": "تصميم التدريس",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-04-02",
+      "title": "المراجعة الأسبوعية لدفتر إعداد الدروس ومطابقة سير الدروس للخطة والتوجيهات",
+      "category": "تصميم التدريس",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-01",
+      "title": "مراجعة نتائج الطلاب والتأكد منها وتزويد وكيل شؤون الطلاب بها",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-02",
+      "title": "توجيه المعلمين بوضع الأسئلة ومتابعة تسليمها قبل بدء الاختبارات",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-03",
+      "title": "التأكد من إنهاء كل معلم للمناهج المقررة قبل الاختبارات النهائية وأخذ توقيعه",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-04",
+      "title": "التأكد من إدخال درجات التقويم المستمر والسلوك والمواظبة وأعمال السنة بالتنسيق مع وكيل شؤون الطلاب",
+      "category": "التقويم والاختبارات",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→support",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-05",
+      "title": "إعداد جدول الاختبارات بمشاركة الطلاب وفق تعليمات وزارة التعليم",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-06",
+      "title": "تسليم أوراق الإجابات مع نماذج الإجابة للجان التصحيح حسب التخصص",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-07",
+      "title": "تعديل درجة الرصد عند وجود خطأ بمشاركة المعلم المختص وفق نموذج و.ت.ع.ن 07-05",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-08",
+      "title": "استخراج النتيجة الأولية من البرنامج الحاسوبي المعتمد من الوزارة",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-09",
+      "title": "المراجعة النهائية للطلاب المستحقين لها وفق شروط لائحة التقويم",
+      "category": "التقويم والاختبارات",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→support",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-10",
+      "title": "استخراج النتيجة النهائية وطباعة الشهادات",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-11",
+      "title": "إدخال جدول الدور الثاني في البرنامج الحاسوبي المعتمد",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-12",
+      "title": "تسليم رواد الفصول الشهادات وكشوف الاستلام والاحتفاظ بغير المسلم في خزانة قائد المدرسة",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "و.ت.ع-05-13",
+      "title": "طباعة مبيضة النتائج وتغليفها والاحتفاظ بها عهدة على قائد المدرسة مع نسخة رقمية",
+      "category": "التقويم والاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "م.م.ع-01-01",
+      "title": "تحديد الاحتياجات والمستلزمات التعليمية وتقديمها إلى لجنة الصندوق المدرسي في بداية العام",
+      "category": "تسيير الميزانية والمستلزمات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_teachers",
+      "task_code": "م.م.ع-01-02",
+      "title": "شراء المستلزمات وإحضار الوثائق والمستندات وتقديمها للجنة الصندوق المدرسي",
+      "category": "تسيير الميزانية والمستلزمات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-01-01",
+      "title": "بدء قبول طلاب المرحلتين المتوسطة والثانوية بعد ظهور النتائج واستكمال الإجراءات النظامية",
+      "category": "القبول والنقل",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-01-02",
+      "title": "تسهيل القبول حسب ميزانية المدرسة وإشعار قائد المدرسة إذا زاد عدد المتقدمين",
+      "category": "القبول والنقل",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-01-03",
+      "title": "التأكد من السن النظامي للطالب عند القبول",
+      "category": "القبول والنقل",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-01-04",
+      "title": "التأكد من وجود خطاب قبول من المدرسة المراد التحويل إليها قبل نقل الطالب",
+      "category": "القبول والنقل",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-02-01",
+      "title": "تسليم المقررات الدراسية للطلاب المنتظمين والمنتقلين وفق نموذج و.ط.ع.ن 01-02",
+      "category": "الكتب الدراسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-02-02",
+      "title": "إعداد خطاب بنواقص المقررات ورفعه لإدارة المستودعات بعد اعتماد قائد المدرسة",
+      "category": "الكتب الدراسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-02-03",
+      "title": "تسليم المقررات الناقصة للطلاب بعد استيفائها والتوقيع على الاستلام",
+      "category": "الكتب الدراسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-02-04",
+      "title": "استلام المقررات الدراسية من الطلاب في نهاية الفصل وفق نموذج التسليم",
+      "category": "الكتب الدراسية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-01",
+      "title": "حصر الطلاب المتأخرين عن الاصطفاف الصباحي في سجل التأخر",
+      "category": "المواظبة والسلوك",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-02",
+      "title": "إشعار ولي الأمر بتأخر الطالب والتأكد من كون التأخر بعذر أو بدون عذر",
+      "category": "المواظبة والسلوك",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-03",
+      "title": "إدخال الطلاب المتأخرين إلى فصولهم بعد تسجيل التأخر",
+      "category": "المواظبة والسلوك",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-04",
+      "title": "إحالة الطالب الذي يتكرر تأخره بلا عذر أكثر من خمس مرات في الفصل إلى المرشد الطلابي",
+      "category": "المواظبة والسلوك",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-05",
+      "title": "حصر الطلاب الغائبين قبل نهاية الحصة الأولى في سجل الغياب",
+      "category": "المواظبة والسلوك",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-06",
+      "title": "إشعار ولي أمر الطالب الغائب بعد الحصة الأولى والتأكد من سبب الغياب",
+      "category": "المواظبة والسلوك",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-07",
+      "title": "مراجعة أعذار الغياب واعتماد ما يُعد غيابًا بعذر",
+      "category": "المواظبة والسلوك",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-08",
+      "title": "إحالة الطالب الذي يتكرر غيابه بلا عذر أكثر من خمس مرات في الفصل إلى المرشد الطلابي",
+      "category": "المواظبة والسلوك",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-09",
+      "title": "تطبيق قواعد السلوك والمواظبة برصد الحسم من درجات المواظبة",
+      "category": "المواظبة والسلوك",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-10",
+      "title": "استقبال ولي الأمر عند الاستئذان والتحقق من بطاقته الشخصية",
+      "category": "المواظبة والسلوك",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-11",
+      "title": "تعبئة سجل استئذان الطالب أثناء الدوام",
+      "category": "المواظبة والسلوك",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-12",
+      "title": "التأكد من مغادرة الطالب مع ولي أمره وإعداد وثيقة التعريف أو التحويل للوحدة الصحية عند الطلب",
+      "category": "المواظبة والسلوك",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-03-13",
+      "title": "مراجعة سجلات الغياب والتأخر والاستئذان قبل الاختبارات",
+      "category": "المواظبة والسلوك",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-04-01",
+      "title": "مراجعة برامج التوجيه والإرشاد ورفعها لقائد المدرسة",
+      "category": "التوجيه والرعاية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-04-02",
+      "title": "التعميم على العاملين بالطلاب ذوي الحالات المرضية وأخذ توقيعاتهم بالعلم",
+      "category": "التوجيه والرعاية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-04-03",
+      "title": "الرفع لقائد المدرسة بتكريم الطلاب المعيدين الذين تحسن مستواهم",
+      "category": "التوجيه والرعاية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-04-04",
+      "title": "الرفع لقائد المدرسة بتكريم الطلاب المتأخرين دراسيًا الذين تحسن مستواهم",
+      "category": "التوجيه والرعاية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-04-05",
+      "title": "تطبيق قواعد السلوك والمواظبة برصد الحسم من درجات السلوك",
+      "category": "التوجيه والرعاية",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-04-06",
+      "title": "متابعة أعمال الإرشاد ورفع التقارير الشهرية بعد مراجعتها",
+      "category": "التوجيه والرعاية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-04-07",
+      "title": "المشاركة في إعداد خطة الحد من الغياب والتأخر وعرضها على قائد المدرسة",
+      "category": "التوجيه والرعاية",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-04-08",
+      "title": "استلام التقرير الفصلي لسير الإرشاد الطلابي ومراجعته",
+      "category": "التوجيه والرعاية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-05-01",
+      "title": "متابعة توثيق حضور الطلاب لمجالات النشاط",
+      "category": "النشاط الطلابي",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-06-01",
+      "title": "التأكد من انطباق شروط المكافأة والإعانة واستكمال الأوراق اللازمة",
+      "category": "المكافآت والإعانات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-06-02",
+      "title": "إعداد خطاب بأسماء الطلاب المستحقين للمكافأة أو الإعانة وتقديمه لقائد المدرسة",
+      "category": "المكافآت والإعانات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-07-01",
+      "title": "استلام جدول الحصص الدراسية المعتمد",
+      "category": "الشراكة التعليمية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-07-02",
+      "title": "استلام تقارير المناوبة وملحوظات الطلاب قبل الدوام وبعده",
+      "category": "الشراكة التعليمية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-07-03",
+      "title": "استلام نتائج الفترة التقويمية ومراجعتها",
+      "category": "الشراكة التعليمية",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→support",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-07-04",
+      "title": "التنسيق في رصد درجات السلوك والمواظبة وأعمال السنة",
+      "category": "الشراكة التعليمية",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "vice_students",
+      "task_code": "و.ط.ع-07-05",
+      "title": "مراجعة اكتمال سجلات المواظبة قبل طباعة الشهادات",
+      "category": "الشراكة التعليمية",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-01",
+      "title": "إعداد برامج وأنشطة التوجيه والإرشاد قبل بداية العام بالتنسيق مع لجنة التميز والجودة",
+      "category": "الأسبوع التمهيدي",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-02",
+      "title": "تنفيذ اللقاء التمهيدي لتهيئة الطلاب إرشادياً",
+      "category": "الأسبوع التمهيدي",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-03",
+      "title": "تجهيز ملفات وسجلات الإرشاد وتفريغها في البرنامج الحاسوبي المعتمد",
+      "category": "الأسبوع التمهيدي",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-04",
+      "title": "حصر الحالات الصحية والاجتماعية والنفسية وفق نموذج و.ط.ع.ن 01-04",
+      "category": "الرعاية الإرشادية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-05",
+      "title": "إعداد استمارة إبلاغ الحالات الصحية وتقديمها للتعميم على العاملين",
+      "category": "الرعاية الإرشادية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-06",
+      "title": "تنفيذ برنامج تعزيز السلوك الإيجابي وفق قواعد السلوك والمواظبة",
+      "category": "السلوك والتنمر",
+      "goal_id": "G5",
+      "status": "mapped",
+      "source": "rule:keyword→discipline",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-07",
+      "title": "تفعيل برنامج رفق لخفض العنف المدرسي",
+      "category": "السلوك والتنمر",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-08",
+      "title": "متابعة تعزيز السلوك الإيجابي ورصد المواقف اليومية",
+      "category": "السلوك والتنمر",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-09",
+      "title": "تنفيذ برنامج الحد من التنمر داخل الفصول والمرافق",
+      "category": "السلوك والتنمر",
+      "goal_id": "G4",
+      "status": "mapped",
+      "source": "rule:keyword→building",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-10",
+      "title": "حصر الطلاب المتأخرين دراسياً من نتائج العام السابق وتدوينهم في السجل",
+      "category": "رعاية المتأخرين والمتفوقين",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-11",
+      "title": "عقد جلسات إرشادية للمتأخرين دراسياً وإعداد الخطة العلاجية",
+      "category": "رعاية المتأخرين والمتفوقين",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-12",
+      "title": "حصر الطلاب المتفوقين وتدوينهم في سجل المتفوقين",
+      "category": "رعاية المتأخرين والمتفوقين",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-13",
+      "title": "الإعداد لتكريم الطلاب المتفوقين",
+      "category": "رعاية المتأخرين والمتفوقين",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-14",
+      "title": "عقد مجلس أولياء الأمور ومتابعة توصياته",
+      "category": "أولياء الأمور والتكريم",
+      "goal_id": "G7",
+      "status": "mapped",
+      "source": "rule:keyword→partnership",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-15",
+      "title": "تنفيذ التهيئة الإرشادية للطلاب قبل الاختبارات",
+      "category": "الاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-16",
+      "title": "متابعة الحالات الإرشادية أثناء فترة الاختبارات",
+      "category": "الاختبارات",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-17",
+      "title": "تنفيذ جلسات دعم للطلاب المتعثرين في فترة الاختبارات",
+      "category": "الاختبارات",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:keyword→support",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-18",
+      "title": "إعداد التقرير الفصلي لسير الإرشاد الطلابي",
+      "category": "التقارير",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-19",
+      "title": "المشاركة في التكريم الفصلي للطلاب الذين تحسن مستواهم",
+      "category": "أولياء الأمور والتكريم",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "student_counselor",
+      "task_code": "إ.ط-20",
+      "title": "إعداد التقرير الختامي لأعمال الإرشاد ورفعه بعد المراجعة",
+      "category": "التقارير",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-01",
+      "title": "تشكيل أندية وجماعات النشاط الطلابي وفق ميول الطلاب",
+      "category": "خطة النشاط",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-02",
+      "title": "إعداد خطة النشاط الفصلي للبرامج الثقافية والاجتماعية والعلمية والفنية والرياضية",
+      "category": "خطة النشاط",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-03",
+      "title": "تنفيذ البرامج الثقافية والإذاعة المدرسية",
+      "category": "البرامج الطلابية",
+      "goal_id": "G7",
+      "status": "mapped",
+      "source": "m5:d4b",
+      "reason": "ربط بند إذاعة موجود بـ school_broadcast"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-04",
+      "title": "تنفيذ فعاليات اليوم الوطني للمملكة",
+      "category": "المناسبات",
+      "goal_id": "G7",
+      "status": "mapped",
+      "source": "m5:d4a",
+      "reason": "ربط بند مناسبات موجود ببرنامج اليوم الوطني المعتمد"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-05",
+      "title": "تنفيذ البرامج الاجتماعية",
+      "category": "البرامج الطلابية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-06",
+      "title": "تنفيذ البرامج العلمية",
+      "category": "البرامج الطلابية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-07",
+      "title": "تنفيذ البرامج الفنية",
+      "category": "البرامج الطلابية",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-08",
+      "title": "تنفيذ البرامج الرياضية",
+      "category": "البرامج الطلابية",
+      "goal_id": "G7",
+      "status": "mapped",
+      "source": "m5:d4c",
+      "reason": "ربط بـ sports_contests"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-09",
+      "title": "تنظيم المعرض المدرسي الداخلي لأعمال الطلاب",
+      "category": "المنافسات والمعارض",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-10",
+      "title": "توثيق حضور الطلاب لمجالات النشاط",
+      "category": "خطة النشاط",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-11",
+      "title": "استكمال موافقات أولياء الأمور لمشاركة الأبناء في النشاط",
+      "category": "المنافسات والمعارض",
+      "goal_id": "G7",
+      "status": "mapped",
+      "source": "rule:keyword→partnership",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-12",
+      "title": "المشاركة في المنافسات الميدانية",
+      "category": "المنافسات والمعارض",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "rule:program_name:nafs",
+      "reason": "مطابقة عنوان→برنامج/كلمة مفتاحية لبرنامج له goal_ref"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-13",
+      "title": "تنفيذ المسابقات الثقافية والعلمية داخل المدرسة",
+      "category": "المنافسات والمعارض",
+      "goal_id": "G7",
+      "status": "mapped",
+      "source": "m5:d4c",
+      "reason": "ربط بـ speech_contest"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-14",
+      "title": "المشاركة في المعارض المدرسية الخارجية",
+      "category": "المنافسات والمعارض",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-15",
+      "title": "حصر المشاركات الطلابية وتوثيق شواهدها",
+      "category": "التقرير والتكريم",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-16",
+      "title": "إعداد التقرير الختامي للنشاط الطلابي",
+      "category": "التقرير والتكريم",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-17",
+      "title": "تكريم الطلاب المشاركين في الأنشطة",
+      "category": "التقرير والتكريم",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-18",
+      "title": "رفع التقرير الختامي للنشاط الطلابي",
+      "category": "التقرير والتكريم",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "unmapped",
+      "reason": "لا مرجع محفوظ يربط البند بهدف"
+    },
+    {
+      "role": "teacher",
+      "task_code": "TCH-01",
+      "title": "تنفيذ مبادرة الرياضيات الممتعة وفق خطة المعلم المعتمدة",
+      "category": "برامج المعلم المعتمدة",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "m4:task_bank",
+      "reason": "بند مشتق من برنامج/مرشّح محفوظ"
+    },
+    {
+      "role": "teacher",
+      "task_code": "TCH-02",
+      "title": "تنفيذ برنامج مهارات التواصل وفق خطة المعلم المعتمدة",
+      "category": "برامج المعلم المعتمدة",
+      "goal_id": "G2",
+      "status": "mapped",
+      "source": "m4:task_bank",
+      "reason": "بند مشتق من برنامج/مرشّح محفوظ"
+    },
+    {
+      "role": "teacher",
+      "task_code": "TCH-03",
+      "title": "تنفيذ برنامج مهارات المذاكرة وفق خطة المعلم المعتمدة",
+      "category": "برامج المعلم المعتمدة",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "m4:task_bank",
+      "reason": "بند مشتق من برنامج/مرشّح محفوظ"
+    },
+    {
+      "role": "teacher",
+      "task_code": "TCH-04",
+      "title": "تنفيذ برنامج إتقان المهارات الأساسية وفق خطة المعلم المعتمدة",
+      "category": "برامج المعلم المعتمدة",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "m4:task_bank",
+      "reason": "بند مشتق من برنامج/مرشّح محفوظ"
+    },
+    {
+      "role": "teacher",
+      "task_code": "TCH-05",
+      "title": "تنفيذ برنامج دعم في المواد الأساسية وفق خطة المعلم المعتمدة",
+      "category": "برامج المعلم المعتمدة",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "m4:task_bank",
+      "reason": "بند مشتق من برنامج/مرشّح محفوظ"
+    },
+    {
+      "role": "teacher",
+      "task_code": "TCH-06",
+      "title": "تنفيذ برنامج التفكير الناقد وفق خطة المعلم المعتمدة",
+      "category": "برامج المعلم المعتمدة",
+      "goal_id": "G2",
+      "status": "mapped",
+      "source": "m4:task_bank",
+      "reason": "بند مشتق من برنامج/مرشّح محفوظ"
+    },
+    {
+      "role": "teacher",
+      "task_code": "TCH-07",
+      "title": "تنفيذ برنامج الكتابة الإبداعية وفق خطة المعلم المعتمدة",
+      "category": "برامج المعلم المعتمدة",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "m4:task_bank",
+      "reason": "بند مشتق من برنامج/مرشّح محفوظ"
+    },
+    {
+      "role": "teacher",
+      "task_code": "TCH-08",
+      "title": "تفعيل نادي الكتابة الإبداعية وفق خطة المعلم المعتمدة",
+      "category": "برامج المعلم المعتمدة",
+      "goal_id": "G3",
+      "status": "mapped",
+      "source": "m4:task_bank",
+      "reason": "بند مشتق من برنامج/مرشّح محفوظ"
+    },
+    {
+      "role": "librarian",
+      "task_code": "LIB-01",
+      "title": "متابعة مبادرة القراءة (مرشّح معرفة #85)",
+      "category": "مرشحو المصادر",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "m4:task_bank",
+      "reason": "مرشّح معرفة بلا goal_ref بعد"
+    },
+    {
+      "role": "librarian",
+      "task_code": "LIB-02",
+      "title": "متابعة مبادرة القراءة للجميع (مرشّح معرفة #86)",
+      "category": "مرشحو المصادر",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "m4:task_bank",
+      "reason": "مرشّح معرفة بلا goal_ref بعد"
+    },
+    {
+      "role": "librarian",
+      "task_code": "LIB-03",
+      "title": "تفعيل نادي القراءة (مرشّح معرفة #87)",
+      "category": "مرشحو المصادر",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "m4:task_bank",
+      "reason": "مرشّح معرفة بلا goal_ref بعد"
+    },
+    {
+      "role": "librarian",
+      "task_code": "LIB-04",
+      "title": "تنفيذ أسبوع القراءة الحرة (مرشّح معرفة #88)",
+      "category": "مرشحو المصادر",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "m4:task_bank",
+      "reason": "مرشّح معرفة بلا goal_ref بعد"
+    },
+    {
+      "role": "librarian",
+      "task_code": "LIB-05",
+      "title": "تنفيذ برنامج البحث في المصادر (مرشّح معرفة #89)",
+      "category": "مرشحو المصادر",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "m4:task_bank",
+      "reason": "مرشّح معرفة بلا goal_ref بعد"
+    },
+    {
+      "role": "librarian",
+      "task_code": "LIB-06",
+      "title": "برنامج القراءة الحرة في حصص المكتبة (مرشّح معرفة #90)",
+      "category": "مرشحو المصادر",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "m4:task_bank",
+      "reason": "مرشّح معرفة بلا goal_ref بعد"
+    },
+    {
+      "role": "librarian",
+      "task_code": "LIB-07",
+      "title": "مسابقة القراءة في السيرة النبوية (مرشّح معرفة #91)",
+      "category": "مرشحو المصادر",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "m4:task_bank",
+      "reason": "مرشّح معرفة بلا goal_ref بعد"
+    },
+    {
+      "role": "librarian",
+      "task_code": "LIB-08",
+      "title": "مسابقة القراءة (مرشّح معرفة #92)",
+      "category": "مرشحو المصادر",
+      "goal_id": "unmapped",
+      "status": "unmapped",
+      "source": "m4:task_bank",
+      "reason": "مرشّح معرفة بلا goal_ref بعد"
+    },
+    {
+      "role": "lab_tech",
+      "task_code": "LAB-01",
+      "title": "اليوم العالمي للفيزياء الطبية ودور ماري كوري (مرشّح معرفة #83)",
+      "category": "د5",
+      "goal_id": "G2",
+      "status": "mapped",
+      "source": "closure:d5",
+      "reason": "ربط بند موجود بـ physics_med_day"
+    },
+    {
+      "role": "lab_tech",
+      "task_code": "LAB-02",
+      "title": "مبادرة تجهيز معمل العلوم (مرشّح معرفة #84)",
+      "category": "د5",
+      "goal_id": "G4",
+      "status": "mapped",
+      "source": "closure:d5",
+      "reason": "ربط بند موجود بـ lab_setup"
+    },
+    {
+      "role": "admin_assistant",
+      "task_code": "ADM-01",
+      "title": "مبادرة التحول الرقمي (مرشّح معرفة #74)",
+      "category": "د5",
+      "goal_id": "G6",
+      "status": "mapped",
+      "source": "closure:d5",
+      "reason": "ربط بند موجود بـ digital_transform"
+    },
+    {
+      "role": "activity_leader",
+      "task_code": "ن.ط-د4ب-01",
+      "title": "تنفيذ مبادرة اليوم العالمي للعصا البيضاء (موسمي)",
+      "category": "المناسبات",
+      "goal_id": "G7",
+      "status": "mapped",
+      "source": "m5:d4b",
+      "reason": "بند موسمي لـ white_cane_day"
+    }
+  ]
+}

@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>رحلة المدير</title>
+  <link rel="stylesheet" href="css/fonts.css?v=font1">
+  <link rel="stylesheet" href="css/ds-tokens.css?v=ds1">
+  <link rel="stylesheet" href="css/ds-components.css?v=ds1">
+  <link rel="stylesheet" href="css/media-governance.css?v=aj146">
+  <link rel="stylesheet" href="css/app-journey.css?v=aj182">
+  <link rel="stylesheet" href="css/responsive.css?v=r291">
+  <link rel="stylesheet" href="css/print-master.css?v=c301">
+</head>
+<body class="app-journey">
+  <p id="aj-browser-warn" class="aj-browser-warn" hidden>يرجى تحديث المتصفح للحصول على أفضل تجربة</p>
+  <a class="aj-skip" href="#aj-main">تخطَّ إلى المحتوى</a>
+  <div id="aj-toast" class="aj-toast" hidden role="status" aria-live="polite"></div>
+  <div id="aj-upload-spin" class="aj-upload-spin" hidden role="status">جارٍ رفع الصورة...</div>
+
+  <div class="aj-modal aj-signature-modal" id="signature-modal" hidden>
+    <div class="aj-modal-backdrop" id="signature-modal-backdrop"></div>
+    <div class="aj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="signature-modal-title">
+      <h2 id="signature-modal-title">تسجيل التوقيع الشخصي</h2>
+      <div class="aj-signature-mode-tabs" role="tablist" aria-label="طريقة إدخال التوقيع">
+        <button type="button" class="aj-signature-mode-btn is-active" id="signature-mode-draw" role="tab" aria-selected="true" aria-controls="signature-draw-panel">رسم يدوي</button>
+        <button type="button" class="aj-signature-mode-btn" id="signature-mode-upload" role="tab" aria-selected="false" aria-controls="signature-upload-panel">رفع صورة</button>
+      </div>
+      <p class="aj-lede" id="signature-modal-hint">اختر الطريقة ثم أقرّ واحفظ التوقيع.</p>
+      <div class="aj-signature-draw-panel" id="signature-draw-panel" role="tabpanel">
+        <div class="aj-signature-frame">
+          <canvas id="signature-pad" width="600" height="220" aria-label="لوحة التوقيع"></canvas>
+        </div>
+      </div>
+      <div class="aj-signature-upload-panel" id="signature-upload-panel" role="tabpanel" hidden>
+        <input type="file" id="signature-file" accept="image/*" capture="environment" hidden>
+        <div class="aj-detail-actions aj-signature-upload-actions">
+          <button type="button" class="aj-detail-btn" id="signature-upload-btn">اختيار صورة التوقيع</button>
+        </div>
+        <p class="aj-lede" id="signature-upload-status" hidden></p>
+        <div class="aj-signature-slot aj-signature-slot-preview" id="signature-upload-preview-wrap" hidden>
+          <img id="signature-upload-preview" class="user-signature" alt="معاينة التوقيع المستخرج" hidden>
+        </div>
+      </div>
+      <label class="aj-checkbox">
+        <input type="checkbox" id="signature-ack">
+        <span>أقر بأن هذا توقيعي الرسمي للاستخدام في الوثائق المدرسية.</span>
+      </label>
+      <p class="aj-status is-error" id="signature-form-error" hidden></p>
+      <div class="aj-detail-actions">
+        <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="signature-clear">مسح</button>
+        <button type="button" class="aj-detail-btn" id="signature-save">حفظ التوقيع</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="aj-topbar" aria-label="شريط الجوال">
+    <button type="button" class="aj-menu-btn" id="aj-menu-open" aria-expanded="false" aria-controls="aj-sidebar">القائمة</button>
+    <a class="aj-back-btn" id="aj-back" href="#view-home">رجوع</a>
+    <span class="aj-topbar-title" id="aj-topbar-title">رحلة المدير</span>
+  </header>
+
+  <div id="aj-auth-gate" class="aj-auth-gate" role="status" aria-live="polite">
+    <p class="aj-auth-brand">رحلة مدير المدرسة</p>
+    <p id="aj-auth-status">جارٍ التحقق من الجلسة...</p>
+    <div class="aj-auth-spinner" id="aj-auth-spinner" aria-hidden="true"></div>
+    <button type="button" class="aj-detail-btn" id="aj-auth-retry" hidden>إعادة المحاولة</button>
+  </div>
+
+  <div class="aj-backdrop" id="aj-backdrop" hidden></div>
+
+  <div class="aj-shell">
+    <aside class="aj-sidebar" id="aj-sidebar" aria-label="مراحل الرحلة">
+      <img src="/assets/ministry_logo.png" class="header-logo" alt="شعار وزارة التعليم">
+      <p class="aj-brand">رحلة مدير المدرسة</p>
+      <p class="aj-user-name" id="aj-school-name"></p>
+      <p class="aj-brand-note">منظومة الحوكمة المدرسية · 1448هـ</p>
+      <p class="aj-user-name" id="aj-user-name"></p>
+      <button type="button" class="aj-logout-btn" id="aj-logout">تسجيل الخروج</button>
+      <a class="aj-home-link" id="aj-home-link" href="#view-desk">مكتبي</a>
+      <a class="aj-home-link" id="aj-profile-link" href="#view-profile">ملفي الشخصي</a>
+      <a class="aj-home-link" id="aj-portfolio-link" href="#view-portfolio">سجل الإنجاز</a>
+      <a class="aj-legacy-link aj-owner-only ds-btn ds-btn-secondary" href="dashboard.html#review" hidden>النظام السابق للمراجعة</a>
+
+      <ul class="aj-stages">
+        <li class="aj-stage">
+          <button type="button" class="aj-stage-toggle" data-aj-stage="plan" aria-expanded="false" aria-controls="aj-panel-plan">تخطيطي</button>
+          <div class="aj-stage-panel" id="aj-panel-plan" role="region" aria-label="تخطيطي">
+            <a class="aj-task-btn" id="aj-task-planning" href="#view-planning">الخطط والبرامج</a>
+            <a class="aj-task-btn" id="aj-task-smart" href="#view-smart-planning">الخطط الذكية</a>
+            <a class="aj-task-btn" id="aj-task-program-add" href="#view-program-add">إضافة برنامج</a>
+            <a class="aj-task-btn" id="aj-task-staff" href="#view-staff">سجل المنسوبين</a>
+            <a class="aj-task-btn" id="aj-task-deliverables" href="#view-deliverables">تسليمات المعلم</a>
+            <a class="aj-task-btn" href="#view-students-lists">قوائم الطلاب</a>
+            <a class="aj-task-btn" href="#view-student-registry">سجل طلاب المدرسة</a>
+          </div>
+        </li>
+        <li class="aj-stage">
+          <button type="button" class="aj-stage-toggle" data-aj-stage="settings" aria-expanded="false" aria-controls="aj-panel-settings">إعداداتي</button>
+          <div class="aj-stage-panel" id="aj-panel-settings" role="region" aria-label="إعداداتي">
+            <a class="aj-task-btn" id="aj-task-school" href="#view-school">بيانات المدرسة</a>
+            <a class="aj-task-btn" href="#view-external-eval">نتائج التقويم الخارجي</a>
+            <a class="aj-task-btn" id="aj-task-leadership" href="#view-leadership">التشكيل القيادي</a>
+            <a class="aj-task-btn" id="aj-task-committees" href="#view-committees">تشكيل اللجان</a>
+            <a class="aj-task-btn" href="#view-calendar">التقويم المعتمد</a>
+            <a class="aj-task-btn" href="#view-occasions">المناسبات</a>
+            <a class="aj-task-btn" href="#view-letterhead">الترويسة والأختام</a>
+            <a class="aj-task-btn" href="#view-backup">النسخ الاحتياطي</a>
+            <a class="aj-task-btn" href="#view-import-center">الاستيراد من نور</a>
+            <a class="aj-task-btn" href="#view-accounts">إدارة الحسابات</a>
+            <a class="aj-task-btn" href="#view-permissions">هندسة الصلاحيات</a>
+            <a class="aj-task-btn aj-principal-only" href="#view-trash" hidden>سلة المهملات</a>
+            <a class="aj-task-btn aj-principal-only" href="#view-audit" hidden>سجل التدقيق</a>
+            <a class="aj-task-btn aj-principal-only" href="#view-health" hidden>فحص النظام</a>
+            <button type="button" class="aj-task-btn aj-principal-only" id="aj-pilot-support-clear" hidden>حذف التسكين التجريبي</button>
+            <button type="button" class="aj-task-btn aj-principal-only" id="aj-pilot-support-draw" hidden>إعادة التسكين العشوائي</button>
+          </div>
+        </li>
+        <li class="aj-stage">
+          <button type="button" class="aj-stage-toggle" data-aj-stage="tasks" aria-expanded="false" aria-controls="aj-panel-tasks">مهامي</button>
+          <div class="aj-stage-panel" id="aj-panel-tasks" role="region" aria-label="مهامي">
+            <a class="aj-task-btn" id="aj-task-today" href="#view-tasks">مهام اليوم</a>
+          </div>
+        </li>
+        <li class="aj-stage">
+          <button type="button" class="aj-stage-toggle" data-aj-stage="exec" aria-expanded="false" aria-controls="aj-panel-exec">تنفيذي</button>
+          <div class="aj-stage-panel" id="aj-panel-exec" role="region" aria-label="تنفيذي">
+            <a class="aj-task-btn" id="aj-task-execution" href="#view-execution">مركز التنفيذ</a>
+          </div>
+        </li>
+        <li class="aj-stage" hidden>
+          <button type="button" class="aj-stage-toggle" data-aj-stage="print" aria-expanded="false" aria-controls="aj-panel-print">طباعتي</button>
+          <div class="aj-stage-panel" id="aj-panel-print" role="region" aria-label="طباعتي"></div>
+        </li>
+        <li class="aj-stage">
+          <button type="button" class="aj-stage-toggle" data-aj-stage="follow" aria-expanded="false" aria-controls="aj-panel-follow">متابعتي</button>
+          <div class="aj-stage-panel" id="aj-panel-follow" role="region" aria-label="متابعتي">
+            <a class="aj-task-btn" id="aj-task-ssot" href="#view-performance">مؤشرات الأداء (SSOT)</a>
+            <a class="aj-task-btn" id="aj-task-soft" href="#view-soft-follow">المتابعة اللاصفية</a>
+            <a class="aj-task-btn" href="#view-visits">الزيارات الصفية</a>
+          </div>
+        </li>
+        <li class="aj-stage">
+          <button type="button" class="aj-stage-toggle" data-aj-stage="evidence" aria-expanded="false" aria-controls="aj-panel-evidence">شواهدي</button>
+          <div class="aj-stage-panel" id="aj-panel-evidence" role="region" aria-label="شواهدي">
+            <a class="aj-task-btn" id="aj-task-evidence" href="#view-evidence">معرض الشواهد</a>
+            <a class="aj-task-btn" href="#view-env-evidence">شواهد البرامج والبيئة</a>
+          </div>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="aj-main" id="aj-main">
+      <form id="aj-find" class="aj-find no-print" role="search">
+        <label class="aj-soft-label" for="aj-find-q">بحث في المحفوظ</label>
+        <input id="aj-find-q" type="search" maxlength="80" placeholder="برنامج، محضر، سجل، خطة، لجنة">
+        <button type="submit" class="aj-detail-btn">بحث</button>
+      </form>
+      <ul id="aj-find-hits" class="aj-find-hits no-print" hidden></ul>
+      <section id="view-desk" class="aj-view wash-board" hidden>
+        <h1 id="aj-desk-title">مكتب العمل</h1>
+        <p class="aj-lede" id="aj-desk-hint">الحزمة تُجهَّز من السجل. التنفيذ أولاً، والتعديل عند الحاجة فقط.</p>
+        <p class="aj-gaps" id="aj-desk-gaps" hidden></p>
+        <p class="aj-summary" id="aj-desk-who"></p>
+        <p class="aj-status" id="aj-desk-status" role="status" aria-live="polite"></p>
+        <section class="aj-owner-only" id="aj-legacy-entry" hidden>
+          <h2 class="aj-group-title">النظام السابق</h2>
+          <p class="aj-lede">للاطلاع والمراجعة. العمل اليومي يبقى في هذه الرحلة.</p>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="dashboard.html#review">العودة للنظام السابق</a>
+        </section>
+        <section class="aj-opinion" id="aj-opinion" aria-label="إبداء الرأي">
+          <h2 class="aj-group-title">رأيك في المعاينة</h2>
+          <p class="aj-lede">يُحفظ رأيك في سجل مستقل. البرامج والإعدادات الأصلية تبقى كما هي، والتعديل عليها للمدير.</p>
+          <label class="aj-opinion-label" for="aj-opinion-text">الرأي</label>
+          <textarea id="aj-opinion-text" rows="4" maxlength="2000" placeholder="اكتب ما تراه مناسباً تعديله أو توضيحه"></textarea>
+          <button type="button" class="aj-detail-btn" id="aj-opinion-save">إرسال الرأي</button>
+          <p class="aj-status" id="aj-opinion-status" role="status" aria-live="polite"></p>
+          <h2 class="aj-group-title" id="aj-opinion-list-title" hidden>الآراء المحفوظة</h2>
+          <ul id="aj-opinion-list" class="aj-opinion-list" hidden></ul>
+        </section>
+        <section class="aj-leadership-only" id="aj-license-entry" hidden>
+          <h2 class="aj-group-title">تعبئة الرخص المهنية</h2>
+          <p class="aj-lede">للمدير والوكيل. من هنا تُكتب الأسماء وتُرفع الصورة أو الملف.</p>
+          <a class="aj-detail-btn" href="#view-license-form">فتح نموذج التعبئة</a>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-practice-evidence">شواهد الممارسات</a>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-visits">الزيارات الصفية</a>
+        </section>
+        <h2 class="aj-group-title">نماذجي الجاهزة</h2>
+        <ul id="aj-desk-forms" class="aj-cards" aria-label="نماذج الدور"></ul>
+        <h2 class="aj-group-title">تسليماتي الدورية</h2>
+        <ul id="aj-desk-deliver" class="aj-cards" aria-label="التسليمات الدورية"></ul>
+        <h2 class="aj-group-title">برامجي للتنفيذ</h2>
+        <ul id="aj-desk-programs" class="aj-cards" aria-label="البرامج المكلّف بها"></ul>
+        <h2 class="aj-group-title">لجاني</h2>
+        <ul id="aj-desk-committees" class="aj-cards" aria-label="عضوية اللجان"></ul>
+        <h2 class="aj-group-title">واجباتي من بنك المهام</h2>
+        <ul id="aj-desk-duties" class="aj-cards" aria-label="واجبات الدور"></ul>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn" href="#view-portfolio">طباعة ملف الإنجاز</a>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">خريطة المراحل</a>
+        </div>
+      </section>
+
+      <section id="view-visits" class="aj-view wash-board" hidden>
+        <h1>الزيارات الصفية</h1>
+        <p class="aj-lede">بنود استمارة الزيارة المعتمدة. التوليد يضع الدرجة الكاملة، ويبقى تعديل العبارة والمستوى لصاحب الصلاحية.</p>
+        <p class="aj-status" id="aj-visit-status" role="status" aria-live="polite"></p>
+        <form id="aj-visit-form" class="aj-form"></form>
+        <h2 class="aj-group-title">الزيارات المحفوظة</h2>
+        <ul id="aj-visit-list" class="aj-cards" aria-label="الزيارات المحفوظة"></ul>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-visits-plan">الخطة السنوية</a>
+        </div>
+      </section>
+
+      <section id="view-visits-plan" class="aj-view wash-board" hidden>
+        <h1>الخطة السنوية للزيارات الصفية</h1>
+        <p class="aj-lede">صف لكل معلم من السجل. زيارتان في السنة، والثالثة عند الحاجة. التاريخ من أسابيع التقويم المحفوظة، وإن لم تُحفظ يبقى فارغاً.</p>
+        <p class="aj-status" id="aj-plan-status" role="status" aria-live="polite"></p>
+        <div class="aj-plan-wrap">
+          <table class="aj-plan-table" id="aj-plan-table">
+            <thead>
+              <tr>
+                <th>م</th>
+                <th>اسم المعلم</th>
+                <th>التخصص</th>
+                <th>المادة</th>
+                <th>الزيارة الأولى</th>
+                <th>الزيارة الثانية</th>
+                <th>زيارة إضافية</th>
+                <th>ملحوظات</th>
+              </tr>
+            </thead>
+            <tbody id="aj-plan-body"></tbody>
+          </table>
+        </div>
+        <div class="aj-detail-actions">
+          <button type="button" class="aj-detail-btn" id="aj-plan-distribute">توزيع تلقائي</button>
+          <button type="button" class="aj-detail-btn" id="aj-plan-save">حفظ الخطة</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-plan-print">طباعة الخطة</button>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-desk">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-practice-evidence" class="aj-view wash-board" hidden>
+        <h1>شواهد الممارسات</h1>
+        <p class="aj-lede">كل شاهد جاهز لرفع صورة أو ملف فقط. لا يُوسَّع إطار الطباعة.</p>
+        <div id="aj-practice-host"></div>
+        <input type="file" id="aj-practice-file" accept="image/jpeg,image/png,image/webp,application/pdf,.pdf" hidden>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-desk">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-license-form" class="aj-view wash-board" hidden>
+        <h1>تعبئة الرخص المهنية</h1>
+        <p class="aj-lede">للمدير والوكيل. الحقل الذي لا تعرفه يُترك فارغًا.</p>
+        <form class="aj-form" id="aj-license-form">
+          <label class="aj-soft-label">الاسم
+            <input id="aj-license-name" type="text" maxlength="120" required>
+          </label>
+          <label class="aj-soft-label">رقم الهوية
+            <input id="aj-license-nid" type="text" inputmode="numeric" maxlength="20">
+          </label>
+          <label class="aj-soft-label">رقم الرخصة
+            <input id="aj-license-no" type="text" maxlength="30">
+          </label>
+          <label class="aj-soft-label">المستوى
+            <input id="aj-license-level" type="text" maxlength="40">
+          </label>
+          <label class="aj-soft-label">التخصص
+            <input id="aj-license-major" type="text" maxlength="60">
+          </label>
+          <label class="aj-soft-label">تاريخ الانتهاء
+            <input id="aj-license-exp" type="text" maxlength="20">
+          </label>
+          <div class="aj-detail-actions">
+            <button type="submit" class="aj-detail-btn">حفظ في السجل</button>
+            <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-license-print">طباعة السجل</button>
+            <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-desk">العودة</a>
+          </div>
+        </form>
+        <ul id="aj-license-rows"></ul>
+        <div class="aj-witness-files" id="aj-license-files">
+          <h2 class="aj-detail-label">رفع ملف أو صورة</h2>
+          <p class="aj-meta">إن كانت الصورة مقلوبة اضغط تدوير.</p>
+          <ul id="aj-license-files-list"></ul>
+          <div class="aj-detail-actions">
+            <button type="button" class="aj-detail-btn" id="aj-license-file-add">رفع ملف أو صورة</button>
+          </div>
+          <input type="file" id="aj-license-file-input" accept="image/jpeg,image/png,image/webp,application/pdf,.pdf" hidden>
+        </div>
+      </section>
+
+      <section id="view-home" class="aj-view" hidden>
+        <h1>مراحل الرحلة</h1>
+        <p class="aj-lede">اختر مرحلة للوصول إلى مهامها.</p>
+        <ul class="aj-home-stages" aria-label="بطاقات المراحل">
+          <li class="aj-home-card">
+            <h2>تخطيطي</h2>
+            <p>الخطة التشغيلية والبرامج.</p>
+            <a class="aj-task-btn" href="#view-planning">الخطط والبرامج</a>
+            <a class="aj-task-btn" href="#view-committees">تشكيل اللجان</a>
+          </li>
+          <li class="aj-home-card">
+            <h2>مهامي</h2>
+            <p>مهام اليوم والمتأخرة.</p>
+            <a class="aj-task-btn" href="#view-tasks">مهام اليوم</a>
+          </li>
+          <li class="aj-home-card">
+            <h2>تنفيذي</h2>
+            <p>اعتماد البرامج والسجلات اليومية.</p>
+            <a class="aj-task-btn" href="#view-execution">مركز التنفيذ</a>
+          </li>
+          <li class="aj-home-card" hidden><h2>طباعتي</h2></li>
+          <li class="aj-home-card">
+            <h2>متابعتي</h2>
+            <p>مؤشرات أداء المدرسة.</p>
+            <a class="aj-task-btn" href="#view-performance">مؤشرات الأداء (SSOT)</a>
+            <a class="aj-task-btn" href="#view-soft-follow">المتابعة اللاصفية</a>
+          </li>
+          <li class="aj-home-card">
+            <h2>شواهدي</h2>
+            <p>الشواهد البصرية المرفقة.</p>
+            <a class="aj-task-btn" href="#view-evidence">معرض الشواهد</a>
+            <a class="aj-task-btn aj-leadership-only" href="#view-license-form" hidden>تعبئة الرخص المهنية</a>
+            <a class="aj-task-btn" href="#view-env-evidence">شواهد البرامج والبيئة</a>
+          </li>
+        </ul>
+      </section>
+
+      <section id="view-smart-planning" class="aj-view" hidden>
+        <h1>الخطط الذكية</h1>
+        <p class="aj-loading" id="aj-smart-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-smart-status" role="status" aria-live="polite"></p>
+        <p class="aj-smart-warning" id="aj-smart-missing" hidden></p>
+        <p class="aj-empty" id="aj-smart-empty" hidden>لا توجد أهداف محفوظة في الخطة.</p>
+        <ul class="aj-smart-cards" id="aj-smart-cards" aria-label="الأهداف الاستراتيجية"></ul>
+      </section>
+
+      <section id="view-program-add" class="aj-view" hidden>
+        <h1 id="aj-program-form-title">إضافة برنامج</h1>
+        <p class="aj-lede">احفظ البرنامج مسودة أولًا. اعتماد المدير ينقله إلى خطة كل صاحب مختار وإلى سجل برنامجه. القوالب تملأ الحقول من المحفوظ، ويمكن اختيار أكثر من صاحب.</p>
+        <div class="aj-program-board" id="aj-program-board">
+          <h2 class="aj-program-board-title">حالة البرامج</h2>
+          <ul class="aj-program-counts" aria-label="عدادات البرامج">
+            <li>مسودات <strong id="aj-program-count-draft">0</strong></li>
+            <li>قيد التنفيذ <strong id="aj-program-count-progress">0</strong></li>
+            <li>مكتمل <strong id="aj-program-count-done">0</strong></li>
+          </ul>
+          <div class="aj-filters" id="aj-program-board-filters" role="group" aria-label="تصفية البرامج">
+            <button type="button" class="aj-filter is-active" data-aj-program-filter="all">الكل</button>
+            <button type="button" class="aj-filter" data-aj-program-filter="draft">مسودات</button>
+            <button type="button" class="aj-filter" data-aj-program-filter="in_progress">قيد التنفيذ</button>
+            <button type="button" class="aj-filter" data-aj-program-filter="done">مكتمل</button>
+          </div>
+          <p class="aj-loading" id="aj-program-board-loading" hidden>جارٍ التحميل...</p>
+          <p class="aj-empty" id="aj-program-board-empty" hidden>لا برامج في هذا الفلتر.</p>
+          <ul class="aj-program-board-list" id="aj-program-board-list" aria-label="قائمة البرامج"></ul>
+        </div>
+        <p class="aj-loading" id="aj-program-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-program-status" role="status" aria-live="polite"></p>
+        <p class="aj-smart-warning" id="aj-program-missing" hidden></p>
+        <p class="aj-list-banner" id="aj-program-list-banner" hidden></p>
+        <form class="aj-form" id="aj-program-form">
+          <div class="aj-field">
+            <label for="aj-program-template">القالب</label>
+            <select id="aj-program-template" name="template">
+              <option value="">— اختر قالباً —</option>
+            </select>
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-name">اسم البرنامج</label>
+            <input id="aj-program-name" name="program_name" type="text" autocomplete="off">
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-bank-q">ابحث برقم المؤشر أو الكلمة المفتاحية</label>
+            <input id="aj-program-bank-q" type="search" autocomplete="off">
+            <ul id="aj-program-bank-hits" class="aj-program-bank-hits" hidden></ul>
+          </div>
+          <p class="aj-lede" id="aj-program-bank-meta" hidden></p>
+          <div class="aj-field" id="aj-program-bank-actions-wrap" hidden>
+            <span class="aj-file-label">إجراءات المؤشر</span>
+            <div id="aj-program-bank-actions" class="aj-check-list aj-program-bank-actions"></div>
+          </div>
+          <div class="aj-field" id="aj-program-bank-evidence-wrap" hidden>
+            <label for="aj-program-bank-evidence">السجلات والشواهد</label>
+            <textarea id="aj-program-bank-evidence" rows="3" readonly></textarea>
+          </div>
+          <div class="aj-field" id="aj-program-bank-committees-wrap" hidden>
+            <label for="aj-program-bank-committees">اللجان المعنية</label>
+            <textarea id="aj-program-bank-committees" rows="2" readonly></textarea>
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-goal">الهدف الاستراتيجي</label>
+            <select id="aj-program-goal" name="goal_ref">
+              <option value="">— بلا ربط —</option>
+            </select>
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-strategic">نص الهدف</label>
+            <textarea id="aj-program-strategic" name="strategic_goal" rows="2"></textarea>
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-executive">الهدف التنفيذي</label>
+            <textarea id="aj-program-executive" name="executive_goal" rows="2"></textarea>
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-domain">المجال</label>
+            <input id="aj-program-domain" name="domain" type="text" autocomplete="off">
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-level">المستوى</label>
+            <input id="aj-program-level" name="level_name" type="text" autocomplete="off">
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-audience">المستهدفون</label>
+            <input id="aj-program-audience" name="target_audience" type="text" autocomplete="off">
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-duration">الفترة الزمنية</label>
+            <input id="aj-program-duration" name="duration" type="text" autocomplete="off">
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-implementers">المنفذون</label>
+            <input id="aj-program-implementers" name="implementers" type="text" autocomplete="off">
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-budget">الميزانية</label>
+            <input id="aj-program-budget" name="budget" type="text" autocomplete="off">
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-mechanism">آلية التنفيذ</label>
+            <textarea id="aj-program-mechanism" name="mechanism" rows="4"></textarea>
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-success">مؤشر النجاح</label>
+            <textarea id="aj-program-success" name="success_indicator" rows="2"></textarea>
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-risk">إدارة المخاطر</label>
+            <textarea id="aj-program-risk" name="risk_management" rows="2"></textarea>
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-register">السجل</label>
+            <select id="aj-program-register" name="register_id">
+              <option value="">— اختر —</option>
+            </select>
+          </div>
+          <div class="aj-field">
+            <span class="aj-file-label" id="aj-program-owners-label">صاحب البرنامج</span>
+            <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-gifted-assign">تعيين منسق الموهوبين</button>
+            <div id="aj-program-owners" class="aj-check-list" role="group" aria-labelledby="aj-program-owners-label"></div>
+          </div>
+          <p class="aj-lede" id="aj-program-link-hint" hidden></p>
+          <div class="aj-field">
+            <label for="aj-program-unit">وحدة المؤشر</label>
+            <select id="aj-program-unit" name="unit">
+              <option value="">— اختر —</option>
+              <option value="%">%</option>
+              <option value="عدد">عدد</option>
+              <option value="نسبة">نسبة</option>
+            </select>
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-baseline">خط الأساس</label>
+            <input id="aj-program-baseline" name="baseline_value" type="text" autocomplete="off">
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-target">المستهدف</label>
+            <input id="aj-program-target" name="target_value" type="text" autocomplete="off">
+          </div>
+          <div class="aj-field">
+            <label for="aj-program-kpi-text">وصف المؤشر</label>
+            <input id="aj-program-kpi-text" name="kpi_description" type="text" autocomplete="off">
+          </div>
+          <div id="aj-program-goal-kpis" hidden>
+            <h2 class="aj-detail-label">مؤشرات الهدف في الخطة</h2>
+            <ul class="aj-smart-kpis" id="aj-program-goal-kpi-list"></ul>
+          </div>
+          <p class="aj-status is-error" id="aj-program-form-error" hidden></p>
+          <div class="aj-detail-actions">
+            <button type="submit" class="aj-detail-btn" id="aj-program-save">حفظ البرنامج مسودة</button>
+            <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-program-reopen" hidden>فتح آخر مسودة</button>
+            <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+          </div>
+        </form>
+        <div class="aj-modal" id="aj-gifted-assign-modal" hidden>
+          <div class="aj-modal-backdrop" data-aj-gifted-close></div>
+          <div class="aj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="aj-gifted-assign-title">
+            <h2 id="aj-gifted-assign-title">تعيين منسق الموهوبين</h2>
+            <form id="aj-gifted-assign-form" class="aj-form">
+              <div class="aj-field">
+                <label for="aj-gifted-staff">المعلم</label>
+                <select id="aj-gifted-staff" name="staff_id">
+                  <option value="">— اختر معلماً —</option>
+                </select>
+              </div>
+              <p class="aj-status is-error" id="aj-gifted-assign-error" hidden></p>
+              <div class="aj-detail-actions">
+                <button type="submit" class="aj-detail-btn" id="aj-gifted-assign-save">حفظ التكليف</button>
+                <button type="button" class="aj-detail-btn aj-detail-btn-secondary" data-aj-gifted-close>إلغاء</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-committees" class="aj-view wash-board" hidden>
+        <h1>تشكيل اللجان</h1>
+        <p class="aj-lede" id="aj-committee-hint">العضوية من سجل المنسوبين. الاعتماد متطلب دخول للمدير والوكلاء بعد التوقيع.</p>
+        <p class="aj-status" id="aj-committee-status" role="status" aria-live="polite"></p>
+        <h2 class="aj-group-title">لجاني</h2>
+        <ul id="aj-committee-mine" class="aj-committee-mine"></ul>
+        <h2 class="aj-group-title">اعتماد القيادة</h2>
+        <ul id="aj-committee-approvals" class="aj-committee-approvals"></ul>
+        <div class="aj-detail-actions">
+          <button type="button" class="aj-detail-btn" id="aj-committee-draw" hidden>سحب تشكيل عشوائي</button>
+          <button type="button" class="aj-detail-btn" id="aj-committee-approve" hidden>اعتماد التشكيل</button>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+        <div id="aj-committee-boards" class="aj-cards" aria-label="مجالس اللجان"></div>
+      </section>
+
+      <section id="view-planning" class="aj-view" hidden>
+        <h1>تخطيطي</h1>
+        <p class="aj-summary" id="aj-plan-summary" hidden></p>
+        <p class="aj-loading" id="aj-plan-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-plan-status" role="status" aria-live="polite"></p>
+        <p class="aj-empty" id="aj-plan-empty" hidden>لا توجد خطط أو برامج للعرض.</p>
+        <ul class="aj-cards" id="aj-plan-cards" aria-label="بطاقات التخطيط"></ul>
+      </section>
+
+      <section id="view-school" class="aj-view" hidden>
+        <h1>بيانات المدرسة</h1>
+        <p class="aj-loading" id="aj-school-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-school-status" role="status" aria-live="polite"></p>
+        <div class="aj-profile-card" id="aj-school-fields"></div>
+        <div class="aj-detail-actions">
+          <button type="button" class="aj-detail-btn" id="aj-school-save">حفظ التعديلات</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-integrity-check">فحص التكامل</button>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+        <ul id="aj-integrity-report" class="aj-cards" hidden></ul>
+      </section>
+
+      <section id="view-external-eval" class="aj-view wash-board" hidden>
+        <h1>نتائج التقويم الخارجي</h1>
+        <p class="aj-lede" id="aj-eval-hint"></p>
+        <p class="aj-status" id="aj-eval-status" role="status"></p>
+        <canvas id="aj-eval-chart" width="640" height="280" aria-label="تطور الأداء العام"></canvas>
+        <div class="aj-table-scroll">
+        <table class="aj-formation-table" id="aj-eval-table">
+          <thead>
+            <tr><th>المؤشر</th><th>2024</th><th>2025</th><th>2026</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        </div>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-deliverables" class="aj-view" hidden>
+        <h1>تسليمات المعلم</h1>
+        <label class="aj-soft-label">ملفات الإنجاز المعتمدة للمعلم
+          <select id="aj-file-teacher"></select>
+        </label>
+        <h2>ملفات الإنجاز المعتمدة</h2>
+        <div class="aj-detail-actions" id="aj-file-tabs" role="tablist"></div>
+        <h2>الملفات المرفوعة</h2>
+        <ul id="aj-file-uploads"></ul>
+        <article class="aj-card" id="aj-file-panel" hidden>
+          <h2 id="aj-file-panel-title"></h2>
+          <div id="aj-file-panel-body"></div>
+          <button type="button" class="aj-detail-btn" id="aj-file-print">طباعة</button>
+        </article>
+        <div class="aj-detail-actions">
+          <button type="button" class="aj-detail-btn" id="aj-deliver-auto">توليد الملف التلقائي</button>
+        </div>
+        <form id="aj-deliver-auto-form" class="aj-form" hidden>
+          <label class="aj-soft-label">اسم المعلم
+            <select id="aj-deliver-auto-teacher" required></select>
+          </label>
+          <label class="aj-soft-label">المادة
+            <input id="aj-deliver-auto-subject" type="text" readonly>
+          </label>
+          <label class="aj-soft-label">العام الدراسي
+            <input id="aj-deliver-auto-year" type="text" value="1448" maxlength="20" required>
+          </label>
+          <p class="aj-status" id="aj-deliver-auto-status" role="status" aria-live="polite"></p>
+          <div class="aj-detail-actions">
+            <button type="submit" class="aj-detail-btn">توليد الوثيقة</button>
+            <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-deliver-auto-cancel">إلغاء</button>
+          </div>
+        </form>
+        <p class="aj-status" id="aj-deliver-status" role="status" aria-live="polite"></p>
+        <datalist id="aj-deliver-subjects">
+          <option value="رياضيات"></option>
+          <option value="علوم"></option>
+          <option value="لغة عربية"></option>
+          <option value="إنجليزي"></option>
+          <option value="إسلامية"></option>
+          <option value="حاسب"></option>
+          <option value="اجتماعيات"></option>
+        </datalist>
+        <div class="aj-deliver-grid">
+          <article class="aj-card aj-deliver-unit" data-deliver-kind="plan">
+            <h2>الخطة الدراسية</h2>
+            <form class="aj-form aj-deliver-form">
+              <label class="aj-soft-label">المعلم
+                <select class="aj-deliver-teacher" required></select>
+              </label>
+              <label class="aj-soft-label">المادة
+                <input class="aj-deliver-subject" type="text" required maxlength="80" placeholder="اكتب أو اختر المادة" list="aj-deliver-subjects">
+              </label>
+              <label class="aj-soft-label">العام الدراسي
+                <input class="aj-deliver-year" type="text" readonly required>
+              </label>
+              <label class="aj-soft-label">الملف
+                <input class="aj-deliver-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
+              </label>
+              <label class="aj-soft-label">ملاحظة
+                <textarea class="aj-deliver-notes" rows="3" maxlength="500"></textarea>
+              </label>
+              <button type="submit" class="aj-detail-btn">حفظ الخطة الدراسية</button>
+              <p class="aj-deliver-feedback" role="status" hidden></p>
+            </form>
+            <h2 class="aj-detail-label">الملفات المرفوعة</h2>
+            <p class="aj-empty aj-deliver-empty">لا ملفات مرفوعة بعد.</p>
+            <ul class="aj-cards aj-deliver-list" aria-label="الخطة الدراسية المرفوعة"></ul>
+          </article>
+          <article class="aj-card aj-deliver-unit" data-deliver-kind="prep">
+            <h2>التحضير اليومي</h2>
+            <form class="aj-form aj-deliver-form">
+              <label class="aj-soft-label">المعلم
+                <select class="aj-deliver-teacher" required></select>
+              </label>
+              <label class="aj-soft-label">المادة
+                <input class="aj-deliver-subject" type="text" required maxlength="80" placeholder="اكتب أو اختر المادة" list="aj-deliver-subjects">
+              </label>
+              <label class="aj-soft-label">العام الدراسي
+                <input class="aj-deliver-year" type="text" readonly required>
+              </label>
+              <label class="aj-soft-label">الملف
+                <input class="aj-deliver-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
+              </label>
+              <label class="aj-soft-label">ملاحظة
+                <textarea class="aj-deliver-notes" rows="3" maxlength="500"></textarea>
+              </label>
+              <button type="submit" class="aj-detail-btn">حفظ التحضير اليومي</button>
+              <p class="aj-deliver-feedback" role="status" hidden></p>
+            </form>
+            <h2 class="aj-detail-label">الملفات المرفوعة</h2>
+            <p class="aj-empty aj-deliver-empty">لا ملفات مرفوعة بعد.</p>
+            <ul class="aj-cards aj-deliver-list" aria-label="التحضير اليومي المرفوع"></ul>
+          </article>
+          <article class="aj-card aj-deliver-unit" data-deliver-kind="visits">
+            <h2>الزيارات الصفية</h2>
+            <form class="aj-form aj-deliver-form">
+              <label class="aj-soft-label">المعلم
+                <select class="aj-deliver-teacher" required></select>
+              </label>
+              <label class="aj-soft-label">المادة
+                <input class="aj-deliver-subject" type="text" required maxlength="80" placeholder="اكتب أو اختر المادة" list="aj-deliver-subjects">
+              </label>
+              <label class="aj-soft-label">العام الدراسي
+                <input class="aj-deliver-year" type="text" readonly required>
+              </label>
+              <label class="aj-soft-label">الملف
+                <input class="aj-deliver-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
+              </label>
+              <label class="aj-soft-label">ملاحظة
+                <textarea class="aj-deliver-notes" rows="3" maxlength="500"></textarea>
+              </label>
+              <button type="submit" class="aj-detail-btn">حفظ الزيارات الصفية</button>
+              <p class="aj-deliver-feedback" role="status" hidden></p>
+            </form>
+            <h2 class="aj-detail-label">الملفات المرفوعة</h2>
+            <p class="aj-empty aj-deliver-empty">لا ملفات مرفوعة بعد.</p>
+            <ul class="aj-cards aj-deliver-list" aria-label="الزيارات الصفية المرفوعة"></ul>
+          </article>
+          <article class="aj-card aj-deliver-unit" data-deliver-kind="tests">
+            <h2>أدوات التقويم</h2>
+            <form class="aj-form aj-deliver-form">
+              <label class="aj-soft-label">المعلم
+                <select class="aj-deliver-teacher" required></select>
+              </label>
+              <label class="aj-soft-label">المادة
+                <input class="aj-deliver-subject" type="text" required maxlength="80" placeholder="اكتب أو اختر المادة" list="aj-deliver-subjects">
+              </label>
+              <label class="aj-soft-label">العام الدراسي
+                <input class="aj-deliver-year" type="text" readonly required>
+              </label>
+              <label class="aj-soft-label">الملف
+                <input class="aj-deliver-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
+              </label>
+              <label class="aj-soft-label">ملاحظة
+                <textarea class="aj-deliver-notes" rows="3" maxlength="500"></textarea>
+              </label>
+              <button type="submit" class="aj-detail-btn">حفظ أدوات التقويم</button>
+              <p class="aj-deliver-feedback" role="status" hidden></p>
+            </form>
+            <h2 class="aj-detail-label">الملفات المرفوعة</h2>
+            <p class="aj-empty aj-deliver-empty">لا ملفات مرفوعة بعد.</p>
+            <ul class="aj-cards aj-deliver-list" aria-label="أدوات التقويم المرفوعة"></ul>
+          </article>
+          <article class="aj-card aj-deliver-unit" data-deliver-kind="results">
+            <h2>تحليل النتائج</h2>
+            <form class="aj-form aj-deliver-form">
+              <label class="aj-soft-label">المعلم
+                <select class="aj-deliver-teacher" required></select>
+              </label>
+              <label class="aj-soft-label">المادة
+                <input class="aj-deliver-subject" type="text" required maxlength="80" placeholder="اكتب أو اختر المادة" list="aj-deliver-subjects">
+              </label>
+              <label class="aj-soft-label">العام الدراسي
+                <input class="aj-deliver-year" type="text" readonly required>
+              </label>
+              <label class="aj-soft-label">الملف
+                <input class="aj-deliver-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
+              </label>
+              <label class="aj-soft-label">ملاحظة
+                <textarea class="aj-deliver-notes" rows="3" maxlength="500"></textarea>
+              </label>
+              <button type="submit" class="aj-detail-btn">حفظ تحليل النتائج</button>
+              <p class="aj-deliver-feedback" role="status" hidden></p>
+            </form>
+            <h2 class="aj-detail-label">الملفات المرفوعة</h2>
+            <p class="aj-empty aj-deliver-empty">لا ملفات مرفوعة بعد.</p>
+            <ul class="aj-cards aj-deliver-list" aria-label="تحليل النتائج المرفوع"></ul>
+          </article>
+          <article class="aj-card aj-deliver-unit" data-deliver-kind="portfolio">
+            <h2>ملف إنجاز المعلم</h2>
+            <form class="aj-form aj-deliver-form">
+              <label class="aj-soft-label">المعلم
+                <select class="aj-deliver-teacher" required></select>
+              </label>
+              <label class="aj-soft-label">المادة
+                <input class="aj-deliver-subject" type="text" required maxlength="80" placeholder="اكتب أو اختر المادة" list="aj-deliver-subjects">
+              </label>
+              <label class="aj-soft-label">العام الدراسي
+                <input class="aj-deliver-year" type="text" readonly required>
+              </label>
+              <label class="aj-soft-label">الملف
+                <input class="aj-deliver-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
+              </label>
+              <label class="aj-soft-label">ملاحظة
+                <textarea class="aj-deliver-notes" rows="3" maxlength="500"></textarea>
+              </label>
+              <button type="submit" class="aj-detail-btn">حفظ ملف الإنجاز</button>
+              <p class="aj-deliver-feedback" role="status" hidden></p>
+            </form>
+            <h2 class="aj-detail-label">الملفات المرفوعة</h2>
+            <p class="aj-empty aj-deliver-empty">لا ملفات مرفوعة بعد.</p>
+            <ul class="aj-cards aj-deliver-list" aria-label="ملف إنجاز المعلم المرفوع"></ul>
+          </article>
+          <article class="aj-card aj-deliver-unit" data-deliver-kind="growth">
+            <h2>التطوير المهني</h2>
+            <form class="aj-form aj-deliver-form">
+              <label class="aj-soft-label">المعلم
+                <select class="aj-deliver-teacher" required></select>
+              </label>
+              <label class="aj-soft-label">المادة
+                <input class="aj-deliver-subject" type="text" required maxlength="80" placeholder="اكتب أو اختر المادة" list="aj-deliver-subjects">
+              </label>
+              <label class="aj-soft-label">العام الدراسي
+                <input class="aj-deliver-year" type="text" readonly required>
+              </label>
+              <label class="aj-soft-label">الملف
+                <input class="aj-deliver-file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
+              </label>
+              <label class="aj-soft-label">ملاحظة
+                <textarea class="aj-deliver-notes" rows="3" maxlength="500"></textarea>
+              </label>
+              <button type="submit" class="aj-detail-btn">حفظ التطوير المهني</button>
+              <p class="aj-deliver-feedback" role="status" hidden></p>
+            </form>
+            <h2 class="aj-detail-label">الملفات المرفوعة</h2>
+            <p class="aj-empty aj-deliver-empty">لا ملفات مرفوعة بعد.</p>
+            <ul class="aj-cards aj-deliver-list" aria-label="التطوير المهني المرفوع"></ul>
+          </article>
+        </div>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-calendar" class="aj-view" hidden>
+        <h1>التقويم المعتمد</h1>
+        <p class="aj-lede">المحطات من السجل. لا يُنسخ التقويم القديم من المتصفح تلقائيًا.</p>
+        <p class="aj-status" id="aj-calendar-status" role="status"></p>
+        <form class="aj-form" id="aj-calendar-form">
+          <label class="aj-soft-label">العام الدراسي
+            <select id="aj-calendar-year"></select>
+          </label>
+          <label class="aj-soft-label">عام جديد
+            <span class="aj-inline-row">
+              <input id="aj-calendar-year-new" type="text" maxlength="20" placeholder="1449-1450">
+              <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-calendar-year-add">إضافة عام</button>
+              <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-calendar-year-del">حذف العام المختار</button>
+            </span>
+          </label>
+          <label class="aj-soft-label">المنطقة
+            <select id="aj-calendar-region">
+              <option value="makkah">مكة والمدينة وجدة والطائف</option>
+              <option value="other">بقية المناطق</option>
+            </select>
+          </label>
+          <label class="aj-soft-label">عدد الفصول
+            <select id="aj-calendar-terms">
+              <option value="2">فصلان</option>
+              <option value="3">ثلاثة فصول</option>
+            </select>
+          </label>
+          <label class="aj-soft-label">بداية العام (هجري / ميلادي)
+            <span class="aj-inline-row">
+              <input id="aj-cal-start-h" type="text">
+              <input id="aj-cal-start-g" type="text">
+            </span>
+          </label>
+          <label class="aj-soft-label">بداية الاختبارات (هجري / ميلادي)
+            <span class="aj-inline-row">
+              <input id="aj-cal-exam-h" type="text">
+              <input id="aj-cal-exam-g" type="text">
+            </span>
+          </label>
+          <label class="aj-soft-label">نهاية العام (هجري / ميلادي)
+            <span class="aj-inline-row">
+              <input id="aj-cal-end-h" type="text">
+              <input id="aj-cal-end-g" type="text">
+            </span>
+          </label>
+          <div class="aj-detail-actions">
+            <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-calendar-fill">تعبئة التواريخ الرسمية</button>
+            <button type="submit" class="aj-detail-btn">حفظ</button>
+            <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+          </div>
+        </form>
+        <h2>المحطات الزمنية</h2>
+        <ul class="aj-cards" id="aj-calendar-stations"></ul>
+      </section>
+
+      <section id="view-occasions" class="aj-view" hidden>
+        <h1>المناسبات</h1>
+        <p class="aj-status" id="aj-occasions-status" role="status"></p>
+        <form class="aj-form" id="aj-occasion-form">
+          <input type="hidden" id="aj-occ-id">
+          <label class="aj-soft-label">العام
+            <input id="aj-occ-year" type="text" required maxlength="20" value="1448-1449">
+          </label>
+          <label class="aj-soft-label">العنوان
+            <input id="aj-occ-title" type="text" required maxlength="120">
+          </label>
+          <label class="aj-soft-label">النوع
+            <input id="aj-occ-type" type="text" maxlength="40">
+          </label>
+          <label class="aj-soft-label">النطاق
+            <select id="aj-occ-scope">
+              <option value="all">الكل</option>
+              <option value="makkah">مكة والمدينة وجدة والطائف</option>
+              <option value="general">بقية المناطق</option>
+            </select>
+          </label>
+          <label class="aj-soft-label">هجري بداية / نهاية
+            <span class="aj-inline-row">
+              <input id="aj-occ-hs" type="text">
+              <input id="aj-occ-he" type="text">
+            </span>
+          </label>
+          <label class="aj-soft-label">ميلادي بداية / نهاية
+            <span class="aj-inline-row">
+              <input id="aj-occ-gs" type="text">
+              <input id="aj-occ-ge" type="text">
+            </span>
+          </label>
+          <label class="aj-soft-label">ملاحظة
+            <input id="aj-occ-note" type="text" maxlength="200">
+          </label>
+          <div class="aj-detail-actions">
+            <button type="submit" class="aj-detail-btn">حفظ المناسبة</button>
+            <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-occ-reset">جديد</button>
+            <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+          </div>
+        </form>
+        <ul class="aj-cards" id="aj-occasions-list"></ul>
+      </section>
+
+      <section id="view-letterhead" class="aj-view" hidden>
+        <h1>الترويسة والأختام</h1>
+        <p class="aj-lede">الإطار الرسمي محصّن. تُحفظ الصور هنا وتُمرَّر للطباعة إن كانت صالحة.</p>
+        <p class="aj-status" id="aj-letter-status" role="status"></p>
+        <form class="aj-form" id="aj-letter-form">
+          <label class="aj-soft-label">شعار الوزارة
+            <input id="aj-letter-ministry" type="file" accept=".png,.jpg,.jpeg,image/png,image/jpeg">
+          </label>
+          <label class="aj-soft-label">شعار رؤية 2030
+            <input id="aj-letter-vision" type="file" accept=".png,.jpg,.jpeg,image/png,image/jpeg">
+          </label>
+          <label class="aj-soft-label">الختم
+            <input id="aj-letter-stamp" type="file" accept=".png,.jpg,.jpeg,image/png,image/jpeg">
+          </label>
+          <label class="aj-soft-label">عبارة تحت الختم
+            <input id="aj-letter-note" type="text" maxlength="120">
+          </label>
+          <div class="aj-letter-previews" id="aj-letter-previews"></div>
+          <div class="aj-detail-actions">
+            <button type="submit" class="aj-detail-btn">حفظ</button>
+            <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+          </div>
+        </form>
+      </section>
+
+      <section id="view-backup" class="aj-view" hidden>
+        <h1>النسخ الاحتياطي</h1>
+        <p class="aj-status" id="aj-backup-status" role="status"></p>
+        <div class="aj-detail-actions">
+          <button type="button" class="aj-detail-btn" id="aj-backup-create">إنشاء نسخة</button>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+        <ul class="aj-cards" id="aj-backup-list"></ul>
+      </section>
+
+      <section id="view-noor-import" class="aj-view" hidden>
+        <h1>الاستيراد من نور</h1>
+        <p class="aj-lede">رفع ملف Excel للمنسوبين أو الطلاب أو الجدول. الجلسة مطلوبة.</p>
+        <p class="aj-status" id="aj-noor-status" role="status"></p>
+        <form class="aj-form" id="aj-noor-form">
+          <label class="aj-soft-label">النوع
+            <select id="aj-noor-kind">
+              <option value="teachers">منسوبون</option>
+              <option value="students">طلاب</option>
+              <option value="timetable">جدول</option>
+            </select>
+          </label>
+          <label class="aj-soft-label">الملف
+            <input id="aj-noor-file" type="file" accept=".xlsx,.xls" required>
+          </label>
+          <div class="aj-detail-actions">
+            <button type="submit" class="aj-detail-btn">رفع الملف</button>
+            <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+          </div>
+        </form>
+      </section>
+
+      <section id="view-import-center" class="aj-view wash-board" hidden>
+        <h1>الاستيراد من نور</h1>
+        <p class="aj-lede">خطوتان ثابتتان: تحليل ومعاينة، ثم تأكيد الإدراج. لا يُكتب في القاعدة قبل التأكيد. بعد التأكيد يظهر ملخص نجح / فشل.</p>
+        <p class="aj-status" id="aj-ic-status" role="status"></p>
+        <div class="aj-sl-grid">
+          <article class="aj-sl-panel" data-ic-kind="matrix">
+            <h2 class="aj-group-title">استيراد الجدول الشامل</h2>
+            <form class="aj-form" data-ic-form="matrix">
+              <label class="aj-soft-label">ملف Excel
+                <input type="file" accept=".xlsx,.xls" multiple required>
+              </label>
+              <button type="submit" class="aj-detail-btn">تحليل ومعاينة</button>
+            </form>
+          </article>
+          <article class="aj-sl-panel" data-ic-kind="students">
+            <h2 class="aj-group-title">استيراد الطلاب</h2>
+            <form class="aj-form" data-ic-form="students">
+              <label class="aj-soft-label">ملفات Excel أو CSV
+                <input type="file" accept=".xlsx,.xls,.csv" multiple required>
+              </label>
+              <button type="submit" class="aj-detail-btn">تحليل ومعاينة</button>
+            </form>
+          </article>
+          <article class="aj-sl-panel" data-ic-kind="teachers">
+            <h2 class="aj-group-title">استيراد المنسوبين</h2>
+            <form class="aj-form" data-ic-form="teachers">
+              <label class="aj-soft-label">ملفات Excel أو CSV
+                <input type="file" accept=".xlsx,.xls,.csv" multiple required>
+              </label>
+              <button type="submit" class="aj-detail-btn">تحليل ومعاينة</button>
+            </form>
+          </article>
+        </div>
+        <div class="aj-detail-actions">
+          <button type="button" class="aj-detail-btn" id="aj-ic-commit" disabled>تأكيد الإدراج</button>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+        <p class="aj-sl-summary" id="aj-ic-summary"></p>
+        <ul class="aj-ic-unmatched" id="aj-ic-unmatched"></ul>
+        <div class="aj-env-students-wrap" id="aj-ic-result" hidden></div>
+        <div class="aj-env-students-wrap" id="aj-ic-preview"></div>
+        <div class="aj-env-students-wrap" id="aj-ic-live"></div>
+      </section>
+
+      <section id="view-accounts" class="aj-view" hidden>
+        <h1>إدارة الحسابات</h1>
+        <p class="aj-status" id="aj-accounts-status" role="status"></p>
+        <form class="aj-form" id="aj-account-pass-form" autocomplete="off">
+          <label class="aj-soft-label">رقم الهوية
+            <input id="aj-account-id" name="national_id" type="text" inputmode="numeric" autocomplete="off" required maxlength="20">
+          </label>
+          <label class="aj-soft-label">كلمة مرور جديدة
+            <input id="aj-account-pass" name="access-key" class="password-masked" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" required minlength="4">
+          </label>
+          <div class="aj-detail-actions">
+            <button type="submit" class="aj-detail-btn">إعادة تعيين كلمة المرور</button>
+            <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+          </div>
+        </form>
+        <ul class="aj-cards" id="aj-accounts-list"></ul>
+      </section>
+
+      <section id="view-permissions" class="aj-view" hidden>
+        <h1>هندسة الصلاحيات</h1>
+        <p class="aj-lede">الربط يُحفظ في القاعدة. لا يُنسخ من المتصفح تلقائيًا.</p>
+        <p class="aj-status" id="aj-perm-status" role="status"></p>
+        <form class="aj-form" id="aj-perm-form">
+          <label class="aj-soft-label">المنسوب
+            <select id="aj-perm-staff" required></select>
+          </label>
+          <label class="aj-soft-label">المستوى
+            <select id="aj-perm-level">
+              <option value="system">مدير نظام</option>
+              <option value="leadership">إدارة عليا</option>
+              <option value="teacher">معلم</option>
+              <option value="guest">اطلاع فقط</option>
+              <option value="visitor">مشرف زائر</option>
+            </select>
+          </label>
+          <div id="aj-perm-windows" class="aj-perm-windows"></div>
+          <div class="aj-detail-actions">
+            <button type="submit" class="aj-detail-btn">حفظ الصلاحيات</button>
+            <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+          </div>
+        </form>
+      </section>
+
+      <section id="view-trash" class="aj-view wash-board" hidden>
+        <h1>سلة المهملات</h1>
+        <p class="aj-lede">الصفوف المخفية تبقى في القاعدة. الاستعادة تعيدها إلى القوائم.</p>
+        <p class="aj-status" id="aj-trash-status" role="status"></p>
+        <ul class="aj-cards" id="aj-trash-list"></ul>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-health" class="aj-view wash-board" hidden>
+        <h1>فحص النظام</h1>
+        <p class="aj-lede">للمدير فقط. الأعداد من القاعدة، والروابط من فحص الاتساق. لا يُحذف صف.</p>
+        <p class="aj-status" id="aj-health-status" role="status"></p>
+        <ul class="aj-cards" id="aj-health-list"></ul>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-audit" class="aj-view wash-board" hidden>
+        <h1>سجل التدقيق</h1>
+        <p class="aj-lede">آخر التعديلات المسجّلة. للمدير فقط.</p>
+        <p class="aj-status" id="aj-audit-status" role="status"></p>
+        <ul class="aj-cards" id="aj-audit-list"></ul>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-students-lists" class="aj-view wash-board" hidden>
+        <h1>قوائم الطلاب</h1>
+        <p class="aj-lede">قائمتا الموهوبين والمتدني للعام الدراسي. الاسم والصف والفصل فقط. اعتماد المدير ينقلها إلى برامج الرعاية والمعالجة وإلى شواهد 2-1-1-1.</p>
+        <p class="aj-status" id="aj-sl-status" role="status" aria-live="polite"></p>
+        <div class="aj-sl-grid">
+          <article class="aj-sl-panel" data-sl-category="gifted">
+            <h2 class="aj-group-title">قائمة الموهوبين</h2>
+            <p class="aj-sl-summary" id="aj-sl-gifted-summary"></p>
+            <div class="aj-detail-actions">
+              <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-student-registry">عرض الكل</a>
+              <button type="button" class="aj-detail-btn aj-detail-btn-secondary" data-sl-print="gifted">طباعة القائمة</button>
+              <button type="button" class="aj-detail-btn" data-sl-add="gifted">إضافة طالب</button>
+              <label class="aj-detail-btn aj-detail-btn-secondary aj-sl-import">استيراد CSV
+                <input type="file" accept=".csv,.txt,.xlsx,.xls" data-sl-import="gifted" hidden>
+              </label>
+              <button type="button" class="aj-detail-btn" data-sl-approve="gifted">اعتماد القائمة</button>
+              <button type="button" class="aj-detail-btn aj-detail-btn-secondary" data-sl-unapprove="gifted" hidden>إلغاء الاعتماد</button>
+            </div>
+            <div class="aj-env-students-wrap" id="aj-sl-gifted-table"></div>
+          </article>
+          <article class="aj-sl-panel" data-sl-category="struggling">
+            <h2 class="aj-group-title">قائمة المتدني</h2>
+            <p class="aj-sl-summary" id="aj-sl-struggling-summary"></p>
+            <div class="aj-detail-actions">
+              <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-student-registry">عرض الكل</a>
+              <button type="button" class="aj-detail-btn aj-detail-btn-secondary" data-sl-print="struggling">طباعة القائمة</button>
+              <button type="button" class="aj-detail-btn" data-sl-add="struggling">إضافة طالب</button>
+              <label class="aj-detail-btn aj-detail-btn-secondary aj-sl-import">استيراد CSV
+                <input type="file" accept=".csv,.txt,.xlsx,.xls" data-sl-import="struggling" hidden>
+              </label>
+              <button type="button" class="aj-detail-btn" data-sl-approve="struggling">اعتماد القائمة</button>
+              <button type="button" class="aj-detail-btn aj-detail-btn-secondary" data-sl-unapprove="struggling" hidden>إلغاء الاعتماد</button>
+            </div>
+            <div class="aj-env-students-wrap" id="aj-sl-struggling-table"></div>
+          </article>
+        </div>
+        <form class="aj-form" id="aj-sl-form" hidden>
+          <input type="hidden" id="aj-sl-id">
+          <input type="hidden" id="aj-sl-category">
+          <input type="hidden" id="aj-sl-nid">
+          <label class="aj-soft-label">الاسم
+            <input id="aj-sl-name" type="text" required maxlength="180" autocomplete="off" list="aj-sl-students" placeholder="ابحث بالاسم">
+          </label>
+          <datalist id="aj-sl-students"></datalist>
+          <label class="aj-soft-label">الصف
+            <input id="aj-sl-grade" type="text" maxlength="40" readonly>
+          </label>
+          <label class="aj-soft-label">الفصل
+            <input id="aj-sl-section" type="text" maxlength="20" readonly>
+          </label>
+          <div class="aj-detail-actions">
+            <button type="submit" class="aj-detail-btn">حفظ</button>
+            <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-sl-cancel">إلغاء</button>
+            <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+          </div>
+        </form>
+        <div class="aj-detail-actions" id="aj-sl-back-row">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-student-registry" class="aj-view wash-board" hidden>
+        <h1>سجل طلاب المدرسة</h1>
+        <p class="aj-lede">العرض من السجل المحفوظ. الاسم والصف والفصل والحالة.</p>
+        <p class="aj-status" id="aj-sr-status" role="status" aria-live="polite"></p>
+        <div class="aj-detail-actions">
+          <label class="aj-soft-label">الصف
+            <select id="aj-sr-grade"></select>
+          </label>
+          <label class="aj-soft-label">الفصل
+            <select id="aj-sr-section"></select>
+          </label>
+          <label class="aj-soft-label">بحث
+            <input id="aj-sr-q" type="search" maxlength="80" autocomplete="off">
+          </label>
+          <button type="button" class="aj-detail-btn" id="aj-sr-print">طباعة</button>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-students-lists">قوائم الدعم</a>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+        <div class="aj-env-students-wrap" id="aj-sr-table"></div>
+      </section>
+
+      <section id="view-leadership" class="aj-view" hidden>
+        <h1>التشكيل القيادي</h1>
+        <p class="aj-loading" id="aj-leadership-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-leadership-status" role="status" aria-live="polite"></p>
+        <div class="aj-profile-card" id="aj-leadership-form"></div>
+        <div class="aj-detail-actions">
+          <button type="button" class="aj-detail-btn" id="aj-leadership-save">حفظ التشكيل القيادي</button>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+        <h2 class="aj-detail-label">التشكيل السابق في هذا المتصفح</h2>
+        <p class="aj-empty" id="aj-leadership-ref-empty" hidden>لا تشكيل محفوظ في هذا المتصفح.</p>
+        <div class="aj-profile-card" id="aj-leadership-ref"></div>
+      </section>
+
+      <section id="view-staff" class="aj-view" hidden>
+        <div class="aj-exec-head">
+          <h1>سجل المنسوبين</h1>
+          <button type="button" class="aj-detail-btn" id="aj-staff-add">+ إضافة منسوب جديد</button>
+        </div>
+        <p class="aj-lede">بيانات المنسوبين المحفوظة في السجل. تُطبع القائمة الظاهرة بعد التصفية.</p>
+        <div class="aj-detail-actions">
+          <label class="aj-soft-label">الصفة
+            <select id="aj-staff-filter-role"></select>
+          </label>
+          <label class="aj-soft-label">التخصص
+            <select id="aj-staff-filter-specialty"></select>
+          </label>
+          <label class="aj-soft-label">بحث
+            <input id="aj-staff-filter-q" type="search" maxlength="80" autocomplete="off">
+          </label>
+          <button type="button" class="aj-detail-btn" id="aj-staff-print">طباعة الكشف</button>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+        <p class="aj-summary" id="aj-staff-summary" hidden></p>
+        <p class="aj-loading" id="aj-staff-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-staff-status" role="status" aria-live="polite"></p>
+        <p class="aj-empty" id="aj-staff-empty" hidden>لا يوجد منسوبون في السجل.</p>
+        <div class="aj-staff-table-wrap" id="aj-staff-table-wrap" hidden>
+          <table class="aj-staff-table">
+            <thead>
+              <tr>
+                <th scope="col">الاسم</th>
+                <th scope="col">رقم الهوية</th>
+                <th scope="col">الصفة</th>
+                <th scope="col">التخصص</th>
+                <th scope="col">الجوال</th>
+                <th scope="col" class="aj-staff-status">الحالة</th>
+                <th scope="col">تعديل</th>
+              </tr>
+            </thead>
+            <tbody id="aj-staff-tbody"></tbody>
+          </table>
+        </div>
+        <ul class="aj-cards aj-staff-cards" id="aj-staff-cards" aria-label="بطاقات المنسوبين" hidden></ul>
+
+        <div class="aj-modal" id="aj-staff-modal" hidden>
+          <div class="aj-modal-backdrop" data-aj-staff-close></div>
+          <div class="aj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="aj-staff-form-title">
+            <h2 id="aj-staff-form-title">إضافة منسوب</h2>
+            <form id="aj-staff-form" class="aj-form" novalidate>
+              <input id="aj-staff-original-id" type="hidden" value="">
+              <div class="aj-field">
+                <label for="aj-staff-name">الاسم</label>
+                <input id="aj-staff-name" name="name" type="text" autocomplete="name" required>
+              </div>
+              <div class="aj-field">
+                <label for="aj-staff-national-id">رقم الهوية</label>
+                <input id="aj-staff-national-id" name="national_id" type="text" inputmode="numeric" autocomplete="off" required>
+              </div>
+              <div class="aj-field">
+                <label for="aj-staff-role">الصفة</label>
+                <input id="aj-staff-role" name="role" type="text" autocomplete="off">
+              </div>
+              <div class="aj-field">
+                <label for="aj-staff-specialty">التخصص</label>
+                <input id="aj-staff-specialty" name="specialty" type="text" autocomplete="off">
+              </div>
+              <div class="aj-field">
+                <label for="aj-staff-mobile">الجوال</label>
+                <input id="aj-staff-mobile" name="mobile" type="text" inputmode="tel" autocomplete="tel">
+              </div>
+              <div class="aj-field">
+                <label for="aj-staff-active">الحالة</label>
+                <select id="aj-staff-active" name="active">
+                  <option value="1">نشط</option>
+                  <option value="0">غير نشط</option>
+                </select>
+              </div>
+              <p class="aj-status is-error" id="aj-staff-form-error" hidden></p>
+              <div class="aj-detail-actions">
+                <button type="submit" class="aj-detail-btn" id="aj-staff-save">حفظ</button>
+                <button type="button" class="aj-detail-btn aj-detail-btn-secondary" data-aj-staff-close>إلغاء</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-plan-details" class="aj-view" hidden>
+        <div class="aj-plan-detail-head">
+          <h1 id="aj-plan-detail-title">تفاصيل الخطة</h1>
+          <span class="aj-tag" id="aj-plan-detail-status" hidden></span>
+        </div>
+        <p class="aj-meta" id="aj-plan-detail-meta" hidden></p>
+        <div class="aj-detail-body aj-plan-goals">
+          <h2 class="aj-detail-label" id="aj-plan-detail-goals-label">أهداف الخطة</h2>
+          <p class="aj-detail-desc" id="aj-plan-detail-goals"></p>
+        </div>
+        <div class="aj-program-photos" id="aj-program-photos" hidden>
+          <h2 class="aj-detail-label">صور البطاقة</h2>
+          <p class="aj-meta" id="aj-program-photos-hint">حتى خمس صور. تظهر فوق التوقيعات عند الطباعة.</p>
+          <ul class="aj-program-photos-list" id="aj-program-photos-list"></ul>
+          <label class="aj-field" for="aj-program-photo-caption">وصف الصورة (اختياري)</label>
+          <input type="text" id="aj-program-photo-caption" maxlength="80">
+          <div class="aj-detail-actions">
+            <button type="button" class="aj-detail-btn" id="aj-plan-photos">إرفاق صور للبطاقة</button>
+          </div>
+          <input type="file" id="aj-program-photo-file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+        </div>
+        <div class="aj-program-plan" id="aj-program-plan" hidden>
+          <h2 class="aj-detail-label">الخطة التفصيلية</h2>
+          <p class="aj-meta">ملف PDF واحد. المعاينة صفحته الأولى، والضغط يفتحه في هذه الصفحة.</p>
+          <button type="button" class="aj-program-plan-preview" id="aj-program-plan-preview" hidden>
+            <iframe id="aj-program-plan-frame" title="معاينة الخطة التفصيلية" tabindex="-1"></iframe>
+            <span>فتح الخطة التفصيلية</span>
+          </button>
+          <p class="aj-meta" id="aj-program-plan-empty">لا خطة تفصيلية مرفقة.</p>
+          <div class="aj-detail-actions">
+            <button type="button" class="aj-detail-btn" id="aj-plan-file">إرفاق الخطة التفصيلية</button>
+            <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-program-plan-delete" hidden>حذف الخطة التفصيلية</button>
+          </div>
+          <input type="file" id="aj-program-plan-file" accept="application/pdf,.pdf" hidden>
+        </div>
+        <p class="aj-status is-error" id="aj-plan-detail-error" hidden></p>
+        <div class="aj-witness-files" id="aj-witness-files" hidden>
+          <h2 class="aj-detail-label">مرفقات الشاهد</h2>
+          <p class="aj-meta">ارفع صورة أو ملف PDF. إن كانت الصورة مقلوبة اضغط تدوير قبل الطباعة.</p>
+          <ul id="aj-witness-files-list"></ul>
+          <div class="aj-detail-actions">
+            <button type="button" class="aj-detail-btn" id="aj-witness-file-add">رفع ملف أو صورة</button>
+          </div>
+          <input type="file" id="aj-witness-file-input" accept="image/jpeg,image/png,image/webp,application/pdf,.pdf" hidden>
+        </div>
+        <div class="aj-detail-actions">
+          <button type="button" class="aj-detail-btn" id="aj-plan-approve" hidden>اعتماد هذا البرنامج</button>
+          <button type="button" class="aj-detail-btn" id="aj-plan-edit" hidden>تعديل البرنامج</button>
+          <button type="button" class="aj-detail-btn" id="aj-plan-print" hidden>طباعة</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-plan-print-122" hidden>طباعة 1-2-1-2</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-plan-print-131" hidden>طباعة 1-3-1-1</button>
+          <button type="button" class="aj-detail-btn" id="aj-plan-witness-131" hidden>شاهد العلاقات 1-3-1-1</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-plan-print-141" hidden>طباعة 1-4-1-1</button>
+          <button type="button" class="aj-detail-btn" id="aj-plan-witness-141" hidden>شاهد الكادر 1-4-1-1</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-plan-print-146" hidden>طباعة 1-4-1-6</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-plan-print-142" hidden>طباعة 1-4-1-2</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-plan-pdf" hidden>حفظ / تصدير</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-plan-evidence" hidden>إرفاق كشاهد</button>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-desk">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-execution" class="aj-view" hidden>
+        <div class="aj-exec-head">
+          <h1>مركز التنفيذ</h1>
+          <button type="button" class="aj-detail-btn" id="aj-council-add">+ إضافة محضر جديد</button>
+        </div>
+        <p class="aj-lede">سجل المجالس المدرسية والمحاضر.</p>
+        <p class="aj-summary" id="aj-exec-summary" hidden></p>
+        <p class="aj-loading" id="aj-exec-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-exec-status" role="status" aria-live="polite"></p>
+        <p class="aj-empty" id="aj-exec-empty" hidden>لا توجد محاضر مجالس للعرض.</p>
+        <ul class="aj-cards" id="aj-exec-cards" aria-label="بطاقات المجالس"></ul>
+
+        <div class="aj-modal" id="aj-council-modal" hidden>
+          <div class="aj-modal-backdrop" data-aj-council-close></div>
+          <div class="aj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="aj-council-form-title">
+            <h2 id="aj-council-form-title">إضافة محضر مجلس</h2>
+            <form id="aj-council-form" class="aj-form" novalidate>
+              <div class="aj-field">
+                <label for="aj-council-type">نوع المجلس</label>
+                <select id="aj-council-type" name="type" required>
+                  <option value="admin">اللجنة الإدارية</option>
+                  <option value="guidance">لجنة التوجيه والإرشاد</option>
+                  <option value="achievement">لجنة التحصيل الدراسي</option>
+                  <option value="excellence">لجنة التميز</option>
+                  <option value="fund">فريق الصندوق المدرسي</option>
+                  <option value="safety">فريق الأمن والسلامة المدرسية</option>
+                  <option value="activity">لجنة النشاط والمناسبات</option>
+                  <option value="discipline">لجنة الانضباط والتدخل السريع</option>
+                  <option value="special">فريق التربية الخاصة</option>
+                </select>
+              </div>
+              <div class="aj-field">
+                <label for="aj-council-date">تاريخ الاجتماع</label>
+                <input id="aj-council-date" name="date" type="date" required>
+              </div>
+              <div class="aj-field">
+                <label for="aj-council-agenda">موضوع الاجتماع</label>
+                <input id="aj-council-agenda" name="agenda" type="text" required maxlength="200" placeholder="مثال: متابعة تنفيذ الخطة التشغيلية">
+              </div>
+              <div class="aj-field">
+                <span id="aj-council-present-label">الحضور من سجل المنسوبين</span>
+                <div id="aj-council-present-list" role="group" aria-labelledby="aj-council-present-label"></div>
+                <p class="aj-status" id="aj-council-present-status" role="status" hidden></p>
+              </div>
+              <div class="aj-field">
+                <label for="aj-council-minutes">نص المحضر</label>
+                <textarea id="aj-council-minutes" name="minutes" rows="6" required placeholder="نص المحضر والتوصيات"></textarea>
+              </div>
+              <p class="aj-status is-error" id="aj-council-form-error" hidden></p>
+              <div class="aj-detail-actions">
+                <button type="submit" class="aj-detail-btn" id="aj-council-save">حفظ المحضر</button>
+                <button type="button" class="aj-detail-btn aj-detail-btn-secondary" data-aj-council-close>إلغاء</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-council-details" class="aj-view" hidden>
+        <article class="aj-council-doc" aria-label="محضر المجلس">
+          <header class="aj-council-doc-head">
+            <h1 id="aj-council-detail-title">محضر المجلس</h1>
+            <p class="aj-council-doc-date" id="aj-council-detail-date"></p>
+          </header>
+          <div class="aj-council-doc-body">
+            <h2 class="aj-detail-label">نص المحضر</h2>
+            <p class="aj-council-doc-text" id="aj-council-detail-body"></p>
+          </div>
+          <section class="aj-council-attendance" aria-label="توقيعات الحضور">
+            <h2 class="aj-detail-label">توقيعات الحضور</h2>
+            <table class="aj-attendance-table">
+              <thead>
+                <tr>
+                  <th>الاسم</th>
+                  <th>الصفة</th>
+                  <th>التوقيع</th>
+                </tr>
+              </thead>
+              <tbody id="aj-council-attendance"></tbody>
+            </table>
+          </section>
+          <p class="aj-status is-error" id="aj-council-detail-error" hidden></p>
+          <div class="aj-detail-actions aj-council-doc-actions">
+            <button type="button" class="aj-detail-btn" id="aj-council-print">طباعة المحضر</button>
+            <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-execution">العودة لمركز التنفيذ</a>
+          </div>
+        </article>
+      </section>
+
+      <section id="view-portfolio" class="aj-view" hidden>
+        <h1>سجل الإنجاز</h1>
+        <p class="aj-loading" id="aj-portfolio-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-portfolio-status" role="status" aria-live="polite"></p>
+        <div class="aj-profile-card" id="aj-portfolio-identity"></div>
+        <h2 class="aj-detail-label">أهداف المدرسة</h2>
+        <p class="aj-empty" id="aj-portfolio-empty" hidden>لا أهداف محفوظة في الخطة.</p>
+        <ul class="aj-cards" id="aj-portfolio-goals" aria-label="أهداف الخطة"></ul>
+        <h2 class="aj-detail-label">مقترحات بحسب تخصصك</h2>
+        <p class="aj-empty" id="aj-portfolio-suggest-empty" hidden>لا أهداف مطابقة لتخصصك في الخطة.</p>
+        <ul class="aj-cards" id="aj-portfolio-suggest" aria-label="مقترحات التخصص"></ul>
+        <h2 class="aj-detail-label">شواهد السجل</h2>
+        <p class="aj-empty" id="aj-portfolio-evidence-empty" hidden>لا شواهد محفوظة.</p>
+        <ul class="aj-cards" id="aj-portfolio-evidence" aria-label="شواهد السجل"></ul>
+        <div class="aj-detail-actions">
+          <button type="button" class="aj-detail-btn" id="aj-portfolio-upload">رفع شاهد</button>
+          <button type="button" class="aj-detail-btn" id="aj-portfolio-print">طباعة السجل</button>
+          <input type="file" id="aj-portfolio-file" class="aj-soft-file" accept="image/*,.pdf">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-profile" class="aj-view" hidden>
+        <h1>ملفي الشخصي</h1>
+        <p class="aj-lede" id="aj-profile-meta">بيانات التوقيع للاستخدام في الوثائق الرسمية.</p>
+        <div class="aj-profile-card">
+          <h2 class="aj-detail-label">التوقيع الحالي</h2>
+          <div class="aj-signature-slot aj-signature-slot-preview">
+            <img id="aj-profile-signature" class="user-signature" alt="التوقيع الحالي" hidden>
+            <p class="aj-empty" id="aj-profile-signature-empty" hidden>لا يوجد توقيع محفوظ بعد.</p>
+          </div>
+          <p class="aj-meta" id="aj-profile-signer-name" hidden></p>
+          <div class="aj-detail-actions">
+            <button type="button" class="aj-detail-btn" id="aj-profile-edit-signature">تحديث/تعديل التوقيع</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-env-evidence" class="aj-view wash-board" hidden>
+        <h1>شواهد البرامج والبيئة</h1>
+        <p class="aj-lede">شواهد البيئة المدرسية وبرامج الخطة التشغيلية للعام 1448–1449، موثّقة بتاريخ التنفيذ وصاحب السجل، ومهيأة لإرفاق الشاهد البصري.</p>
+        <p class="aj-status" id="aj-env-status" role="status" aria-live="polite"></p>
+        <div class="aj-field">
+          <label for="aj-env-filter">المجموعة</label>
+          <select id="aj-env-filter">
+            <option value="">كل المجموعات</option>
+          </select>
+        </div>
+        <ul class="aj-cards" id="aj-env-cards" aria-label="شواهد البرامج والبيئة"></ul>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn" href="#view-evidence">معرض الشواهد</a>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-desk">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-evidence" class="aj-view" hidden>
+        <div class="aj-exec-head">
+          <h1>شواهدي</h1>
+          <button type="button" class="aj-detail-btn" id="aj-evidence-add">+ إرفاق شاهد جديد</button>
+        </div>
+        <p class="aj-lede">الشواهد البصرية المرتبطة بالمجالس والبرامج والفترات وتسليمات المعلم.</p>
+        <p class="aj-summary" id="aj-evidence-summary" hidden></p>
+        <p class="aj-loading" id="aj-evidence-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-evidence-status" role="status" aria-live="polite"></p>
+        <p class="aj-empty" id="aj-evidence-empty" hidden>لا توجد شواهد للعرض.</p>
+        <ul class="aj-cards aj-evidence-cards" id="aj-evidence-cards" aria-label="بطاقات الشواهد"></ul>
+
+        <div class="aj-modal" id="aj-evidence-modal" hidden>
+          <div class="aj-modal-backdrop" data-aj-evidence-close></div>
+          <div class="aj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="aj-evidence-form-title">
+            <h2 id="aj-evidence-form-title">إرفاق شاهد جديد</h2>
+            <form id="aj-evidence-form" class="aj-form" novalidate>
+              <div class="aj-field">
+                <label for="aj-evidence-entity-type">نوع الكيان</label>
+                <select id="aj-evidence-entity-type" name="entity_type" required>
+                  <option value="council_minutes">محضر مجلس</option>
+                  <option value="program">برنامج</option>
+                  <option value="soft_period">فترة لاصفية</option>
+                  <option value="teacher_deliverable">تسليم معلم</option>
+                  <option value="register">سجل البيئة المدرسية</option>
+                </select>
+              </div>
+              <div class="aj-field">
+                <label for="aj-evidence-entity-key">الكيان المرتبط</label>
+                <select id="aj-evidence-entity-key" name="entity_key" required>
+                  <option value="">— اختر —</option>
+                </select>
+              </div>
+              <div class="aj-field" id="aj-evidence-deliver-kind-wrap" hidden>
+                <label for="aj-evidence-deliver-kind">نوع التسليم</label>
+                <select id="aj-evidence-deliver-kind">
+                  <option value="plan">الخطة الدراسية</option>
+                  <option value="prep">التحضير اليومي</option>
+                  <option value="visits">الزيارات الصفية</option>
+                  <option value="tests">أدوات التقويم</option>
+                  <option value="results">تحليل النتائج</option>
+                  <option value="portfolio">ملف إنجاز المعلم</option>
+                  <option value="growth">التطوير المهني</option>
+                </select>
+              </div>
+              <div class="aj-field" id="aj-evidence-deliver-subject-wrap" hidden>
+                <label for="aj-evidence-deliver-subject">المادة</label>
+                <input id="aj-evidence-deliver-subject" type="text" maxlength="80" placeholder="اكتب أو اختر المادة" list="aj-deliver-subjects">
+              </div>
+              <div class="aj-field" id="aj-evidence-deliver-year-wrap" hidden>
+                <label for="aj-evidence-deliver-year">العام الدراسي</label>
+                <input id="aj-evidence-deliver-year" type="text" readonly>
+              </div>
+              <div class="aj-field">
+                <label for="aj-evidence-date">تاريخ الإرفاق</label>
+                <input id="aj-evidence-date" name="date" type="date" required>
+              </div>
+              <div class="aj-field">
+                <span class="aj-file-label">الملف المرفق</span>
+                <label class="aj-file-drop" id="aj-evidence-drop" for="aj-evidence-file">
+                  <input id="aj-evidence-file" name="file" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp,application/pdf,.pdf" required>
+                  <span class="aj-file-drop-title">اسحب الملف هنا أو اضغط للاختيار</span>
+                  <span class="aj-file-drop-hint">صور · فيديو · PDF</span>
+                  <span class="aj-file-drop-name" id="aj-evidence-file-name"></span>
+                </label>
+              </div>
+              <p class="aj-status is-error" id="aj-evidence-form-error" hidden></p>
+              <div class="aj-detail-actions">
+                <button type="submit" class="aj-detail-btn" id="aj-evidence-save">حفظ الشاهد</button>
+                <button type="button" class="aj-detail-btn aj-detail-btn-secondary" data-aj-evidence-close>إلغاء</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-soft-follow" class="aj-view" hidden>
+        <h1>المتابعة اللاصفية</h1>
+        <p class="aj-loading" id="aj-soft-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-soft-status" role="status" aria-live="polite"></p>
+        <p class="aj-meta" id="aj-soft-meta" hidden></p>
+        <div class="aj-filters" id="aj-soft-days" role="group" aria-label="أيام المتابعة"></div>
+        <p class="aj-empty" id="aj-soft-empty" hidden>لا صفوف لهذا اليوم.</p>
+        <ul class="aj-cards" id="aj-soft-cards" aria-label="فترات اليوم"></ul>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
+        </div>
+      </section>
+
+      <section id="view-performance" class="aj-view" hidden>
+        <h1>مؤشرات الأداء (SSOT)</h1>
+        <p class="aj-loading" id="aj-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-status" role="status" aria-live="polite"></p>
+        <p class="aj-meta" id="aj-meta" hidden></p>
+        <ul class="aj-cards" id="aj-cards" aria-label="بطاقات المؤشرات"></ul>
+      </section>
+
+      <section id="view-tasks" class="aj-view" hidden>
+        <h1>مهام اليوم</h1>
+        <p class="aj-summary" id="aj-tasks-summary" hidden></p>
+        <div class="aj-filters" id="aj-tasks-filters" role="group" aria-label="تصفية المهام">
+          <button type="button" class="aj-filter is-active" data-aj-filter="all">الكل</button>
+          <button type="button" class="aj-filter" data-aj-filter="mine">مهامي فقط</button>
+          <button type="button" class="aj-filter" data-aj-filter="overdue">المتأخرة</button>
+        </div>
+        <p class="aj-loading" id="aj-tasks-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-tasks-status" role="status" aria-live="polite"></p>
+        <p class="aj-meta" id="aj-tasks-meta" hidden></p>
+        <p class="aj-empty" id="aj-tasks-empty" hidden>لا توجد مهام اليوم.</p>
+        <ul class="aj-cards" id="aj-tasks-cards" aria-label="بطاقات المهام"></ul>
+      </section>
+
+      <section id="view-task-details" class="aj-view" hidden>
+        <div class="aj-plan-detail-head">
+          <h1 id="aj-detail-title">تفاصيل المهمة</h1>
+          <span class="aj-tag" id="aj-detail-status-badge" hidden></span>
+        </div>
+        <p class="aj-detail-status-line" id="aj-detail-status-line"></p>
+        <p class="aj-meta" id="aj-detail-date" hidden></p>
+        <div class="aj-detail-body">
+          <h2 class="aj-detail-label">الوصف</h2>
+          <p class="aj-detail-desc" id="aj-detail-desc"></p>
+        </div>
+        <p class="aj-status is-error" id="aj-detail-error" hidden></p>
+        <div class="aj-detail-actions">
+          <button type="button" class="aj-detail-btn" id="aj-detail-complete" hidden>إنجاز المهمة</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-detail-evidence">إرفاق شاهد</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-detail-print">طباعة</button>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-tasks">العودة للمهام</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="aj-file-preview" class="aj-modal aj-file-viewer" hidden>
+    <div class="aj-modal-backdrop" id="aj-file-preview-backdrop"></div>
+    <div class="aj-modal-panel aj-file-viewer-panel" role="dialog" aria-modal="true" aria-labelledby="aj-file-preview-title">
+      <h2 id="aj-file-preview-title">معاينة الملف</h2>
+      <div class="aj-file-viewer-body">
+        <img id="aj-file-preview-image" alt="" hidden>
+        <iframe id="aj-file-preview-frame" title="معاينة الملف" hidden></iframe>
+        <object id="aj-file-preview-object" type="application/pdf" hidden></object>
+      </div>
+      <div class="aj-detail-actions">
+        <button type="button" class="aj-detail-btn" id="aj-file-preview-download">تنزيل الملف</button>
+        <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-file-preview-close">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="aj-print-stage" class="aj-print-stage" hidden>
+    <button type="button" id="aj-print-stress" class="no-print" hidden>اختبار نواة الطباعة</button>
+    <div class="aj-print-preview-bar">
+      <button type="button" class="aj-detail-btn" id="aj-print-preview-go">طباعة</button>
+      <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-print-preview-pdf">حفظ PDF</button>
+      <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-print-preview-export">تصدير المرفقات</button>
+      <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-print-preview-close">إغلاق المعاينة</button>
+    </div>
+    <div id="aj-print-stage-page" class="aj-print-stage-page"></div>
+  </div>
+
+  <nav class="aj-bottom-nav" aria-label="تنقل سريع">
+    <a href="#view-desk">مكتبي</a>
+    <a href="#view-tasks">مهامي</a>
+    <button type="button" id="aj-menu-open-bottom">المراحل</button>
+  </nav>
+
+  <script src="js/official-frame-core.js?v=aj161"></script>
+  <script src="/cores/print-master-core.js?v=c301"></script>
+  <script src="/cores/identity-core.js?v=c275"></script>
+  <script src="/cores/signature-core.js?v=c270"></script>
+  <script src="/cores/planning-core.js?v=c302"></script>
+  <script src="/cores/narrative-core.js?v=c275"></script>
+  <script src="/cores/deficiency-core.js?v=c274"></script>
+  <script src="js/print-templates.js?v=aj175"></script>
+  <script src="/cores/print-core.js?v=c287"></script>
+  <script src="/cores/event-bus.js?v=c294"></script>
+  <script src="/cores/consistency-core.js?v=c282"></script>
+  <script src="/cores/evaluation-core.js?v=c284"></script>
+  <script src="/cores/template-engine.js?v=c286"></script>
+  <script src="js/app-journey.js?v=aj183"></script>
+  <script src="js/app-journey-indicator-files.js?v=aj1"></script>
+  <script src="js/app-journey-deliverable-file.js?v=c298"></script>
+  <script src="js/app-journey-plan-111.js?v=aj175"></script>
+  <script src="js/app-journey-env-evidence.js?v=aj136"></script>
+  <script src="js/app-journey-pilot-support.js?v=aj1"></script>
+  <script src="js/app-journey-planning.js?v=aj128"></script>
+  <script src="js/app-journey-committees.js?v=aj146"></script>
+  <script src="js/app-journey-desk.js?v=aj119"></script>
+  <script src="js/app-journey-students-lists.js?v=aj110"></script>
+  <script src="js/app-journey-import-center.js?v=aj119"></script>
+  <script src="js/app-journey-student-registry.js?v=aj145"></script>
+  <script src="js/app-journey-evaluation.js?v=c284"></script>
+  <script src="js/app-journey-visits.js?v=aj9"></script>
+  <script src="js/app-journey-visit-plan.js?v=aj2"></script>
+</body>
+</html>

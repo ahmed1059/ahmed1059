@@ -1,0 +1,26 @@
+{
+  "student_portfolio_schema": {
+    "schema_metadata": {
+      "version": "2.0.0",
+      "spec_id": "SP-SCH-1448",
+      "title": "مخطط ملف متابعة المتعلم المعياري",
+      "school": "متوسطة سعد بن الربيع الأنصاري",
+      "academic_year": "1448",
+      "principal": "نايف بن سمير حجيف المخلفي",
+      "vice_academic": "هاني بن مسعود سعيد الأحمدي"
+    },
+    "cascading_logic": {
+      "steps": ["grade", "section", "student_name", "student_nid", "student_phone"]
+    },
+    "evaluation_levels": [
+      { "value": "mastered", "label": "✅ متقن" },
+      { "value": "developing", "label": "🟡 نامٍ" },
+      { "value": "needs_support", "label": "🔴 يحتاج دعم" }
+    ],
+    "skills_weights": {
+      "لغتي الخالدة": { "AR-01": 30, "AR-02": 20, "AR-03": 25, "AR-04": 15, "AR-05": 10 },
+      "الرياضيات": { "MA-01": 30, "MA-02": 25, "MA-03": 25, "MA-04": 20 },
+      "العلوم": { "SC-01": 30, "SC-02": 30, "SC-03": 20, "SC-04": 20 }
+    }
+  }
+}

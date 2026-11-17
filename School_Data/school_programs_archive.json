@@ -1,0 +1,25 @@
+{
+  "archived_at": "2026-11-13T14:59:43",
+  "programs": [
+    {
+      "id": 51,
+      "program_name": "معالجة الفاقد التعليمي والرفع التحصيلي — تجربة 196",
+      "status": "مسودة",
+      "duty_ref": "improvement:1",
+      "owner_role": "vice_teachers",
+      "indicator_ids": "[15, 34]",
+      "created_at": "2026-11-07T19:30:49+00:00",
+      "updated_at": "2026-11-07T19:30:49+00:00"
+    },
+    {
+      "id": 52,
+      "program_name": "رعاية الموهوبين والمبتكرين — تجربة 197",
+      "status": "معتمد",
+      "duty_ref": "",
+      "owner_role": "activity_leader",
+      "indicator_ids": "[22]",
+      "created_at": "2026-11-07T19:54:22+00:00",
+      "updated_at": "2026-11-07T20:17:31+00:00"
+    }
+  ]
+}

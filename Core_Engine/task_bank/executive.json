@@ -1,0 +1,174 @@
+[
+  {
+    "task_code": "EXE-001",
+    "week_target": 1,
+    "title": "اجتماعات الجاهزية للكادر الإداري والتعليمي",
+    "execution_method": "اجتماع",
+    "execution_time": "الأسبوع الأول",
+    "evidence": "محضر اجتماع الجاهزية",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-002",
+    "week_target": 1,
+    "title": "استلام المبنى والكتب",
+    "execution_method": "استلام",
+    "execution_time": "الأسبوع الأول",
+    "evidence": "محضر استلام المبنى والكتب",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-003",
+    "week_target": 2,
+    "title": "توزيع الجداول الدراسية",
+    "execution_method": "توزيع",
+    "execution_time": "الأسبوع الثاني",
+    "evidence": "الجداول الدراسية المعتمدة",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-004",
+    "week_target": 3,
+    "title": "تنفيذ الاختبارات التشخيصية",
+    "execution_method": "اختبارات تشخيصية",
+    "execution_time": "الأسبوع الثالث",
+    "evidence": "نتائج الاختبارات التشخيصية",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-005",
+    "week_target": 4,
+    "title": "فعاليات اليوم الوطني",
+    "execution_method": "فعالية",
+    "execution_time": "الأسبوع الرابع",
+    "evidence": "تقرير فعاليات اليوم الوطني",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-006",
+    "week_target": 5,
+    "title": "انطلاق برنامج رفق",
+    "execution_method": "إطلاق البرنامج",
+    "execution_time": "الأسبوع الخامس",
+    "evidence": "سجل انطلاق برنامج رفق",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-007",
+    "week_target": 6,
+    "title": "تشكيل خطط الدعم العلاجي وبدء الزيارات الإشرافية",
+    "execution_method": "تخطيط وزيارات",
+    "execution_time": "الأسبوع السادس",
+    "evidence": "خطط الدعم العلاجي وجدول الزيارات",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-008",
+    "week_target": 7,
+    "title": "برامج الاستعداد لاختبارات نافس",
+    "execution_method": "برنامج استعداد",
+    "execution_time": "الأسبوع السابع",
+    "evidence": "خطة الاستعداد لاختبارات نافس",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-009",
+    "week_target": 8,
+    "title": "لقاء أولياء الأمور",
+    "execution_method": "لقاء",
+    "execution_time": "الأسبوع الثامن",
+    "evidence": "محضر لقاء أولياء الأمور",
+    "category": "إداري",
+    "shared_with": "وكيل شؤون الطلاب"
+  },
+  {
+    "task_code": "EXE-010",
+    "week_target": 9,
+    "title": "فرضية الإخلاء ورصد الفترة الأولى",
+    "execution_method": "فرضية ورصد",
+    "execution_time": "الأسبوع التاسع",
+    "evidence": "تقرير فرضية الإخلاء ورصد الفترة الأولى",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-011",
+    "week_target": 10,
+    "title": "مجتمعات التعلم المهنية",
+    "execution_method": "مجتمع تعلم",
+    "execution_time": "الأسبوع العاشر",
+    "evidence": "محضر مجتمع التعلم المهني",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-012",
+    "week_target": 11,
+    "title": "قياس مؤشرات الانضباط",
+    "execution_method": "قياس",
+    "execution_time": "الأسبوع الحادي عشر",
+    "evidence": "تقرير مؤشرات الانضباط",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-013",
+    "week_target": 12,
+    "title": "تبادل الزيارات الصفية",
+    "execution_method": "زيارات صفية",
+    "execution_time": "الأسبوع الثاني عشر",
+    "evidence": "سجل الزيارات الصفية وتقارير مجتمعات التعلم المهنية",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-014",
+    "week_target": 13,
+    "title": "مراجعة معايير التقويم المدرسي",
+    "execution_method": "مراجعة",
+    "execution_time": "الأسبوع الثالث عشر",
+    "evidence": "تقرير مراجعة معايير التقويم",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-015",
+    "week_target": 14,
+    "title": "التجهيز للاختبارات النهائية",
+    "execution_method": "تجهيز",
+    "execution_time": "الأسبوع الرابع عشر",
+    "evidence": "خطة الاختبارات النهائية",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-016",
+    "week_target": 15,
+    "title": "لجان الرصد",
+    "execution_method": "لجنة",
+    "execution_time": "الأسبوع الخامس عشر",
+    "evidence": "تشكيل لجان الرصد ومحاضرها",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-017",
+    "week_target": 16,
+    "title": "لجان التحكم",
+    "execution_method": "لجنة",
+    "execution_time": "الأسبوع السادس عشر",
+    "evidence": "تشكيل لجان التحكم ومحاضرها",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-018",
+    "week_target": 17,
+    "title": "متابعة أعمال التصحيح في نور",
+    "execution_method": "متابعة",
+    "execution_time": "الأسبوع السابع عشر",
+    "evidence": "تقرير متابعة التصحيح في نور",
+    "category": "إداري"
+  },
+  {
+    "task_code": "EXE-019",
+    "week_target": 18,
+    "title": "تقرير تقويم الأداء الفصلي",
+    "execution_method": "تقرير",
+    "execution_time": "الأسبوع الثامن عشر",
+    "evidence": "تقرير تقويم الأداء الفصلي",
+    "category": "إداري"
+  }
+]

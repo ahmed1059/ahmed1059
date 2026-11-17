@@ -1,0 +1,3922 @@
+[
+{
+"num": "1",
+"title": "أفضل نموذج لتوثيق برنامج أو نشاط (المطور)",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "2",
+"title": "تقرير تنفيذ استراتيجية تعليمية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "3",
+"title": "تقرير تنفيذ برنامج (تغطية)",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 2
+},
+{
+"num": "9",
+"title": "مبادرة الاستعداد للاختبار التحصيلي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 15
+},
+{
+"num": "10",
+"title": "مبادرة الذكاء الاصطناعي في التعليم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "11",
+"title": "مبادرة حفظ النعمة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "12",
+"title": "مبادرة سقيا الماء",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "13",
+"title": "مبادرة الانضباط المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "14",
+"title": "مبادرة كسوة الشتاء",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "15",
+"title": "مبادرة مهارات المستقبل",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "16",
+"title": "مبادرة مدرستي خضراء",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "17",
+"title": "مبادرة الخط العربي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "18",
+"title": "مبادرة القراءة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "19",
+"title": "مبادرة القدرات والتحصيلي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "20",
+"title": "مبادرة النظافة المدرسية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "21",
+"title": "مبادرة كبار السن",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "22",
+"title": "مبادرة التحول الرقمي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "23",
+"title": "مبادرة الرياضيات الممتعة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "24",
+"title": "مبادرة المقصف المدرسي الصحي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "25",
+"title": "مبادرة الأمن والسلامة المدرسية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "26",
+"title": "مبادرة الطاقة الشمسية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "27",
+"title": "مبادرة الطالبة المثالية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "28",
+"title": "مبادرة القيم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "29",
+"title": "مبادرة الصلاة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "30",
+"title": "مبادرة المسرح المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "31",
+"title": "مبادرة الحقيبة المدرسية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "32",
+"title": "مبادرة ترشيد الكهرباء",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "33",
+"title": "مبادرة الطفولة المبكرة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "34",
+"title": "تقرير تفعيل يوم مبادرة السعودية الخضراء",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "35",
+"title": "تقرير تفعيل مبادرة السلة الرمضانية للأسر المحتاجة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "36",
+"title": "تقرير تنفيذ مبادرة التوعية بسرطان الثدي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "37",
+"title": "تقرير تفعيل مبادرة (10KSA) لرفع الوعي حول الوقاية من أمراض السرطان",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "38",
+"title": "مبادرة الأمن السيبراني والمواطنة الرقمية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "39",
+"title": "مبادرة اليوم العالمي للعصا البيضاء",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "40",
+"title": "مبادرة الأمن السيبراني المتقدّم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "41",
+"title": "مبادرة موسم التشجير الوطني",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "42",
+"title": "مبادرة اليوم العالمي للتأتأة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "43",
+"title": "مبادرة الاستعداد للاختبارات الوطنية نافس",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 18
+},
+{
+"num": "44",
+"title": "تقرير تفعيل برنامج المادة (٣٤) من النظام الأساسي للحكم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "45",
+"title": "تقرير معرض ومسابقة الأمن والابتكار العالمية سيف",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "46",
+"title": "تقرير أولمبياد الموهبة الوطني",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "47",
+"title": "تقرير مسابقة كاوست للرياضيات",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "48",
+"title": "تقرير مسابقة سافي للتعلم عبر اللعب",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "49",
+"title": "تقرير الأولمبياد العالمي للروبوت WRO",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "50",
+"title": "تقرير مسابقة Robo G",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "51",
+"title": "تقرير مسابقة بيبراس موهبة للمعلوماتية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "52",
+"title": "تقرير مسابقة القرآن الكريم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "53",
+"title": "تقرير جائزة الأميرة صيتة للتميز في العمل الاجتماعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "54",
+"title": "تقرير مسابقة السلامة المرورية سلامتنا",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "55",
+"title": "تقرير برنامج المعرفة الإحصائية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "56",
+"title": "تقرير أولمبياد التاريخ الوطني",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "57",
+"title": "تقرير مسابقة ريادة الأعمال ريادي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "58",
+"title": "تقرير مسابقة إنجاز السعودية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "59",
+"title": "تقرير مسابقة إنجاز السعودية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "60",
+"title": "تقرير جائزة رواد القدرات لذوي الإعاقة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "61",
+"title": "تقرير مسابقة أقرأ",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "62",
+"title": "تقرير أولمبياد اللغة الإنجليزية الوطني والدولي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "63",
+"title": "تقرير مسابقة أبيليمبيكس",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "64",
+"title": "تقرير مسابقة العدسة الذكية لفنون المستقبل",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "65",
+"title": "تقرير مسابقة العدسة الذكية لفنون المستقبل",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "66",
+"title": "تقرير منافسة رسل السلام للتميز الكشفي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "67",
+"title": "تقرير دوري المدارس لكرة القدم والألعاب المختلفة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "68",
+"title": "تقرير دوري المدارس لألعاب القوى",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "69",
+"title": "تقرير مسابقة الحي يحييك",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 17
+},
+{
+"num": "70",
+"title": "تقرير تنفيذ إذاعة مدرسية عن (موضوع الإذاعة)",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "71",
+"title": "تقرير جلسة مجتمع التعلم المهني",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "72",
+"title": "تقرير تبادل زيارات بين المعلمين",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "73",
+"title": "استمارة تبادل الزيارات بين المعلمين",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "74",
+"title": "تقرير تنفيذ درس تطبيقي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "75",
+"title": "تقرير حضور دورة / ورشة عمل",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "76",
+"title": "تقرير تنفيذ دورة / ورشة عمل",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "77",
+"title": "تقرير تواصل فردي مع ولي أمر",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "78",
+"title": "تقرير متابعة حضور وغياب الطالبات لشهر رجب",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "79",
+"title": "خطة علاجية فردية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "80",
+"title": "خطة إثرائية فردية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "81",
+"title": "خطة علاجية جماعية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "82",
+"title": "خطة إثرائية جماعية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "83",
+"title": "استمارة قياس الأثر (مبادرة)",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "84",
+"title": "استمارة قياس الأثر (برنامج)",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "85",
+"title": "استمارة قياس الأثر (درس تطبيقي)",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "86",
+"title": "تقرير تكريم الطالبات المتفوقات",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "87",
+"title": "تقرير الإدارة الصفية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "88",
+"title": "تحليل نتائج المهارات - الصف الثاني ابتدائي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "89",
+"title": "تحليل نتائج اختبار مادة [الرياضيات]",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "90",
+"title": "تحليل نتائج الاختبار القبلي والبعدي - مادة [الرياضيات]",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "91",
+"title": "تقرير اختبار تشخيصي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "92",
+"title": "بطاقة تنفيذ مسابقة نشاط طلابي*",
+"kind": "بطاقة",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "93",
+"title": "بطاقة تنفيذ برنامج نشاط طلابي*",
+"kind": "بطاقة",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "94",
+"title": "حليل نتائج مادة لصف واحد",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 2
+},
+{
+"num": "95",
+"title": "تحليل نتائج اختبار مادة [الرياضيات]",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 13
+},
+{
+"num": "96",
+"title": "خطة علاجية فردية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "97",
+"title": "خطة علاجية جماعية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "98",
+"title": "خطة إثرائية فردية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "99",
+"title": "خطة إثرائية جماعية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 18
+},
+{
+"num": "100",
+"title": "تعريف مدير المدرسة وهدفه ومهامه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "101",
+"title": "محضر الاجتماع التمهيدي للعام الدراسي",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "102",
+"title": "محضر الاجتماع الختامي للعام الدراسي",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "103",
+"title": "محضر اجتماع مجلس المدرسة",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "104",
+"title": "تقرير تقييم أداء الهيئة الإدارية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 13
+},
+{
+"num": "105",
+"title": "تقرير تقييم أداء الهيئة الإدارية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 13
+},
+{
+"num": "106",
+"title": "تقرير تقييم أداء الهيئة الإدارية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 13
+},
+{
+"num": "107",
+"title": "نموذج شواهد الخطة التشغيلية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "108",
+"title": "ميثاق الأداء الوظيفي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "109",
+"title": "مراجعة الأداء الوظيفي النصف سنوية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "110",
+"title": "تقييم الأداء الوظيفي السنوي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "111",
+"title": "طلب التظلم على الأداء الوظيفي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "112",
+"title": "اعتماد قائمة المستحقين للتكريم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "113",
+"title": "طلب الموافقة على الرحلة أو الزيارة المدرسية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "114",
+"title": "تعريف التوجيه الطلابي ورؤيته ورسالته وأهدافه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "115",
+"title": "بيانات المدرسة في سجل الموجه الطلابي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "116",
+"title": "البيانات الأساسية للموجه الطلابي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "117",
+"title": "البيانات الأساسية للموجه الطلابي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "118",
+"title": "سجل الدورات التدريبية للموجه الطلابي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "119",
+"title": "خطة تنفيذ برامج التوجيه الطلابي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 15
+},
+{
+"num": "120",
+"title": "سجل البرامج الإرشادية المقدمة للطلاب",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "121",
+"title": "تقرير تنفيذ برامج التوجيه الطلابي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "122",
+"title": "التقرير الفصلي للتوجيه الطلابي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "123",
+"title": "تقرير الخصائص العمرية للطلاب",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "124",
+"title": "نموذج جلسة إرشاد جمعي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "125",
+"title": "خطة التوجيه المهني للطلاب",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "126",
+"title": "نموذج حصر حالات الطلاب",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "127",
+"title": "حصر الحالات الصحية والنفسية للطلاب",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "128",
+"title": "استمارة الإبلاغ عن الحالات الصحية للطلاب",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "129",
+"title": "حصر الحالات الاجتماعية للطلاب",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "130",
+"title": "حصر الحالات الاقتصادية للطلاب",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "131",
+"title": "حصر أبناء الشهداء والمستفيدين من الحد المانع",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "132",
+"title": "سجل متابعة الحالات الإرشادية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "133",
+"title": "سجل دراسة المواقف السلوكية ومعالجتها",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "134",
+"title": "استمارة رصد السلوك المخالف",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "135",
+"title": "نموذج إحالة الطالب",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "136",
+"title": "سجل التواصل مع أولياء الأمور",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "137",
+"title": "خطاب إحالة حالة لإدارة التوجيه والإرشاد",
+"kind": "خطاب",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "138",
+"title": "نموذج جلسة إرشاد فردي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "139",
+"title": "نموذج دراسة حالة طالب",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "140",
+"title": "استمارة الرعاية الفردية للطالب",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "141",
+"title": "خطة تعديل السلوك",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "142",
+"title": "نموذج التعاقد السلوكي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 14
+},
+{
+"num": "143",
+"title": "تقرير متابعة الغياب والتأخر الصباحي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "144",
+"title": "إجراءات الغياب بعذر وبدون عذر",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "145",
+"title": "الخطة العلاجية لحالات الغياب والتأخر",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "146",
+"title": "سجل رعاية متكرري الغياب عن منصة مدرستي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "147",
+"title": "سجل رعاية الطلاب المعيدين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "148",
+"title": "سجل رعاية الطلاب المتأخرين دراسياً",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "149",
+"title": "سجل الطلاب المتفوقين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "150",
+"title": "تقرير حالة التنمر المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 16
+},
+{
+"num": "151",
+"title": "محضر برنامج رفق للحد من العنف",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "152",
+"title": "محضر برنامج رفق للحد من العنف",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "153",
+"title": "خطة تفعيل الأسبوع التمهيدي للصف الأول الابتدائي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "154",
+"title": "خطة تفعيل برنامج التهيئة للصف الرابع الابتدائي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "155",
+"title": "خطة تفعيل برنامج التهيئة للأول المتوسط والأول الثانوي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "156",
+"title": "سجل غرس القيم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "157",
+"title": "سجل غرس القيم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "158",
+"title": "الاستمارة الأسبوعية للقيم الإسلامية والوطنية",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "159",
+"title": "خطاب دعوة ولي أمر لزيارة المدرسة",
+"kind": "خطاب",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "160",
+"title": "تعريف الأمن والسلامة المدرسية ورؤيته ورسالته وأهدافه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "161",
+"title": "تعريف الموجه الصحي وهدفه ومهامه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "162",
+"title": "تعريف الصندوق المدرسي ورؤيته ورسالته وأهدافه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "163",
+"title": "بيانات المدرسة في سجل الصندوق المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "164",
+"title": "البيانات الأساسية لأعضاء فريق عمل الصندوق المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "165",
+"title": "قرار تشكيل فريق عمل الصندوق المدرسي",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "166",
+"title": "مهام فريق عمل الصندوق المدرسي وإقرار الاطلاع عليها",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "167",
+"title": "مصفوفة مسؤوليات فريق عمل الصندوق المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "168",
+"title": "الخطة السنوية لفريق عمل الصندوق المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "169",
+"title": "خطة اجتماعات فريق عمل الصندوق المدرسي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "170",
+"title": "محضر اجتماع فريق عمل الصندوق المدرسي",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "171",
+"title": "حصر موارد الصندوق المدرسي ومطابقة الرصيد الافتتاحي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "172",
+"title": "توزيع بنود الصرف من الصندوق المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "173",
+"title": "نموذج الخطة الزمنية لصرف الميزانية التشغيلية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "174",
+"title": "نموذج أمر اعتماد صرف مستحقات المستلزمات الدراسية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "175",
+"title": "قائمة التحقق من مستندات الصرف من الصندوق المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "176",
+"title": "سجل قيد إيرادات ومصروفات الصندوق المدرسي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 13
+},
+{
+"num": "177",
+"title": "نموذج حصر وتوثيق التبرعات الواردة للمدرسة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "178",
+"title": "بيانات تشغيل المقصف المدرسي في سجل الصندوق",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "179",
+"title": "سجل متابعة المقصف المدرسي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "180",
+"title": "سجل مخالفات المقصف المدرسي وإجراءات معالجتها",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "181",
+"title": "سجل متابعة المقصف المدرسي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "182",
+"title": "سجل مخالفات المقصف المدرسي وإجراءات معالجتها",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "183",
+"title": "التقرير المالي الشهري للصندوق المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "184",
+"title": "التقرير المالي الختامي لأعمال الصندوق المدرسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "185",
+"title": "التقرير المالي السنوي لأعمال الصندوق المدرسي لإدارة التعليم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "186",
+"title": "قائمة مراجعة إقفال الصندوق المدرسي نهاية العام",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "187",
+"title": "محضر تسليم واستلام الصندوق المدرسي",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "188",
+"title": "تعريف اللجنة الإدارية وهدفها ومهامها",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "189",
+"title": "قرار تشكيل اللجنة الإدارية",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 16
+},
+{
+"num": "190",
+"title": "خطة اجتماعات اللجنة الإدارية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "191",
+"title": "مواضيع مقترحة لاجتماعات اللجنة الإدارية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "192",
+"title": "محضر إقرار واعتماد الخطة التشغيلية للمدرسة",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "193",
+"title": "محضر متابعة تنفيذ الخطة التشغيلية والتغذية الراجعة",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "194",
+"title": "محضر مراجعة واعتماد التقرير النهائي لقياس الرضا",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "195",
+"title": "محضر اعتماد خطة الميزانية التشغيلية والخطة الزمنية لصرفها",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "196",
+"title": "محضر اعتماد خطة تنفيذ برامج النشاط الطلابي",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 14
+},
+{
+"num": "197",
+"title": "محضر اجتماع اللجنة الإدارية",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "198",
+"title": "محضر توزيع المهام الإدارية",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "199",
+"title": "تعريف وكيل المدرسة لشؤون الطلاب وهدفه ومهامه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "200",
+"title": "خطة نشر قواعد السلوك والمواظبة والتوعية بها",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "201",
+"title": "سجل التوقيع على الاطلاع على قواعد السلوك والمواظبة",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "202",
+"title": "نموذج الالتزام المدرسي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "203",
+"title": "سجل البرامج التوعوية بقواعد السلوك والمواظبة",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "204",
+"title": "سجل حصر الحضور والغياب اليومي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "205",
+"title": "كشف الغياب اليومي والاتصال بأولياء الأمور",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "206",
+"title": "كشف الغياب اليومي والاتصال بأولياء الأمور",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "207",
+"title": "سجل التأخر الصباحي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "208",
+"title": "سجل التأخر بعد نهاية الدوام",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "209",
+"title": "سجل دراسة أسباب الغياب وتحليلها",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "210",
+"title": "خطة معالجة الغياب بالشراكة مع الأسرة",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "211",
+"title": "سجل المساءلة عن الغياب",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "212",
+"title": "نموذج تحويل متكرر الغياب والتأخر",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "213",
+"title": "خطة معالجة الغياب بالشراكة مع الأسرة",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "214",
+"title": "سجل المساءلة عن الغياب",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "215",
+"title": "نموذج تحويل متكرر الغياب والتأخر",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "216",
+"title": "نموذج إحالة طالب إلى وكيل شؤون الطلاب",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "217",
+"title": "سجل المخالفات السلوكية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "218",
+"title": "سجل المخالفات السلوكية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "219",
+"title": "سجل الحالات الطارئة",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "220",
+"title": "نموذج إبلاغ عن حالة طالب",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "221",
+"title": "بطاقة متابعة الانضباط والالتزام في الفصل",
+"kind": "بطاقة",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "222",
+"title": "قائمة الطلاب المستحقين للتكريم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "223",
+"title": "سجل استئذان الطلاب",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "224",
+"title": "محضر اجتماع لجنة الانضباط المدرسي",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 13
+},
+{
+"num": "225",
+"title": "محضر ضبط واقعة",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "226",
+"title": "نموذج تعهد طالب",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "227",
+"title": "إشعار ولي أمر الطالب",
+"kind": "خطاب",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "228",
+"title": "طلب قبول طالب جديد",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "229",
+"title": "طلب نقل أو تحويل طالب إلى مدرسة أخرى",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "230",
+"title": "طلب التحويل إلى مدارس تحفيظ القرآن أو التعليم المستمر",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "231",
+"title": "طلب تحويل المسار في المرحلة الثانوية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "232",
+"title": "استمارة البيانات الشخصية للطالب",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "233",
+"title": "كشف تسليم المقررات الدراسية للطلاب واستلامها",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "234",
+"title": "استمارة تقويم البرنامج الإذاعي",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "235",
+"title": "نموذج تنظيم الرحلة المدرسية وموافقات أولياء الأمور",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 15
+},
+{
+"num": "236",
+"title": "تعريف وكيل المدرسة للشؤون التعليمية وهدفه ومهامه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "237",
+"title": "سجل توزيع المقررات على المعلمين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "238",
+"title": "الخطة الفصلية لتوزيع المادة الدراسية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "239",
+"title": "سجل استلام خطط توزيع المنهج",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "240",
+"title": "نموذج اعتماد الخطة الدراسية الأسبوعية والفصلية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "241",
+"title": "سجل المتابعة الدورية لتنفيذ المنهج",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "242",
+"title": "استمارة متابعة تنفيذ المنهج للمعلم",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "243",
+"title": "نموذج مراجعة سجل إعداد الدروس",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "244",
+"title": "سجل معالجة التأخر في تنفيذ المنهج",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "245",
+"title": "نموذج اعتماد تقرير الإنجاز الشامل للمادة الدراسية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "246",
+"title": "خطة تنفيذ المناهج في الحالات الطارئة",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "247",
+"title": "سجل المصادر والتجهيزات اللازمة لتنفيذ المناهج",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "248",
+"title": "سجل فحص عينات ملفات الإنجاز والأنشطة الصفية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "249",
+"title": "سجل التغذية الراجعة ومقترحات التحسين للمعلمين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "250",
+"title": "نموذج إتمام المقرر الدراسي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "251",
+"title": "خطة تنفيذ الاختبارات القصيرة",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "252",
+"title": "مهام لجان الاختبارات الفرعية وتوزيع أعضائها",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "253",
+"title": "نموذج تكليف معلم بوضع أسئلة اختبار",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "254",
+"title": "كشف الغياب اليومي عن الاختبارات",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "255",
+"title": "محضر مخالفة أنظمة الاختبارات وتعليماتها",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "256",
+"title": "كشف تسليم أوراق الإجابة في لجنة الاختبار",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "257",
+"title": "كشف تسليم أوراق الإجابة في لجنة الاختبار",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "258",
+"title": "سجل متابعة رصد الدرجات في نظام نور",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "259",
+"title": "نموذج طلب تعديل درجة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "260",
+"title": "نموذج اعتماد الحصص العلاجية للخطة العلاجية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "261",
+"title": "سجل استلام نتائج الفترات التقويمية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "262",
+"title": "التقرير الأسبوعي لسير الإشراف اليومي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "263",
+"title": "تقرير المناوبة اليومي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "264",
+"title": "جدول توزيع حصص الانتظار اليومي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "265",
+"title": "نموذج جدول الحصص الدراسي المعتمد",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "266",
+"title": "تعريف المساعد الإداري وهدفه ومهامه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "267",
+"title": "تقرير متابعة دوام الموظفين",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "268",
+"title": "نموذج قرار الحسم",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "269",
+"title": "نموذج طلب استئذان الموظفين",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "270",
+"title": "سجل رصد خروج المنسوبين بدون استئذان",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "271",
+"title": "سجل العهد المدرسية وتسليمها",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "272",
+"title": "سجل الصادر العام",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "273",
+"title": "سجل الوارد العام",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "274",
+"title": "سجل غياب وتأخر الطلاب",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "275",
+"title": "سجل استئذان الطلاب",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "276",
+"title": "نموذج موافقة ولي أمر الطالب على الرحلة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "277",
+"title": "تعريف وكيل المدرسة للشؤون المدرسية وهدفه ومهامه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "278",
+"title": "كشف الاطلاع على ميثاق أخلاقيات مهنة التعليم",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "279",
+"title": "سجل الدوام الرسمي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "280",
+"title": "سجل استئذان الموظفين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "281",
+"title": "نموذج طلب إجازة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "282",
+"title": "مساءلة على تأخر أو انصراف مبكر",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "283",
+"title": "نموذج مساءلة غياب منسوبي المدرسة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "284",
+"title": "نموذج إخلاء الطرف",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "285",
+"title": "سجل إدارة المستودع المدرسي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "286",
+"title": "سجل إدارة المقصف المدرسي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "287",
+"title": "سجل إتلاف المواد المختبرية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "288",
+"title": "خطة تطبيق استمارة تقويم الأمن والسلامة",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "289",
+"title": "نموذج طلب شراء المستلزمات الدراسية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "290",
+"title": "خطة تفعيل التقنية المعلوماتية المدرسية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "291",
+"title": "تعريف مركز مصادر التعلم ورؤيته ورسالته وأهدافه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "292",
+"title": "بيانات المدرسة في سجل مركز مصادر التعلم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "293",
+"title": "البيانات الأساسية لأمين مصادر التعلم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "294",
+"title": "قرار تكليف أمين مصادر التعلم وفريق العمل",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "295",
+"title": "الخطة السنوية لمركز مصادر التعلم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "296",
+"title": "حصر أنشطة مركز مصادر التعلم المنفذة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "297",
+"title": "حصر أنشطة مركز مصادر التعلم المنفذة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "298",
+"title": "تقرير عن برنامج في مركز مصادر التعلم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "299",
+"title": "سجل الدورات التدريبية لأمين مصادر التعلم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "300",
+"title": "تشكيل جماعة مركز مصادر التعلم وتوزيع مهامها",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "301",
+"title": "سجل متابعة التعاميم الواردة لمركز مصادر التعلم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "302",
+"title": "سجل جرد المختبر والمواد الكيميائية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "303",
+"title": "سجل جرد معامل الحاسب",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "304",
+"title": "سجل حصر الناقص والزائد والتالف في المختبر",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "305",
+"title": "نموذج اللوحات الإرشادية وفحوصات المخزون",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "306",
+"title": "سجل حفظ المواد الكيميائية ومتابعة صلاحيتها",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "307",
+"title": "نموذج متابعة إجراءات السلامة في المختبر",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "308",
+"title": "الخطة الفصلية للتجارب العملية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "309",
+"title": "الخطة الفصلية للتجارب العملية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "310",
+"title": "تجهيز المختبر ومعمل الحاسب لحصة دراسية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "311",
+"title": "سجل تنفيذ التجارب وترتيب المختبر",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "312",
+"title": "تجهيز غرفة مصادر التعلم لحصة دراسية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "313",
+"title": "نموذج استعارة أجهزة وأدوات مصادر التعلم",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "314",
+"title": "تقرير استخدام المختبر والمعمل وغرفة مصادر التعلم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "315",
+"title": "سجل عهدة مركز مصادر التعلم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "316",
+"title": "نموذج فهرسة وتصنيف مصادر التعلم",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "317",
+"title": "سجل إعارة الكتب والمواد التعليمية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "318",
+"title": "الخطة الأسبوعية لزيارة المعلمات لمركز مصادر التعلم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "319",
+"title": "سجل التردد اليومي للطالبات على مركز مصادر التعلم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "320",
+"title": "سجل المترددات على مركز مصادر التعلم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "321",
+"title": "تعريف لجنة التميز وهدفها ومهامها",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "322",
+"title": "قرار تشكيل لجنة التميز",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 15
+},
+{
+"num": "323",
+"title": "خطة اجتماعات لجنة التميز",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "324",
+"title": "مواضيع مقترحة لاجتماعات لجنة التميز",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "325",
+"title": "نموذج تحليل البيئة الداخلية والخارجية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "326",
+"title": "نموذج القضايا الرئيسية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "327",
+"title": "نموذج الأهداف التشغيلية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "328",
+"title": "نموذج مؤشرات قياس الأداء التشغيلية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 14
+},
+{
+"num": "329",
+"title": "نموذج المبادرات والبرامج التشغيلية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "330",
+"title": "نموذج الخطة التشغيلية للمدرسة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "331",
+"title": "خطة التقويم الذاتي للمدرسة",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 13
+},
+{
+"num": "332",
+"title": "نموذج الجاهزية للتقويم الذاتي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "333",
+"title": "نموذج تطبيق أدوات التقويم الذاتي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "334",
+"title": "تقرير التقويم الذاتي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "335",
+"title": "نموذج قياس اتجاهات المتعلمين نحو المدرسة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "336",
+"title": "تقرير نتائج قياس اتجاهات المتعلمين نحو المدرسة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "337",
+"title": "استبانة قياس رضا المستفيد عن بيئة وممكنات المدرسة",
+"kind": "استبانة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "338",
+"title": "تقرير قياس مستوى رضا المستفيد عن خدمات المدرسة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "339",
+"title": "خطة التدقيق الداخلي النصف سنوية",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "340",
+"title": "نموذج التدقيق الداخلي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "341",
+"title": "نموذج عدم المطابقة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "342",
+"title": "تقرير التدقيق الداخلي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "343",
+"title": "سجل طلبات الإجراءات التصحيحية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 14
+},
+{
+"num": "344",
+"title": "خطة التحسين والتطوير والاستدامة",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "345",
+"title": "نموذج طلب خدمة دعم التميز المدرسي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "346",
+"title": "محضر اجتماع لجنة التميز والجودة",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "347",
+"title": "تعريف فريق عمل الطلاب ذوي الإعاقة وهدفه ومهامه",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "348",
+"title": "قرار تشكيل فريق عمل الطلاب ذوي الإعاقة",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "349",
+"title": "محضر اجتماع فريق عمل الطلاب ذوي الإعاقة",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "350",
+"title": "سجل تدريب منسوبي المدرسة حول برامج ذوي الإعاقة",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "351",
+"title": "سجل الكشف عن الطلاب ذوي الإعاقة وحصرهم وتصنيفهم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "352",
+"title": "تقرير حالات الطلاب ذوي الإعاقة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "353",
+"title": "نموذج نتائج الاختبار الأولي لذوي الإعاقة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "354",
+"title": "نموذج تحديد أهلية الطالب لبرنامج ذوي الإعاقة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "355",
+"title": "سجل تحديد احتياجات الطلاب ذوي الإعاقة ومتطلباتهم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "356",
+"title": "نموذج تحويل الطالب إلى مركز الخدمات المساندة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "357",
+"title": "نموذج تحديد العجز من تجهيزات غرفة المصادر",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "358",
+"title": "نموذج تقويم غرفة المصادر واستفادة الطلاب",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "359",
+"title": "الخطة التربوية الفردية للطالب ذي الإعاقة",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "360",
+"title": "خطة برامج ذوي الإعاقة",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 14
+},
+{
+"num": "361",
+"title": "سجل الإشراف اليومي على حضور الطلاب ذوي الإعاقة وانصرافهم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "362",
+"title": "سجل متابعة تنفيذ الحصص الأسبوعية لذوي الإعاقة",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "363",
+"title": "تقرير متابعة تنفيذ برامج ذوي الإعاقة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "364",
+"title": "سجل متابعة تدني مستوى الطلاب ذوي الإعاقة",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "365",
+"title": "نموذج متابعة الطلاب ذوي صعوبات التعلم",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "366",
+"title": "سجل متابعة الحالات الاجتماعية والنفسية للطلاب ذوي الإعاقة",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "367",
+"title": "سجل دمج الطلاب ذوي الإعاقة وتنفيذ البرامج بالتعاون مع المعلمين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "368",
+"title": "سجل توعية أولياء أمور الطلاب ذوي الإعاقة",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "369",
+"title": "التقرير الشهري لبرامج ذوي الإعاقة وأنشطتها",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "370",
+"title": "التقرير الدوري لمستوى الطالب ذوي الإعاقة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "371",
+"title": "سجل تزويد أولياء الأمور بتقارير الطلاب ذوي الإعاقة",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "372",
+"title": "نموذج تقويم البرنامج التربوي الفردي الدوري",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "373",
+"title": "نموذج تقويم البرنامج التربوي الفردي الدوري",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "374",
+"title": "تقرير تقويم برامج ذوي الإعاقة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "375",
+"title": "تقويم الخطط التربوية الفردية والتقرير الختامي لذوي الإعاقة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "376",
+"title": "تعريف لجنة التحصيل الدراسي وهدفها ومهامها",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "377",
+"title": "خطة اجتماعات لجنة التحصيل الدراسي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "378",
+"title": "مواضيع مقترحة لاجتماعات لجنة التحصيل الدراسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "379",
+"title": "قرار تشكيل لجنة التحصيل الدراسي",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "380",
+"title": "محضر اجتماع لجنة التحصيل الدراسي",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "381",
+"title": "تقرير أعمال لجنة التحصيل الدراسي الدوري",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "382",
+"title": "جدول الاختبارات النهائية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "383",
+"title": "جدول ومتابعة الملاحظين والإشراف اليومي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "384",
+"title": "كشف أسماء الطلاب وأرقام الجلوس",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 14
+},
+{
+"num": "385",
+"title": "نموذج فتح المظاريف",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "386",
+"title": "محضر ضبط سير الاختبار",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "387",
+"title": "كشف استلام وتسليم أوراق الإجابة",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "388",
+"title": "نموذج الرصد والمطابقة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "389",
+"title": "جدول الدور الثاني",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "390",
+"title": "تقرير تحليل نتائج التحصيل الدراسي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "391",
+"title": "محضر مراجعة تقارير الإنجاز الشاملة",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "392",
+"title": "نموذج اعتماد برنامج معالجة التأخر الدراسي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "393",
+"title": "استبانة قياس رضا أولياء الأمور عن التحصيل الدراسي",
+"kind": "استبانة",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "394",
+"title": "تعريف لجنة التوجيه الطلابي وهدفها ومهامها",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "395",
+"title": "قرار تشكيل لجنة التوجيه الطلابي",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "396",
+"title": "خطة اجتماعات لجنة التوجيه الطلابي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "397",
+"title": "مواضيع مقترحة لاجتماعات لجنة التوجيه الطلابي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "398",
+"title": "محضر اجتماع لجنة التوجيه الطلابي",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "399",
+"title": "نموذج متابعة الخطة السنوية للتوجيه الطلابي",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "400",
+"title": "التقرير الفصلي لأعمال التوجيه الطلابي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "401",
+"title": "نموذج معايير حوافز السلوك والمواظبة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "402",
+"title": "نموذج توزيع الطلاب على الفصول الدراسية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "403",
+"title": "نموذج دراسة الظواهر السلوكية الجماعية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "404",
+"title": "نموذج متابعة نتائج المجالس الطلابية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "405",
+"title": "نموذج دراسة أوضاع مخالفي إجراءات سير الاختبارات",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "406",
+"title": "نموذج دراسة أعذار الغياب عن الاختبارات",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "407",
+"title": "تعريف رعاية الموهوبين وأهدافها ومهام معلم الموهوبين",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "408",
+"title": "سمات الطلاب الموهوبين وخصائصهم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "409",
+"title": "قرار تكليف معلم الموهوبين",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "410",
+"title": "خطاب طلب افتتاح فصل الموهوبين",
+"kind": "خطاب",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "411",
+"title": "قرار تكليف لجنة المفاضلة وقبول الطلبة",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "412",
+"title": "البيانات الأساسية لمعلم الموهوبين",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "413",
+"title": "كشف الطلاب المرشحين للتسريع الأكاديمي",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "414",
+"title": "قرار استبعاد طالب من فصل الموهوبين",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "415",
+"title": "كشف الطلاب ذوي المواهب الخاصة",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "416",
+"title": "الخطة التشغيلية لبرامج الموهوبين",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 18
+},
+{
+"num": "417",
+"title": "خطة برامج رعاية الموهوبين",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "418",
+"title": "برنامج رعاية الموهوبين والمتفوقين",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "419",
+"title": "محضر اجتماع برنامج رعاية الموهوبين",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "420",
+"title": "سجل الكشف عن الموهوبين وترشيحهم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "421",
+"title": "استمارة الترشيح الأولي للموهوبين",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 13
+},
+{
+"num": "422",
+"title": "سجل البرامج والأنشطة الإثرائية للموهوبين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "423",
+"title": "الخطة الفردية للطالب الموهوب",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "424",
+"title": "تقرير تقويم برامج الموهوبين",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "425",
+"title": "التقرير الشهري لبرامج الموهوبين وأنشطتها",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "426",
+"title": "سجل المسابقات الوطنية والدولية للموهوبين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "427",
+"title": "كشف ترشيح الطلاب للأولمبياد الوطني للإبداع العلمي",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "428",
+"title": "سجل حوافز الموهوبين وتكريمهم",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "429",
+"title": "سجل الإرشاد الأكاديمي والمهني للموهوبين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "430",
+"title": "سجل متابعة الموهوبين اجتماعياً وسلوكياً",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "431",
+"title": "سجل الأنشطة الإثرائية الصفية وأسئلة التحدي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "432",
+"title": "خطة التوعية والتهيئة للطلبة وأولياء الأمور",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "433",
+"title": "سجل التواصل مع أسر الموهوبين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "434",
+"title": "سجل الشراكة مع المؤسسات الوطنية في رعاية الموهوبين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "435",
+"title": "التقرير الختامي السنوي لأعمال رعاية الموهوبين",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "436",
+"title": "تقرير أداء فصول ومدارس الموهوبين",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "437",
+"title": "سجل الزيارات الإشرافية لبرنامج الموهوبين ومتابعتها",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "438",
+"title": "تعريف العمل التطوعي وأهدافه ومهام منسق التطوع",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "439",
+"title": "بيانات المدرسة في سجل العمل التطوعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "440",
+"title": "البيانات الأساسية لمنسق العمل التطوعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "441",
+"title": "قرار تكليف منسق العمل التطوعي",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "442",
+"title": "مجالات العمل التطوعي ومستوياته",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "443",
+"title": "قرار تشكيل فريق العمل التطوعي بالمدرسة",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 14
+},
+{
+"num": "444",
+"title": "أدوار الإشراف على العمل التطوعي في المدرسة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "445",
+"title": "محضر اجتماع فريق العمل التطوعي",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "446",
+"title": "تأسيس فريق تطوعي طلابي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "447",
+"title": "أدوار الإشراف على العمل التطوعي في المدرسة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "448",
+"title": "تقدير الاحتياج التطوعي وترتيب أولويات المبادرات",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "449",
+"title": "الخطة السنوية للعمل التطوعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "450",
+"title": "التقويم التنفيذي للفرص التطوعية في المناسبات والمواسم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "451",
+"title": "سجل الجهات الشريكة في العمل التطوعي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "452",
+"title": "تصميم فرصة تطوعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "453",
+"title": "اعتماد مبادرة تطوعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "454",
+"title": "إدارة مخاطر الفرصة التطوعية وإجراءات السلامة",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "455",
+"title": "استمارة تسجيل طالب متطوع",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "456",
+"title": "الميثاق الأخلاقي للعمل التطوعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "457",
+"title": "اتفاقية المتطوع للفرصة التطوعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "458",
+"title": "موافقة ولي الأمر على المشاركة في برنامج تطوعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "459",
+"title": "توزيع مهام المتطوعين وتهيئتهم قبل التنفيذ",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "460",
+"title": "رصد الساعات التطوعية للطلاب",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "461",
+"title": "متابعة المتعثرين في استيفاء الساعات التطوعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "462",
+"title": "سجل العمل التطوعي وخدمة المجتمع",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "463",
+"title": "تقييم أداء الطالب المتطوع",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "464",
+"title": "تقييم الطالب المتطوع لتجربته التطوعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "465",
+"title": "نتائج قياس رضا المتطوعين",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "466",
+"title": "تقرير ختام برنامج تطوعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "467",
+"title": "التقرير الفصلي للعمل التطوعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "468",
+"title": "تقرير ختام برنامج تطوعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "469",
+"title": "التقرير الختامي السنوي للعمل التطوعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "470",
+"title": "خطة التواصل الأسري للعام الدراسي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "471",
+"title": "سجل التواصل اليومي مع أولياء الأمور",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "472",
+"title": "استمارة مقابلة فردية مع ولي الأمر",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "473",
+"title": "سجل تزويد الأسرة بالمعلومات عن تعلم الأبناء",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "474",
+"title": "محضر اجتماع مجلس أولياء الأمور",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "475",
+"title": "خطة الزيارات الصفية للمعلمين",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "476",
+"title": "استمارة دعم وتطوير أداء الهيئة التعليمية",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "477",
+"title": "استمارة الاحتياج التدريبي الفردية",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "478",
+"title": "سجل تحليل الاحتياجات التدريبية للمنسوبين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "479",
+"title": "خطة التطوير المهني للعام الدراسي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "480",
+"title": "سجل تنفيذ البرامج التدريبية الداخلية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "481",
+"title": "كشف حضور برنامج تدريبي",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "482",
+"title": "سجل التحاق المنسوبين بالبرامج والمؤتمرات والملتقيات",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "483",
+"title": "سجل مجتمعات التعلم المهني",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 3
+},
+{
+"num": "484",
+"title": "سجل الزيارات التبادلية وتبادل الخبرات",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "485",
+"title": "سجل البحوث الإجرائية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "486",
+"title": "سجل قياس أثر التدريب",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "487",
+"title": "سجل تهيئة المنسوبين الجدد",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "488",
+"title": "سجل الرخص المهنية للمعلمين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "489",
+"title": "سجل البرامج التوعوية والتحفيزية للرخصة المهنية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "490",
+"title": "سجل حوافز المنسوبين وتكريمهم في التطوير المهني",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "491",
+"title": "تعريف الشراكة المجتمعية ورؤيتها ورسالتها وقيمها وأهدافها",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "492",
+"title": "بيانات المدرسة في سجل الشراكة المجتمعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "493",
+"title": "البيانات الأساسية لمنسق الشراكة المجتمعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "494",
+"title": "قرار تكليف منسق الشراكة المجتمعية",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "495",
+"title": "قرار تشكيل فريق الشراكة المجتمعية ومهامه",
+"kind": "قرار",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "496",
+"title": "خطة اجتماعات فريق الشراكة المجتمعية وموضوعاتها المقترحة",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "497",
+"title": "محضر اجتماع فريق الشراكة المجتمعية",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "498",
+"title": "التحليل الرباعي لواقع الشراكة المجتمعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "499",
+"title": "إعلان واستمارة ترشيح أولياء الأمور للإسهام في الشراكة المجتمعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "500",
+"title": "خطاب دعوة ولي الأمر للإسهام في الشراكة المجتمعية",
+"kind": "خطاب",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "501",
+"title": "حصر خبرات أولياء الأمور ومهاراتهم",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "502",
+"title": "حصر المتطوعين من الأسر والمجتمع المحلي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "503",
+"title": "الأهداف العامة والتفصيلية لبرامج الشراكة المجتمعية",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "504",
+"title": "سجل رفع احتياجات الشراكة المجتمعية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "505",
+"title": "نموذج إعداد الشراكة المجتمعية في المدرسة",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "506",
+"title": "نموذج تقييم الشراكة المجتمعية للاعتماد",
+"kind": "نموذج",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "507",
+"title": "خطاب إشعار إدارة التعليم بالشراكة المجتمعية",
+"kind": "خطاب",
+"source": "archive_txt",
+"fields": 10
+},
+{
+"num": "508",
+"title": "سجل الجهات والمؤسسات الشريكة",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "509",
+"title": "سجل البرامج والأنشطة المنفذة مع الشركاء",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "510",
+"title": "تقرير تنفيذ برنامج شراكة مجتمعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "511",
+"title": "سجل الدعم والتبرعات المقدمة من الشركاء",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "512",
+"title": "المتابعة الدورية لتنفيذ الشراكة المجتمعية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "513",
+"title": "بطاقة توثيق الشراكة المجتمعية وقياس أثرها",
+"kind": "بطاقة",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "514",
+"title": "سجل مشاركة المجتمع المحلي في الأنشطة والفعاليات",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "515",
+"title": "سجل الفعاليات التوعوية للمجتمع المحلي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "516",
+"title": "سجل إتاحة إمكانات المدرسة وخدماتها للمجتمع المحلي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "517",
+"title": "سجل تبادل الخبرات مع المدارس الأخرى",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "518",
+"title": "سجل العمل التعاوني بين المنسوبين",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "519",
+"title": "استمارة التقييم الداخلي للشراكة المجتمعية",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "520",
+"title": "استبانة رضا أولياء الأمور والشركاء عن برامج الشراكة المجتمعية",
+"kind": "استبانة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "521",
+"title": "سجل الشكر والتقدير للشركاء",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "522",
+"title": "خطة برامج النشاط الطلابي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "523",
+"title": "استمارة الميول والرغبات في النشاط الطلابي",
+"kind": "استمارة",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "524",
+"title": "تشكيل مجالات النشاط الطلابي والإشراف عليها",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "525",
+"title": "تشكيل مجالات النشاط الطلابي والإشراف عليها",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "526",
+"title": "كشف عرفاء الفصول",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "527",
+"title": "خطة مجال النشاط",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "528",
+"title": "سجل حضور مجالات النشاط الطلابي",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "529",
+"title": "متابعة تنفيذ خطط مجالات النشاط وتقويمها",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "530",
+"title": "حصر المتميزين في برامج النشاط ورعايتهم",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "531",
+"title": "تقرير تكريم الطلاب المواظبين",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 12
+},
+{
+"num": "532",
+"title": "حصر حالات عدم التفاعل مع النشاط الطلابي",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "533",
+"title": "تقرير إنجاز النشاط الطلابي الفصلي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "534",
+"title": "محضر اجتماع المجلس الطلابي",
+"kind": "محضر",
+"source": "archive_txt",
+"fields": 11
+},
+{
+"num": "535",
+"title": "خطة البرنامج الإذاعي",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "536",
+"title": "التقرير الختامي للبرنامج الإذاعي",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "537",
+"title": "خطة تفعيل الأيام والمناسبات",
+"kind": "خطة",
+"source": "archive_txt",
+"fields": 5
+},
+{
+"num": "538",
+"title": "سجل المطويات والنشرات التربوية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "539",
+"title": "موافقة ولي الأمر على المشاركة في النشاط المدرسي",
+"kind": "خطاب",
+"source": "archive_txt",
+"fields": 9
+},
+{
+"num": "540",
+"title": "تقرير الرحلة أو الزيارة المدرسية",
+"kind": "تقرير",
+"source": "archive_txt",
+"fields": 4
+},
+{
+"num": "541",
+"title": "سجل الرحلات والزيارات المدرسية",
+"kind": "سجل",
+"source": "archive_txt",
+"fields": 6
+},
+{
+"num": "542",
+"title": "كشف الحضور والغياب - مادة العلوم - أول متوسط/١",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 8
+},
+{
+"num": "543",
+"title": "كشف متابعة الدرجات - مادة العلوم - أول متوسط/١",
+"kind": "كشف",
+"source": "archive_txt",
+"fields": 7
+},
+{
+"num": "544",
+"title": "سجل منسق الموهوبين (مصدر خارجي 1447)",
+"kind": "سجل",
+"source": "external_docx",
+"fields": 4
+},
+{
+"num": "545",
+"title": "تقرير تنفيذ البرامج الإثرائية في العام الدراسي ١٤٤٦هـ",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "546",
+"title": "تقرير التفعيل في المدرسة",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "547",
+"title": "تقرير التفعيل في المدرسة",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "548",
+"title": "تقرير التوعية والتعريف بالموهبة والموهوبين",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 10
+},
+{
+"num": "549",
+"title": "تقرير الأولمبياد الوطني للإبداع العلمي إبداع 2025",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "550",
+"title": "تقرير الأولمبياد الوطني للبرمجة والذكاء الاصطناعي",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "551",
+"title": "تقرير البرنامج الوطني للكشف عن الموهوبين",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 12
+},
+{
+"num": "552",
+"title": "ثانياً: مرحلة التدريب",
+"kind": "سجل",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "553",
+"title": "رابعاً: مرحلة التصفيات والمعرض الختامي",
+"kind": "سجل",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "554",
+"title": "تقرير برنامج الباحث الصغير",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "555",
+"title": "تقرير البرنامج",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "556",
+"title": "نموذج الأداء الوظيفي معلم (مصدر خارجي)",
+"kind": "نموذج",
+"source": "external_docx",
+"fields": 12
+},
+{
+"num": "557",
+"title": "تقرير عن تطبيق استراتيجية ⁃ ملف إنجاز المعلم",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "558",
+"title": "تقرير تصنيف الطلاب وفق أنماط التعلم. ⁃ نماذج من التحفيز المادي والمعنوي",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "559",
+"title": "سجل تبادل الزيارات",
+"kind": "سجل",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "560",
+"title": "تقرير اجتماع ولي الأمر مع المعلم",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "561",
+"title": "تقرير عن تطبيق استراتيجية",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "562",
+"title": "نموذج من إعداد الدروس",
+"kind": "نموذج",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "563",
+"title": "تقرير تصنيف الطلاب وفق أنماط التعلم",
+"kind": "تقرير",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "564",
+"title": "نموذج تقييم أداء المعلم",
+"kind": "نموذج",
+"source": "external_docx",
+"fields": 2
+},
+{
+"num": "565",
+"title": "خطة التوجيه الطلابي لعام 1447 (مصدر خارجي)",
+"kind": "خطة",
+"source": "external_doc",
+"fields": 2
+}
+]
