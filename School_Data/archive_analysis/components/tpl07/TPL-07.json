@@ -1,0 +1,29 @@
+{
+  "template_id": "TPL-07",
+  "title": "استمارة تقويم / قياس أثر",
+  "structure_ref": "08_template_structure.md#TPL-07",
+  "default_indicator_codes": [
+    "1-4-1-2",
+    "2-2-1-4"
+  ],
+  "permissions": {
+    "approved_by": "optional",
+    "rapporteur_vacant": false,
+    "needs_expert_review": false
+  },
+  "print": {
+    "engine": "OfficialFrameCore",
+    "orientation": "portrait",
+    "strictIdentity": true,
+    "barcode_required": false
+  },
+  "fields_from_structure_only": true,
+  "dynamic": {
+    "persons": "identity.json",
+    "indicators": "indicators.json",
+    "committees": null,
+    "programs": null,
+    "dual_date": true,
+    "dynamic_title": false
+  }
+}

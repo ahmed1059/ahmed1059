@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>خطتي · داخل الصدفة · قرار 167</title>
+  <link rel="stylesheet" href="../../css/fonts.css?v=font1">
+  <link rel="stylesheet" href="../../css/school-os.css?v=os33">
+  <link rel="stylesheet" href="../../css/media-governance.css?v=frame14">
+  <link rel="stylesheet" href="../../css/shell-standard.css?v=shell4">
+  <link rel="stylesheet" href="../../css/page-nav.css?v=nav1">
+  <link rel="stylesheet" href="../../css/erp-nav.css?v=erp146">
+  <link rel="stylesheet" href="../preview-integration.css?v=pi5">
+  <style>
+    body.preview-integration-page a.erp-trigger {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      height: 36px;
+      padding: 0 2px;
+      background: transparent;
+      border: 0;
+      font: inherit;
+      cursor: pointer;
+    }
+    /* جداول تلائم عرض 100% دون الحاجة لتصغير المتصفح إلى 75% */
+    .pi-fit-wrap {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table.pi-plan-table {
+      width: 100%;
+      max-width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 12px;
+      background: #fff;
+    }
+    table.pi-plan-table col.c-n { width: 3%; }
+    table.pi-plan-table col.c-name { width: 18%; }
+    table.pi-plan-table col.c-goal { width: 6%; }
+    table.pi-plan-table col.c-aud { width: 14%; }
+    table.pi-plan-table col.c-dur { width: 12%; }
+    table.pi-plan-table col.c-own { width: 10%; }
+    table.pi-plan-table col.c-kpi { width: 29%; }
+    table.pi-plan-table col.c-st { width: 8%; }
+    table.pi-plan-table th,
+    table.pi-plan-table td {
+      border: 1px solid rgba(11, 94, 86, 0.22);
+      padding: 5px 6px;
+      text-align: right;
+      vertical-align: top;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+    table.pi-plan-table th {
+      background: #0b5e56;
+      color: #fff;
+      font-weight: 700;
+      white-space: normal;
+      line-height: 1.25;
+    }
+    table.pi-plan-table tr:nth-child(even) td {
+      background: rgba(11, 94, 86, 0.04);
+    }
+    table.pi-table {
+      table-layout: fixed;
+      width: 100%;
+      font-size: 12px;
+    }
+    table.pi-table th,
+    table.pi-table td {
+      padding: 5px 6px;
+      word-break: break-word;
+    }
+    @media (max-width: 1200px) {
+      table.pi-plan-table .col-hide-md,
+      table.pi-plan-table th.col-hide-md,
+      table.pi-plan-table td.col-hide-md {
+        display: none;
+      }
+    }
+    .pi-print-only { display: none; }
+    .pi-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+      margin: 0 0 16px;
+    }
+    .pi-metric {
+      background: #fff;
+      border: 1px solid rgba(11, 94, 86, 0.22);
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .pi-metric--primary {
+      border-color: rgba(11, 94, 86, 0.35);
+      background: #f3faf8;
+    }
+    .pi-metric .n {
+      display: block;
+      font-size: 20px;
+      font-weight: 700;
+      color: #0b5e56;
+      line-height: 1.2;
+    }
+    .pi-metric .l {
+      display: block;
+      font-size: 12px;
+      color: #5c675f;
+      margin-top: 4px;
+    }
+    .pi-metric .t {
+      display: block;
+      font-size: 11px;
+      color: #0b5e56;
+      margin-top: 2px;
+    }
+    .pi-metrics-more { display: contents; }
+    .pi-metrics-more > summary { display: none; }
+    .pi-metrics__rest { display: contents; }
+    @media screen and (max-width: 820px) {
+      .pi-metrics {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .pi-metrics-more {
+        display: block;
+        border: 1px solid rgba(11, 94, 86, 0.18);
+        border-radius: 10px;
+        background: #fff;
+        padding: 0 10px;
+      }
+      .pi-metrics-more > summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 44px;
+        cursor: pointer;
+        list-style: none;
+        color: #0b5e56;
+        font-size: 13px;
+        font-weight: 800;
+      }
+      .pi-metrics-more > summary::-webkit-details-marker { display: none; }
+      .pi-metrics-more__count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 999px;
+        background: #e8f6f3;
+        font-size: 12px;
+      }
+      .pi-metrics__rest {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        padding: 0 0 10px;
+      }
+    }
+    @media print {
+      @page { size: A4 landscape; margin: 10mm; }
+      html, body.preview-integration-page.erp-shell {
+        background: #fff !important;
+        overflow: visible !important;
+        height: auto !important;
+      }
+      body.preview-integration-page .app-header,
+      body.preview-integration-page .pi-toolbar,
+      body.preview-integration-page .pi-stats,
+      body.preview-integration-page .pi-pager,
+      body.preview-integration-page .no-print,
+      body.preview-integration-page .pi-banner {
+        display: none !important;
+      }
+      body.preview-integration-page .pi-stage,
+      body.preview-integration-page .wash-board {
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        max-width: none !important;
+      }
+      body.preview-integration-page .wash-board::before { display: none !important; }
+      .pi-print-only { display: block !important; margin-bottom: 8px; }
+      table.pi-plan-table,
+      table.pi-table {
+        font-size: 11px !important;
+        width: 100% !important;
+      }
+      table.pi-plan-table th,
+      table.pi-plan-table td,
+      table.pi-table th,
+      table.pi-table td {
+        padding: 4px 5px !important;
+      }
+      /* إخفاء ترقيم الشاشة: اطبع كل البنود */
+      #pi-tasks .pi-pager { display: none !important; }
+    }
+  </style>
+</head>
+<body class="erp-shell preview-integration-page">
+  <div class="app-shell">
+    <header class="app-header command-bar no-print">
+      <div class="command-brand">
+        <img src="/assets/ministry_logo.png" class="header-logo" alt="شعار وزارة التعليم" width="48" height="48">
+        <a class="school-name" href="../../dashboard.html#home">متوسطة سعد بن الربيع الأنصاري</a>
+      </div>
+
+      <nav class="erp-ops" aria-label="روابط النظام">
+        <!-- روابط كاملة للوحة — لا قوائم ناقصة على هذه الصفحة -->
+        <div class="erp-item"><a class="erp-trigger" href="../../dashboard.html#home"><span class="erp-trigger-label">لوحة التحكم</span></a></div>
+        <div class="erp-item"><a class="erp-trigger" href="../../dashboard.html"><span class="erp-trigger-label">الإعدادات</span></a></div>
+        <div class="erp-item"><a class="erp-trigger" href="../../dashboard.html"><span class="erp-trigger-label">السجلات</span></a></div>
+        <div class="erp-item"><a class="erp-trigger" href="../../dashboard.html"><span class="erp-trigger-label">المهام</span></a></div>
+        <div class="erp-item"><a class="erp-trigger" href="../../dashboard.html"><span class="erp-trigger-label">اللجان</span></a></div>
+        <div class="erp-item"><a class="erp-trigger" href="../../dashboard.html"><span class="erp-trigger-label">إعداد الخطط</span></a></div>
+        <div class="erp-item"><a class="erp-trigger" href="../../dashboard.html"><span class="erp-trigger-label">المؤشرات</span></a></div>
+        <div class="erp-item is-current"><a class="erp-trigger" href="my-plan-app.html" title="خطتي"><span class="erp-trigger-label">خطتي</span></a></div>
+        <div class="erp-item" data-erp-pin="end"><a class="erp-trigger" href="../../identity.html#about"><span class="erp-trigger-label">عنا</span></a></div>
+      </nav>
+
+      <div class="command-tools">
+        <div class="command-user" id="command-user">
+          <span id="command-user-name"></span>
+          <span id="command-user-role"></span>
+        </div>
+        <a class="command-exit" href="../../login.html">خروج</a>
+      </div>
+    </header>
+
+    <main class="pi-stage">
+      <section class="wash-board is-plain" aria-label="خطتي">
+        <div class="pi-print-only">
+          <strong>خطتي — متوسطة سعد بن الربيع الأنصاري</strong>
+          <span id="pi-print-meta"></span>
+        </div>
+
+        <h1 class="pi-page-title">خطتي</h1>
+        <p class="pi-field-label" id="pi-cover">جاري التحميل…</p>
+
+        <div class="pi-toolbar no-print">
+          <span id="pi-status" class="pi-field-label" style="margin:0">…</span>
+          <label class="pi-field-label" style="margin:0" for="pi-role-select">الدور</label>
+          <select id="pi-role-select" aria-label="اختيار الدور"></select>
+          <label class="pi-field-label" style="margin:0">
+            <input type="checkbox" id="pi-seasonal"> إظهار الموسمي
+          </label>
+          <button type="button" id="pi-reload">تحديث</button>
+          <button type="button" id="pi-print">طباعة خطتي</button>
+          <a class="pi-field-label" href="../../dashboard.html#home" style="margin-inline-start:auto;color:#0b5e56;font-weight:700">العودة للوحة</a>
+        </div>
+
+        <h2 class="pi-group-title no-print">ملخص سريع</h2>
+        <div class="pi-stats no-print" id="pi-stats"></div>
+
+        <h2 class="pi-group-title">مؤشرات الأداء (من مركز البيانات)</h2>
+        <p class="pi-field-label no-print">تُقرأ ديناميكيًا من <code>performance_metrics.json</code> — بلا أرقام ثابتة في الصفحة</p>
+        <div id="pi-metrics" class="pi-metrics" aria-live="polite"></div>
+
+        <h2 class="pi-group-title">برامج دوري (المعتمدة)</h2>
+        <p class="pi-field-label no-print">جدول يلائم عرض الصفحة · للطباعة الورقية اضغط «طباعة خطتي» (A4 أفقي · بلا مساس بإطار الوثيقة الرسمية)</p>
+        <div id="pi-programs"></div>
+
+        <!-- مرشّحو المعرفة مخفَون عن المستخدم النهائي: ليست للطباعة وليست معتمدة -->
+        <div id="pi-knowledge" hidden></div>
+
+        <h2 class="pi-group-title">بنود التنفيذ</h2>
+        <p class="pi-field-label no-print">جدول · تصفية حسب الهدف · عند الطباعة تُعرض كل البنود</p>
+        <div id="pi-tasks"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="rolePlanPack.js?v=pi3"></script>
+  <script src="../../js/performance-bind.js?v=ssot3"></script>
+  <script src="../../js/identity-bind.js?v=id1"></script>
+  <script src="my-plan-app.js?v=i5"></script>
+</body>
+</html>

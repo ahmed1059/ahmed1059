@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "title": "إطلاق تجريبي — منسوبو متوسطة سعد بن الربيع الأنصاري",
+  "password": "1448",
+  "seed_accounts": true,
+  "overwrite_passwords": false,
+  "open_all_windows": true,
+  "note": "كلمة المرور الموحدة للتجربة فقط. بعد جمع الآراء يُغلق الوضع التجريبي وتُضبط كلمات فردية.",
+  "updated": "2026-11-02"
+}

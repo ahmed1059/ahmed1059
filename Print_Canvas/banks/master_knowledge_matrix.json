@@ -1,0 +1,1056 @@
+{
+  "master_knowledge_matrix": {
+    "metadata": {
+      "matrix_id": "MKM-1448-SRB",
+      "version": "1.0.0",
+      "title": "مصفوفة المعرفة المركزية — منظومة الحوكمة المدرسية",
+      "school": "متوسطة سعد بن الربيع الأنصاري",
+      "school_id": "S-40341",
+      "principal": "نايف بن سمير حجيف المخلفي",
+      "academic_year": "1448",
+      "grade_focus": "الثالث متوسط (0925)",
+      "total_grade_students": 114,
+      "total_school_students": 341,
+      "total_staff": 38,
+      "region": "المدينة المنورة",
+      "office": "مكتب التعليم بقباء",
+      "framework": "هيئة تقويم التعليم والتدريب — ETEC",
+      "runtime": "browser_side_port_8060",
+      "created_at": "1448-05-06",
+      "total_axes": 5
+    },
+
+    "axis_1_plan_separation": {
+      "axis_id": "AX-01",
+      "axis_title": "الفصل الجذري بين الخطة التشغيلية والخطة التنفيذية",
+      "principle": "الخطة التشغيلية تصف (ماذا نريد تحقيقه — Strategic). الخطة التنفيذية تصف (كيف ومتى ومن — Tactical). لا تخلط بينهما في قاعدة البيانات.",
+
+      "operational_plan": {
+        "plan_id": "OP-1448",
+        "plan_type": "استراتيجية سنوية عامة",
+        "timeline": "العام الدراسي الكامل 1448هـ",
+        "owner": "مدير المدرسة",
+        "approver": "المشرف التربوي + إدارة التعليم",
+
+        "strategic_goals_1448": [
+          {
+            "goal_id": "SG-01",
+            "goal": "رفع نسبة الجاهزية الكلية للاعتماد المدرسي من 71% إلى 85%",
+            "linked_domain": "جميع المجالات الأربعة",
+            "kpi": "readiness_index",
+            "baseline": "71%",
+            "target": "85%",
+            "deadline": "نهاية الفصل الثالث"
+          },
+          {
+            "goal_id": "SG-02",
+            "goal": "رفع نسبة إتقان الطلاب في القراءة (لغتي) وفق نافس من 27.7% إلى 55%",
+            "linked_domain": "نواتج التعلم",
+            "linked_indicator": "3-1-1-1",
+            "baseline": "27.7%",
+            "target": "55%"
+          },
+          {
+            "goal_id": "SG-03",
+            "goal": "رفع نسبة إتقان الطلاب في الرياضيات وفق نافس من 18.8% إلى 45%",
+            "linked_domain": "نواتج التعلم",
+            "linked_indicator": "3-1-1-2",
+            "baseline": "18.8%",
+            "target": "45%"
+          },
+          {
+            "goal_id": "SG-04",
+            "goal": "رفع نسبة إتقان الطلاب في العلوم وفق نافس من 42.5% إلى 60%",
+            "linked_domain": "نواتج التعلم",
+            "linked_indicator": "3-1-1-3",
+            "baseline": "42.5%",
+            "target": "60%"
+          },
+          {
+            "goal_id": "SG-05",
+            "goal": "رفع نسبة البيئة المدرسية الآمنة من 60.5% إلى 75%",
+            "linked_domain": "البيئة المدرسية",
+            "linked_indicators": ["4-1-1-1", "4-1-1-2", "4-1-1-3", "4-2-1-1", "4-2-1-2", "4-2-1-3"],
+            "baseline": "60.5%",
+            "target": "75%"
+          },
+          {
+            "goal_id": "SG-06",
+            "goal": "تحقيق نسبة 80% من شواهد ETEC المرفوعة على المنصة الرقمية",
+            "linked_domain": "الإدارة المدرسية",
+            "linked_indicator": "1-4-1-6",
+            "baseline": "50%",
+            "target": "80%"
+          }
+        ],
+
+        "budget": {
+          "total_annual_sar": 45000,
+          "by_category": [
+            { "category": "تشغيل وصيانة", "amount_sar": 12000, "percentage": 26.7 },
+            { "category": "أنشطة طلابية", "amount_sar": 8000, "percentage": 17.8 },
+            { "category": "مستلزمات تعليمية", "amount_sar": 10000, "percentage": 22.2 },
+            { "category": "تطوير مهني", "amount_sar": 6000, "percentage": 13.3 },
+            { "category": "ضيافة وتكريم", "amount_sar": 4000, "percentage": 8.9 },
+            { "category": "طوارئ واحتياطي", "amount_sar": 5000, "percentage": 11.1 }
+          ],
+          "funding_sources": [
+            { "source": "الصندوق المدرسي", "percentage": 55 },
+            { "source": "إدارة التعليم", "percentage": 30 },
+            { "source": "الشراكات المجتمعية", "percentage": 15 }
+          ]
+        },
+
+        "committees_distribution": {
+          "total_committees": 9,
+          "committees": [
+            { "code": "ACC", "name": "لجنة التميز والجودة والاعتماد", "chair": "المدير", "linked_domains": ["الإدارة", "جميع المجالات"] },
+            { "code": "AAN", "name": "لجنة التحصيل الدراسي ونافس", "chair": "المدير", "linked_domains": ["نواتج التعلم"] },
+            { "code": "SGC", "name": "لجنة التوجيه الطلابي والرعاية", "chair": "المدير", "linked_domains": ["نواتج التعلم", "الإدارة"] },
+            { "code": "SSC", "name": "لجنة الأمن والسلامة والطوارئ", "chair": "المدير", "linked_domains": ["البيئة المدرسية"] },
+            { "code": "NEA", "name": "لجنة المناسبات الوطنية والأنشطة", "chair": "المدير", "linked_domains": ["نواتج التعلم"] },
+            { "code": "LRD", "name": "لجنة مصادر التعلم والتحول الرقمي", "chair": "المدير", "linked_domains": ["التعليم والتعلم"] },
+            { "code": "SFP", "name": "لجنة الصندوق المدرسي والمشتريات", "chair": "المدير", "linked_domains": ["الإدارة"] },
+            { "code": "SCS", "name": "لجنة الجدول والانتظار والمناوبة", "chair": "المدير", "linked_domains": ["الإدارة"] },
+            { "code": "EIT", "name": "فريق التدخل السريع وإدارة الأزمات", "chair": "المدير", "linked_domains": ["البيئة المدرسية"] }
+          ]
+        },
+
+        "etec_indicators_50": {
+          "total": 52,
+          "domains": [
+            { "domain": "الإدارة المدرسية", "count": 19, "codes_range": "1-1-1-1 → 1-5-1-2" },
+            { "domain": "التعليم والتعلم", "count": 13, "codes_range": "2-1-1-1 → 2-2-1-4" },
+            { "domain": "نواتج التعلم", "count": 13, "codes_range": "3-1-1-1 → 3-2-1-7" },
+            { "domain": "البيئة المدرسية", "count": 7, "codes_range": "4-1-1-1 → 4-2-1-3" }
+          ],
+          "detail_reference": "registers_lookup_data.json → indicators_master"
+        }
+      },
+
+      "executive_plan": {
+        "plan_id": "EP-1448",
+        "plan_type": "خطة تنفيذية مفصلة",
+        "timeline_weeks": 18,
+        "flexible_range_weeks": "10-20",
+        "owner": "وكيل الشؤون التعليمية",
+        "reviewer": "مدير المدرسة",
+        "task_count_estimated": 42,
+
+        "task_structure": {
+          "required_fields": ["task_id", "week", "task", "responsible_role", "linked_indicator", "evidence_type", "correction_action_if_delayed", "status"],
+          "status_values": ["pending", "in_progress", "completed", "delayed", "cancelled"]
+        },
+
+        "fixed_timeline_18_weeks": [
+          { "week": 1, "phase": "التهيئة والاستعداد", "tasks": [
+            { "task_id": "EP-W01-T01", "task": "اجتماع الجاهزية للكادر الإداري والتعليمي", "role": "principal", "indicator": "1-1-1-1", "evidence": "محضر اجتماع رسمي معتمد" },
+            { "task_id": "EP-W01-T02", "task": "استلام المبنى والكتب وتوزيع الجداول", "role": "vice_admin", "indicator": "4-1-1-2", "evidence": "بيان توقيعات واستلام" },
+            { "task_id": "EP-W01-T03", "task": "توزيع الجداول الدراسية على المعلمين", "role": "vice_academic", "indicator": "2-1-1-2", "evidence": "جدول أسبوعي معتمد" }
+          ]},
+          { "week": 2, "phase": "التشخيص الأولي", "tasks": [
+            { "task_id": "EP-W02-T01", "task": "تنفيذ الاختبارات التشخيصية في المواد الثلاث", "role": "vice_academic", "indicator": "3-1-1-1", "evidence": "كشف درجات من نور" },
+            { "task_id": "EP-W02-T02", "task": "تفعيل منصة مدرستي وتحديث بياناتها", "role": "it_tech", "indicator": "2-1-1-4", "evidence": "تقرير ختامي مصور" }
+          ]},
+          { "week": 3, "phase": "التخطيط والتوثيق", "tasks": [
+            { "task_id": "EP-W03-T01", "task": "اعتماد الخطط الفصلية والعلاجية", "role": "vice_academic", "indicator": "2-1-1-2", "evidence": "خطة عمل معتمدة ومؤرخة" },
+            { "task_id": "EP-W03-T02", "task": "تشكيل لجنة التميز وتوزيع الأدوار", "role": "principal", "indicator": "1-4-1-6", "evidence": "محضر اجتماع رسمي معتمد" }
+          ]},
+          { "week": 4, "phase": "بدء التنفيذ الميداني", "tasks": [
+            { "task_id": "EP-W04-T01", "task": "الزيارات الصفية التقويمية الأولى", "role": "vice_academic", "indicator": "2-1-1-3", "evidence": "استمارة متابعة فردية" },
+            { "task_id": "EP-W04-T02", "task": "تفعيل مصادر التعلم وإحصاء الاستعارة", "role": "media_specialist", "indicator": "2-1-1-6", "evidence": "تقرير ختامي مصور" }
+          ]},
+          { "week": 5, "phase": "التطوير المهني", "tasks": [
+            { "task_id": "EP-W05-T01", "task": "ورشة تدريبية على استراتيجيات التفكير العليا", "role": "vice_academic", "indicator": "2-1-1-7", "evidence": "تقرير ختامي مصور" },
+            { "task_id": "EP-W05-T02", "task": "مجتمعات التعلم المهنية الأولى", "role": "vice_academic", "indicator": "1-4-1-5", "evidence": "محضر اجتماع رسمي معتمد" }
+          ]},
+          { "week": 6, "phase": "الأنشطة الطلابية", "tasks": [
+            { "task_id": "EP-W06-T01", "task": "إطلاق تحدي القراءة الداخلي", "role": "media_specialist", "indicator": "2-1-1-6", "evidence": "شهادة شكر وتكريم" },
+            { "task_id": "EP-W06-T02", "task": "تفعيل الأنشطة الإثرائية للموهوبين", "role": "activity_leader", "indicator": "1-2-1-6", "evidence": "تقرير ختامي مصور" }
+          ]},
+          { "week": 7, "phase": "المتابعة والتحسين", "tasks": [
+            { "task_id": "EP-W07-T01", "task": "مراجعة منتصف الفصل للخطط العلاجية", "role": "vice_academic", "indicator": "2-2-1-2", "evidence": "استمارة متابعة فردية" },
+            { "task_id": "EP-W07-T02", "task": "تحديث شواهد ETEC المرفوعة", "role": "principal", "indicator": "1-4-1-6", "evidence": "بيان توقيعات واستلام" }
+          ]},
+          { "week": 8, "phase": "الاختبارات الفترية", "tasks": [
+            { "task_id": "EP-W08-T01", "task": "تنفيذ الاختبارات الفترية الأولى", "role": "vice_academic", "indicator": "2-2-1-1", "evidence": "كشف درجات من نور" },
+            { "task_id": "EP-W08-T02", "task": "تحليل النتائج وبناء الخطط الإثرائية", "role": "vice_academic", "indicator": "2-2-1-2", "evidence": "استمارة متابعة فردية" }
+          ]},
+          { "week": 9, "phase": "التغذية الراجعة", "tasks": [
+            { "task_id": "EP-W09-T01", "task": "تقديم التغذية الراجعة للطلاب وأولياء الأمور", "role": "vice_students", "indicator": "2-2-1-3", "evidence": "بيان توقيعات واستلام" },
+            { "task_id": "EP-W09-T02", "task": "مراجعة استبانات رضا أولياء الأمور", "role": "counselor", "indicator": "1-3-1-2", "evidence": "تقرير ختامي مصور" }
+          ]},
+          { "week": 10, "phase": "التقويم الذاتي الوسيط", "tasks": [
+            { "task_id": "EP-W10-T01", "task": "تطبيق استبانات التقويم الذاتي", "role": "principal", "indicator": "1-4-1-6", "evidence": "استمارة متابعة فردية" },
+            { "task_id": "EP-W10-T02", "task": "تحديث خطة التحسين في ضوء النتائج", "role": "principal", "indicator": "1-4-1-7", "evidence": "خطة عمل معتمدة ومؤرخة" }
+          ]},
+          { "week": 11, "phase": "مراجعة شاملة", "tasks": [
+            { "task_id": "EP-W11-T01", "task": "اجتماع لجنة التميز الشهري", "role": "principal", "indicator": "1-4-1-6", "evidence": "محضر اجتماع رسمي معتمد" },
+            { "task_id": "EP-W11-T02", "task": "زيارة ميدانية داخلية للمراجعة", "role": "principal", "indicator": "1-4-1-7", "evidence": "تقرير ختامي مصور" }
+          ]},
+          { "week": 12, "phase": "التدخلات الفردية", "tasks": [
+            { "task_id": "EP-W12-T01", "task": "دراسة الحالات الفردية المتعثرة", "role": "counselor", "indicator": "3-2-1-2", "evidence": "استمارة متابعة فردية" },
+            { "task_id": "EP-W12-T02", "task": "إحالة الحالات الحرجة للمختصين", "role": "counselor", "indicator": "3-2-1-5", "evidence": "بيان توقيعات واستلام" }
+          ]},
+          { "week": 13, "phase": "الأنشطة الختامية", "tasks": [
+            { "task_id": "EP-W13-T01", "task": "تنفيذ المسابقات الداخلية", "role": "activity_leader", "indicator": "1-2-1-6", "evidence": "شهادة شكر وتكريم" },
+            { "task_id": "EP-W13-T02", "task": "تكريم الطلاب المتميزين سلوكياً", "role": "counselor", "indicator": "3-2-1-2", "evidence": "شهادة شكر وتكريم" }
+          ]},
+          { "week": 14, "phase": "الاستعداد للاختبارات النهائية", "tasks": [
+            { "task_id": "EP-W14-T01", "task": "مراجعة الخطط العلاجية النهائية", "role": "vice_academic", "indicator": "2-2-1-2", "evidence": "استمارة متابعة فردية" },
+            { "task_id": "EP-W14-T02", "task": "تجهيز جداول الاختبارات النهائية", "role": "vice_academic", "indicator": "1-1-1-2", "evidence": "جدول أسبوعي معتمد" }
+          ]},
+          { "week": 15, "phase": "الاختبارات النهائية", "tasks": [
+            { "task_id": "EP-W15-T01", "task": "تنفيذ الاختبارات النهائية", "role": "vice_academic", "indicator": "2-2-1-1", "evidence": "كشف درجات من نور" },
+            { "task_id": "EP-W15-T02", "task": "مراجعة إجراءات الأمن والسلامة أثناء الاختبارات", "role": "vice_admin", "indicator": "4-2-1-1", "evidence": "محضر اجتماع رسمي معتمد" }
+          ]},
+          { "week": 16, "phase": "التصحيح والتحليل", "tasks": [
+            { "task_id": "EP-W16-T01", "task": "رصد النتائج في نظام نور", "role": "vice_academic", "indicator": "2-2-1-1", "evidence": "كشف درجات من نور" },
+            { "task_id": "EP-W16-T02", "task": "تحليل النتائج النهائية", "role": "vice_academic", "indicator": "2-2-1-2", "evidence": "تقرير ختامي مصور" }
+          ]},
+          { "week": 17, "phase": "التقارير الختامية", "tasks": [
+            { "task_id": "EP-W17-T01", "task": "إعداد التقرير السنوي للتقويم الذاتي", "role": "principal", "indicator": "1-4-1-6", "evidence": "تقرير ختامي مصور" },
+            { "task_id": "EP-W17-T02", "task": "رفع التقارير النهائية لإدارة التعليم", "role": "principal", "indicator": "1-1-1-2", "evidence": "بيان توقيعات واستلام" }
+          ]},
+          { "week": 18, "phase": "الإغلاق والتخطيط للعام القادم", "tasks": [
+            { "task_id": "EP-W18-T01", "task": "اجتماع لجنة التميز الختامي", "role": "principal", "indicator": "1-4-1-6", "evidence": "محضر اجتماع رسمي معتمد" },
+            { "task_id": "EP-W18-T02", "task": "بناء خطة العام 1449", "role": "principal", "indicator": "1-1-1-1", "evidence": "خطة عمل معتمدة ومؤرخة" }
+          ]}
+        ],
+
+        "dynamic_nafes_slots": {
+          "note": "هذه المهام لا تُثبَّت على أسابيع ثابتة — تُحسب نسبياً إلى nafes_target_week (انظر AX-02)",
+          "linked_to": "AX-02_floating_nafes_engine"
+        }
+      }
+    },
+
+    "axis_2_floating_nafes_engine": {
+      "axis_id": "AX-02",
+      "axis_title": "محرك الجدولة العائمة لاختبار نافس",
+      "rationale": "موعد تطبيق نافس الوزاري متغير سنوياً — لا يمكن تثبيته على أسبوع ثابت. الحل: متغير ديناميكي واحد + قواعد إزاحة نسبية.",
+
+      "configuration": {
+        "nafes_target_week": {
+          "type": "integer",
+          "range": [8, 18],
+          "default": 14,
+          "editable_by": "principal",
+          "stored_in": "settings.executive_plan.nafes_target_week",
+          "hint": "يُحدَّث هذا المتغير عند صدور التعميم الوزاري بموعد تطبيق نافس"
+        },
+        "recalculation_trigger": "auto_on_change",
+        "recalculation_scope": "all_nafes_related_tasks"
+      },
+
+      "offset_rules": [
+        {
+          "phase_id": "NAFES-PRE-01",
+          "label": "التشخيص المبكر",
+          "offset_weeks": -6,
+          "range_end_offset": -4,
+          "duration_weeks": 3,
+          "activities": [
+            { "activity": "تطبيق الاختبارات التشخيصية المركزية (النماذج 1-2)", "responsible": "vice_academic", "evidence": "كشف درجات من نور" },
+            { "activity": "تحليل الفجوات المهارية وتصنيف الطلاب", "responsible": "vice_academic", "evidence": "استمارة متابعة فردية" },
+            { "activity": "بناء خطة التدخل العلاجي على مستوى الفصل", "responsible": "vice_academic", "evidence": "خطة عمل معتمدة ومؤرخة" }
+          ],
+          "deliverable": "matrix_gap_analysis_per_class"
+        },
+        {
+          "phase_id": "NAFES-PRE-02",
+          "label": "التدريب المكثف",
+          "offset_weeks": -3,
+          "range_end_offset": -1,
+          "duration_weeks": 3,
+          "activities": [
+            { "activity": "حصص الدعم اليومية في المهارات الحرجة", "responsible": "teachers", "evidence": "استمارة متابعة فردية" },
+            { "activity": "تفعيل بنك أوراق العمل التخصصية", "responsible": "vice_academic", "evidence": "تقرير ختامي مصور" },
+            { "activity": "تشغيل الاختبارات القصيرة الأسبوعية", "responsible": "teachers", "evidence": "كشف درجات من نور" }
+          ],
+          "deliverable": "intensive_training_package_completed"
+        },
+        {
+          "phase_id": "NAFES-TEST-WEEK",
+          "label": "أسبوع التطبيق الفعلي",
+          "offset_weeks": 0,
+          "duration_weeks": 1,
+          "activities": [
+            { "activity": "محاكاة شروط الاختبار (45 دقيقة لكل مادة)", "responsible": "vice_academic", "evidence": "تقرير ختامي مصور" },
+            { "activity": "التدريب على التظليل الورقي OMR", "responsible": "teachers", "evidence": "بيان توقيعات واستلام" },
+            { "activity": "تجهيز لجان الاختبار وتطبيق المحاكاة النهائية", "responsible": "vice_admin", "evidence": "محضر اجتماع رسمي معتمد" }
+          ],
+          "deliverable": "final_simulation_complete"
+        },
+        {
+          "phase_id": "NAFES-POST-01",
+          "label": "تحليل النتائج",
+          "offset_weeks": 1,
+          "range_end_offset": 2,
+          "duration_weeks": 2,
+          "activities": [
+            { "activity": "استيراد نتائج نافس من نظام نور", "responsible": "vice_academic", "evidence": "كشف درجات من نور" },
+            { "activity": "تسكين الفاقد التعليمي في سجل الرعاية التحصيلية (ACR)", "responsible": "vice_academic", "evidence": "استمارة متابعة فردية" },
+            { "activity": "إعداد تقرير أثر نافس التفصيلي", "responsible": "principal", "evidence": "تقرير ختامي مصور" }
+          ],
+          "deliverable": "nafes_impact_report_final"
+        }
+      ],
+
+      "simulation_protocol": {
+        "test_duration_minutes_per_subject": 45,
+        "omr_shading": "paper_based",
+        "subjects_config": [
+          { "subject": "لغتي الخالدة (قراءة)", "questions_count": 28 },
+          { "subject": "الرياضيات", "questions_count": 30 },
+          { "subject": "العلوم", "questions_count": 30 }
+        ],
+        "invigilation_rules": [
+          "استخدام نفس عدد لجان الاختبار الرسمي",
+          "توزيع الطلاب بمسافات فاصلة كما في الاختبار الرسمي",
+          "استخدام نماذج OMR مطابقة",
+          "مراقبة زمنية دقيقة (45 دقيقة لكل مادة)"
+        ]
+      },
+
+      "example_calculation": {
+        "scenario": "إذا nafes_target_week = 14",
+        "computed_weeks": {
+          "diagnostic_phase": "الأسابيع 8-10",
+          "intensive_training": "الأسابيع 11-13",
+          "test_week": "الأسبوع 14",
+          "results_analysis": "الأسابيع 15-16"
+        }
+      }
+    },
+
+    "axis_3_nafes_repository": {
+      "axis_id": "AX-03",
+      "axis_title": "المستودع المعياري لمهارات وبنوك نافس",
+      "grade": "الثالث متوسط",
+      "total_skills": 47,
+
+      "reading_repository": {
+        "subject": "لغتي الخالدة",
+        "nafes_questions": 28,
+        "cognitive_levels": [
+          {
+            "level_id": "RC-L1",
+            "level_name": "الفهم والاسترجاع",
+            "level_name_en": "Retrieval",
+            "weight": 40,
+            "description": "استخراج المعلومات المباشرة من النص",
+            "sample_skills": [
+              "تحديد الفكرة الرئيسة للنص",
+              "استخراج تفاصيل محددة",
+              "تحديد الشخصيات والأماكن",
+              "ترتيب الأحداث حسب التسلسل الزمني",
+              "التعرف على معاني المفردات في سياقها"
+            ]
+          },
+          {
+            "level_id": "RC-L2",
+            "level_name": "الدمج والتفسير",
+            "level_name_en": "Integration & Interpretation",
+            "weight": 40,
+            "description": "ربط المعلومات واستنتاج المعنى الضمني",
+            "sample_skills": [
+              "استنتاج الفكرة الضمنية",
+              "تحديد العلاقات السببية",
+              "المقارنة بين فكرتين",
+              "تفسير السلوك والدوافع",
+              "تلخيص النص بأسلوب الطالب"
+            ]
+          },
+          {
+            "level_id": "RC-L3",
+            "level_name": "التأمل والتقييم",
+            "level_name_en": "Reflection & Evaluation",
+            "weight": 20,
+            "description": "تقييم النص والحكم عليه",
+            "sample_skills": [
+              "تقييم حجج الكاتب",
+              "تحديد موقف الكاتب",
+              "نقد الأسلوب",
+              "الربط بالخبرات الشخصية",
+              "اقتراح حلول للقضايا المطروحة"
+            ]
+          }
+        ],
+        "linked_skills": [
+          { "skill_id": "AR-R-01", "skill": "الفهم القرائي المباشر", "level": "RC-L1", "linked_etec": "3-1-1-1" },
+          { "skill_id": "AR-R-02", "skill": "الاستنتاج القرائي", "level": "RC-L2", "linked_etec": "3-1-1-1" },
+          { "skill_id": "AR-R-03", "skill": "التقييم النقدي", "level": "RC-L3", "linked_etec": "3-1-1-1" },
+          { "skill_id": "AR-R-04", "skill": "المفردات والتراكيب", "level": "RC-L1", "linked_etec": "2-1-1-6" }
+        ]
+      },
+
+      "math_repository": {
+        "subject": "الرياضيات",
+        "nafes_questions": 30,
+        "major_units": [
+          {
+            "unit_id": "MA-U1",
+            "unit_name": "أنظمة المعادلات",
+            "weight_percentage": 25,
+            "skills": [
+              "حل نظام معادلتين خطيتين بيانياً",
+              "حل نظام معادلتين بالتعويض",
+              "حل نظام معادلتين بالحذف",
+              "تطبيقات حياتية على أنظمة المعادلات"
+            ],
+            "worksheet_reference": "AR-WS-01",
+            "linked_etec": "3-1-1-2"
+          },
+          {
+            "unit_id": "MA-U2",
+            "unit_name": "وحيدات الحد",
+            "weight_percentage": 20,
+            "skills": [
+              "ضرب وحيدات الحد",
+              "قسمة وحيدات الحد",
+              "تبسيط العبارات الجبرية",
+              "الأسس السالبة"
+            ],
+            "worksheet_reference": "AR-WS-02",
+            "linked_etec": "3-1-1-2"
+          },
+          {
+            "unit_id": "MA-U3",
+            "unit_name": "كثيرات الحدود",
+            "weight_percentage": 25,
+            "skills": [
+              "جمع وطرح كثيرات الحدود",
+              "ضرب كثيرات الحدود",
+              "ضرب ثنائيات الحد (FOIL)",
+              "المربع الكامل"
+            ],
+            "worksheet_reference": "AR-WS-03",
+            "linked_etec": "3-1-1-2"
+          },
+          {
+            "unit_id": "MA-U4",
+            "unit_name": "التحليل",
+            "weight_percentage": 30,
+            "skills": [
+              "التحليل بإخراج العامل المشترك الأكبر",
+              "التحليل بالتجميع",
+              "تحليل الفرق بين مربعين",
+              "تحليل ثلاثي الحدود",
+              "حل المعادلات التربيعية بالتحليل"
+            ],
+            "worksheet_reference": "AR-WS-04",
+            "linked_etec": "3-1-1-2"
+          }
+        ],
+        "total_skills": 17
+      },
+
+      "science_repository": {
+        "subject": "العلوم",
+        "nafes_questions": 30,
+        "branches": [
+          {
+            "branch_id": "SC-B1",
+            "branch_name": "علوم الحياة",
+            "weight_percentage": 35,
+            "skills": [
+              "الخلية ووظائف أعضائها",
+              "الانقسام الخلوي",
+              "الوراثة وقوانين مندل",
+              "التكيف والتنوع الحيوي",
+              "العلاقات البيئية"
+            ],
+            "linked_etec": "3-1-1-3"
+          },
+          {
+            "branch_id": "SC-B2",
+            "branch_name": "العلوم الفيزيائية",
+            "weight_percentage": 35,
+            "skills": [
+              "الحركة والسرعة والتسارع",
+              "قوانين نيوتن",
+              "الطاقة والشغل والقدرة",
+              "الضوء والصوت",
+              "الكهرباء والمغناطيسية"
+            ],
+            "linked_etec": "3-1-1-3"
+          },
+          {
+            "branch_id": "SC-B3",
+            "branch_name": "الكيمياء",
+            "weight_percentage": 20,
+            "skills": [
+              "الجدول الدوري",
+              "التفاعلات الكيميائية",
+              "المعادلات الكيميائية وموازنتها",
+              "الأحماض والقواعد"
+            ],
+            "linked_etec": "3-1-1-3"
+          },
+          {
+            "branch_id": "SC-B4",
+            "branch_name": "علم الأرض والفضاء",
+            "weight_percentage": 10,
+            "skills": [
+              "طبقات الأرض",
+              "الصفائح التكتونية",
+              "المجموعة الشمسية",
+              "النجوم والمجرات"
+            ],
+            "linked_etec": "3-1-1-3"
+          }
+        ],
+        "total_skills": 18
+      },
+
+      "kangaroo_gifted_repository": {
+        "bank_name": "بنك الكانجارو للموهوبين",
+        "linked_register": "GCR",
+        "linked_committee": "AAN",
+        "question_difficulty_levels": [
+          {
+            "level": 3,
+            "label": "سهل",
+            "points": 3,
+            "description": "أسئلة تأسيسية - مهارات أساسية",
+            "sample_count": 30,
+            "skill_focus": ["الحساب الذهني", "الأنماط البسيطة", "الهندسة الأساسية"]
+          },
+          {
+            "level": 4,
+            "label": "متوسط",
+            "points": 4,
+            "description": "أسئلة تحليلية - تفكير منطقي",
+            "sample_count": 30,
+            "skill_focus": ["المنطق الرياضي", "الاحتمالات المبسطة", "البرهان البسيط"]
+          },
+          {
+            "level": 5,
+            "label": "صعب",
+            "points": 5,
+            "description": "أسئلة إبداعية - تفكير عليا",
+            "sample_count": 20,
+            "skill_focus": ["الابتكار الرياضي", "حل مشكلات معقدة", "البرهان المتقدم"]
+          }
+        ],
+        "total_questions": 80,
+        "competition_format": {
+          "duration_minutes": 75,
+          "questions_total": 30,
+          "scoring": "3 نقاط للسؤال السهل + 4 للمتوسط + 5 للصعب",
+          "max_score": 120
+        },
+        "linked_indicators": ["1-2-1-6", "3-2-1-6"]
+      },
+
+      "central_models_library": {
+        "bank_name": "النماذج الوزارية المركزية",
+        "models_count": 5,
+        "models": [
+          { "model_id": "CM-01", "label": "النموذج الأول", "questions": { "reading": 28, "math": 30, "science": 30 }, "link_path": "Print_Canvas/assets/central_models/CM-01.pdf" },
+          { "model_id": "CM-02", "label": "النموذج الثاني", "questions": { "reading": 28, "math": 30, "science": 30 }, "link_path": "Print_Canvas/assets/central_models/CM-02.pdf" },
+          { "model_id": "CM-03", "label": "النموذج الثالث", "questions": { "reading": 28, "math": 30, "science": 30 }, "link_path": "Print_Canvas/assets/central_models/CM-03.pdf" },
+          { "model_id": "CM-04", "label": "النموذج الرابع", "questions": { "reading": 28, "math": 30, "science": 30 }, "link_path": "Print_Canvas/assets/central_models/CM-04.pdf" },
+          { "model_id": "CM-05", "label": "النموذج الخامس", "questions": { "reading": 28, "math": 30, "science": 30 }, "link_path": "Print_Canvas/assets/central_models/CM-05.pdf" }
+        ]
+      },
+
+      "worksheet_bank": {
+        "bank_name": "بنك أوراق العمل التخصصية",
+        "total_worksheets": 24,
+        "structure": {
+          "math_worksheets": [
+            { "ws_id": "AR-WS-01", "title": "أنظمة المعادلات", "items_count": 15, "linked_unit": "MA-U1" },
+            { "ws_id": "AR-WS-02", "title": "وحيدات الحد", "items_count": 12, "linked_unit": "MA-U2" },
+            { "ws_id": "AR-WS-03", "title": "كثيرات الحدود", "items_count": 18, "linked_unit": "MA-U3" },
+            { "ws_id": "AR-WS-04", "title": "التحليل", "items_count": 20, "linked_unit": "MA-U4" }
+          ],
+          "reading_worksheets": [
+            { "ws_id": "AR-WS-05", "title": "الفهم المباشر", "items_count": 10, "level": "RC-L1" },
+            { "ws_id": "AR-WS-06", "title": "الاستنتاج والدمج", "items_count": 10, "level": "RC-L2" },
+            { "ws_id": "AR-WS-07", "title": "التقييم النقدي", "items_count": 8, "level": "RC-L3" }
+          ],
+          "science_worksheets": [
+            { "ws_id": "AR-WS-08", "title": "علوم الحياة", "items_count": 15, "branch": "SC-B1" },
+            { "ws_id": "AR-WS-09", "title": "الفيزياء", "items_count": 15, "branch": "SC-B2" },
+            { "ws_id": "AR-WS-10", "title": "الكيمياء", "items_count": 12, "branch": "SC-B3" }
+          ]
+        }
+      }
+    },
+
+    "axis_4_staff_roles_registers": {
+      "axis_id": "AX-04",
+      "axis_title": "مصفوفة سجلات واختصاصات الكادر",
+      "total_staff": 38,
+      "staff_by_role": {
+        "principal": 1,
+        "vice_academic": 1,
+        "vice_admin": 1,
+        "vice_students": 1,
+        "counselor": 1,
+        "activity_leader": 1,
+        "lab_tech": 1,
+        "it_tech": 1,
+        "media_specialist": 1,
+        "admin_assistant": 3,
+        "teachers": 26
+      },
+
+      "role_matrix": [
+        {
+          "role_code": "principal",
+          "role_name": "مدير المدرسة",
+          "assigned_person": "نايف بن سمير حجيف المخلفي",
+          "nid": "1000000001",
+          "signature_file": "sig_1000000001.png",
+          "registers_owned": ["accreditation_and_excellence", "school_fund_and_procurement"],
+          "registers_supervised": ["all_registers"],
+          "committees_led": ["ACC", "AAN", "SGC", "SSC", "NEA", "LRD", "SFP", "SCS", "EIT"],
+          "linked_indicators": ["1-1-1-1", "1-1-1-2", "1-4-1-6", "1-4-1-7"],
+          "kpis_monitored": ["readiness_index", "all_domain_scores"]
+        },
+        {
+          "role_code": "vice_academic",
+          "role_name": "وكيل الشؤون التعليمية",
+          "assigned_person": "هاني بن مسعود سعيد الأحمدي",
+          "nid": "1000000002",
+          "signature_file": "sig_1000000002.png",
+          "registers_owned": ["academic_care_register", "classroom_visits", "learning_resources_register", "schedule_and_substitution_register"],
+          "registers_supervised": ["academic_care", "lab_experiments"],
+          "committees_led": ["AAN", "SCS"],
+          "linked_indicators": ["2-1-1-1", "2-1-1-2", "2-1-1-3", "2-2-1-1", "2-2-1-2", "2-2-1-3", "1-4-1-5"],
+          "kpis_monitored": ["nafes_readiness", "classroom_visit_completion", "remediation_plan_completion"]
+        },
+        {
+          "role_code": "vice_admin",
+          "role_name": "وكيل الشؤون المدرسية",
+          "assigned_person": "مطيع بن طلال غازي الصاعدي",
+          "nid": "1000000003",
+          "signature_file": "sig_1000000003.png",
+          "registers_owned": ["safety_security_and_crisis", "employee_leave_register"],
+          "committees_led": ["SSC"],
+          "linked_indicators": ["4-1-1-1", "4-1-1-2", "4-1-1-3", "4-2-1-1", "4-2-1-2", "4-2-1-3"],
+          "kpis_monitored": ["safety_compliance_rate", "maintenance_completion"]
+        },
+        {
+          "role_code": "vice_students",
+          "role_name": "وكيل شؤون الطلاب",
+          "assigned_person": "محمد بن نافع الحربي",
+          "nid": "1000000004",
+          "signature_file": "sig_1000000004.png",
+          "registers_owned": ["behavioral_cases_register", "student_guidance_and_care"],
+          "committees_led": ["SGC", "NEA"],
+          "linked_indicators": ["3-2-1-1", "3-2-1-2", "3-2-1-3", "3-2-1-4", "3-2-1-5"],
+          "kpis_monitored": ["behavioral_incidents_rate", "attendance_rate", "parent_engagement"]
+        },
+        {
+          "role_code": "counselor",
+          "role_name": "الموجه الطلابي",
+          "assigned_person": "عبدالله بن سعد العمري",
+          "nid": "1000000005",
+          "signature_file": "sig_1000000005.png",
+          "registers_owned": ["counselor_care", "case_study"],
+          "committees_led": ["SGC"],
+          "linked_indicators": ["1-2-1-3", "1-2-1-4", "3-2-1-2", "3-2-1-5", "3-2-1-6"],
+          "kpis_monitored": ["counseling_sessions_completed", "case_resolution_rate"]
+        },
+        {
+          "role_code": "activity_leader",
+          "role_name": "رائد النشاط الطلابي",
+          "assigned_person": "سعد بن علي القحطاني",
+          "nid": "1000000006",
+          "signature_file": "sig_1000000006.png",
+          "registers_owned": ["activity_plan", "national_events_and_activities"],
+          "committees_led": ["NEA"],
+          "linked_indicators": ["1-2-1-6", "1-3-1-3", "3-2-1-4", "3-2-1-7"],
+          "kpis_monitored": ["activities_completion", "student_participation"]
+        },
+        {
+          "role_code": "lab_tech",
+          "role_name": "محضر المختبر",
+          "assigned_person": "خالد بن فهد الغامدي",
+          "nid": "1000000031",
+          "signature_file": "sig_1000000031.png",
+          "registers_owned": ["lab_experiments_register"],
+          "committees_led": [],
+          "linked_indicators": ["2-1-1-5", "3-1-1-3", "4-2-1-1"],
+          "kpis_monitored": ["experiments_execution_rate", "safety_compliance"]
+        },
+        {
+          "role_code": "it_tech",
+          "role_name": "محضر معمل الحاسب",
+          "assigned_person": "سلطان بن سعد الشهري",
+          "nid": "1000000032",
+          "signature_file": "sig_1000000032.png",
+          "registers_owned": [],
+          "committees_led": [],
+          "linked_indicators": ["2-1-1-4", "2-1-1-9"],
+          "kpis_monitored": ["madrasati_usage_rate", "digital_skills_completion"]
+        },
+        {
+          "role_code": "media_specialist",
+          "role_name": "أمين مصادر التعلم",
+          "assigned_person": "أحمد بن فهد المالكي",
+          "nid": "1000000033",
+          "signature_file": "sig_1000000033.png",
+          "registers_owned": ["learning_resources_register"],
+          "committees_led": ["LRD"],
+          "linked_indicators": ["2-1-1-6", "3-1-1-1", "3-2-1-6"],
+          "kpis_monitored": ["borrowing_rate", "reading_activities_count"]
+        },
+        {
+          "role_code": "admin_assistant",
+          "role_name": "المساعد الإداري",
+          "assigned_people": [
+            { "name": "محمد بن سعيد العتيبي", "nid": "1000000034" },
+            { "name": "عبدالله بن ناصر الدوسري", "nid": "1000000035" },
+            { "name": "سعد بن ماجد السبيعي", "nid": "1000000036" }
+          ],
+          "registers_owned": ["admin_communications", "employee_leave_register"],
+          "committees_led": [],
+          "linked_indicators": ["1-4-1-2", "1-1-1-2"],
+          "kpis_monitored": ["transactions_processing_rate", "archive_completeness"]
+        },
+        {
+          "role_code": "teacher",
+          "role_name": "المعلم",
+          "total_count": 26,
+          "nid_range": "1000000007 → 1000000030 + 1000000037 → 1000000038",
+          "registers_owned": ["classroom_visits", "academic_care_register"],
+          "committees_led": [],
+          "linked_indicators": ["2-1-1-1", "2-1-1-2", "2-1-1-3", "2-1-1-7", "2-2-1-1", "2-2-1-3"],
+          "kpis_monitored": ["lesson_plan_completion", "student_progress", "evidence_upload_rate"]
+        }
+      ],
+
+      "register_ownership_index": {
+        "accreditation_and_excellence": ["principal"],
+        "academic_achievement_and_nafes": ["vice_academic"],
+        "student_guidance_and_care": ["counselor", "vice_students"],
+        "safety_security_and_crisis": ["vice_admin"],
+        "national_events_and_activities": ["activity_leader"],
+        "learning_resources_and_digital": ["media_specialist"],
+        "school_fund_and_procurement": ["admin_assistant", "principal"],
+        "schedule_and_substitutions": ["vice_academic"],
+        "emergency_intervention_team": ["vice_admin"]
+      }
+    },
+
+    "axis_5_smart_autofill": {
+      "axis_id": "AX-05",
+      "axis_title": "محرك التسكين الذكي متعدد المسارات",
+      "principle": "التمييز التلقائي بين حالتين: (أ) إجراء أحادي بسيط للحالات الروتينية، (ب) مسار علاجي متكامل من مرحلتين للفاقد المهاري الحرج.",
+
+      "trigger_logic": {
+        "input_sources": [
+          "academic_care_register.gap_type",
+          "academic_care_register.severity",
+          "nafes_result.percentage",
+          "behavioral_cases_register.incident_classification"
+        ],
+        "decision_tree": [
+          { "condition": "severity == 'بسيط' OR gap_type == 'معرفي'", "route": "single_step" },
+          { "condition": "severity == 'متوسط' OR gap_type == 'مهاري'", "route": "multi_step" },
+          { "condition": "severity == 'عميق' OR nafes_pct < 50", "route": "multi_step_critical" }
+        ]
+      },
+
+      "single_step_rules": {
+        "description": "للحالات الروتينية — إجراء واحد مباشر يُسكَّن تلقائياً",
+        "rules": [
+          {
+            "rule_id": "SS-01",
+            "trigger": "gap_type=معرفي AND severity=بسيط",
+            "autofill": {
+              "intervention_type": "دعم فردي من المعلم",
+              "duration_weeks": 2,
+              "sessions_count": 4,
+              "evidence_required": "استمارة متابعة فردية"
+            }
+          },
+          {
+            "rule_id": "SS-02",
+            "trigger": "incident_classification=بسيطة AND incident_count_in_week < 3",
+            "autofill": {
+              "immediate_action": "تنبيه شفهي وتوجيه تربوي",
+              "followup_sessions": 1,
+              "evidence_required": "بيان توقيعات واستلام"
+            }
+          },
+          {
+            "rule_id": "SS-03",
+            "trigger": "nafes_skill_pct IN [60, 74]",
+            "autofill": {
+              "intervention_type": "حصص تقوية أسبوعية",
+              "duration_weeks": 3,
+              "sessions_per_week": 1,
+              "evidence_required": "كشف درجات من نور"
+            }
+          },
+          {
+            "rule_id": "SS-04",
+            "trigger": "attendance_absence=3_days_consecutive",
+            "autofill": {
+              "immediate_action": "استدعاء ولي الأمر",
+              "counselor_session_required": false,
+              "evidence_required": "بيان توقيعات واستلام"
+            }
+          }
+        ]
+      },
+
+      "multi_step_pathways": {
+        "description": "للفاقد المهاري الحرج — مسار متكامل من مرحلتين أو ثلاث",
+        "pathways": [
+          {
+            "pathway_id": "MSP-01",
+            "pathway_name": "مسار الفاقد المهاري الحرج - الرياضيات",
+            "trigger": {
+              "subject": "الرياضيات",
+              "gap_type": "مهاري",
+              "severity": "عميق",
+              "nafes_pct_threshold": "< 50"
+            },
+            "steps": [
+              {
+                "step": 1,
+                "type": "حصة تقوية محددة",
+                "autofill": {
+                  "session_type": "حصة تقوية فردية",
+                  "frequency": "3_مرات_أسبوعياً",
+                  "duration_weeks": 4,
+                  "linked_skill": "auto_detect_from_matrix_gap",
+                  "teacher_assigned": "auto_pick_by_subject_specialization"
+                }
+              },
+              {
+                "step": 2,
+                "type": "ورقة عمل تخصصية",
+                "autofill": {
+                  "worksheet_id": "auto_map_from_skill_to_ws",
+                  "worksheet_example": "AR-WS-04 (التحليل)",
+                  "completion_required": true,
+                  "auto_grading": false,
+                  "teacher_review": true
+                }
+              },
+              {
+                "step": 3,
+                "type": "توثيق الشاهد",
+                "autofill": {
+                  "evidence_type": "استمارة متابعة فردية",
+                  "evidence_number": "auto_generate_prefix_ACR",
+                  "archive_path": "evidence/1448/academic_care/{student_nid}/",
+                  "linked_indicator": "3-1-1-2"
+                }
+              }
+            ],
+            "expected_outcome": {
+              "kpi_measured": "improvement_rate",
+              "target": ">= 30%_improvement",
+              "review_after_weeks": 4
+            }
+          },
+          {
+            "pathway_id": "MSP-02",
+            "pathway_name": "مسار الفاقد القرائي الحرج - القراءة",
+            "trigger": {
+              "subject": "لغتي الخالدة (قراءة)",
+              "gap_type": "مهاري",
+              "reading_level": "RC-L2_or_RC-L3",
+              "nafes_pct_threshold": "< 55"
+            },
+            "steps": [
+              {
+                "step": 1,
+                "type": "جلسات قراءة موجهة",
+                "autofill": {
+                  "session_type": "قراءة موجهة فردية",
+                  "frequency": "يومياً_15_دقيقة",
+                  "duration_weeks": 6,
+                  "reading_materials": "auto_from_nafes_reading_bank"
+                }
+              },
+              {
+                "step": 2,
+                "type": "ورقة عمل حسب المستوى",
+                "autofill": {
+                  "worksheet_id": "AR-WS-05/06/07_by_level",
+                  "completion_required": true
+                }
+              },
+              {
+                "step": 3,
+                "type": "أنشطة إثرائية",
+                "autofill": {
+                  "activity_type": "تحدي القراءة الداخلي",
+                  "linked_register": "learning_resources_register",
+                  "evidence_type": "شهادة شكر وتكريم"
+                }
+              }
+            ]
+          },
+          {
+            "pathway_id": "MSP-03",
+            "pathway_name": "مسار الفاقد العلمي الحرج - العلوم",
+            "trigger": {
+              "subject": "العلوم",
+              "gap_type": "مهاري",
+              "nafes_pct_threshold": "< 50"
+            },
+            "steps": [
+              {
+                "step": 1,
+                "type": "حصص تجريبية عملية",
+                "autofill": {
+                  "session_type": "تجارب عملية مصغرة",
+                  "frequency": "2_مرات_أسبوعياً",
+                  "duration_weeks": 4,
+                  "lab_tech_assigned": "1000000031",
+                  "linked_branch": "auto_from_weakest_nafes_branch"
+                }
+              },
+              {
+                "step": 2,
+                "type": "ورقة عمل تخصصية",
+                "autofill": {
+                  "worksheet_id": "AR-WS-08/09/10_by_branch"
+                }
+              },
+              {
+                "step": 3,
+                "type": "شاهد عملي",
+                "autofill": {
+                  "evidence_type": "تقرير ختامي مصور",
+                  "linked_register": "lab_experiments_register"
+                }
+              }
+            ]
+          },
+          {
+            "pathway_id": "MSP-04",
+            "pathway_name": "مسار الطالب الموهوب - الرياضيات",
+            "trigger": {
+              "student_classification": "موهوب",
+              "gifted_domain": "رياضي",
+              "linked_register": "GCR"
+            },
+            "steps": [
+              {
+                "step": 1,
+                "type": "بنك الكانجارو",
+                "autofill": {
+                  "kangaroo_level": "auto_assign_3_4_5_based_on_performance",
+                  "questions_count": 30,
+                  "duration": "حسب تقدم الطالب"
+                }
+              },
+              {
+                "step": 2,
+                "type": "برنامج إثرائي نوعي",
+                "autofill": {
+                  "program": "برنامج إثرائي في الرياضيات المتقدمة",
+                  "frequency": "أسبوعياً",
+                  "teacher_assigned": "auto_pick_top_math_teacher"
+                }
+              },
+              {
+                "step": 3,
+                "type": "مشاركة خارجية",
+                "autofill": {
+                  "competition": "مسابقات موهبة أو الكانجارو",
+                  "evidence_type": "شهادة شكر وتكريم",
+                  "linked_indicator": "3-2-1-6"
+                }
+              }
+            ]
+          }
+        ]
+      },
+
+      "skill_to_worksheet_mapping": {
+        "description": "ربط تلقائي بين المهارة المفقودة وورقة العمل المناسبة",
+        "mappings": [
+          { "skill_keywords": ["المعادلات الخطية", "أنظمة المعادلات"], "worksheet": "AR-WS-01", "unit": "MA-U1" },
+          { "skill_keywords": ["وحيدات الحد", "ضرب وقسمة الحدود"], "worksheet": "AR-WS-02", "unit": "MA-U2" },
+          { "skill_keywords": ["كثيرات الحدود", "ثنائيات الحد"], "worksheet": "AR-WS-03", "unit": "MA-U3" },
+          { "skill_keywords": ["التحليل", "العامل المشترك", "الفرق بين مربعين"], "worksheet": "AR-WS-04", "unit": "MA-U4" },
+          { "skill_keywords": ["الفهم المباشر", "الاسترجاع"], "worksheet": "AR-WS-05", "level": "RC-L1" },
+          { "skill_keywords": ["الاستنتاج", "الدمج", "التفسير"], "worksheet": "AR-WS-06", "level": "RC-L2" },
+          { "skill_keywords": ["التقييم", "التأمل", "النقد"], "worksheet": "AR-WS-07", "level": "RC-L3" },
+          { "skill_keywords": ["الخلايا", "الوراثة", "التكيف"], "worksheet": "AR-WS-08", "branch": "SC-B1" },
+          { "skill_keywords": ["الحركة", "نيوتن", "الطاقة", "الضوء"], "worksheet": "AR-WS-09", "branch": "SC-B2" },
+          { "skill_keywords": ["الجدول الدوري", "التفاعلات", "الأحماض"], "worksheet": "AR-WS-10", "branch": "SC-B3" }
+        ]
+      },
+
+      "evidence_auto_generation": {
+        "evidence_prefix_by_register": {
+          "academic_care_register": "EVD-ACR",
+          "behavioral_cases_register": "EVD-BCR",
+          "gifted_care_register": "EVD-GCR",
+          "classroom_visits": "EVD-VIS",
+          "lab_experiments_register": "EVD-LER",
+          "activity_plan": "EVD-APR"
+        },
+        "evidence_number_format": "{prefix}-1448-{seq:05d}",
+        "archive_path_pattern": "evidence/1448/{register_code}/{student_nid}/{evidence_number}/",
+        "required_evidence_metadata": [
+          "evidence_type",
+          "linked_indicator",
+          "uploaded_by_nid",
+          "uploaded_at_timestamp",
+          "approval_status"
+        ]
+      }
+    },
+
+    "integration_metadata": {
+      "linked_files": {
+        "registers_lookup_data.json": "مناهج + قوائم منسدلة",
+        "registers_content_bank.json": "بنك المحتوى للسيناريوهات",
+        "contextual_impact_bank.json": "بنك الأثر الرقمي",
+        "registers_standardized_schemas.json": "السجلات الخمسة الأولى",
+        "school_governance_remaining_suite.json": "السجلات التشغيلية الأربعة",
+        "individual_assignments_templates.json": "قوالب التكليفات",
+        "student_portfolio_schema.json": "ملف إنجاز الطالب",
+        "signatures_management_spec.json": "منظومة التواقيع",
+        "advanced_governance_intelligence.json": "محرك الإنذار المبكر",
+        "students_registry_db.json": "قاعدة 341 طالب"
+      },
+      "api_endpoints": {
+        "get_master_matrix": "/api/knowledge/matrix",
+        "get_executive_plan": "/api/plan/executive",
+        "get_nafes_config": "/api/nafes/config",
+        "update_nafes_week": "/api/nafes/week",
+        "get_autofill_suggestion": "/api/autofill/suggest",
+        "get_skill_to_worksheet": "/api/autofill/worksheet-map"
+      },
+      "runtime_constants": {
+        "school": "متوسطة سعد بن الربيع الأنصاري",
+        "principal": "نايف بن سمير حجيف المخلفي",
+        "port": 8060,
+        "runtime": "browser_side_SPA",
+        "framework": "ETEC_1448"
+      }
+    },
+
+    "system_metadata": {
+      "total_axes": 5,
+      "total_strategic_goals": 6,
+      "total_executive_tasks": 36,
+      "total_nafes_phases": 4,
+      "total_reading_skills": 4,
+      "total_math_skills": 17,
+      "total_science_skills": 18,
+      "total_kangaroo_questions": 80,
+      "total_staff_roles": 10,
+      "total_single_step_rules": 4,
+      "total_multi_step_pathways": 4,
+      "total_worksheets": 10,
+      "ready_for_deployment": true
+    }
+  }
+}

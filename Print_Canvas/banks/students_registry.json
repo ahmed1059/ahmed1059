@@ -1,0 +1,2391 @@
+{
+  "students": [
+    {
+      "student_nid": "2402989277",
+      "student_name": "ابراهيم فتح عبدالتواب اليوسفي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966554442619"
+    },
+    {
+      "student_nid": "2371221942",
+      "student_name": "أبوبكر عبدالله غلام نبي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966580584218"
+    },
+    {
+      "student_nid": "1163062548",
+      "student_name": "اسامه يوسف بن سعود الأحمدي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966551800629"
+    },
+    {
+      "student_nid": "2473282537",
+      "student_name": "اسماعيل عبدالرب محمد جان عالم",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966508686642"
+    },
+    {
+      "student_nid": "1165153147",
+      "student_name": "اصيل تركي عليثه الحسيني",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966565563774"
+    },
+    {
+      "student_nid": "2447835279",
+      "student_name": "البراء عمران - حبيب الله مصطفى",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966550743821"
+    },
+    {
+      "student_nid": "2460061563",
+      "student_name": "الفا بابارو ابراهيم سو",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966598670437"
+    },
+    {
+      "student_nid": "2527960047",
+      "student_name": "الفا ساليو تراور -",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966591067509"
+    },
+    {
+      "student_nid": "1163795048",
+      "student_name": "الوليد فرج عطيه الحربي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966554346146"
+    },
+    {
+      "student_nid": "2376029928",
+      "student_name": "اياد ابراهيم محمد انور محمد اكبر",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966555502178"
+    },
+    {
+      "student_nid": "2330789740",
+      "student_name": "اياد صابر عاشق داد خان",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966592543541"
+    },
+    {
+      "student_nid": "2342223837",
+      "student_name": "اياد عبدالعزيز محمدالحسن وداعةالله",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966558445056"
+    },
+    {
+      "student_nid": "1162847139",
+      "student_name": "باسل محمد عايض السهلي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966505075997"
+    },
+    {
+      "student_nid": "1163705278",
+      "student_name": "باسل مصطفى بن محمد صالح الحاسري",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966561063886"
+    },
+    {
+      "student_nid": "2354915221",
+      "student_name": "حذيفة رشيد الله اصغر علي علي اكبر",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966551377454"
+    },
+    {
+      "student_nid": "2427323734",
+      "student_name": "حسام عبدالله علي محمد علي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966560220575"
+    },
+    {
+      "student_nid": "2296849470",
+      "student_name": "حسن عبدالقهار - احمد",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966554853705"
+    },
+    {
+      "student_nid": "1172849802",
+      "student_name": "حسن علي حسن سفياني",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966599944027"
+    },
+    {
+      "student_nid": "2296849686",
+      "student_name": "حسين عبدالقهار - احمد",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966554853705"
+    },
+    {
+      "student_nid": "2433991953",
+      "student_name": "حلمي عبدالباسط بلة عبدالله",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "996552095300"
+    },
+    {
+      "student_nid": "0050215226",
+      "student_name": "حمزه احمد محمد حسين",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966553719002"
+    },
+    {
+      "student_nid": "2355952124",
+      "student_name": "حمزه انس الطيب ابراهيم",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966556997654"
+    },
+    {
+      "student_nid": "1165536275",
+      "student_name": "حمزه عبدالرحمن ناصر الردادي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966554261009"
+    },
+    {
+      "student_nid": "1164618959",
+      "student_name": "خالد عبدالله بن حامد العوفي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966545016417"
+    },
+    {
+      "student_nid": "2361550854",
+      "student_name": "خالد فواز ردمان حسن",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966502124592"
+    },
+    {
+      "student_nid": "2320418227",
+      "student_name": "خالد يحي محمد احمد فال",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966569766434"
+    },
+    {
+      "student_nid": "2314020500",
+      "student_name": "راكان عبدالعزيز عبدالله محمد",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966501715073"
+    },
+    {
+      "student_nid": "tjza$1427321586",
+      "student_name": "عصام ملا مسلم حسام الدين",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966561848630"
+    },
+    {
+      "student_nid": "2371375722",
+      "student_name": "على موسى - علي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966542696701"
+    },
+    {
+      "student_nid": "4460248877",
+      "student_name": "محسن يوسف محسن علي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966552080466"
+    },
+    {
+      "student_nid": "1158935765",
+      "student_name": "محمد احمد محمد الرحيلي",
+      "grade": "الأول متوسط",
+      "section": "1",
+      "guardian_phone": "966590007497"
+    },
+    {
+      "student_nid": "2433424161",
+      "student_name": "ابراهيم سيد محمد علي",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966556899255"
+    },
+    {
+      "student_nid": "1179542186",
+      "student_name": "رواف تركي بن بركي السهلي",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966503308001"
+    },
+    {
+      "student_nid": "0050205223",
+      "student_name": "ريان حنيف عبدالحليم كالامياه",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966534193425"
+    },
+    {
+      "student_nid": "0160237841",
+      "student_name": "ريان عفيف محمد عبدالله",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966557973351"
+    },
+    {
+      "student_nid": "1166324861",
+      "student_name": "ريان محمدناصر ناجي العمري",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966506309870"
+    },
+    {
+      "student_nid": "4470081896",
+      "student_name": "زياد ابراهيم علي محمد علي",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966536655360"
+    },
+    {
+      "student_nid": "2360807305",
+      "student_name": "سامي ياسر حمزه احمد",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966501856466"
+    },
+    {
+      "student_nid": "0160519175",
+      "student_name": "سلمان سعود فيصل عبدالمانع",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966559272143"
+    },
+    {
+      "student_nid": "2355948999",
+      "student_name": "سليمان وائل فخري عبدالتواب",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966550771311"
+    },
+    {
+      "student_nid": "3977933567",
+      "student_name": "سيف محمد سيف محمد الصبري",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966536252922"
+    },
+    {
+      "student_nid": "2364070132",
+      "student_name": "شاهين عمر محمد معشوق",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966561139424"
+    },
+    {
+      "student_nid": "20421770842",
+      "student_name": "صالح اكرم صالح محسن",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966532885534"
+    },
+    {
+      "student_nid": "2288613561",
+      "student_name": "صائم محمد شمسالدين علي",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966594963056"
+    },
+    {
+      "student_nid": "2374813513",
+      "student_name": "طاهر محمد محمود ابراهيم",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966566063104"
+    },
+    {
+      "student_nid": "1159394095",
+      "student_name": "عبادي بندر احمد المامي",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966598340154"
+    },
+    {
+      "student_nid": "2427921198",
+      "student_name": "عبدالرحمن أنور عبد المنان كالا ميان",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966568573938"
+    },
+    {
+      "student_nid": "4724377256",
+      "student_name": "عبدالرحمن جميل ياسين المسني",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966534111568"
+    },
+    {
+      "student_nid": "064544444",
+      "student_name": "عبدالرحمن حسين شوعي عيد",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966599291533"
+    },
+    {
+      "student_nid": "2529926509",
+      "student_name": "عبدالرحمن طارق مصطفى عبدالرحمن",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966531857503"
+    },
+    {
+      "student_nid": "2369859554",
+      "student_name": "عبدالرحمن علي قايد علي",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966506023724"
+    },
+    {
+      "student_nid": "2448840039",
+      "student_name": "عبدالرحمن محمد عبدالله معلا",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966566697785"
+    },
+    {
+      "student_nid": "2319266405",
+      "student_name": "عبدالرحمن محمد عبده رضوان",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966598581101"
+    },
+    {
+      "student_nid": "2427551433",
+      "student_name": "عبدالرحمن هارون الرشيد - محمد اسلام",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966595172083"
+    },
+    {
+      "student_nid": "2392608457",
+      "student_name": "عبدالرؤوف امان الله - محمد صالح",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966599563588"
+    },
+    {
+      "student_nid": "2366102677",
+      "student_name": "عبدالعزيز حق نواز - محمدافضل",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966508598592"
+    },
+    {
+      "student_nid": "2355512308",
+      "student_name": "عبدالقادر الامين الامام الوكيل",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966567896366"
+    },
+    {
+      "student_nid": "07938966",
+      "student_name": "عبدالكريم صلاح محمد رماد",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966557157816"
+    },
+    {
+      "student_nid": "2427921347",
+      "student_name": "عبدالله أنور عبد المنان كالا ميان",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966568573938"
+    },
+    {
+      "student_nid": "1166787059",
+      "student_name": "عمر ماجد بن سويلم العوفي",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966542273880"
+    },
+    {
+      "student_nid": "2365855432",
+      "student_name": "فهد عبدالقيوم - خان",
+      "grade": "الأول متوسط",
+      "section": "2",
+      "guardian_phone": "966534628835"
+    },
+    {
+      "student_nid": "0190787780",
+      "student_name": "ابراهيم محمد شبير عبدالرشيد",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966577670390"
+    },
+    {
+      "student_nid": "07270835",
+      "student_name": "بشير ماجد احمد ناجي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966564508109"
+    },
+    {
+      "student_nid": "1167853165",
+      "student_name": "بندر شادي بندر كبير",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966536380031"
+    },
+    {
+      "student_nid": "6143709274",
+      "student_name": "صهيب عبدالرحمن محمد ادريس",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966509325764"
+    },
+    {
+      "student_nid": "2356967139",
+      "student_name": "عبدالله فخر الدين علي القاضي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966508516534"
+    },
+    {
+      "student_nid": "1163156084",
+      "student_name": "عبدالله فهد بن حسن الحربي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966508848354"
+    },
+    {
+      "student_nid": "0010770480",
+      "student_name": "عبدالله لاسيني ديمبلي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966560215404"
+    },
+    {
+      "student_nid": "0160757108",
+      "student_name": "عبدالله مجاهد عبدالله الباقري",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966545048895"
+    },
+    {
+      "student_nid": "2375256886",
+      "student_name": "عبدالله مجيب علي المطري",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966538942655"
+    },
+    {
+      "student_nid": "0160482989",
+      "student_name": "عصام ربيع علي الهمداني",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966583600301"
+    },
+    {
+      "student_nid": "0160516282",
+      "student_name": "علي عبدالفتاح علي -",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966532525342"
+    },
+    {
+      "student_nid": "2355354065",
+      "student_name": "علي فيصل خان مرام خان",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966565650327"
+    },
+    {
+      "student_nid": "1176916896",
+      "student_name": "عمار فاضل احمد الشنقيطي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966502203906"
+    },
+    {
+      "student_nid": "1165988468",
+      "student_name": "عمر سلطان مدخل الصاعدي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966536220564"
+    },
+    {
+      "student_nid": "2388011716",
+      "student_name": "عمر يوسف اسماعيل محمد المصطفى",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966595996979"
+    },
+    {
+      "student_nid": "2352750000",
+      "student_name": "فارس عبدالله غلام نبي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966580584218"
+    },
+    {
+      "student_nid": "2342194079",
+      "student_name": "فارس فراز عبد الله جبار",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966543033288"
+    },
+    {
+      "student_nid": "1164047613",
+      "student_name": "فارس مطيران بن مطر السحيمي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966507158711"
+    },
+    {
+      "student_nid": "0190787779",
+      "student_name": "فهد محمد شبير عبدالرشيد",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966577670390"
+    },
+    {
+      "student_nid": "1172917278",
+      "student_name": "فيصل هاني فيصل المغذوي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966533733645"
+    },
+    {
+      "student_nid": "2342828932",
+      "student_name": "قصى نبيل عبدالغنى العامري",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966503316323"
+    },
+    {
+      "student_nid": "4472532540",
+      "student_name": "قصي عبدالرحمن محمد أدريس",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966502875118"
+    },
+    {
+      "student_nid": "1165042449",
+      "student_name": "مالك عبدالرزاق صقر الحربي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966554918186"
+    },
+    {
+      "student_nid": "2311870337",
+      "student_name": "ماهر ملك لطيف الله وصايا",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966536768489"
+    },
+    {
+      "student_nid": "2355849130",
+      "student_name": "محمد عمر البشير عبدالقادر",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966501785846"
+    },
+    {
+      "student_nid": "2350232001",
+      "student_name": "محمد انور فاروق عبدالله",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966560967800"
+    },
+    {
+      "student_nid": "2331422143",
+      "student_name": "محمد جان محمد نور محمد",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966534052184"
+    },
+    {
+      "student_nid": "2359603418",
+      "student_name": "محمد سمير رضا الكريم سيد أحمد",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966598415450"
+    },
+    {
+      "student_nid": "1166281269",
+      "student_name": "مشاري محمد علي الحربي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966535731334"
+    },
+    {
+      "student_nid": "0160488036",
+      "student_name": "يحيى حمود صالح علي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966545409044"
+    },
+    {
+      "student_nid": "1170989337",
+      "student_name": "يونس عبدالحي بادي الشنقيطي",
+      "grade": "الأول متوسط",
+      "section": "3",
+      "guardian_phone": "966540081730"
+    },
+    {
+      "student_nid": "tjza$1427323777",
+      "student_name": "أسامه جعفر عبيدالله محمد",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966504697117"
+    },
+    {
+      "student_nid": "1168218194",
+      "student_name": "عبدالباري عبدالله بن حمد الصاعدي",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966599114907"
+    },
+    {
+      "student_nid": "2347085850",
+      "student_name": "عيسى بركاي علي محمد",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966549253662"
+    },
+    {
+      "student_nid": "0160740673",
+      "student_name": "كمال هلال زين اليهري",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966502211489"
+    },
+    {
+      "student_nid": "2615424344",
+      "student_name": "لؤي الشيخ محمد محمدالامين",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966545509621"
+    },
+    {
+      "student_nid": "0160207047",
+      "student_name": "محمد عارف محمد عبدالرحمن",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966597871112"
+    },
+    {
+      "student_nid": "2322928595",
+      "student_name": "محمد عبد الرحيم تنوير أحمد",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966558624753"
+    },
+    {
+      "student_nid": "0190799980",
+      "student_name": "محمد عبدالحكيم عبدالحليم",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966597006912"
+    },
+    {
+      "student_nid": "12042015970",
+      "student_name": "محمد عبدالرقيب الفقيه احمد",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966501486441"
+    },
+    {
+      "student_nid": "2042091097",
+      "student_name": "محمد عبدالله قائد لطف",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966503327139"
+    },
+    {
+      "student_nid": "1170774911",
+      "student_name": "محمد عدنان هلال عبدالله",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966551462685"
+    },
+    {
+      "student_nid": "2351126368",
+      "student_name": "محمد قل الدين - قطب الدين",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966595626620"
+    },
+    {
+      "student_nid": "2417162233",
+      "student_name": "محمد ميرغني الماحى موسي",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966569852706"
+    },
+    {
+      "student_nid": "2364859047",
+      "student_name": "محمد وليد صابر محمود",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966545324541"
+    },
+    {
+      "student_nid": "2350379109",
+      "student_name": "محمد ياسر سواش بهزات سون",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966508385889"
+    },
+    {
+      "student_nid": "2392152712",
+      "student_name": "مصعب محمد رحيم صديق احمد كالامياه",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966559150299"
+    },
+    {
+      "student_nid": "2363989233",
+      "student_name": "معاذ خالد محمد بلوشي",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966549641203"
+    },
+    {
+      "student_nid": "2392324717",
+      "student_name": "معاذ كمال حسين حسين صديق احمد",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966568360316"
+    },
+    {
+      "student_nid": "2311975326",
+      "student_name": "معاذ محمد مستفيض الرحمن علي",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966531042873"
+    },
+    {
+      "student_nid": "2356217113",
+      "student_name": "مهدى مصطفي السر العاقب",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966564239203"
+    },
+    {
+      "student_nid": "1179258130",
+      "student_name": "مهند ناجي سعد عبدالله",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966551630095"
+    },
+    {
+      "student_nid": "0160470731",
+      "student_name": "مؤيد رياض عبداللطيف عبده",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966532904483"
+    },
+    {
+      "student_nid": "2359237175",
+      "student_name": "نبيل محمد عبده رضوان",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966598581101"
+    },
+    {
+      "student_nid": "2364114062",
+      "student_name": "وسام ابراهيم شاه حنيف",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966502746255"
+    },
+    {
+      "student_nid": "2372493375",
+      "student_name": "وسام عبدالعزيز عبدالله محمد",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966501715073"
+    },
+    {
+      "student_nid": "4639016866",
+      "student_name": "ياسر وليد علي القاره",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966535467960"
+    },
+    {
+      "student_nid": "2311398420",
+      "student_name": "يحى عبدالاحد غلام محمود",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": ""
+    },
+    {
+      "student_nid": "R0280731",
+      "student_name": "يوسف صالح احمد يوسف",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966507575361"
+    },
+    {
+      "student_nid": "1169233069",
+      "student_name": "يوسف صالح بن درويش الزهراني",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966557406918"
+    },
+    {
+      "student_nid": "2370502458",
+      "student_name": "يوسف عبد الستار - عبد الرحيم",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966502093577"
+    },
+    {
+      "student_nid": "0160207049",
+      "student_name": "يوسف عمر محمد بارشيد",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966541669307"
+    },
+    {
+      "student_nid": "2368726648",
+      "student_name": "يونس حفيظ الله - محمد الله",
+      "grade": "الأول متوسط",
+      "section": "4",
+      "guardian_phone": "966559580723"
+    },
+    {
+      "student_nid": "0190790189",
+      "student_name": "ابراهيم أحمد فضل الحق غلام رسول",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966595557833"
+    },
+    {
+      "student_nid": "2331839734",
+      "student_name": "ابراهيم محمد زين البكر",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966543670490"
+    },
+    {
+      "student_nid": "2337332874",
+      "student_name": "احمد ياسر عثمان محمد",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966534180545"
+    },
+    {
+      "student_nid": "2318406499",
+      "student_name": "احمد حيات الله ناصر الله -",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966581864748"
+    },
+    {
+      "student_nid": "2322034568",
+      "student_name": "احمد سرفراز - بخش",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966559845316"
+    },
+    {
+      "student_nid": "1189239369",
+      "student_name": "احمد سعد بن حامد العمري",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966590906503"
+    },
+    {
+      "student_nid": "1160253165",
+      "student_name": "أحمد سعيد بن سالم الصاعدي",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966551356936"
+    },
+    {
+      "student_nid": "4763767730",
+      "student_name": "أحمد عز الدين أحمد فرحان",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966541300423"
+    },
+    {
+      "student_nid": "4717888574",
+      "student_name": "احمد مروان احمد ناجي",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966531149267"
+    },
+    {
+      "student_nid": "2363681913",
+      "student_name": "احيد حلمى احمد احمد",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966566697785"
+    },
+    {
+      "student_nid": "2431313770",
+      "student_name": "اصيل صلاح الدين عبدالله محمد",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966553234552"
+    },
+    {
+      "student_nid": "2334556020",
+      "student_name": "اكرم عبدالرحمن عبده رضوان",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966530219196"
+    },
+    {
+      "student_nid": "1160583777",
+      "student_name": "الياس محمد ملفي الحربي",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966553306774"
+    },
+    {
+      "student_nid": "0160476693",
+      "student_name": "انس فتح احمد حيدرة",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966532848814"
+    },
+    {
+      "student_nid": "2381265889",
+      "student_name": "بسام يوسف محمد عمر",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966500752841"
+    },
+    {
+      "student_nid": "2334850803",
+      "student_name": "جود بسام لطف محمد",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966599671565"
+    },
+    {
+      "student_nid": "0160476685",
+      "student_name": "حسام عصام احمد حيدرة",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966532848814"
+    },
+    {
+      "student_nid": "1145501977",
+      "student_name": "حسن احمد بن عبدالله ذياب",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966591596235"
+    },
+    {
+      "student_nid": "1161535792",
+      "student_name": "حمدان سعيد بن سلوم المنهالي",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966546469500"
+    },
+    {
+      "student_nid": "2317867006",
+      "student_name": "حمزه سعد صديق احمد",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966532994221"
+    },
+    {
+      "student_nid": "0160472755",
+      "student_name": "خالد وليد سعد محمد",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966536156616"
+    },
+    {
+      "student_nid": "4691382008",
+      "student_name": "ذي يزن عاطف قايد",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966563832075"
+    },
+    {
+      "student_nid": "1186771075",
+      "student_name": "راكان طارق بن مسلم الصاعدي",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966547869585"
+    },
+    {
+      "student_nid": "1160727762",
+      "student_name": "زياد سعد بن عبيدالله العوفي",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966506326772"
+    },
+    {
+      "student_nid": "2328831512",
+      "student_name": "عبدالله محمد امبويه الباه",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966537502628"
+    },
+    {
+      "student_nid": "1160922132",
+      "student_name": "عمر ناصر بن سعيد الصاعدي",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966501139145"
+    },
+    {
+      "student_nid": "2337079889",
+      "student_name": "فيصل محمد بابكر على",
+      "grade": "الثاني متوسط",
+      "section": "1",
+      "guardian_phone": "966506336815"
+    },
+    {
+      "student_nid": "1164335471",
+      "student_name": "المعتصم امين خالد الحجاجي",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966592678435"
+    },
+    {
+      "student_nid": "2383054315",
+      "student_name": "بشير محمد - ولي محمد",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966568750467"
+    },
+    {
+      "student_nid": "1159024106",
+      "student_name": "زياد سلمان يحيى يتيمي",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966551295195"
+    },
+    {
+      "student_nid": "1158320505",
+      "student_name": "زياد مرزوق بن رزيق الحربي",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966553289271"
+    },
+    {
+      "student_nid": "2319173825",
+      "student_name": "سلطان محمد ذاكر - محمد الله",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966566446860"
+    },
+    {
+      "student_nid": "2286561267",
+      "student_name": "شريف حاجي محمد صالح",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966561184660"
+    },
+    {
+      "student_nid": "4736845860",
+      "student_name": "طلال نبيل مثنى السعيدي",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966502324861"
+    },
+    {
+      "student_nid": "4763769348",
+      "student_name": "عابد عزالدين أحمد فرحان",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966541300423"
+    },
+    {
+      "student_nid": "2365886031",
+      "student_name": "عامر عبد الله فدا يحيى",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966508462071"
+    },
+    {
+      "student_nid": "1145514343",
+      "student_name": "عبدالاله مسلم بن سليمان الترجمي",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966559492906"
+    },
+    {
+      "student_nid": "1186992150",
+      "student_name": "عبدالعزيز حسين احمد الشنقيطي",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966544080163"
+    },
+    {
+      "student_nid": "6877",
+      "student_name": "عبدالعزيز علي احمد يحيى",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966560680679"
+    },
+    {
+      "student_nid": "1158031920",
+      "student_name": "عبدالعزيز عويض بركه السهلي",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966503323210"
+    },
+    {
+      "student_nid": "2330112596",
+      "student_name": "عبدالعزيز يوسف حسين بشير",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966566169273"
+    },
+    {
+      "student_nid": "2120392725",
+      "student_name": "عبدالقدوس امين محمد عواس",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966508515059"
+    },
+    {
+      "student_nid": "4881726105",
+      "student_name": "عبدالله أكرم عبدالله عبد القوي",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966544989838"
+    },
+    {
+      "student_nid": "2385383977",
+      "student_name": "عبدالله عبدالقادر عبدالله -",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966547866277"
+    },
+    {
+      "student_nid": "2383094840",
+      "student_name": "عبدالله عز محروص خلف الله",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966597430259"
+    },
+    {
+      "student_nid": "4822145258",
+      "student_name": "عبدالوهاب ابو القاسم عبدالوهاب الشيخ",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966554261519"
+    },
+    {
+      "student_nid": "2393255019",
+      "student_name": "عفان شيخ - عبادالله",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966507047924"
+    },
+    {
+      "student_nid": "0160205227",
+      "student_name": "عفيف معتصم عفيف سعيد",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966502010194"
+    },
+    {
+      "student_nid": "0160234267",
+      "student_name": "علي عبده احمد مثنى الجحيني",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966533620769"
+    },
+    {
+      "student_nid": "1161903230",
+      "student_name": "عمر سعود مبيريك السهلي",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966541975559"
+    },
+    {
+      "student_nid": "4674266087",
+      "student_name": "مجتبا محمد مصطفى الصديق",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966556386923"
+    },
+    {
+      "student_nid": "4713167015",
+      "student_name": "محمد احمد محمد حنينه",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966530838456"
+    },
+    {
+      "student_nid": "2391720360",
+      "student_name": "مختار امين ولد محمد الشيخ",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966531660996"
+    },
+    {
+      "student_nid": "0191069398",
+      "student_name": "هاشم محمد آدم ادريس",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966598616688"
+    },
+    {
+      "student_nid": "2344035833",
+      "student_name": "يحيى محمود محمد الامين",
+      "grade": "الثاني متوسط",
+      "section": "2",
+      "guardian_phone": "966569117827"
+    },
+    {
+      "student_nid": "2350237406",
+      "student_name": "الياس محمد نور موسى هارون",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966546040902"
+    },
+    {
+      "student_nid": "1177340518",
+      "student_name": "شيخ محمد امين الشنقيطي",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966544015978"
+    },
+    {
+      "student_nid": "2337750620",
+      "student_name": "عمر نعيم الله - شاه",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966540055353"
+    },
+    {
+      "student_nid": "2419420233",
+      "student_name": "عيسى ضياء الحق كبير احمد اظهار",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966576133471"
+    },
+    {
+      "student_nid": "1161183981",
+      "student_name": "غالي مساعد بن غالي الحربي",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966504423787"
+    },
+    {
+      "student_nid": "1160422752",
+      "student_name": "فادي حامد بن عايض العمري",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966555305771"
+    },
+    {
+      "student_nid": "2315272597",
+      "student_name": "فادي شاهد منور حسين",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966590014716"
+    },
+    {
+      "student_nid": "2325151112",
+      "student_name": "فادي محمد عبدالنور عكاشه",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966590440351"
+    },
+    {
+      "student_nid": "2347085553",
+      "student_name": "فارس بركاي علي محمد",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966540874311"
+    },
+    {
+      "student_nid": "0190800629",
+      "student_name": "فداء حسين محمد",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966508154521"
+    },
+    {
+      "student_nid": "2300760176",
+      "student_name": "فريد محمد ذكر - محمد الله",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966566446860"
+    },
+    {
+      "student_nid": "1159896966",
+      "student_name": "فهد محمد بن صقر العتيبي",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966563350067"
+    },
+    {
+      "student_nid": "2304879014",
+      "student_name": "قيصر سراج الله محمـد غلام نابا",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966555321391"
+    },
+    {
+      "student_nid": "1160419048",
+      "student_name": "ماهر رائد عايد الترجمي",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966508515005"
+    },
+    {
+      "student_nid": "2352614479",
+      "student_name": "ماهر رحمة الله - محمدابراهيم",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966509499227"
+    },
+    {
+      "student_nid": "2311053991",
+      "student_name": "محمد الامين - موافقى",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966504139543"
+    },
+    {
+      "student_nid": "2343681702",
+      "student_name": "محمد حامد أحمد ذكر الدين",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966502127202"
+    },
+    {
+      "student_nid": "2355307576",
+      "student_name": "محمد حمود محمد العفيفى",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966564928540"
+    },
+    {
+      "student_nid": "2314722279",
+      "student_name": "محمد خادم حسين - نظر محمد",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966593524864"
+    },
+    {
+      "student_nid": "2416305601",
+      "student_name": "محمد دفع الله محمد دفع الله",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966546193744"
+    },
+    {
+      "student_nid": "2362300390",
+      "student_name": "محمد صالح عبد الوهاب الامين",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966594343596"
+    },
+    {
+      "student_nid": "0160234270",
+      "student_name": "محمد عبدالله احمد مثني علي",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966504196305"
+    },
+    {
+      "student_nid": "4053847143",
+      "student_name": "محمد عدنان محمد احمد",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966560273493"
+    },
+    {
+      "student_nid": "0160208007",
+      "student_name": "محمد علي حسين الكينعي",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966507953170"
+    },
+    {
+      "student_nid": "4103256121",
+      "student_name": "مصطفى فراس مصطفى الحاج محرم",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966569150437"
+    },
+    {
+      "student_nid": "2375705387",
+      "student_name": "مهدي محمد اسلام علي أحمد صديق",
+      "grade": "الثاني متوسط",
+      "section": "3",
+      "guardian_phone": "966500441668"
+    },
+    {
+      "student_nid": "2292119829",
+      "student_name": "ابراهيم حيات الله خان - نور الله خان",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966535721967"
+    },
+    {
+      "student_nid": "1159466125",
+      "student_name": "فيصل قاسم شوعي مباركي",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966550571630"
+    },
+    {
+      "student_nid": "1158420453",
+      "student_name": "محمد محمود مجتبى الشنقيطى",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966551086575"
+    },
+    {
+      "student_nid": "4721072306",
+      "student_name": "محمد نشوان الوصابي",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966566500467"
+    },
+    {
+      "student_nid": "2317979462",
+      "student_name": "محمد نظير احمد بخش",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966534246052"
+    },
+    {
+      "student_nid": "2375251135",
+      "student_name": "محمود الشريف عبدالله محمد",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966550801015"
+    },
+    {
+      "student_nid": "2611894839",
+      "student_name": "محمود هاني فريد عبدالوهاب",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966509599764"
+    },
+    {
+      "student_nid": "2407867072",
+      "student_name": "مشعل عبد الرحمن نور محمد مهدي",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966508577981"
+    },
+    {
+      "student_nid": "2391720378",
+      "student_name": "مصطفى امين ولد محمد الشيخ",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966531660996"
+    },
+    {
+      "student_nid": "2329153569",
+      "student_name": "مصطفى محمود علي محمد",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966535030673"
+    },
+    {
+      "student_nid": "2322825171",
+      "student_name": "معاذ صبور محمد نعيم",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966556750523"
+    },
+    {
+      "student_nid": "0160205234",
+      "student_name": "معاذ فهمي عبد عبدالله",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966509742031"
+    },
+    {
+      "student_nid": "1160570378",
+      "student_name": "نايف سعود محمد الحربي",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966505314631"
+    },
+    {
+      "student_nid": "0160467416",
+      "student_name": "نشأت ابراهيم علي هزاع",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966536634051"
+    },
+    {
+      "student_nid": "2323544680",
+      "student_name": "هتان عدنان محمد حسين",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966508686839"
+    },
+    {
+      "student_nid": "1160186423",
+      "student_name": "وليد احمد بن مرزوق السهلي",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966592175271"
+    },
+    {
+      "student_nid": "2324538582",
+      "student_name": "ياسر فهد دهني بخش",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966565981581"
+    },
+    {
+      "student_nid": "0160467410",
+      "student_name": "ياسين محمد احمد محمد",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966599616969"
+    },
+    {
+      "student_nid": "1158788099",
+      "student_name": "يزن عادل يحي عبدلي",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966595988700"
+    },
+    {
+      "student_nid": "2337315416",
+      "student_name": "يوسف حفيظ الله - محمد الله",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966559580723"
+    },
+    {
+      "student_nid": "2334695364",
+      "student_name": "يوسف عبد الوهاب غلام محمدد بار",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966583884399"
+    },
+    {
+      "student_nid": "2283610067",
+      "student_name": "يوسف عبدالناصر علوي اليزيدي",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966502564459"
+    },
+    {
+      "student_nid": "2337985762",
+      "student_name": "يوسف عوض احمد عبدالقوي",
+      "grade": "الثاني متوسط",
+      "section": "4",
+      "guardian_phone": "966502691738"
+    },
+    {
+      "student_nid": "2374038772",
+      "student_name": "ابراهيم احمد - سعيد",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966532330632"
+    },
+    {
+      "student_nid": "2319043234",
+      "student_name": "ابراهيم عبدالرب محمد جان عالم",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966508686642"
+    },
+    {
+      "student_nid": "2381483698",
+      "student_name": "ابراهيم مجذوب بانقا ابراهيم",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966503331737"
+    },
+    {
+      "student_nid": "2310120718",
+      "student_name": "ابوبكر جمال علي ادريس",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966556255787"
+    },
+    {
+      "student_nid": "2351859240",
+      "student_name": "احمد السر بشير عبدالله",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966580873449"
+    },
+    {
+      "student_nid": "0190802272",
+      "student_name": "أحمد علي الحاج الأمين",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966566774119"
+    },
+    {
+      "student_nid": "2326098023",
+      "student_name": "احمد علي البدوي احمد",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966569213321"
+    },
+    {
+      "student_nid": "0160484571",
+      "student_name": "اسعد دارس عبده محفوظ",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966543812480"
+    },
+    {
+      "student_nid": "1155926635",
+      "student_name": "البراء احمد بن سعيد العوفي",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966599124876"
+    },
+    {
+      "student_nid": "1196162307",
+      "student_name": "الحسن معتز محمد بخاري",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966535904363"
+    },
+    {
+      "student_nid": "2417161920",
+      "student_name": "الطيب ميرغني الماحى موسي",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966530916071"
+    },
+    {
+      "student_nid": "2386389551",
+      "student_name": "انس محمد يونس محمد حسين خليل الرحمن",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966502322992"
+    },
+    {
+      "student_nid": "1156459230",
+      "student_name": "اياد محمد مسلم الحربي",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966555304854"
+    },
+    {
+      "student_nid": "4654911652",
+      "student_name": "ايهم علي راشد السغير",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966538345314"
+    },
+    {
+      "student_nid": "0160464796",
+      "student_name": "ايهم يحيى محمد قائد",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966577075110"
+    },
+    {
+      "student_nid": "2316781489",
+      "student_name": "بدر سيد رحيم محمد شريف غلام حيدر",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966502177911"
+    },
+    {
+      "student_nid": "2433604358",
+      "student_name": "براء امين حمود هلال",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966551552355"
+    },
+    {
+      "student_nid": "4763246792",
+      "student_name": "بسام عادل يحيى جابر",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966502301311"
+    },
+    {
+      "student_nid": "0160207043",
+      "student_name": "جمال عبدالوهاب قاسم عبدالله",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966507741554"
+    },
+    {
+      "student_nid": "30000768533",
+      "student_name": "حُميد عبدالجبار عبدالجليل كالو مياه",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966542342012"
+    },
+    {
+      "student_nid": "0160237835",
+      "student_name": "رائد عفيف محمد عبدالله",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966557973351"
+    },
+    {
+      "student_nid": "2383054307",
+      "student_name": "روح الامين محمد - ولي محمد",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966554469138"
+    },
+    {
+      "student_nid": "1156983890",
+      "student_name": "سيف فائز حمدان الترجمي",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966503316145"
+    },
+    {
+      "student_nid": "1155803396",
+      "student_name": "طارق حمدان حميد الترجمي",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966503316145"
+    },
+    {
+      "student_nid": "1157431378",
+      "student_name": "عبدالله عبدالأله عايض العوفي",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966552323335"
+    },
+    {
+      "student_nid": "2388597870",
+      "student_name": "قصي حسن حسين المحو",
+      "grade": "الثالث متوسط",
+      "section": "1",
+      "guardian_phone": "966534462901"
+    },
+    {
+      "student_nid": "4769462567",
+      "student_name": "احمد عمر خالد عمر",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966548710914"
+    },
+    {
+      "student_nid": "1174738821",
+      "student_name": "باسل نافع بن ربيع الحسيني",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966534111346"
+    },
+    {
+      "student_nid": "1157730126",
+      "student_name": "خليل قاسم شوعي مباركي",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966537059003"
+    },
+    {
+      "student_nid": "0190802269",
+      "student_name": "خيري عمار محمد الصديق",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966547398046"
+    },
+    {
+      "student_nid": "0160464797",
+      "student_name": "رمزي سمير محمد محمد",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966578410870"
+    },
+    {
+      "student_nid": "1156331272",
+      "student_name": "ريان احمد بن مسفر الزهراني",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966559928816"
+    },
+    {
+      "student_nid": "2302297037",
+      "student_name": "ريان جميل احمد - خورشيدأحمد",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966561004502"
+    },
+    {
+      "student_nid": "0010770300",
+      "student_name": "زكريا محمد شريف موسى",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966560303544"
+    },
+    {
+      "student_nid": "2301771123",
+      "student_name": "زياد عمر عبد المجيد عبد الرحمن",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966543779195"
+    },
+    {
+      "student_nid": "2318073612",
+      "student_name": "سامي محمد سالم محمد",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966595508008"
+    },
+    {
+      "student_nid": "2307756938",
+      "student_name": "سليمان محمد عيدروس السنيدي",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966501519964"
+    },
+    {
+      "student_nid": "2320647445",
+      "student_name": "سيد زياد سيد شعيب - علي",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966555323882"
+    },
+    {
+      "student_nid": "2354914752",
+      "student_name": "شعيب رشيد الله اصغر علي علي اكبر",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966536107585"
+    },
+    {
+      "student_nid": "1180235838",
+      "student_name": "صالح عادل بن حجاج الصاعدي",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966545625044"
+    },
+    {
+      "student_nid": "2315178950",
+      "student_name": "صالح كيو احمد سنكاري",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966541421490"
+    },
+    {
+      "student_nid": "2317088330",
+      "student_name": "طارق محمد شريف - محمد حسن",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966598676303"
+    },
+    {
+      "student_nid": "2304913433",
+      "student_name": "طه محمود علي احمد",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966507318904"
+    },
+    {
+      "student_nid": "1169299136",
+      "student_name": "عبدالاله عادل محمد الحسيني",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966540705454"
+    },
+    {
+      "student_nid": "1156437780",
+      "student_name": "عبدالباري سعيد بن خضر الصاعدي",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966501053624"
+    },
+    {
+      "student_nid": "2317251748",
+      "student_name": "عبدالدائم خالد عبدالله مختار",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966567258574"
+    },
+    {
+      "student_nid": "2328699364",
+      "student_name": "عبدالرحمن غلام رسول عبدالمجيد خوشي محمد",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966557635226"
+    },
+    {
+      "student_nid": "2355308699",
+      "student_name": "عبدالرحمن منصور مسعود اسماعيل",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966508537438"
+    },
+    {
+      "student_nid": "0160223584",
+      "student_name": "عبدالرشيد امين مهدي الكبودي",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966558951800"
+    },
+    {
+      "student_nid": "2305056133",
+      "student_name": "عبدالعزيز أبراهيم صالح البلوشي",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966504351185"
+    },
+    {
+      "student_nid": "1145501985",
+      "student_name": "عبدالله احمد بن عبدالله ذياب",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966544465521"
+    },
+    {
+      "student_nid": "0160207039",
+      "student_name": "عبدالله ادم صالح ناجي",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966557395895"
+    },
+    {
+      "student_nid": "0010773963",
+      "student_name": "عبدالله نجيب راشد",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966506154282"
+    },
+    {
+      "student_nid": "2293554032",
+      "student_name": "عبدالوهاب يوسف عبدالوهاب ادم",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966566495425"
+    },
+    {
+      "student_nid": "tjza$1427323783",
+      "student_name": "علي زين العابدين مصطفى العباس مصطفى",
+      "grade": "الثالث متوسط",
+      "section": "2",
+      "guardian_phone": "966532964504"
+    },
+    {
+      "student_nid": "1156955625",
+      "student_name": "أنس سامي عوده الصبحي",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966554306453"
+    },
+    {
+      "student_nid": "0201066328",
+      "student_name": "بلال أبوالقاسم عبدالوهاب الشيخ",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966554261519"
+    },
+    {
+      "student_nid": "1155894320",
+      "student_name": "خالد محمدناصر ناجي العمري",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966506309870"
+    },
+    {
+      "student_nid": "4727819171",
+      "student_name": "عبدالله حسين علي احمد",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966504174304"
+    },
+    {
+      "student_nid": "1155942624",
+      "student_name": "عبدالله حمدان حامد اللقماني",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966559050787"
+    },
+    {
+      "student_nid": "2331288494",
+      "student_name": "عبدالله عبدالحكيم - عبدالحليم",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966597006912"
+    },
+    {
+      "student_nid": "2277238503",
+      "student_name": "عبدالله مكي صديق احمد",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966551954610"
+    },
+    {
+      "student_nid": "2388011583",
+      "student_name": "عبدالملك يوسف اسماعيل محمد المصطفى",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966595996979"
+    },
+    {
+      "student_nid": "4138334299",
+      "student_name": "عثمان عبدالصمد محمد الصمدي",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966571417496"
+    },
+    {
+      "student_nid": "1156620088",
+      "student_name": "عدي سمير علي الحربي",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966599699156"
+    },
+    {
+      "student_nid": "4150433417",
+      "student_name": "عدي نايف عبدالله ناصر",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966553458143"
+    },
+    {
+      "student_nid": "0160484573",
+      "student_name": "علي ياسر محسن محمد",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966508062289"
+    },
+    {
+      "student_nid": "2304695360",
+      "student_name": "عماد - - محمد صادق",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966593935133"
+    },
+    {
+      "student_nid": "2394886804",
+      "student_name": "عمار أنور عبد المنان كالا ميان",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966531285194"
+    },
+    {
+      "student_nid": "2326428592",
+      "student_name": "عمار حسن محمد يوسف",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966505614501"
+    },
+    {
+      "student_nid": "4670452723",
+      "student_name": "عمر امير احمد دفع الله",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": ""
+    },
+    {
+      "student_nid": "0160503451",
+      "student_name": "عمر توفيق حجي غانم",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966592524313"
+    },
+    {
+      "student_nid": "2266062872",
+      "student_name": "عمر حفيظ الله - معراج الدين",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966581949003"
+    },
+    {
+      "student_nid": "2312250117",
+      "student_name": "عمر مختار غالب البيدعي",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966537309566"
+    },
+    {
+      "student_nid": "2347614980",
+      "student_name": "عيسى سيف الله - ذكرالله",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966568546220"
+    },
+    {
+      "student_nid": "1154525750",
+      "student_name": "فادي عيسى بن محمد الصبياني",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966559156781"
+    },
+    {
+      "student_nid": "2313540045",
+      "student_name": "فراس نبيل عبدالغنى العامري",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966503316323"
+    },
+    {
+      "student_nid": "0160205231",
+      "student_name": "لؤي صلاح عبدالله غانم",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966558257134"
+    },
+    {
+      "student_nid": "2390156285",
+      "student_name": "مجتبى سعيد محمد سعيد",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966503510347"
+    },
+    {
+      "student_nid": "2390156277",
+      "student_name": "محمد سعيد محمد سعيد",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966503510347"
+    },
+    {
+      "student_nid": "4435097391",
+      "student_name": "محمد علي محمد عكروت",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966538651026"
+    },
+    {
+      "student_nid": "tjza$1427323895",
+      "student_name": "محمد عمر محمد دبلوب",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966549752052"
+    },
+    {
+      "student_nid": "1158088995",
+      "student_name": "وديع عبدالرحمن بن عزيز اللقماني",
+      "grade": "الثالث متوسط",
+      "section": "3",
+      "guardian_phone": "966506671332"
+    },
+    {
+      "student_nid": "1158221448",
+      "student_name": "اصيل خالد بن علي العمري",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966530530391"
+    },
+    {
+      "student_nid": "07938967",
+      "student_name": "علي صلاح محمد رماد",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966557157816"
+    },
+    {
+      "student_nid": "2337467829",
+      "student_name": "عماد عبدالعزيز رحمة الله مهران",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966535331304"
+    },
+    {
+      "student_nid": "1151843925",
+      "student_name": "فايز محمد بن فايز الحربي",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966552273666"
+    },
+    {
+      "student_nid": "1163961871",
+      "student_name": "ليث عدنان حجاج الصاعدي",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966564166634"
+    },
+    {
+      "student_nid": "1157351881",
+      "student_name": "ماجد عبدالله ابن محمد الصبياني",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966550791308"
+    },
+    {
+      "student_nid": "1154706863",
+      "student_name": "مالك عصام غازي الرحيلي",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966507896920"
+    },
+    {
+      "student_nid": "19683756048",
+      "student_name": "مالك علي محمد حسن",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966508859387"
+    },
+    {
+      "student_nid": "2311222984",
+      "student_name": "ماهر شير محمد - حافظ امير",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966599218793"
+    },
+    {
+      "student_nid": "2315730198",
+      "student_name": "محمد الرشيد محمد احمد",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966508768464"
+    },
+    {
+      "student_nid": "4235286533",
+      "student_name": "محمد باسم محمد هاشم",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966569371455"
+    },
+    {
+      "student_nid": "1155469065",
+      "student_name": "محمد راشد حمد الصاعدي",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966553307052"
+    },
+    {
+      "student_nid": "2322035714",
+      "student_name": "محمد سرفراز - بخش",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966559845316"
+    },
+    {
+      "student_nid": "2314300993",
+      "student_name": "محمد عبد الستار - سديد",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966501630206"
+    },
+    {
+      "student_nid": "2433992027",
+      "student_name": "محمد عبدالباسط بلة عبدالله",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966552095300"
+    },
+    {
+      "student_nid": "4824480760",
+      "student_name": "محمد هاشم أحمد الأحمدي",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966504959894"
+    },
+    {
+      "student_nid": "4018014416",
+      "student_name": "مراد رضوان أحمد صالح",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966507853240"
+    },
+    {
+      "student_nid": "2327441172",
+      "student_name": "مشاري اسماعيل غلام شبير محمد",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966532028930"
+    },
+    {
+      "student_nid": "1155866179",
+      "student_name": "مشعل عايد بن عواد الرويتعي",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966537786522"
+    },
+    {
+      "student_nid": "1161841422",
+      "student_name": "مشعل محمد بن حامد العمري",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966569567243"
+    },
+    {
+      "student_nid": "2441926702",
+      "student_name": "معاذ محمود حسن امين",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966541757370"
+    },
+    {
+      "student_nid": "1169235213",
+      "student_name": "مؤيد صالح بن درويش الزهراني",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966557406918"
+    },
+    {
+      "student_nid": "2423655162",
+      "student_name": "مؤيد صفور محمد اشرف",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966539268852"
+    },
+    {
+      "student_nid": "2311907428",
+      "student_name": "مؤيد كمال حسين - صديق احمد",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966568360316"
+    },
+    {
+      "student_nid": "1156814657",
+      "student_name": "نافع بنيان بن عبدالعزيز الحربي",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966506314997"
+    },
+    {
+      "student_nid": "4646401788",
+      "student_name": "هادي هشام باصويطين",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966506208609"
+    },
+    {
+      "student_nid": "0160208011",
+      "student_name": "هارون محمد حسين الكينعي",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966533670997"
+    },
+    {
+      "student_nid": "2304915271",
+      "student_name": "وسيم عمر صالح عسكر",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966597961623"
+    },
+    {
+      "student_nid": "2431770896",
+      "student_name": "ياسر عبدالمجيد أيوب محمد",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966599374733"
+    },
+    {
+      "student_nid": "2304392984",
+      "student_name": "يحيى شاه علي قل خان",
+      "grade": "الثالث متوسط",
+      "section": "4",
+      "guardian_phone": "966551986347"
+    }
+  ]
+}

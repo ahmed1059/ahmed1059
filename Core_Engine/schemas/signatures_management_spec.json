@@ -1,0 +1,33 @@
+{
+  "signatures_management_spec": {
+    "spec_metadata": {
+      "version": "1.0.0",
+      "spec_id": "SIG-MGMT-1448",
+      "title": "منظومة التواقيع الرقمية الشفافة للكادر الـ 38",
+      "school": "متوسطة سعد بن الربيع الأنصاري",
+      "academic_year": "1448",
+      "principal": "نايف بن سمير حجيف المخلفي",
+      "total_staff": 38
+    },
+    "folder_structure": {
+      "root_path": "Print_Canvas/assets/signatures/"
+    },
+    "naming_protocol": {
+      "pattern": "sig_{national_id}.png"
+    },
+    "signature_contexts": {
+      "context_1_inline_table": {
+        "class_name": "sig-inline-cell",
+        "dimensions": { "max_height_px": 28, "max_width_px": 85 }
+      },
+      "context_2_document_footer": {
+        "class_name": "sig-footer-box",
+        "dimensions": { "max_height_px": 50, "max_width_px": 130 }
+      },
+      "context_3_mandate_letter": {
+        "class_name": "sig-mandate-box",
+        "dimensions": { "max_height_px": 42, "max_width_px": 110 }
+      }
+    }
+  }
+}

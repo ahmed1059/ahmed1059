@@ -1,0 +1,98 @@
+[
+  {
+    "task_code": "TCH-01",
+    "week_target": 1,
+    "title": "تنفيذ مبادرة الرياضيات الممتعة وفق خطة المعلم المعتمدة",
+    "execution_method": "تنفيذ صفّي",
+    "execution_time": "وفق الجدول الأسبوعي",
+    "evidence": "تقرير/شاهد TPL-01 أو سجل متابعة",
+    "category": "برامج المعلم المعتمدة",
+    "program_id": "fun_math",
+    "goal_id": "G3",
+    "task_type": "educational"
+  },
+  {
+    "task_code": "TCH-02",
+    "week_target": 2,
+    "title": "تنفيذ برنامج مهارات التواصل وفق خطة المعلم المعتمدة",
+    "execution_method": "تنفيذ صفّي",
+    "execution_time": "وفق الجدول الأسبوعي",
+    "evidence": "تقرير/شاهد TPL-01 أو سجل متابعة",
+    "category": "برامج المعلم المعتمدة",
+    "program_id": "comm_skills",
+    "goal_id": "G2",
+    "task_type": "educational"
+  },
+  {
+    "task_code": "TCH-03",
+    "week_target": 3,
+    "title": "تنفيذ برنامج مهارات المذاكرة وفق خطة المعلم المعتمدة",
+    "execution_method": "تنفيذ صفّي",
+    "execution_time": "وفق الجدول الأسبوعي",
+    "evidence": "تقرير/شاهد TPL-01 أو سجل متابعة",
+    "category": "برامج المعلم المعتمدة",
+    "program_id": "study_skills",
+    "goal_id": "G3",
+    "task_type": "educational"
+  },
+  {
+    "task_code": "TCH-04",
+    "week_target": 4,
+    "title": "تنفيذ برنامج إتقان المهارات الأساسية وفق خطة المعلم المعتمدة",
+    "execution_method": "تنفيذ صفّي",
+    "execution_time": "وفق الجدول الأسبوعي",
+    "evidence": "تقرير/شاهد TPL-01 أو سجل متابعة",
+    "category": "برامج المعلم المعتمدة",
+    "program_id": "basic_mastery",
+    "goal_id": "G3",
+    "task_type": "educational"
+  },
+  {
+    "task_code": "TCH-05",
+    "week_target": 5,
+    "title": "تنفيذ برنامج دعم في المواد الأساسية وفق خطة المعلم المعتمدة",
+    "execution_method": "تنفيذ صفّي",
+    "execution_time": "وفق الجدول الأسبوعي",
+    "evidence": "تقرير/شاهد TPL-01 أو سجل متابعة",
+    "category": "برامج المعلم المعتمدة",
+    "program_id": "subject_support_teacher",
+    "goal_id": "G3",
+    "task_type": "educational"
+  },
+  {
+    "task_code": "TCH-06",
+    "week_target": 6,
+    "title": "تنفيذ برنامج التفكير الناقد وفق خطة المعلم المعتمدة",
+    "execution_method": "تنفيذ صفّي",
+    "execution_time": "وفق الجدول الأسبوعي",
+    "evidence": "تقرير/شاهد TPL-01 أو سجل متابعة",
+    "category": "برامج المعلم المعتمدة",
+    "program_id": "critical_thinking",
+    "goal_id": "G2",
+    "task_type": "educational"
+  },
+  {
+    "task_code": "TCH-07",
+    "week_target": 7,
+    "title": "تنفيذ برنامج الكتابة الإبداعية وفق خطة المعلم المعتمدة",
+    "execution_method": "تنفيذ صفّي",
+    "execution_time": "وفق الجدول الأسبوعي",
+    "evidence": "تقرير/شاهد TPL-01 أو سجل متابعة",
+    "category": "برامج المعلم المعتمدة",
+    "program_id": "creative_writing",
+    "goal_id": "G3",
+    "task_type": "educational"
+  },
+  {
+    "task_code": "TCH-08",
+    "week_target": 8,
+    "title": "تفعيل نادي الكتابة الإبداعية وفق خطة المعلم المعتمدة",
+    "execution_method": "نشاط نادي",
+    "execution_time": "وفق جدول النادي",
+    "evidence": "تقرير/شاهد TPL-01 أو سجل متابعة",
+    "category": "برامج المعلم المعتمدة",
+    "program_id": "creative_writing_club",
+    "goal_id": "G3",
+    "task_type": "educational"
+  }
+]

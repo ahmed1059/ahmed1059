@@ -1,0 +1,8 @@
+overall=71.0
+admin=78.75
+teach=65.5
+outcomes=74.75
+env=60.5
+math=18.8
+reading=27.7
+science=42.5

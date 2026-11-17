@@ -1,0 +1,376 @@
+{
+  "meta": {
+    "decision": 155,
+    "wave": "م5/د3-أ",
+    "scope": "11 دوراً · ترقية دفعة المعلم فقط إلى النواة",
+    "source": "19_role_plan_seating_mechanism.md + 17_programs_by_staff_plan.md + 10_role_permissions.csv",
+    "count": 11,
+    "note": "م4: بنك معلم + بنوك خفيفة من مرشحي المعرفة · بلا ترقية overlap · بلا م5"
+  },
+  "roles": [
+    {
+      "id": "principal",
+      "label_ar": "مدير المدرسة",
+      "task_bank_file": "executive.json",
+      "goal_refs": [
+        "G1",
+        "G7"
+      ],
+      "register_ids": [
+        1
+      ],
+      "indicator_codes": [
+        "1-3-1-1",
+        "1-3-1-2",
+        "1-3-1-3"
+      ],
+      "templates": [
+        {
+          "id": "TPL-02",
+          "label_ar": "خطة تربوية / تشغيلية",
+          "href": "../tpl02/TPL-02.html"
+        },
+        {
+          "id": "TPL-03",
+          "label_ar": "محضر لجنة / اجتماع",
+          "href": "../tpl03/TPL-03.html"
+        },
+        {
+          "id": "TPL-04",
+          "label_ar": "قرار تشكيل",
+          "href": "../tpl04/TPL-04.html"
+        },
+        {
+          "id": "TPL-08b",
+          "label_ar": "توثيق شراكة مجتمعية",
+          "href": "../tpl08b/TPL-08b.html"
+        }
+      ]
+    },
+    {
+      "id": "vice_teachers",
+      "label_ar": "وكيل الشؤون التعليمية",
+      "task_bank_file": "vice_academic.json",
+      "goal_refs": [
+        "G2",
+        "G3",
+        "G6"
+      ],
+      "register_ids": [
+        2,
+        3
+      ],
+      "indicator_codes": [
+        "1-4-1-1",
+        "1-4-1-2",
+        "2-1-1-2",
+        "2-1-1-5",
+        "2-2-1-1",
+        "2-2-1-2",
+        "2-2-1-3"
+      ],
+      "templates": [
+        {
+          "id": "TPL-01",
+          "label_ar": "تقرير برنامج / مسابقة / مبادرة",
+          "href": "../tpl01/TPL-01.html"
+        },
+        {
+          "id": "TPL-02",
+          "label_ar": "خطة تربوية / تشغيلية",
+          "href": "../tpl02/TPL-02.html"
+        },
+        {
+          "id": "TPL-03",
+          "label_ar": "محضر لجنة / اجتماع",
+          "href": "../tpl03/TPL-03.html"
+        },
+        {
+          "id": "TPL-05",
+          "label_ar": "سجل متابعة",
+          "href": "../tpl05/TPL-05.html"
+        },
+        {
+          "id": "TPL-07",
+          "label_ar": "استمارة تقويم / أثر",
+          "href": "../tpl07/TPL-07.html"
+        }
+      ]
+    },
+    {
+      "id": "vice_students",
+      "label_ar": "وكيل شؤون الطلاب",
+      "task_bank_file": "vice_students.json",
+      "goal_refs": [
+        "G4",
+        "G5"
+      ],
+      "register_ids": [
+        4,
+        6
+      ],
+      "indicator_codes": [
+        "1-2-1-1"
+      ],
+      "templates": [
+        {
+          "id": "TPL-03",
+          "label_ar": "محضر لجنة / اجتماع",
+          "href": "../tpl03/TPL-03.html"
+        },
+        {
+          "id": "TPL-05",
+          "label_ar": "سجل متابعة",
+          "href": "../tpl05/TPL-05.html"
+        },
+        {
+          "id": "TPL-06",
+          "label_ar": "كشف / قائمة",
+          "href": "../tpl06/TPL-06.html"
+        }
+      ]
+    },
+    {
+      "id": "vice_admin",
+      "label_ar": "وكيل الشؤون المدرسية",
+      "task_bank_file": "vice_admin.json",
+      "goal_refs": [],
+      "register_ids": [
+        1,
+        6
+      ],
+      "indicator_codes": [
+        "1-2-1-1"
+      ],
+      "templates": [
+        {
+          "id": "TPL-04",
+          "label_ar": "قرار تشكيل",
+          "href": "../tpl04/TPL-04.html"
+        },
+        {
+          "id": "TPL-05",
+          "label_ar": "سجل متابعة",
+          "href": "../tpl05/TPL-05.html"
+        }
+      ],
+      "pack_note": "دور بلا برامج في تصنيف الـ92 · فارغ موثّق (خ-إغلاق م4 · قرار 155) · لا اختراع"
+    },
+    {
+      "id": "student_counselor",
+      "label_ar": "الموجه الطلابي",
+      "task_bank_file": "student_counselor.json",
+      "goal_refs": [
+        "G5"
+      ],
+      "register_ids": [
+        4,
+        5
+      ],
+      "indicator_codes": [
+        "1-2-1-1"
+      ],
+      "templates": [
+        {
+          "id": "TPL-05",
+          "label_ar": "سجل متابعة",
+          "href": "../tpl05/TPL-05.html"
+        },
+        {
+          "id": "TPL-07",
+          "label_ar": "استمارة تقويم / أثر",
+          "href": "../tpl07/TPL-07.html"
+        }
+      ]
+    },
+    {
+      "id": "health_counselor",
+      "label_ar": "الموجه الصحي",
+      "task_bank_file": "health_counselor.json",
+      "goal_refs": [],
+      "register_ids": [
+        4
+      ],
+      "indicator_codes": [],
+      "templates": [
+        {
+          "id": "TPL-05",
+          "label_ar": "سجل متابعة",
+          "href": "../tpl05/TPL-05.html"
+        },
+        {
+          "id": "TPL-07",
+          "label_ar": "استمارة تقويم / أثر",
+          "href": "../tpl07/TPL-07.html"
+        }
+      ],
+      "pack_note": "دور بلا برامج في تصنيف الـ92 · فارغ موثّق (خ-إغلاق م4 · قرار 155) · لا اختراع"
+    },
+    {
+      "id": "teacher",
+      "label_ar": "المعلم",
+      "task_bank_file": "teacher.json",
+      "goal_refs": [
+        "G2",
+        "G3"
+      ],
+      "register_ids": [
+        3,
+        5
+      ],
+      "indicator_codes": [
+        "2-1-1-2",
+        "2-1-1-5",
+        "2-2-1-1",
+        "2-2-1-2",
+        "2-2-1-3"
+      ],
+      "templates": [
+        {
+          "id": "TPL-01",
+          "label_ar": "تقرير برنامج / مسابقة / مبادرة",
+          "href": "../tpl01/TPL-01.html"
+        },
+        {
+          "id": "TPL-05",
+          "label_ar": "سجل متابعة",
+          "href": "../tpl05/TPL-05.html"
+        },
+        {
+          "id": "TPL-07",
+          "label_ar": "استمارة تقويم / أثر",
+          "href": "../tpl07/TPL-07.html"
+        },
+        {
+          "id": "TPL-09f",
+          "label_ar": "بطاقات تشغيلية",
+          "href": "../tpl09f/TPL-09f.html"
+        }
+      ],
+      "pack_note": "8 برامج معتمدة + 8 بنود · د3-ب لم تُفتح بعد"
+    },
+    {
+      "id": "activity_leader",
+      "label_ar": "رائد النشاط الطلابي",
+      "task_bank_file": "activity_leader.json",
+      "goal_refs": [
+        "G7",
+        "G3"
+      ],
+      "register_ids": [
+        5
+      ],
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "templates": [
+        {
+          "id": "TPL-01",
+          "label_ar": "تقرير برنامج / مسابقة / مبادرة",
+          "href": "../tpl01/TPL-01.html"
+        },
+        {
+          "id": "TPL-05",
+          "label_ar": "سجل متابعة",
+          "href": "../tpl05/TPL-05.html"
+        },
+        {
+          "id": "TPL-08a",
+          "label_ar": "توثيق عمل تطوعي",
+          "href": "../tpl08a/TPL-08a.html"
+        }
+      ]
+    },
+    {
+      "id": "librarian",
+      "label_ar": "أمين مصادر التعلم",
+      "task_bank_file": "librarian.json",
+      "goal_refs": [
+        "G2"
+      ],
+      "register_ids": [
+        5,
+        6
+      ],
+      "indicator_codes": [
+        "2-1-1-2"
+      ],
+      "templates": [
+        {
+          "id": "TPL-05",
+          "label_ar": "سجل متابعة",
+          "href": "../tpl05/TPL-05.html"
+        }
+      ],
+      "pack_note": "8 برامج معتمدة (د3-أ بانتظار اعتماد بشري) + بنود LIB · مرشحو المعرفة لهذا الدور = 0 بعد الترقية"
+    },
+    {
+      "id": "lab_tech",
+      "label_ar": "محضر المختبر",
+      "task_bank_file": "lab_tech.json",
+      "goal_refs": [
+        "G2",
+        "G4"
+      ],
+      "register_ids": [
+        6
+      ],
+      "indicator_codes": [],
+      "templates": [
+        {
+          "id": "TPL-05",
+          "label_ar": "سجل متابعة",
+          "href": "../tpl05/TPL-05.html"
+        }
+      ],
+      "pack_note": "برامج مملوكة=0 · 2 مرشحان + 2 بند · بانتظار د5/م5"
+    },
+    {
+      "id": "admin_assistant",
+      "label_ar": "المساعد الإداري",
+      "task_bank_file": "admin_assistant.json",
+      "goal_refs": [
+        "G1",
+        "G6"
+      ],
+      "register_ids": [
+        1
+      ],
+      "indicator_codes": [],
+      "templates": [
+        {
+          "id": "TPL-05",
+          "label_ar": "سجل متابعة",
+          "href": "../tpl05/TPL-05.html"
+        }
+      ],
+      "pack_note": "برامج مملوكة=0 · 1 مرشّح + 1 بند · بانتظار د5/م5"
+    }
+  ],
+  "registers": [
+    {
+      "id": 1,
+      "label_ar": "سجل القيادة والتحسين المستمر"
+    },
+    {
+      "id": 2,
+      "label_ar": "سجل التطوير المهني"
+    },
+    {
+      "id": 3,
+      "label_ar": "سجل المناهج والتقويم"
+    },
+    {
+      "id": 4,
+      "label_ar": "سجل الانضباط"
+    },
+    {
+      "id": 5,
+      "label_ar": "سجل الأنشطة والرعاية"
+    },
+    {
+      "id": 6,
+      "label_ar": "سجل البيئة والموارد"
+    }
+  ]
+}

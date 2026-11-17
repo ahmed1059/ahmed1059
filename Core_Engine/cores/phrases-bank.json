@@ -1,0 +1,10 @@
+{
+  "meeting.opening": "اجتماع اللجنة {{committee_name}} بتاريخ {{date}} لمناقشة {{topic}}.",
+  "program.objective": "يهدف البرنامج إلى {{program_name}} ضمن مجال {{domain}}.",
+  "report.closing": "وفي الختام نوصي بـ {{recommendation}}.",
+  "plan.objective": "العنصر المراد تحسينه: {{title}}.",
+  "plan.procedures": "تُنفَّذ الإجراءات التالية: {{procedures}}.",
+  "plan.evidence": "الشواهد المطلوبة: {{evidence}}.",
+  "plan.expectations": "{{expectations}}",
+  "plan.committees": "اللجان المعنية: {{committees}}."
+}

@@ -1,0 +1,299 @@
+{
+  "education_office": "{{office_name}}",
+  "principal_name": "نايف بن سمير حجيف المخلفي",
+  "school_name": "متوسطة سعد بن الربيع الأنصاري",
+  "academic_year": "1448هـ",
+  "individual_mandate_letter": {
+    "title": "خطاب تكليف فردي",
+    "preamble": [
+      "المملكة العربية السعودية",
+      "وزارة التعليم",
+      "{education_administration}",
+      "{education_office}",
+      "{school_name}",
+      "العام الدراسي {year}"
+    ],
+    "subject": "تكليف {staff_name} بصفة {mandate_title} في {committee_name}",
+    "paragraphs": [
+      "إن مدير {school_name}، {principal_name}، يكلف {staff_name}، {staff_job_title}، سجل مدني رقم {staff_nid}، بالعمل بصفة {mandate_title} ضمن {committee_name} للعام الدراسي {year}.",
+      "وتكون المهام المنوطة به في هذه اللجنة على النحو الآتي:\n{tasks_list}",
+      "وعلى المكلف مباشرة العمل من تاريخ استلام هذا الخطاب، والرفع لرئيس اللجنة بما يستدعي."
+    ],
+    "acknowledgment_title": "إقرار الاستلام والتوقيع بالعلم",
+    "acknowledgment": "أقر أنا {staff_name}، سجل مدني {staff_nid}، باستلام خطاب التكليف بصفة {mandate_title} في {committee_name}، وقد اطلعت على مهامه وبالعلم أوقع.",
+    "principal_approval": "اعتماد مدير المدرسة: {principal_name}"
+  },
+  "signatures_protocol": {
+    "path_pattern": "signatures/sig_{nid}.png",
+    "decision_columns": [
+      "م",
+      "الاسم",
+      "الصفة",
+      "التوقيع",
+      "بالعلم"
+    ],
+    "columns": [
+      "م",
+      "الاسم",
+      "السجل المدني",
+      "الصفة الوظيفية",
+      "مسار التوقيع"
+    ],
+    "people": [
+      {
+        "name": "نايف بن سمير حجيف المخلفي",
+        "nid": "1046940365",
+        "job_title": "مدير مدرسة",
+        "signature_path": "signatures/sig_1046940365.png"
+      },
+      {
+        "name": "محمد بن فايز بن هلال الحربي",
+        "nid": "1060852900",
+        "job_title": "وكيل الشؤون التعليمية",
+        "signature_path": "signatures/sig_1060852900.png"
+      },
+      {
+        "name": "خالد بن علي بن حجري العمري",
+        "nid": "1006741209",
+        "job_title": "وكيل شؤون الطلاب",
+        "signature_path": "signatures/sig_1006741209.png"
+      },
+      {
+        "name": "فهد حنيف بن محمد العمري",
+        "nid": "1053394563",
+        "job_title": "موجه طلابي",
+        "signature_path": "signatures/sig_1053394563.png"
+      },
+      {
+        "name": "منور بن محمد بن عليان اللهيبي",
+        "nid": "1048036600",
+        "job_title": "موجه طلابي",
+        "signature_path": "signatures/sig_1048036600.png"
+      },
+      {
+        "name": "احمد بن سعيد بن سلمي العوفي",
+        "nid": "1018819753",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1018819753.png"
+      },
+      {
+        "name": "احمد عبدالله عريج الحربي",
+        "nid": "1081900746",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1081900746.png"
+      },
+      {
+        "name": "احمد علي هيازع الشهري",
+        "nid": "1008379958",
+        "job_title": "مسؤول النظام والقيادة الشاملة / معلم رياضيات",
+        "signature_path": "signatures/sig_1008379958.png"
+      },
+      {
+        "name": "انس عبدالرحمن صالح الرحيلي",
+        "nid": "1098736349",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1098736349.png"
+      },
+      {
+        "name": "ايمن سليم محمد البلادي",
+        "nid": "1059972792",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1059972792.png"
+      },
+      {
+        "name": "بدر بن سليم بن حمود الترجمي",
+        "nid": "1003471925",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1003471925.png"
+      },
+      {
+        "name": "بندر بن عائد بن محمد الاحمدي",
+        "nid": "1045101852",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1045101852.png"
+      },
+      {
+        "name": "بندر حمدان سمران المحمدي",
+        "nid": "1034517084",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1034517084.png"
+      },
+      {
+        "name": "حسن بن نافع بن مساعد الهرساني",
+        "nid": "1011057906",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1011057906.png"
+      },
+      {
+        "name": "حميد قاسم ضفيدع الصاعدي",
+        "nid": "1077893483",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1077893483.png"
+      },
+      {
+        "name": "خالد بن سعود بن مسعود الأحمدي",
+        "nid": "1022093361",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1022093361.png"
+      },
+      {
+        "name": "راشد حمد محمد الصاعدي",
+        "nid": "1019835337",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1019835337.png"
+      },
+      {
+        "name": "زهير بن عتيق بن عوده الحجيلي",
+        "nid": "1017536960",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1017536960.png"
+      },
+      {
+        "name": "صالح بن فالح بن صالح الحربي",
+        "nid": "1071048803",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1071048803.png"
+      },
+      {
+        "name": "عبدالرحمن بن حامد بن حمد العوفي",
+        "nid": "1020615165",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1020615165.png"
+      },
+      {
+        "name": "عبدالمحسن بن حسين بن حسن الحربي",
+        "nid": "1020360283",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1020360283.png"
+      },
+      {
+        "name": "عدنان صلاح بن عويد الحربي",
+        "nid": "1036241733",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1036241733.png"
+      },
+      {
+        "name": "فائز حمدان حميد الترجمي",
+        "nid": "1046780217",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1046780217.png"
+      },
+      {
+        "name": "فواز بن علي بن سليم الحربي",
+        "nid": "1010639605",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1010639605.png"
+      },
+      {
+        "name": "ماجد طلال عوض الحجيلي",
+        "nid": "1075342285",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1075342285.png"
+      },
+      {
+        "name": "ماجد فهد محمد الحربي",
+        "nid": "1073084434",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1073084434.png"
+      },
+      {
+        "name": "محمد بن نافع بن نويفع الصاعدي",
+        "nid": "1056872599",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1056872599.png"
+      },
+      {
+        "name": "محمد عايد نغيمش الجهني",
+        "nid": "1006107989",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1006107989.png"
+      },
+      {
+        "name": "مطيع بن طلال بن غازي الصاعدي",
+        "nid": "1009464478",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1009464478.png"
+      },
+      {
+        "name": "هاشم بن راشد بن دهيكل البرقاني الجهني",
+        "nid": "1049053653",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1049053653.png"
+      },
+      {
+        "name": "هاني مسعود سعيد الأحمدي",
+        "nid": "1018745529",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1018745529.png"
+      },
+      {
+        "name": "ياسر دخيل الله بن حمود السهلي",
+        "nid": "1062255912",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1062255912.png"
+      },
+      {
+        "name": "ياسر فالح مسعد السحيمي",
+        "nid": "1077684114",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1077684114.png"
+      },
+      {
+        "name": "يوسف بن عواد بن عويد العوفي",
+        "nid": "1027591864",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1027591864.png"
+      },
+      {
+        "name": "يوسف مقبل مانع الصاعدي",
+        "nid": "1052167663",
+        "job_title": "معلم",
+        "signature_path": "signatures/sig_1052167663.png"
+      },
+      {
+        "name": "احمد بن صالح بن رجاء العوفي",
+        "nid": "1009058346",
+        "job_title": "محضر مختبر علوم / أمين مصادر تعلم ومحضر معمل حاسب",
+        "signature_path": "signatures/sig_1009058346.png"
+      },
+      {
+        "name": "محمد حامد عماش السهلي",
+        "nid": "1083157642",
+        "job_title": "رائد النشاط",
+        "signature_path": "signatures/sig_1083157642.png"
+      },
+      {
+        "name": "عبدالمجيد محمد رميزان المرواني",
+        "nid": "1036307674",
+        "job_title": "اداري",
+        "signature_path": "signatures/sig_1036307674.png"
+      }
+    ]
+  },
+  "meeting_minutes_template": {
+    "title": "محضر اجتماع {committee_name}",
+    "meeting_number": "1",
+    "preamble": [
+      "المملكة العربية السعودية",
+      "وزارة التعليم",
+      "{education_administration}",
+      "{education_office}",
+      "{school_name}",
+      "العام الدراسي {year}"
+    ],
+    "intro": "محضر الاجتماع رقم {meeting_number} للجنة {committee_name} في {school_name} للعام الدراسي {year}.",
+    "attendance_columns": [
+      "م",
+      "الاسم",
+      "الدور",
+      "الحضور",
+      "التوقيع"
+    ],
+    "sections": [
+      "بنود جدول الأعمال",
+      "تفاصيل المناقشات",
+      "القرارات والتوصيات"
+    ],
+    "approval": "اعتماد مدير المدرسة: {principal_name}"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "source": "05_committee_structure.csv",
+    "count": 15,
+    "note": "أسماء هيئات محفوظة فقط — بلا اختراع أعضاء"
+  },
+  "committees": [
+    {
+      "body_id": "admin",
+      "body_name": "اللجنة الإدارية",
+      "kind": "لجنة",
+      "has_rapporteur_role": "yes",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": true,
+      "named_members_count": 0
+    },
+    {
+      "body_id": "quality",
+      "body_name": "لجنة التميز / الجودة",
+      "kind": "لجنة",
+      "has_rapporteur_role": "yes",
+      "has_rapporteur_named": "yes",
+      "rapporteur_vacant": false,
+      "named_members_count": 4
+    },
+    {
+      "body_id": "exams",
+      "body_name": "لجنة التحصيل الدراسي / الاختبارات",
+      "kind": "لجنة",
+      "has_rapporteur_role": "yes",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": true,
+      "named_members_count": 3
+    },
+    {
+      "body_id": "guidance",
+      "body_name": "لجنة التوجيه الطلابي",
+      "kind": "لجنة",
+      "has_rapporteur_role": "yes",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": true,
+      "named_members_count": 3
+    },
+    {
+      "body_id": "resources",
+      "body_name": "لجنة مصادر التعلم",
+      "kind": "لجنة",
+      "has_rapporteur_role": "no",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": false,
+      "named_members_count": 3
+    },
+    {
+      "body_id": "fund",
+      "body_name": "فريق عمل الصندوق المدرسي",
+      "kind": "فريق",
+      "has_rapporteur_role": "no",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": false,
+      "named_members_count": 0
+    },
+    {
+      "body_id": "disability",
+      "body_name": "فريق عمل الطلاب ذوي الإعاقة",
+      "kind": "فريق",
+      "has_rapporteur_role": "yes",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": true,
+      "named_members_count": 0
+    },
+    {
+      "body_id": "volunteer",
+      "body_name": "فريق العمل التطوعي",
+      "kind": "فريق",
+      "has_rapporteur_role": "no",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": false,
+      "named_members_count": 0
+    },
+    {
+      "body_id": "partnership",
+      "body_name": "فريق الشراكة المجتمعية",
+      "kind": "فريق",
+      "has_rapporteur_role": "no",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": false,
+      "named_members_count": 0
+    },
+    {
+      "body_id": "gifted",
+      "body_name": "رعاية الموهوبين (مسار/معلم)",
+      "kind": "مسار",
+      "has_rapporteur_role": "no",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": false,
+      "named_members_count": 0
+    },
+    {
+      "body_id": "discipline",
+      "body_name": "لجنة الانضباط المدرسي",
+      "kind": "لجنة",
+      "has_rapporteur_role": "no",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": false,
+      "named_members_count": 0
+    },
+    {
+      "body_id": "admission",
+      "body_name": "لجنة المفاضلة وقبول الطلبة",
+      "kind": "لجنة",
+      "has_rapporteur_role": "no",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": false,
+      "named_members_count": 0
+    },
+    {
+      "body_id": "school_council",
+      "body_name": "مجلس المدرسة",
+      "kind": "مجلس",
+      "has_rapporteur_role": "no",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": false,
+      "named_members_count": 0
+    },
+    {
+      "body_id": "parents_council",
+      "body_name": "مجلس أولياء الأمور",
+      "kind": "مجلس",
+      "has_rapporteur_role": "no",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": false,
+      "named_members_count": 0
+    },
+    {
+      "body_id": "students_council",
+      "body_name": "المجلس الطلابي",
+      "kind": "مجلس",
+      "has_rapporteur_role": "no",
+      "has_rapporteur_named": "no",
+      "rapporteur_vacant": false,
+      "named_members_count": 0
+    }
+  ]
+}

@@ -1,0 +1,260 @@
+/* قرار 289 — مرونة الشاشات. كل قاعدة داخل screen حتى تبقى طباعة A4 كما هي.
+   سطح المكتب من 1100px يبقى على app-journey.css بلا تغيير.
+   الجهاز اللوحي 768–1099: شريط أيقونات. الجوال حتى 767: قائمة همبرغر القائمة. */
+
+@media screen and (min-width: 768px) and (max-width: 1099px) {
+  .aj-shell {
+    grid-template-columns: 76px minmax(0, 1fr);
+  }
+
+  .aj-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    align-self: start;
+    height: 100vh;
+    overflow: visible;
+    padding: 10px 6px 16px;
+    background: #ffffff;
+    border-inline-end: 1px solid #0b5e56;
+  }
+
+  .aj-brand,
+  .aj-brand-note,
+  .aj-user-name,
+  .aj-sidebar .header-logo {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .aj-logout-btn,
+  .aj-home-link,
+  .aj-legacy-link,
+  .aj-stage-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    margin: 0 0 6px;
+    padding: 0;
+    font-size: 0;
+    line-height: 1;
+  }
+
+  .aj-logout-btn::before,
+  .aj-home-link::before,
+  .aj-legacy-link::before,
+  .aj-stage-toggle::before {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0b5e56;
+  }
+
+  #aj-home-link::before { content: "مك"; }
+  #aj-profile-link::before { content: "مل"; }
+  #aj-portfolio-link::before { content: "سج"; }
+  .aj-legacy-link::before { content: "قد"; }
+  .aj-logout-btn::before { content: "خ"; }
+
+  .aj-stage-toggle[data-aj-stage="plan"]::before { content: "تخ"; }
+  .aj-stage-toggle[data-aj-stage="settings"]::before { content: "إع"; }
+  .aj-stage-toggle[data-aj-stage="tasks"]::before { content: "مه"; }
+  .aj-stage-toggle[data-aj-stage="exec"]::before { content: "تن"; }
+  .aj-stage-toggle[data-aj-stage="print"]::before { content: "طب"; }
+  .aj-stage-toggle[data-aj-stage="follow"]::before { content: "مت"; }
+  .aj-stage-toggle[data-aj-stage="evidence"]::before { content: "شه"; }
+
+  .aj-stage {
+    position: relative;
+    overflow: visible;
+    margin: 0 0 6px;
+    border-color: #d7e3df;
+  }
+
+  .aj-stage-toggle[aria-expanded="true"] {
+    background: #e8f3f1;
+    box-shadow: inset 0 -3px 0 #c5a572;
+  }
+
+  .aj-stage-panel.is-open {
+    position: absolute;
+    inset-inline-start: calc(100% + 8px);
+    top: 0;
+    z-index: 40;
+    width: 240px;
+    padding: 8px;
+    background: #ffffff;
+    border: 1px solid #0b5e56;
+    box-shadow: 0 10px 24px rgba(8, 40, 36, 0.16);
+  }
+
+  .aj-stage-toggle:hover::after,
+  .aj-stage-toggle:focus-visible::after,
+  .aj-home-link:hover::after,
+  .aj-home-link:focus-visible::after,
+  .aj-legacy-link:hover::after,
+  .aj-legacy-link:focus-visible::after,
+  .aj-logout-btn:hover::after,
+  .aj-logout-btn:focus-visible::after {
+    content: attr(title);
+    position: absolute;
+    inset-inline-start: calc(100% + 10px);
+    top: 50%;
+    z-index: 50;
+    padding: 4px 8px;
+    background: #0b5e56;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  .aj-stage-toggle[aria-expanded="true"]::after {
+    content: none;
+  }
+
+  .aj-home-stages,
+  .aj-cards,
+  #view-import-center .aj-sl-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 1099px) {
+  body.app-journey {
+    background: #f4f7f6;
+  }
+
+  .aj-main {
+    max-width: none;
+    min-width: 0;
+  }
+
+  .aj-view.wash-board,
+  .aj-home-card,
+  .aj-card,
+  .aj-sl-panel,
+  .aj-profile-card {
+    background: #ffffff;
+    border-top: 3px solid #c5a572;
+  }
+
+  #view-student-registry .aj-detail-actions,
+  #view-staff .aj-detail-actions,
+  #view-import-center .aj-detail-actions,
+  #view-school .aj-detail-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+    align-items: end;
+  }
+
+  #view-student-registry .aj-soft-label,
+  #view-staff .aj-soft-label {
+    min-width: 0;
+  }
+
+  #view-student-registry .aj-soft-label select,
+  #view-student-registry .aj-soft-label input,
+  #view-staff .aj-soft-label select,
+  #view-staff .aj-soft-label input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .aj-table-scroll,
+  .aj-env-students-wrap,
+  #view-staff .aj-staff-table-wrap,
+  #aj-committee-boards {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-color: #0b5e56 #e7eeeb;
+    scrollbar-width: thin;
+  }
+
+  .aj-table-scroll::-webkit-scrollbar,
+  .aj-env-students-wrap::-webkit-scrollbar,
+  #view-staff .aj-staff-table-wrap::-webkit-scrollbar,
+  #aj-committee-boards::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .aj-table-scroll::-webkit-scrollbar-thumb,
+  .aj-env-students-wrap::-webkit-scrollbar-thumb,
+  #view-staff .aj-staff-table-wrap::-webkit-scrollbar-thumb,
+  #aj-committee-boards::-webkit-scrollbar-thumb {
+    background: #0b5e56;
+  }
+
+  .aj-table-scroll::-webkit-scrollbar-track,
+  .aj-env-students-wrap::-webkit-scrollbar-track,
+  #view-staff .aj-staff-table-wrap::-webkit-scrollbar-track,
+  #aj-committee-boards::-webkit-scrollbar-track {
+    background: #e7eeeb;
+  }
+
+  .aj-env-students-table,
+  .aj-formation-table,
+  #view-staff .aj-staff-table {
+    min-width: 36rem;
+  }
+
+  #aj-eval-chart {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .aj-print-stage {
+    overflow: auto;
+  }
+
+  .aj-print-stage-page,
+  .aj-print-stage-page .pm-document {
+    width: 210mm;
+    max-width: 210mm;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .aj-home-stages,
+  .aj-cards,
+  #view-import-center .aj-sl-grid,
+  .aj-deliver-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .aj-detail-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .aj-detail-actions .aj-detail-btn,
+  .aj-sl-panel .aj-detail-btn,
+  .aj-form .aj-detail-btn {
+    width: 100%;
+  }
+
+  .aj-profile-card {
+    max-width: none;
+  }
+
+  .aj-menu-btn,
+  .aj-back-btn,
+  .aj-bottom-nav a,
+  .aj-bottom-nav button,
+  .aj-task-btn,
+  .aj-detail-btn {
+    min-height: 44px;
+  }
+}

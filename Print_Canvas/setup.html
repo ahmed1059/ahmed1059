@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>إعداد الخطة — منظومة الخطط المدرسية</title>
+    <link rel="stylesheet" href="css/fonts.css?v=font1">
+    <link rel="stylesheet" href="css/design-system.css">
+    <link rel="stylesheet" href="css/dashboard.css?v=space1">
+    <link rel="stylesheet" href="css/setup.css?v=space1">
+    <link rel="stylesheet" href="css/theme-core.css?v=space2">
+    <link rel="stylesheet" href="css/opening-surface.css?v=open4">
+    <link rel="stylesheet" href="css/page-nav.css?v=nav1">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="setup-page">
+    <!-- نفس هيدر لوحة التحكم -->
+    <header class="app-header">
+        <div class="header-right">
+            <img src="/assets/ministry_logo.png" class="header-logo" alt="وزارة التعليم">
+            <a class="header-title home-title" href="dashboard.html#home"><strong>متوسطة سعد بن الربيع الأنصاري</strong><span class="home-caption">الصفحة الرئيسية</span></a>
+        </div>
+        <div class="header-left">
+            <button class="icon-btn" type="button" title="الإشعارات">🔔</button>
+            <button class="icon-btn" type="button" title="الحساب">👤</button>
+        </div>
+        <nav class="page-nav" aria-label="تعريف المدرسة">
+            <a href="identity.html#about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6.5 19c.8-2.8 2.8-4.2 5.5-4.2s4.7 1.4 5.5 4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>من نحن</a>
+            <a href="identity.html#vision"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>الرؤية والرسالة</a>
+            <a href="identity.html#goals"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>أهدافنا</a>
+            <a href="identity.html#partners"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.8 18c.7-2.4 2.4-3.6 4.2-3.6s3.5 1.2 4.2 3.6M12 18c.6-2 2-3.2 3.8-3.2 1.7 0 3.1 1.1 3.8 3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>شركاؤنا</a>
+            <a href="identity.html#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 8l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>تواصل معنا</a>
+        </nav>
+    </header>
+
+    <div class="app-body">
+        <aside class="app-sidebar">
+            <nav>
+                <a href="#" class="nav-item active">
+                    <i data-lucide="home"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="bar-chart"></i>
+                    <span>لوحة المعلومات</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="calendar"></i>
+                    <span>الخطط</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="users"></i>
+                    <span>المستخدمون</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i data-lucide="folder"></i>
+                    <span>الملفات</span>
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i data-lucide="settings"></i>
+                    <span>الإعدادات</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="app-main">
+            <div class="top-action-bar no-print">
+                <h2>إعداد الخطة</h2>
+                <a class="btn-unified-back" href="dashboard.html">رجوع</a>
+            </div>
+            <div class="official-header">
+                <div class="official-right">
+                    <img src="/assets/ministry_logo.png" alt="وزارة التعليم">
+                </div>
+                <div class="official-center">
+                    <div>المملكة العربية السعودية</div>
+                    <div>وزارة التعليم</div>
+                    <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                    <div class="header-office" id="official-office"></div>
+                    <div class="official-school" id="official-school">متوسطة سعد بن الربيع الأنصاري</div>
+                    <div id="setup-principal">مدير المدرسة: نايف بن سمير حجيف المخلفي</div>
+                </div>
+                <div class="official-left">
+                    <img src="/assets/vision_2030.png" alt="رؤية 2030">
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>إعداد الخطة</h2>
+                </div>
+                <div class="card-body">
+                    <!-- رجوع من صفحة البطاقات إلى لوحة التحكم -->
+                    <button class="btn-back btn-unified-back" type="button" onclick="location.href='dashboard.html'">رجوع</button>
+                    <div class="setup-grid">
+                        <article class="setup-card" id="card-basics">
+                            <div class="icon-circle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <line x1="10" y1="9" x2="8" y2="9"></line>
+                                </svg>
+                            </div>
+                            <h3>البيانات الأساسية</h3>
+                            <p>الرؤية والرسالة والأهداف والمقدمة</p>
+                            <button class="btn-primary" type="button" disabled>التالي</button>
+                        </article>
+                        <article class="setup-card" id="card-type">
+                            <div class="icon-circle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                    <polyline points="2 17 12 22 22 17"></polyline>
+                                    <polyline points="2 12 12 17 22 12"></polyline>
+                                </svg>
+                            </div>
+                            <h3>نوع الخطة</h3>
+                            <p>تشغيلية، تنفيذية، أو متابعة</p>
+                            <span class="choice-badge" id="badge-type" hidden></span>
+                            <button class="btn-primary" id="next-type" type="button" disabled>التالي</button>
+                        </article>
+                        <article class="setup-card" id="card-scope">
+                            <div class="icon-circle">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </div>
+                            <h3>طريقة التوليد</h3>
+                            <p>يومية، أسبوعية، شهرية، فصلية، سنوية</p>
+                            <span class="choice-badge" id="badge-scope" hidden></span>
+                            <button class="btn-primary" id="next-scope" type="button" disabled>التالي</button>
+                        </article>
+                    </div>
+
+                    <!-- محرر البيانات الأساسية: مخفي حتى الضغط على البطاقة -->
+                    <div id="content-editor" hidden>
+                        <div>
+                            <label for="f-vision">[1] الرؤية</label>
+                            <textarea id="f-vision" rows="3"></textarea>
+                        </div>
+                        <div>
+                            <label for="f-mission">[2] الرسالة</label>
+                            <textarea id="f-mission" rows="3"></textarea>
+                        </div>
+                        <div>
+                            <label for="f-values">[3] القيم</label>
+                            <textarea id="f-values" rows="8"></textarea>
+                        </div>
+                        <div>
+                            <label for="f-introduction">[4] المقدمة</label>
+                            <textarea id="f-introduction" rows="10"></textarea>
+                        </div>
+                        <div class="goals-editor">
+                            <div class="goals-header">
+                                <h4>الأهداف الاستراتيجية</h4>
+                                <button id="btn-add-goal" class="btn-secondary" type="button">+ إضافة هدف</button>
+                            </div>
+                            <div id="goals-list"></div>
+                        </div>
+                        <div>
+                            <label for="f-signature-name">[6] اسم المنفذ</label>
+                            <textarea id="f-signature-name" rows="2"></textarea>
+                        </div>
+                        <div>
+                            <label for="f-signature-title">[7] صفة المنفذ</label>
+                            <textarea id="f-signature-title" rows="2"></textarea>
+                        </div>
+                        <div>
+                            <label for="f-footer-note">[8] ملاحظة الفوتر</label>
+                            <textarea id="f-footer-note" rows="3"></textarea>
+                        </div>
+                        <div class="content-actions">
+                            <button class="btn-primary" id="save-all" type="button">حفظ الكل</button>
+                            <button class="btn-secondary" id="reset-all" type="button">استعادة الافتراضي</button>
+                            <button class="btn-back" id="back-grid" type="button">→ رجوع</button>
+                        </div>
+                        <p class="form-message" id="content-message"></p>
+                    </div>
+
+                    <!-- اختيار نوع الخطة: مخفي حتى الضغط على البطاقة الثانية -->
+                    <div id="plan-type-selector" hidden>
+                        <p class="selector-note">الخطة التنفيذية تعتمد تلقائياً على مستهدفات الخطة التشغيلية، وخطة المتابعة تراقب بنود الخطة التنفيذية.</p>
+                        <div class="selection-grid">
+                            <label class="selection-card">
+                                <input type="radio" name="plan-type" value="operational">
+                                <strong>الخطة التشغيلية</strong>
+                                <span>النطاق العام، الرؤية، الأهداف العامة، مصفوفة البرامج، مؤشرات الأداء.</span>
+                            </label>
+                            <label class="selection-card">
+                                <input type="radio" name="plan-type" value="executive">
+                                <strong>الخطة التنفيذية</strong>
+                                <span>مشتقة من التشغيلية، توزيع إجرائي للمهام، ربط بالمسؤولين، الشواهد، وقت التنفيذ.</span>
+                            </label>
+                            <label class="selection-card">
+                                <input type="radio" name="plan-type" value="monitoring">
+                                <strong>خطة المتابعة والتقييم</strong>
+                                <span>مشتقة من التنفيذية، أدوات قياس الأثر، سجل المتابعة اليومية/الأسبوعية، رصد الشواهد.</span>
+                            </label>
+                        </div>
+                        <div class="content-actions">
+                            <button class="btn-primary" id="confirm-plan-type" type="button">تأكيد الاختيار والانتقال</button>
+                            <button class="btn-back" id="back-from-type" type="button">رجوع للبطاقات</button>
+                        </div>
+                        <p class="form-message" id="type-message"></p>
+                    </div>
+
+                    <!-- اختيار مدى التوليد: مخفي حتى الضغط على البطاقة الثالثة -->
+                    <div id="generation-scope-selector" hidden>
+                        <div class="selection-grid">
+                            <label class="selection-card">
+                                <input type="radio" name="generation-scope" value="daily">
+                                <strong>يومية (Daily)</strong>
+                                <span>جدول زمني تفصيلي للمهام يوماً بيوم.</span>
+                            </label>
+                            <label class="selection-card">
+                                <input type="radio" name="generation-scope" value="weekly">
+                                <strong>أسبوعية (Weekly)</strong>
+                                <span>التوزيع الافتراضي المعتمد (18 أسبوعاً حسب تقويم الفصل).</span>
+                            </label>
+                            <label class="selection-card">
+                                <input type="radio" name="generation-scope" value="monthly">
+                                <strong>شهرية (Monthly)</strong>
+                                <span>تجميع المهام حسب أشهر الفصل الدراسي.</span>
+                            </label>
+                            <label class="selection-card">
+                                <input type="radio" name="generation-scope" value="semester">
+                                <strong>فصلية (Semester)</strong>
+                                <span>نظرة شمولية لأهداف ومخرجات الفصل الدراسي.</span>
+                            </label>
+                            <label class="selection-card">
+                                <input type="radio" name="generation-scope" value="annual">
+                                <strong>سنوية (Annual)</strong>
+                                <span>خريطة المسار العام للعام الدراسي 1448هـ.</span>
+                            </label>
+                        </div>
+                        <div class="content-actions">
+                            <button class="btn-primary" id="start-generation" type="button">اعتماد وبدء التوليد النهائي</button>
+                            <button class="btn-back" id="back-from-scope" type="button">رجوع للبطاقات</button>
+                        </div>
+                        <p class="form-message" id="scope-message"></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/setup.js"></script>
+    <script>lucide.createIcons();</script>
+<script src="js/page-nav.js?v=nav1"></script>
+</body>
+</html>

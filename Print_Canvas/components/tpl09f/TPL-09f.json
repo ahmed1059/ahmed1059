@@ -1,0 +1,10 @@
+{
+  "template_id": "TPL-09f",
+  "title": "بطاقات — توثيق",
+  "kind": "stub_documentation",
+  "note": "توثيق صنف TPL-09 بلا توحيد قسري (قرار 104) · لا مكوّن تشغيل كامل",
+  "print": {
+    "engine": "OfficialFrameCore",
+    "strictIdentity": true
+  }
+}

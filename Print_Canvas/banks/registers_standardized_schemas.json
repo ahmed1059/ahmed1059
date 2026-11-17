@@ -1,0 +1,221 @@
+{
+  "academic_year": "1448هـ",
+  "principal_name": "نايف بن سمير حجيف المخلفي",
+  "document_bar": "وثيقة إدارية رسمية معتمدة – متوسطة سعد بن الربيع الأنصاري | صفحة 1 من 1",
+  "registers": [
+    {
+      "code": "ACR",
+      "register_id": "academic_care",
+      "title": "سجل الرعاية التحصيلية",
+      "serial_pattern": "ACR-1448-0000",
+      "sections": [
+        {
+          "id": "student",
+          "label": "بيانات الطالب",
+          "fields": [
+            {"id": "grade", "label": "الصف", "type": "grade"},
+            {"id": "class_section", "label": "الفصل", "type": "select", "options": ["1", "2", "3", "4"]},
+            {"id": "student_name", "label": "اسم الطالب", "type": "student"},
+            {"id": "student_nid", "label": "السجل المدني", "type": "text"},
+            {"id": "guardian_phone", "label": "جوال ولي الأمر", "type": "text"}
+          ]
+        },
+        {
+          "id": "diagnosis",
+          "label": "التشخيص",
+          "fields": [
+            {"id": "subject", "label": "المادة", "type": "subject"},
+            {"id": "skill", "label": "المهارة المستهدفة", "type": "skill"},
+            {"id": "loss_type", "label": "نوع الفاقد", "type": "select", "options": ["مهارة قرائية", "مهارة حسابية", "مهارة علمية", "مهارة كتابية", "مفاهيمية"]},
+            {"id": "intervention", "label": "نوع التدخل", "type": "select", "options": ["حصص تقوية", "ورقة عمل", "تعلم بالأقران", "متابعة ولي الأمر", "خطة علاجية", "جلسة إرشاد فردي"]},
+            {"id": "delay_degree", "label": "درجة التأخر", "type": "number"},
+            {"id": "diagnostic_tool", "label": "أداة التشخيص", "type": "select", "options": ["اختبار قصير", "ملاحظة صفية", "كشف نتائج", "مهمة أدائية"]}
+          ]
+        },
+        {
+          "id": "scores",
+          "label": "الدرجات",
+          "fields": [
+            {"id": "pre_score", "label": "الدرجة القبلية", "type": "number", "calc": "pre"},
+            {"id": "target_score", "label": "الدرجة المستهدفة", "type": "number", "calc": "target"},
+            {"id": "post_score", "label": "الدرجة البعدية", "type": "number", "calc": "post"},
+            {"id": "gap", "label": "الفجوة", "type": "computed", "compute": "gap"},
+            {"id": "improvement", "label": "نسبة التحسن", "type": "computed", "compute": "improvement"}
+          ]
+        }
+      ],
+      "signatures": [
+        {"role": "معلم المادة", "source": "staff"},
+        {"role": "وكيل الشؤون التعليمية", "name": "محمد بن فايز بن هلال الحربي", "signature": "signatures/sig_1060852900.png"},
+        {"role": "الموجه الطلابي", "name": "فهد حنيف بن محمد العمري", "signature": "signatures/sig_1053394563.png"},
+        {"role": "مدير المدرسة", "name": "نايف بن سمير حجيف المخلفي", "signature": "signatures/sig_1000000001.png", "stamp": true}
+      ]
+    },
+    {
+      "code": "BCR",
+      "register_id": "behavior_cases",
+      "title": "سجل الحالات السلوكية",
+      "serial_pattern": "BCR-1448-0000",
+      "sections": [
+        {
+          "id": "student",
+          "label": "بيانات الطالب",
+          "fields": [
+            {"id": "grade", "label": "الصف", "type": "grade"},
+            {"id": "class_section", "label": "الفصل", "type": "select", "options": ["1", "2", "3", "4"]},
+            {"id": "student_name", "label": "اسم الطالب", "type": "student"},
+            {"id": "student_nid", "label": "السجل المدني", "type": "text"},
+            {"id": "guardian_phone", "label": "جوال ولي الأمر", "type": "text"}
+          ]
+        },
+        {
+          "id": "incident",
+          "label": "الواقعة",
+          "fields": [
+            {"id": "violation_class", "label": "تصنيف المخالفة", "type": "select", "options": ["بسيطة", "متوسطة", "جسيمة"]},
+            {"id": "incident_type", "label": "نوع الحادثة", "type": "text"},
+            {"id": "description", "label": "وصف المخالفة", "type": "textarea"},
+            {"id": "incident_date", "label": "التاريخ", "type": "date"},
+            {"id": "incident_time", "label": "الوقت", "type": "time"},
+            {"id": "place", "label": "المكان", "type": "text"},
+            {"id": "immediate_action", "label": "الإجراء التربوي", "type": "textarea"}
+          ]
+        },
+        {
+          "id": "treatment",
+          "label": "المعالجة",
+          "fields": [
+            {"id": "counseling_sessions", "label": "جلسات المرشد الفردية", "type": "textarea"},
+            {"id": "parent_summon_date", "label": "تاريخ استدعاء ولي الأمر", "type": "date"},
+            {"id": "committee_decision", "label": "قرار اللجنة", "type": "textarea"},
+            {"id": "behavior_pre", "label": "درجة السلوك قبل المعالجة", "type": "number", "calc": "pre"},
+            {"id": "behavior_post", "label": "درجة السلوك بعد المعالجة", "type": "number", "calc": "post"},
+            {"id": "behavior_improvement", "label": "نسبة التحسن السلوكي", "type": "computed", "compute": "improvement"}
+          ]
+        }
+      ],
+      "signatures": [
+        {"role": "وكيل شؤون الطلاب", "name": "خالد بن علي بن حجري العمري", "signature": "signatures/sig_1006741209.png"},
+        {"role": "المرشد الطلابي", "name": "فهد حنيف بن محمد العمري", "signature": "signatures/sig_1053394563.png"},
+        {"role": "إقرار ولي الأمر", "source": "text"},
+        {"role": "مدير المدرسة", "name": "نايف بن سمير حجيف المخلفي", "signature": "signatures/sig_1000000001.png", "stamp": true}
+      ]
+    },
+    {
+      "code": "GCR",
+      "register_id": "gifted_care",
+      "title": "سجل رعاية الموهوبين",
+      "serial_pattern": "GCR-1448-0000",
+      "sections": [
+        {
+          "id": "student",
+          "label": "بيانات الطالب",
+          "fields": [
+            {"id": "grade", "label": "الصف", "type": "grade"},
+            {"id": "class_section", "label": "الفصل", "type": "select", "options": ["1", "2", "3", "4"]},
+            {"id": "student_name", "label": "اسم الطالب", "type": "student"},
+            {"id": "student_nid", "label": "السجل المدني", "type": "text"},
+            {"id": "guardian_phone", "label": "جوال ولي الأمر", "type": "text"}
+          ]
+        },
+        {
+          "id": "classification",
+          "label": "التصنيف والاكتشاف",
+          "fields": [
+            {"id": "gift_class", "label": "التصنيف", "type": "select", "options": ["موهوب فعلياً بمقياس معتمد", "متفوق دراسياً 90%+"]},
+            {"id": "discovery_tool", "label": "أداة الاكتشاف", "type": "text"},
+            {"id": "scale_score", "label": "درجة المقياس", "type": "number"},
+            {"id": "enrichment", "label": "البرامج الإثرائية", "type": "textarea"}
+          ]
+        },
+        {
+          "id": "impact",
+          "label": "قياس الأثر",
+          "fields": [
+            {"id": "impact_pre", "label": "الأثر القبلي", "type": "number", "calc": "pre"},
+            {"id": "impact_post", "label": "الأثر البعدي", "type": "number", "calc": "post"},
+            {"id": "impact_improvement", "label": "نسبة التحسن", "type": "computed", "compute": "improvement"}
+          ]
+        }
+      ],
+      "signatures": [
+        {"role": "معلم المادة", "source": "staff"},
+        {"role": "الموجه الطلابي", "name": "فهد حنيف بن محمد العمري", "signature": "signatures/sig_1053394563.png"},
+        {"role": "وكيل الشؤون التعليمية", "name": "محمد بن فايز بن هلال الحربي", "signature": "signatures/sig_1060852900.png"},
+        {"role": "مدير المدرسة", "name": "نايف بن سمير حجيف المخلفي", "signature": "signatures/sig_1000000001.png", "stamp": true}
+      ]
+    },
+    {
+      "code": "LER",
+      "register_id": "lab_register",
+      "title": "سجل التجارب المخبرية",
+      "serial_pattern": "LER-1448-0000",
+      "sections": [
+        {
+          "id": "experiment",
+          "label": "التجربة",
+          "fields": [
+            {"id": "subject", "label": "المادة", "type": "subject"},
+            {"id": "experiment_type", "label": "نوع التجربة", "type": "select", "options": ["استكشافية", "توكيدية", "عرض عملي"]},
+            {"id": "safety_level", "label": "مستوى السلامة", "type": "select", "options": ["منخفض", "متوسط", "مرتفع"]},
+            {"id": "materials", "label": "المواد والأدوات", "type": "textarea"},
+            {"id": "equipment_status", "label": "حالة الأجهزة والصيانة", "type": "select", "options": ["سليمة", "تحتاج صيانة", "متوقفة"]}
+          ]
+        },
+        {
+          "id": "mastery",
+          "label": "إتقان الطلاب",
+          "fields": [
+            {"id": "students_count", "label": "عدد الطلاب", "type": "number", "calc": "students"},
+            {"id": "mastered_count", "label": "عدد المتقنين", "type": "number", "calc": "mastered"},
+            {"id": "mastery_rate", "label": "نسبة إتقان الطلاب", "type": "computed", "compute": "mastery"}
+          ]
+        }
+      ],
+      "signatures": [
+        {"role": "المحضر / المشرف", "source": "staff"},
+        {"role": "المعلم المستفيد", "source": "staff"},
+        {"role": "وكيل الشؤون التعليمية", "name": "محمد بن فايز بن هلال الحربي", "signature": "signatures/sig_1060852900.png"},
+        {"role": "مدير المدرسة", "name": "نايف بن سمير حجيف المخلفي", "signature": "signatures/sig_1000000001.png", "stamp": true}
+      ]
+    },
+    {
+      "code": "APR",
+      "register_id": "activity_plan",
+      "title": "سجل الأنشطة والبرامج",
+      "serial_pattern": "APR-1448-0000",
+      "sections": [
+        {
+          "id": "program",
+          "label": "البرنامج",
+          "fields": [
+            {"id": "domain", "label": "المجال", "type": "select", "options": ["ديني", "وطني", "علمي", "ثقافي", "رياضي", "اجتماعي", "كشفي", "بيئي"]},
+            {"id": "program_type", "label": "النوع", "type": "select", "options": ["إذاعي", "مسرحي", "مسابقة", "معرض", "رحلة", "تطوعي", "احتفال", "تدريب"]},
+            {"id": "planned", "label": "المستهدفون المخطط لهم", "type": "number", "calc": "planned"},
+            {"id": "actual", "label": "المشاركون الفعليون", "type": "number", "calc": "actual"},
+            {"id": "honored", "label": "المكرمون", "type": "number", "calc": "honored"},
+            {"id": "partnerships", "label": "الشراكات المجتمعية", "type": "textarea"},
+            {"id": "budget", "label": "الميزانية", "type": "number"}
+          ]
+        },
+        {
+          "id": "impact",
+          "label": "قياس الأثر والرضا",
+          "fields": [
+            {"id": "impact_pre", "label": "الأثر القبلي", "type": "number", "calc": "pre"},
+            {"id": "impact_post", "label": "الأثر البعدي", "type": "number", "calc": "post"},
+            {"id": "satisfied", "label": "عدد الراضين", "type": "number", "calc": "satisfied"},
+            {"id": "participation_rate", "label": "نسبة المشاركة", "type": "computed", "compute": "participation"},
+            {"id": "satisfaction_rate", "label": "نسبة الرضا", "type": "computed", "compute": "satisfaction"},
+            {"id": "impact_improvement", "label": "نسبة تحسن الأثر", "type": "computed", "compute": "improvement"}
+          ]
+        }
+      ],
+      "signatures": [
+        {"role": "رائد النشاط", "name": "محمد حامد عماش السهلي", "signature": "signatures/sig_1083157642.png"},
+        {"role": "وكيل الشؤون التعليمية", "name": "محمد بن فايز بن هلال الحربي", "signature": "signatures/sig_1060852900.png"},
+        {"role": "مدير المدرسة", "name": "نايف بن سمير حجيف المخلفي", "signature": "signatures/sig_1000000001.png", "stamp": true}
+      ]
+    }
+  ]
+}

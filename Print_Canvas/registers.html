@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>منظومة الخطط المدرسية</title>
+    <link rel="stylesheet" href="css/fonts.css?v=font1">
+    <link rel="stylesheet" href="css/school-os.css?v=os31">
+    <link rel="stylesheet" href="css/print.css?v=os10">
+    <link rel="stylesheet" href="components/standardized-registers.css?v=std3">
+    <link rel="stylesheet" href="css/polish.css?v=p7">
+    <link rel="stylesheet" href="css/shell-standard.css?v=shell4">
+    <link rel="stylesheet" href="css/opening-surface.css?v=open4">
+    <link rel="stylesheet" href="css/page-nav.css?v=nav1">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="view-home">
+<div class="app-shell">
+    <header class="app-header command-bar">
+        <div class="command-brand">
+            <img src="/assets/ministry_logo.png" class="header-logo" alt="شعار وزارة التعليم">
+            <div class="brand-copy">
+                <a id="command-school-name" class="school-name home-title" href="dashboard.html#home">متوسطة سعد بن الربيع الأنصاري</a>
+                <a class="home-caption" href="dashboard.html#home">الصفحة الرئيسية</a>
+                <div class="command-principal" id="command-principal">
+                    <strong>نايف بن سمير حجيف المخلفي</strong>
+                    <span>مدير المدرسة</span>
+                </div>
+            </div>
+        </div>
+        <div class="command-tools">
+            <button type="button" id="quiet-back" class="quiet-back no-print" hidden>رجوع</button>
+            <span class="user-chip">نايف المخلفي</span>
+            <button class="btn-unified-back" id="session-switch" type="button" hidden>تبديل الصلاحية</button>
+            <div id="register-delegation" hidden>
+                <label class="sr-only" for="register-role-preview">تبديل الصلاحية</label>
+                <select id="register-role-preview" title="تبديل الصلاحية"></select>
+            </div>
+            <div class="notify-wrap header-extra">
+                <button class="icon-btn" id="open-alerts" type="button" title="الإشعارات">🔔<span id="notify-badge" class="notify-badge" hidden>0</span></button>
+                <div id="notify-panel" class="notify-panel" hidden>
+                    <div class="notify-tabs">
+                        <button type="button" data-notify-tab="new" class="is-active">جديدة</button>
+                        <button type="button" data-notify-tab="read">مقروءة</button>
+                    </div>
+                    <div id="notify-list"></div>
+                </div>
+            </div>
+            <button class="icon-btn header-extra" id="theme-toggle" type="button" title="الوضع الداكن">🌙</button>
+            <a class="command-exit" href="login.html">خروج</a>
+        </div>
+        <nav class="page-nav" aria-label="تعريف المدرسة">
+            <a href="identity.html#about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6.5 19c.8-2.8 2.8-4.2 5.5-4.2s4.7 1.4 5.5 4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>من نحن</a>
+            <a href="identity.html#vision"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>الرؤية والرسالة</a>
+            <a href="identity.html#goals"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>أهدافنا</a>
+            <a href="identity.html#partners"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.8 18c.7-2.4 2.4-3.6 4.2-3.6s3.5 1.2 4.2 3.6M12 18c.6-2 2-3.2 3.8-3.2 1.7 0 3.1 1.1 3.8 3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>شركاؤنا</a>
+            <a href="identity.html#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 8l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>تواصل معنا</a>
+        </nav>
+    </header>
+
+        <aside class="app-sidebar" id="app-sidebar">
+			<a href="#lobby" class="sidebar-return-btn" id="btn-global-return" onclick="returnToLobby(event)">
+				<span>↩ العودة للرئيسية</span>
+			</a>
+            <button class="sidebar-toggle" id="sidebar-toggle" type="button" title="طي القائمة">⟨</button>
+            <p class="sidebar-mark no-print">متوسطة سعد بن الربيع</p>
+            <nav class="app-sidebar__nav" aria-label="القائمة الرئيسية">
+                <a href="#home" class="nav-item active" data-nav="home" id="nav-home" aria-current="page">
+                    <span class="nav-item__icon" aria-hidden="true">🏠</span>
+                    <span class="nav-item__label">الرئيسية</span>
+                </a>
+                <a href="#registers" class="nav-item" data-nav="registers" id="nav-registers">
+                    <span class="nav-item__icon" aria-hidden="true">📋</span>
+                    <span class="nav-item__label">السجلات المدرسية</span>
+                </a>
+                <a href="#measurement" class="nav-item" data-nav="measurement" id="nav-measurement">
+                    <span class="nav-item__icon" aria-hidden="true">📊</span>
+                    <span class="nav-item__label">التحليلات والمؤشرات</span>
+                </a>
+                <a href="#staff" class="nav-item disabled" id="nav-staff" aria-disabled="true" title="قيد التطوير">
+                    <span class="nav-item__icon" aria-hidden="true">👥</span>
+                    <span class="nav-item__label">الكادر المدرسي</span>
+                    <span class="nav-badge">قيد التطوير</span>
+                </a>
+                <a href="#committees" class="nav-item disabled" data-nav="committees" id="nav-committees" aria-disabled="true" title="قيد التطوير">
+                    <span class="nav-item__icon" aria-hidden="true">🏛️</span>
+                    <span class="nav-item__label">اللجان المدرسية</span>
+                    <span class="nav-badge">قيد التطوير</span>
+                </a>
+                <a href="settings.html" class="nav-item disabled" id="nav-settings" aria-disabled="true" title="قيد التطوير">
+                    <span class="nav-item__icon" aria-hidden="true">⚙️</span>
+                    <span class="nav-item__label">الإعدادات العامة</span>
+                    <span class="nav-badge">قيد التطوير</span>
+                </a>
+                <div hidden>
+                    <a href="#tasks" class="nav-item" data-nav="tasks" id="nav-tasks" tabindex="-1">المهام والمواعيد</a>
+                    <a href="#etec" class="nav-item" data-nav="etec" id="nav-etec" tabindex="-1">مؤشرات ETEC</a>
+                    <a href="#charts" class="nav-item" data-nav="charts" id="nav-charts" tabindex="-1">الرسوم البيانية</a>
+                    <a href="#users" class="nav-item" data-nav="users" id="nav-users" tabindex="-1">المستخدمون</a>
+                    <a href="#noor" class="nav-item" data-nav="noor" id="nav-noor" tabindex="-1">استيراد نور</a>
+                </div>
+            </nav>
+            <footer class="sidebar-foot no-print">
+                <div class="command-user" id="command-user">
+                    <span id="command-user-name"></span>
+                    <span id="command-user-role"></span>
+                    <span id="composite-badge" class="composite-badge"></span>
+                </div>
+                <a class="sidebar-logout" href="login.html" title="خروج">خروج</a>
+            </footer>
+        </aside>
+
+        
+        
+        
+
+
+        <div id="register-filters" class="no-print">
+            <input type="radio" name="reg-filter" id="reg-all" checked>
+            <input type="radio" name="reg-filter" id="reg-critical">
+            <input type="radio" name="reg-filter" id="reg-progress">
+            <input type="radio" name="reg-filter" id="reg-excellent">
+            <div class="register-filters__bar">
+                <label for="reg-all">الكل</label>
+                <label for="reg-critical">حرج</label>
+                <label for="reg-progress">قيد الإنجاز</label>
+                <label for="reg-excellent">ممتاز</label>
+            </div>
+        </div>
+
+        <main class="app-main">
+            <div class="plan-switch screen-only">
+                <label for="plan-role">الخطة المعروضة</label>
+                <select id="plan-role">
+                    <option value="principal" selected>خطة مدير المدرسة: نايف بن سمير حجيف المخلفي</option>
+                    <option value="vice_teachers">خطة وكيل الشؤون التعليمية: محمد بن فايز بن هلال الحربي</option>
+                    <option value="vice_students">خطة وكيل شؤون الطلاب: خالد بن علي بن حجري العمري</option>
+                    <option value="student_counselor">خطة الموجه الطلابي</option>
+                    <option value="activity_leader">خطة رائد النشاط الطلابي</option>
+                </select>
+            </div>
+            <div class="view-tabs screen-only no-print">
+                <button class="btn-unified-primary" id="tab-home" type="button">توليد الخطط</button>
+                <button class="btn-unified-back" id="tab-registers" type="button">السجلات والنماذج</button>
+                <button class="btn-unified-back" id="tab-committees" type="button">🏛️ إدارة التكليفات واللجان المدرسية</button>
+                <button class="btn-unified-back" id="tab-measurement" type="button">📊 مركز القياس والمؤشرات</button>
+            </div>
+            <section id="self-achievement" class="card screen-only no-print" hidden>
+                <div class="card-header"><h2>بطاقة الإنجاز الذاتي</h2></div>
+                <div class="card-body">
+                    <p id="self-score"></p>
+                    <p id="self-subject"></p>
+                    <p id="self-rank"></p>
+                    <button class="btn-unified-primary" type="button" data-open-register="class_followup">تقارير الزيارات الصفية المعتمدة</button>
+                </div>
+            </section>
+            <section id="section-c" class="smart-alerts dashboard-alerts screen-only no-print" aria-label="شريط التنبيهات الذكي">
+                <p id="readiness-meter" class="readiness-meter" hidden></p>
+                <div class="alert-box critical sa-group sa-group-critical">
+                    <span class="alert-chip">🔴 حرجة</span>
+                    <div id="sa-critical" class="alert-chips sa-row"></div>
+                </div>
+                <div class="alert-box stable sa-group sa-group-stable">
+                    <span class="alert-chip">🟢 مستقرة</span>
+                    <div id="sa-stable" class="alert-chips sa-row"></div>
+                </div>
+            </section>
+            <section class="card screen-only no-print" id="students-import-card">
+                <div class="card-header">
+                    <h2>تحديث قاعدة بيانات الطلاب (نظام نور)</h2>
+                </div>
+                <div class="card-body">
+                    <label for="students-excel">ملف الطلاب (.xlsx أو .xls)</label>
+                    <input id="students-excel" type="file" accept=".xlsx,.xls,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                    <div class="form-actions">
+                        <button id="import-students" class="btn-primary" type="button">استيراد وتحديث القاعدة</button>
+                    </div>
+                    <p id="students-import-message" class="form-message"></p>
+                </div>
+            </section>
+            <section class="card" id="committees-portal" hidden>
+                <div class="card-header">
+                    <h2>إدارة التكليفات واللجان المدرسية</h2>
+                </div>
+                <div class="card-body">
+                    <p id="committees-note" class="form-message"></p>
+                    <div id="committees-grid" class="committees-grid"></div>
+                    <dialog id="committee-dialog" class="committee-dialog no-print"></dialog>
+                </div>
+            </section>
+            <div id="committee-sheet" class="register-sheet" hidden></div>
+            <dialog id="assignment-dialog" class="assignment-dialog no-print">
+                <form method="dialog">
+                    <h3>خطاب التكليف الفردي</h3>
+                    <label for="assignment-member">اختر العضو المكلف</label>
+                    <select id="assignment-member"></select>
+                    <div class="committee-actions">
+                        <button class="btn-unified-primary" id="assignment-print" type="button">معاينة وطباعة الخطاب</button>
+                        <button class="btn-unified-back" type="submit">إغلاق</button>
+                    </div>
+                </form>
+            </dialog>
+            <section class="card dashboard-kpi" id="measurement-center" hidden>
+                <div class="card-header">
+                    <h2>مركز القياس والمؤشرات</h2>
+                    <button class="btn-unified-primary no-print" id="print-measurement" type="button">طباعة لوحة القياس</button>
+                    <button class="btn-unified-back no-print" id="print-etec-rollup" type="button">طباعة التقرير التجميعي السنوي للاعتماد المدرسي (A4 عرضي - Landscape)</button>
+                </div>
+                <div class="card-body">
+                    <div class="kpi-grid">
+                        <article class="card kpi-card">
+                            <h3>مؤشر الجاهزية الكلي للاعتماد</h3>
+                            <canvas id="chart-readiness"></canvas>
+                            <p class="kpi-note">متوسط المجالات الأربعة المنشورة في الكتيب: 90 و85 و20 و90.</p>
+                        </article>
+                        <article class="card kpi-card">
+                            <h3>رادار المجالات الأربعة لهيئة تقويم التعليم</h3>
+                            <canvas id="chart-domains"></canvas>
+                        </article>
+                        <article class="card kpi-card kpi-card-wide">
+                            <h3>فجوة نواتج التعلم واختبارات نافس</h3>
+                            <canvas id="chart-nafs"></canvas>
+                            <p class="kpi-note">الأعمدة الوضع الحالي، والخط المستهدف من بطاقات أهداف المدير. مستهدف النواتج +10 عن الوضع الحالي.</p>
+                        </article>
+                        <article class="card kpi-card kpi-card-wide kpi-staff">
+                            <h3>مصفوفة إنجاز الكادر الفعلي</h3>
+                            <canvas id="chart-staff"></canvas>
+                            <p class="kpi-note">القيمة 100 لمن ورد اسمه في ردود توثيق الشواهد، وصفر لمن لم يرد في تلك الردود.</p>
+                        </article>
+                        <article class="card kpi-card">
+                            <h3>توزيع أنواع الشواهد المعتمدة السبعة</h3>
+                            <canvas id="chart-evidence"></canvas>
+                            <p class="kpi-note">العدّ من عبارات الشاهد في بنوك الخطط الخمس.</p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+            <section class="card screen-only" id="registers-portal">
+                <div class="card-header">
+                    <h2>📁 السجلات والنماذج المدرسية</h2>
+                </div>
+                <div class="card-body">
+                    <p id="registers-note" class="form-message"></p>
+                    <div id="registers-grid" class="registers-grid rw-grid"></div>
+                    <div id="register-editor" hidden></div>
+                    <template id="standard-register">
+                        <article class="standard-register">
+                            <div data-std="sections"></div>
+                            <footer class="official-signoff official-print-footer std-signoff" data-std="signatures"></footer>
+                            <p class="print-doc-bar" data-std="bar"></p>
+                        </article>
+                    </template>
+                    <template id="classroom-visit">
+                        <article class="classroom-visit">
+                            <section class="cv-section" data-cv-section="context">
+                                <h4>سياق الزيارة</h4>
+                                <div class="cv-grid">
+                                    <label>الزائر <select data-cv="visitor" data-label="الزائر"></select></label>
+                                    <label>المعلم المُزار <select data-cv="teacher" data-label="المعلم المُزار"></select></label>
+                                    <label>نوع الزيارة
+                                        <select data-cv="visit-type" data-label="نوع الزيارة">
+                                            <option value=""></option>
+                                            <option value="استطلاعية">استطلاعية</option>
+                                            <option value="تقويمية">تقويمية</option>
+                                            <option value="متابعة">متابعة</option>
+                                            <option value="تبادلية">تبادلية</option>
+                                        </select>
+                                    </label>
+                                    <label>المؤشر ETEC
+                                        <select data-cv="indicator" data-label="المؤشر ETEC">
+                                            <option value=""></option>
+                                            <option value="1-1 التخطيط">1-1 التخطيط</option>
+                                            <option value="1-2 قيادة العملية التعليمية">1-2 قيادة العملية التعليمية</option>
+                                            <option value="1-3 المجتمع المدرسي">1-3 المجتمع المدرسي</option>
+                                            <option value="1-4 التطوير المؤسسي">1-4 التطوير المؤسسي</option>
+                                            <option value="1-5 حقوق المتعلم وحمايته">1-5 حقوق المتعلم وحمايته</option>
+                                            <option value="2-1 بناء خبرات التعلم">2-1 بناء خبرات التعلم</option>
+                                            <option value="2-2 تقويم التعلم">2-2 تقويم التعلم</option>
+                                            <option value="3-1 التحصيل التعليمي">3-1 التحصيل التعليمي</option>
+                                            <option value="3-2 التطور الشخصي والصحي والاجتماعي">3-2 التطور الشخصي والصحي والاجتماعي</option>
+                                            <option value="4-1 المبنى المدرسي">4-1 المبنى المدرسي</option>
+                                            <option value="4-2 الأمن والسلامة">4-2 الأمن والسلامة</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </section>
+                            <section class="cv-section" data-cv-section="lesson">
+                                <h4>محتوى الدرس</h4>
+                                <div class="cv-grid">
+                                    <label>الصف <select data-cv="grade" data-label="الصف"></select></label>
+                                    <label>المادة <select data-cv="subject" data-label="المادة"></select></label>
+                                    <label>المهارة <select data-cv="skill" data-label="المهارة"></select></label>
+                                    <label>الموضوع / الدرس <select data-cv="lesson" data-label="الموضوع / الدرس"></select></label>
+                                </div>
+                            </section>
+                            <section class="cv-section" data-cv-section="matrix">
+                                <h4>مصفوفة التقييم</h4>
+                                <table class="cv-matrix">
+                                    <thead>
+                                        <tr><th>البند</th><th>الوزن</th><th>مستوى التحقق</th><th>الدرجة الموزونة</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="cv-criterion" data-weight="10"><td>التخطيط للدرس ووضوح الأهداف</td><td>10</td><td><select data-cv="level-select" data-label="التخطيط للدرس ووضوح الأهداف"><option value=""></option><option value="none">لم يتحقق</option><option value="partial">متحقق جزئياً</option><option value="met">متحقق</option><option value="high">متحقق بدرجة عالية</option></select></td><td data-cv="points">0</td></tr>
+                                        <tr class="cv-criterion" data-weight="10"><td>التهيئة وربط التعلم بالخبرة السابقة</td><td>10</td><td><select data-cv="level-select" data-label="التهيئة وربط التعلم بالخبرة السابقة"><option value=""></option><option value="none">لم يتحقق</option><option value="partial">متحقق جزئياً</option><option value="met">متحقق</option><option value="high">متحقق بدرجة عالية</option></select></td><td data-cv="points">0</td></tr>
+                                        <tr class="cv-criterion" data-weight="15"><td>استراتيجيات التدريس وتنويعها</td><td>15</td><td><select data-cv="level-select" data-label="استراتيجيات التدريس وتنويعها"><option value=""></option><option value="none">لم يتحقق</option><option value="partial">متحقق جزئياً</option><option value="met">متحقق</option><option value="high">متحقق بدرجة عالية</option></select></td><td data-cv="points">0</td></tr>
+                                        <tr class="cv-criterion" data-weight="10"><td>دقة المحتوى العلمي والمهاري</td><td>10</td><td><select data-cv="level-select" data-label="دقة المحتوى العلمي والمهاري"><option value=""></option><option value="none">لم يتحقق</option><option value="partial">متحقق جزئياً</option><option value="met">متحقق</option><option value="high">متحقق بدرجة عالية</option></select></td><td data-cv="points">0</td></tr>
+                                        <tr class="cv-criterion" data-weight="15"><td>مراعاة الفروق الفردية</td><td>15</td><td><select data-cv="level-select" data-label="مراعاة الفروق الفردية"><option value=""></option><option value="none">لم يتحقق</option><option value="partial">متحقق جزئياً</option><option value="met">متحقق</option><option value="high">متحقق بدرجة عالية</option></select></td><td data-cv="points">0</td></tr>
+                                        <tr class="cv-criterion" data-weight="10"><td>بيئة التعلم وإدارة الصف</td><td>10</td><td><select data-cv="level-select" data-label="بيئة التعلم وإدارة الصف"><option value=""></option><option value="none">لم يتحقق</option><option value="partial">متحقق جزئياً</option><option value="met">متحقق</option><option value="high">متحقق بدرجة عالية</option></select></td><td data-cv="points">0</td></tr>
+                                        <tr class="cv-criterion" data-weight="20"><td>التقويم البنائي والختامي</td><td>20</td><td><select data-cv="level-select" data-label="التقويم البنائي والختامي"><option value=""></option><option value="none">لم يتحقق</option><option value="partial">متحقق جزئياً</option><option value="met">متحقق</option><option value="high">متحقق بدرجة عالية</option></select></td><td data-cv="points">0</td></tr>
+                                        <tr class="cv-criterion" data-weight="10"><td>التغذية الراجعة وإغلاق الدرس</td><td>10</td><td><select data-cv="level-select" data-label="التغذية الراجعة وإغلاق الدرس"><option value=""></option><option value="none">لم يتحقق</option><option value="partial">متحقق جزئياً</option><option value="met">متحقق</option><option value="high">متحقق بدرجة عالية</option></select></td><td data-cv="points">0</td></tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr><td>المجموع</td><td>100</td><td data-cv="level">بحاجة إلى دعم</td><td data-cv="total" class="cv-total cv-level-low">0</td></tr>
+                                    </tfoot>
+                                </table>
+                            </section>
+                            <section class="cv-section" data-cv-section="plan">
+                                <h4>التوصيات وخطة التحسين</h4>
+                                <div class="cv-plan cv-grid">
+                                    <label>التوصيات <textarea data-cv="recommendations" data-label="التوصيات"></textarea></label>
+                                    <label>خطة التحسين <textarea data-cv="improvement" data-label="خطة التحسين"></textarea></label>
+                                    <label class="dual-date">موعد المتابعة <span class="dual-date-pair"><input class="doc-hijri" data-cv="follow-up" data-label="موعد المتابعة الهجري" placeholder="مثال: 17 ربيع الأول 1448هـ"><input class="doc-date-picker" data-cv="follow-up-gregorian" data-label="موعد المتابعة الميلادي" placeholder="مثال: 30 أغسطس 2026م"></span></label>
+                                </div>
+                            </section>
+                            <div class="cv-progress" role="meter" aria-label="تقدم أقسام الزيارة">
+                                <span data-section="context"></span>
+                                <span data-section="lesson"></span>
+                                <span data-section="matrix"></span>
+                                <span data-section="plan"></span>
+                                <span data-section="signs"></span>
+                            </div>
+                            <footer class="cv-signoff official-print-footer">
+                                <div>
+                                    <strong>المعلم المُزار</strong>
+                                    <span data-cv="sign-teacher"></span>
+                                    <img data-cv="sign-teacher-image" alt="" hidden>
+                                </div>
+                                <div>
+                                    <strong>الزائر</strong>
+                                    <span data-cv="sign-visitor"></span>
+                                    <img data-cv="sign-visitor-image" alt="" hidden>
+                                </div>
+                                <div>
+                                    <strong>اعتماد مدير المدرسة</strong>
+                                    <span>نايف بن سمير حجيف المخلفي</span>
+                                    <img class="sig-image" src="signatures/sig_manager.png" alt="" onerror="this.remove()">
+                                    <img class="school-stamp" src="/assets/img/official_school_stamp.png" alt="الختم المدرسي">
+                                </div>
+                            </footer>
+                            <p class="cv-doc-bar print-doc-bar">وثيقة إدارية رسمية معتمدة – متوسطة سعد بن الربيع الأنصاري | صفحة 1 من 1</p>
+                        </article>
+                    </template>
+                </div>
+            </section>
+            <div id="register-sheet" class="register-sheet" hidden></div>
+            <div class="booklet" id="booklet">
+                <section class="booklet-page cover-page booklet-cover">
+                    <div class="cover-stripe"><span id="cover-stripe-text">الخطة التشغيلية 1448هـ</span></div>
+                    <div class="cover-header">
+                        <div class="print-header-grid cover-logos">
+                            <div><img src="/assets/vision_2030.png" alt="رؤية 2030"></div>
+                            <div class="print-header-text">
+                                <div>المملكة العربية السعودية</div>
+                                <div>وزارة التعليم</div>
+                                <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                                <div class="header-office"></div>
+                                <div class="school-name">متوسطة سعد بن الربيع الأنصاري</div>
+                            </div>
+                            <div><img src="/assets/ministry_logo.png" alt="وزارة التعليم"></div>
+                        </div>
+                    </div>
+                    <div class="cover-layout">
+                        <h2 class="cover-plan-title"><span>الخطة</span> <span id="cover-plan-kind" class="cover-kind">التشغيلية</span></h2>
+                        <div class="cover-ornament" aria-hidden="true"></div>
+                        <p class="cover-school" id="cover-school-line"><span id="cover-school-name">لمدرسة سعد بن الربيع الأنصاري</span> <span class="cover-stage">المتوسطة</span></p>
+                        <p class="cover-note">وفق مجالات ومؤشرات التقويم والاعتماد المدرسي</p>
+                        <p class="cover-year" id="cover-year">للعام الدراسي 1448هـ</p>
+                        <p class="cover-author" id="cover-author">إعداد: مدير المدرسة / نايف بن سمير حجيف المخلفي</p>
+                    </div>
+                </section>
+                <section class="booklet-page">
+                    <div class="print-header-frame">
+                        <div class="print-header-grid">
+                            <div><img src="/assets/ministry_logo.png" alt="وزارة التعليم"></div>
+                            <div class="print-header-text">
+                                <div>المملكة العربية السعودية — وزارة التعليم</div>
+                                <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                                <div class="header-office"></div>
+                                <div class="school-name">متوسطة سعد بن الربيع الأنصاري</div>
+                            </div>
+                            <div><img src="/assets/vision_2030.png" alt="رؤية 2030"></div>
+                        </div>
+                    </div>
+                    <div class="basmala-page">
+                        <img src="/assets/basmala.png" alt="بسم الله الرحمن الرحيم">
+                    </div>
+                </section>
+                <section class="booklet-page">
+                    <div class="print-header-frame">
+                        <div class="print-header-grid">
+                            <div><img src="/assets/ministry_logo.png" alt="وزارة التعليم"></div>
+                            <div class="print-header-text">
+                                <div>المملكة العربية السعودية — وزارة التعليم</div>
+                                <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                                <div class="header-office"></div>
+                                <div class="school-name">متوسطة سعد بن الربيع الأنصاري</div>
+                            </div>
+                            <div><img src="/assets/vision_2030.png" alt="رؤية 2030"></div>
+                        </div>
+                    </div>
+                    <h2>محتويات الخطة</h2>
+                    <ol class="toc-strips">
+                        <li><span>1</span>المقدمة</li>
+                        <li><span>2</span>مصادر ومجالات الخطة</li>
+                        <li><span>3</span>الرؤية والرسالة والقيم</li>
+                        <li><span>4</span>تحليل سوات</li>
+                        <li><span>5</span>فريق التخطيط</li>
+                        <li><span>6</span>بيانات عامة</li>
+                        <li><span>7</span>برامج الخطة</li>
+                        <li><span>8</span>النماذج</li>
+                    </ol>
+                </section>
+                <section class="booklet-page">
+                    <div class="print-header-frame">
+                        <div class="print-header-grid">
+                            <div><img src="/assets/ministry_logo.png" alt="وزارة التعليم"></div>
+                            <div class="print-header-text">
+                                <div>المملكة العربية السعودية — وزارة التعليم</div>
+                                <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                                <div class="header-office"></div>
+                                <div class="school-name">متوسطة سعد بن الربيع الأنصاري</div>
+                            </div>
+                            <div><img src="/assets/vision_2030.png" alt="رؤية 2030"></div>
+                        </div>
+                    </div>
+                    <h2 id="intro-title">المقدمة</h2>
+                    <div class="intro-wrap">
+                        <div class="intro-photo" aria-hidden="true"><div class="photo-frame"></div></div>
+                        <div class="intro-columns" id="intro-columns"></div>
+                    </div>
+                    <p class="intro-footer" id="intro-sign">نايف بن سمير حجيف المخلفي / مدير متوسطة سعد بن الربيع الأنصاري</p>
+                </section>
+                <section class="booklet-page">
+                    <div class="print-header-frame">
+                        <div class="print-header-grid">
+                            <div><img src="/assets/ministry_logo.png" alt="وزارة التعليم"></div>
+                            <div class="print-header-text">
+                                <div>المملكة العربية السعودية — وزارة التعليم</div>
+                                <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                                <div class="header-office"></div>
+                                <div class="school-name">متوسطة سعد بن الربيع الأنصاري</div>
+                            </div>
+                            <div><img src="/assets/vision_2030.png" alt="رؤية 2030"></div>
+                        </div>
+                    </div>
+                    <div class="identity-grid">
+                        <article class="identity-card">
+                            <svg class="identity-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <h3>الرؤية</h3><p id="booklet-vision"></p>
+                        </article>
+                        <article class="identity-card">
+                            <svg class="identity-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2"></path></svg>
+                            <h3>الرسالة</h3><p id="booklet-mission"></p>
+                        </article>
+                        <article class="identity-card">
+                            <h3>القيم</h3><ul id="booklet-values"></ul>
+                        </article>
+                    </div>
+                </section>
+                <section class="booklet-page">
+                    <div class="print-header-frame">
+                        <div class="print-header-grid">
+                            <div><img src="/assets/ministry_logo.png" alt="وزارة التعليم"></div>
+                            <div class="print-header-text">
+                                <div>المملكة العربية السعودية — وزارة التعليم</div>
+                                <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                                <div class="header-office"></div>
+                                <div class="school-name">متوسطة سعد بن الربيع الأنصاري</div>
+                            </div>
+                            <div><img src="/assets/vision_2030.png" alt="رؤية 2030"></div>
+                        </div>
+                    </div>
+                    <h2>فريق التخطيط المدرسي</h2>
+                    <table class="data-table">
+                        <thead><tr><th>الاسم</th><th>الصفة</th><th>التوقيع</th></tr></thead>
+                        <tbody id="booklet-team"></tbody>
+                    </table>
+                </section>
+                <section class="booklet-page">
+                    <div class="print-header-frame">
+                        <div class="print-header-grid">
+                            <div><img src="/assets/ministry_logo.png" alt="وزارة التعليم"></div>
+                            <div class="print-header-text">
+                                <div>المملكة العربية السعودية — وزارة التعليم</div>
+                                <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                                <div class="header-office"></div>
+                                <div class="school-name">متوسطة سعد بن الربيع الأنصاري</div>
+                            </div>
+                            <div><img src="/assets/vision_2030.png" alt="رؤية 2030"></div>
+                        </div>
+                    </div>
+                    <h2>البيانات العامة للمدرسة</h2>
+                    <table class="data-table">
+                        <tbody>
+                            <tr><th>اسم المدرسة</th><td id="profile-name">متوسطة سعد بن الربيع الأنصاري</td></tr>
+                            <tr><th>طبيعة المبنى</th><td id="profile-building"></td></tr>
+                            <tr><th>عدد الفصول</th><td id="profile-classrooms"></td></tr>
+                            <tr><th>عدد المعامل</th><td id="profile-labs"></td></tr>
+                            <tr><th>الصالات الرياضية</th><td id="profile-halls"></td></tr>
+                            <tr><th>إجمالي الطلاب</th><td id="profile-students"></td></tr>
+                            <tr><th>إجمالي المعلمين والإداريين</th><td id="profile-staff"></td></tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section class="booklet-page">
+                    <div class="print-header-frame">
+                        <div class="print-header-grid">
+                            <div><img src="/assets/ministry_logo.png" alt="وزارة التعليم"></div>
+                            <div class="print-header-text">
+                                <div>المملكة العربية السعودية — وزارة التعليم</div>
+                                <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                                <div class="header-office"></div>
+                                <div class="school-name">متوسطة سعد بن الربيع الأنصاري</div>
+                            </div>
+                            <div><img src="/assets/vision_2030.png" alt="رؤية 2030"></div>
+                        </div>
+                    </div>
+                    <h2>تحليل سوات ومجالات التقويم المدرسي</h2>
+                    <table class="data-table">
+                        <thead><tr><th>المجال</th><th>المعيار</th><th>مستوى الاهتمام</th></tr></thead>
+                        <tbody>
+                            <tr><td>القيادة المدرسية</td><td>التخطيط</td><td>التطوير</td></tr>
+                            <tr><td>القيادة المدرسية</td><td>قيادة العملية التعليمية</td><td>التطوير</td></tr>
+                            <tr><td>القيادة المدرسية</td><td>المجتمع المدرسي</td><td>التطوير</td></tr>
+                            <tr><td>القيادة المدرسية</td><td>التطوير المؤسسي</td><td>التطوير</td></tr>
+                            <tr><td>القيادة المدرسية</td><td>حقوق المتعلم وحمايته</td><td>التطوير</td></tr>
+                            <tr><td>التعليم والتعلم</td><td>بناء خبرات التعلم</td><td>التطوير</td></tr>
+                            <tr><td>التعليم والتعلم</td><td>تقويم التعلم</td><td>التطوير</td></tr>
+                            <tr><td>نواتج التعلم</td><td>التحصيل التعليمي</td><td>أولوية أولى</td></tr>
+                            <tr><td>نواتج التعلم</td><td>التطور الشخصي والصحي والاجتماعي</td><td>أولوية أولى</td></tr>
+                            <tr><td>البيئة المدرسية</td><td>المبنى المدرسي</td><td>التطوير</td></tr>
+                            <tr><td>البيئة المدرسية</td><td>الأمن والسلامة</td><td>التطوير</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section class="booklet-page">
+                    <div class="print-header-frame">
+                        <div class="print-header-grid">
+                            <div><img src="/assets/ministry_logo.png" alt="وزارة التعليم"></div>
+                            <div class="print-header-text">
+                                <div>المملكة العربية السعودية — وزارة التعليم</div>
+                                <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                                <div class="header-office"></div>
+                                <div class="school-name">متوسطة سعد بن الربيع الأنصاري</div>
+                            </div>
+                            <div><img src="/assets/vision_2030.png" alt="رؤية 2030"></div>
+                        </div>
+                    </div>
+                    <h2>مؤشرات الأداء والتمثيل البياني لنواتج التعلم (نافس)</h2>
+                    <div class="chart-row">
+                        <figure class="chart-card">
+                            <figcaption>مجالات التقويم: المؤشر المصاحب والمستهدف</figcaption>
+                            <svg class="bar-chart" viewBox="0 0 360 168" role="img" aria-label="مقارنة مؤشرات مجالات التقويم">
+                                <line x1="28" y1="128" x2="348" y2="128" stroke="#d1d5db"/>
+                                <g fill="#1e3a5f">
+                                    <rect x="40" y="38" width="14" height="90"/>
+                                    <rect x="118" y="43" width="14" height="85"/>
+                                    <rect x="196" y="108" width="14" height="20"/>
+                                    <rect x="274" y="38" width="14" height="90"/>
+                                </g>
+                                <g fill="#5ebbb5">
+                                    <rect x="58" y="28" width="14" height="100"/>
+                                    <rect x="136" y="28" width="14" height="100"/>
+                                    <rect x="214" y="118" width="14" height="10"/>
+                                    <rect x="292" y="28" width="14" height="100"/>
+                                </g>
+                                <g fill="#1e3a5f" font-size="9" text-anchor="middle" font-family="Tajawal, Cairo, sans-serif">
+                                    <text x="56" y="146">القيادة</text>
+                                    <text x="134" y="146">التعليم</text>
+                                    <text x="212" y="146">النواتج</text>
+                                    <text x="290" y="146">البيئة</text>
+                                </g>
+                            </svg>
+                            <p class="chart-note">الأعمدة الداكنة: 90% و85% و20% و90%. الأعمدة التركوازية: 100% و100% و+10% و100%. الأرقام من بطاقات أهداف المدير.</p>
+                        </figure>
+                        <figure class="chart-card">
+                            <figcaption>توزيع برامج المجالات الأربعة</figcaption>
+                            <svg class="donut-chart" viewBox="0 0 160 160" role="img" aria-label="توزيع البرامج على مجالات التقويم">
+                                <g transform="rotate(-90 80 80)" fill="none" stroke-width="18">
+                                    <circle cx="80" cy="80" r="46" stroke="#1e3a5f" stroke-dasharray="57.81 231.22" stroke-dashoffset="0"/>
+                                    <circle cx="80" cy="80" r="46" stroke="#5ebbb5" stroke-dasharray="77.07 211.96" stroke-dashoffset="-57.81"/>
+                                    <circle cx="80" cy="80" r="46" stroke="#c9a961" stroke-dasharray="77.07 211.96" stroke-dashoffset="-134.88"/>
+                                    <circle cx="80" cy="80" r="46" stroke="#4a9d98" stroke-dasharray="77.08 211.95" stroke-dashoffset="-211.95"/>
+                                </g>
+                                <text x="80" y="84" text-anchor="middle" font-size="13" fill="#1e3a5f" font-family="Tajawal, Cairo, sans-serif">15</text>
+                            </svg>
+                            <ul class="donut-legend">
+                                <li><span class="swatch navy"></span>القيادة 3</li>
+                                <li><span class="swatch teal"></span>التعليم 4</li>
+                                <li><span class="swatch gold"></span>النواتج 4</li>
+                                <li><span class="swatch deep"></span>البيئة 4</li>
+                            </ul>
+                        </figure>
+                    </div>
+                    <table class="data-table nafes-table">
+                        <caption>مستهدفات مهارات نافس</caption>
+                        <thead><tr><th>المهارة</th><th>المستهدف</th><th>أداة القياس</th></tr></thead>
+                        <tbody>
+                            <tr><td>القراءة</td><td>+10% عن العام السابق</td><td>اختبار نافس</td></tr>
+                            <tr><td>الرياضيات</td><td>+10% عن العام السابق</td><td>اختبار نافس</td></tr>
+                            <tr><td>العلوم</td><td>+10% عن العام السابق</td><td>اختبار نافس</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section class="booklet-page">
+                    <div class="print-header-frame">
+                        <div class="print-header-grid">
+                            <div><img src="/assets/ministry_logo.png" alt="وزارة التعليم"></div>
+                            <div class="print-header-text">
+                                <div>المملكة العربية السعودية — وزارة التعليم</div>
+                                <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                                <div class="header-office"></div>
+                                <div class="school-name">متوسطة سعد بن الربيع الأنصاري</div>
+                            </div>
+                            <div><img src="/assets/vision_2030.png" alt="رؤية 2030"></div>
+                        </div>
+                    </div>
+                    <h2>الخاتمة وميثاق الالتزام بتنفيذ الخطة</h2>
+                    <p class="closing-text">نحمد الله على تمام إعداد هذه الخطة، ونسأل الله العون على حمل أمانة الرسالة التعليمية. وتمضي المدرسة في تنفيذ بنودها، وترصد شواهدها بانتظام، وتتطلع إلى مستقبل واعد لطلابها وفق رؤية المملكة 2030.</p>
+                    <table class="data-table">
+                        <caption>ميثاق التميز والالتزام</caption>
+                        <thead><tr><th>البند</th><th>الالتزام</th></tr></thead>
+                        <tbody>
+                            <tr><td>تنفيذ الخطة</td><td>التقيد ببنود الخطة في مواعيدها ومتابعة منجزها أولًا بأول.</td></tr>
+                            <tr><td>الشواهد</td><td>الرصد المستمر للشواهد وربطها بمؤشرات التقويم والاعتماد المدرسي.</td></tr>
+                            <tr><td>المراجعة</td><td>مراجعة المؤشرات دوريًا ومعالجة الفجوات خلال الفصل الدراسي.</td></tr>
+                            <tr><td>الاعتماد</td><td>حفظ الوثائق والنماذج المعتمدة وتهيئتها لأعمال التقويم المدرسي.</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="sign-grid">
+                        <div>
+                            <strong>وكيل شؤون المعلمين</strong>
+                            <span id="sign-academic">أ. محمد بن فايز الجابري</span>
+                            <img class="sig-image" src="signatures/sig_teachers.png" alt="">
+                        </div>
+                        <div>
+                            <strong>وكيل شؤون الطلاب</strong>
+                            <span id="sign-students">أ. خالد بن علي الجابري</span>
+                            <img class="sig-image" src="signatures/sig_students.png" alt="">
+                        </div>
+                        <div>
+                            <strong>اعتماد مدير المدرسة</strong>
+                            <span id="sign-principal">نايف بن سمير حجيف المخلفي</span>
+                            <img class="sig-image" src="signatures/sig_manager.png" alt="">
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="official-header">
+                <div class="official-right">
+                    <img src="/assets/ministry_logo.png" alt="وزارة التعليم">
+                </div>
+                <div class="official-center">
+                    <div>المملكة العربية السعودية</div>
+                    <div>وزارة التعليم</div>
+                    <div class="header-admin">الإدارة العامة للتعليم بمنطقة المدينة المنورة</div>
+                    <div class="header-office" id="official-office"></div>
+                    <div class="official-school" id="official-school">متوسطة سعد بن الربيع الأنصاري</div>
+                </div>
+                <div class="official-left">
+                    <img src="/assets/vision_2030.png" alt="رؤية 2030">
+                </div>
+            </div>
+
+            <div class="card screen-only" id="plan-generator">
+                <div class="card-header">
+                    <h2>توليد الخطة</h2>
+                </div>
+                <div class="card-body">
+                    <form id="plan-form">
+                        <div class="form-grid">
+                            <div>
+                                <label for="region">المنطقة</label>
+                                <select id="region" name="region" required></select>
+                            </div>
+                            <div>
+                                <label for="stage">المرحلة</label>
+                                <select id="stage" name="stage" required>
+                                    <option value="ابتدائي">ابتدائي</option>
+                                    <option value="متوسط" selected>متوسط</option>
+                                    <option value="ثانوي">ثانوي</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="gender">الجنس</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="male" selected>بنين</option>
+                                    <option value="female">بنات</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="semester">الفصل</label>
+                                <select id="semester" name="semester" required>
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="excel-filename">اسم ملف إكسل</label>
+                                <input id="excel-filename" name="excel_filename" type="text" value="noor_sample.xlsx" required>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn-primary" type="submit">توليد الخطط</button>
+                        </div>
+                        <p id="form-message" class="form-message"></p>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card" id="results" hidden>
+                <div class="card-header">
+                    <h2>خطة المدير</h2>
+                    <span id="executor-name" class="badge">نايف بن سمير حجيف المخلفي</span>
+                    <button id="print-plan" class="btn-primary screen-only" type="button">طباعة</button>
+                    <button id="btn-save-plan" class="btn-primary" style="margin-left: 8px;">💾 حفظ تعديلات الخطة</button>
+                </div>
+                <div class="card-body">
+                    <p id="plan-dates" class="form-message"></p>
+                    <p id="plan-save-message" class="plan-save-message" hidden></p>
+                    <table class="data-table exec-table plan-table">
+                        <thead>
+                            <tr>
+                                <th>حذف</th>
+                                <th>البند</th>
+                                <th>وقت التنفيذ</th>
+                                <th>أسلوب التنفيذ</th>
+                                <th>ضوابط التنفيذ / الشواهد</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exec-rows"></tbody>
+                    </table>
+                    <button id="add-item" class="btn-secondary screen-only" type="button">+ إضافة بند</button>
+                    <h3 class="matrix-title">متابعة التنفيذ (تقييم ذاتي)</h3>
+                    <div class="matrix-wrap">
+                        <table class="data-table matrix-table">
+                            <thead>
+                                <tr id="matrix-head"></tr>
+                            </thead>
+                            <tbody id="matrix-rows"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // أسماء الأدوار للعرض، ومنطق الجلب والعرض كما هو
+        var roleTitles = { principal: "مدير" };
+        var plans = {};
+        var activeRole = "";
+
+        var regionSelect = document.getElementById("region");
+        var form = document.getElementById("plan-form");
+        var message = document.getElementById("form-message");
+        var results = document.getElementById("results");
+        var executorName = document.getElementById("executor-name");
+        var planDates = document.getElementById("plan-dates");
+
+        document.getElementById("print-plan").addEventListener("click", function () {
+            window.print();
+        });
+
+        function roleLabel(role) {
+            return roleTitles[role] || role;
+        }
+
+        function showMessage(text) {
+            message.textContent = text;
+        }
+
+        fetch("/api/regions")
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error("تعذر تحميل المناطق");
+                }
+                return response.json();
+            })
+            .then(function (regions) {
+                regions.forEach(function (region) {
+                    var option = document.createElement("option");
+                    option.value = region;
+                    option.textContent = region;
+                    regionSelect.appendChild(option);
+                });
+            })
+            .catch(function () {
+                showMessage("تعذر تحميل المناطق");
+            });
+
+        function selectRole(role) {
+            activeRole = role;
+            showRolePlan(role);
+        }
+    </script>
+    <script src="js/chart.min.js"></script>
+    <script src="js/progress-engine.js?v=home2"></script>
+    <script src="js/official-frame-core.js?v=frame2"></script>
+    <script src="js/print-templates.js?v=tpl1"></script>
+    <script src="js/dashboard.js?v=shell22"></script>
+    <script src="components/classroom-visit.js?v=sig2"></script>
+    <script src="js/xlsx.full.min.js"></script>
+    <script src="components/standardized-registers.js?v=cascade5"></script>
+    <script src="js/students-registry.js?v=cascade4"></script>
+    <script src="js/widget-controllers.js?v=home2"></script>
+    <script src="js/roles-alerts.js?v=home2"></script>
+    <script src="js/governance-suite.js?v=etec4"></script>
+    <script src="js/governance-intelligence.js?v=home2"></script>
+    <script>lucide.createIcons();</script>
+    <script>
+        (function () {
+            var rooms = ["quiet-lobby", "quiet-alerts", "quiet-charts", "quiet-registers"];
+
+            function clearRooms() {
+                rooms.forEach(function (name) {
+                    document.body.classList.remove(name);
+                });
+            }
+
+            function syncBack() {
+                var back = document.getElementById("quiet-back");
+                if (!back) {
+                    return;
+                }
+                var lobby = document.body.classList.contains("quiet-lobby") && document.body.classList.contains("view-home");
+                back.hidden = lobby;
+            }
+
+            function showLobby() {
+                if (window.setDashboardView && !document.body.classList.contains("view-home")) {
+                    window.setDashboardView("home");
+                }
+                clearRooms();
+                document.body.classList.add("quiet-lobby");
+                syncBack();
+            }
+
+            function showRoom(name) {
+                if (window.setDashboardView && !document.body.classList.contains("view-home")) {
+                    window.setDashboardView("home");
+                }
+                clearRooms();
+                document.body.classList.add(name);
+                syncBack();
+                if (name === "quiet-charts" && window.ProgressEngine) {
+                    requestAnimationFrame(function () {
+                        ProgressEngine.initCharts();
+                    });
+                }
+            }
+
+            document.addEventListener("click", function (event) {
+                var door = event.target.closest("[data-room]");
+                if (door) {
+                    event.preventDefault();
+                    showRoom(door.getAttribute("data-room"));
+                    return;
+                }
+                if (event.target.closest("#quiet-back")) {
+                    event.preventDefault();
+                    showLobby();
+                    return;
+                }
+                var nav = event.target.closest(".app-sidebar [data-nav]");
+                if (nav && !nav.classList.contains("disabled")) {
+                    clearRooms();
+                    if (nav.getAttribute("data-nav") === "home") {
+                        document.body.classList.add("quiet-lobby");
+                    }
+                    setTimeout(syncBack, 0);
+                }
+            });
+
+            if (document.body.classList.contains("view-home")) {
+                document.body.classList.add("quiet-lobby");
+            }
+            syncBack();
+            if (window.ProgressEngine) {
+                ProgressEngine.initCharts();
+            }
+        })();
+    </script>
+<script src="js/page-nav.js?v=nav1"></script>
+</body>
+</html>

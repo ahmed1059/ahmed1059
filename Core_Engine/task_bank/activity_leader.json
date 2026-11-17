@@ -1,0 +1,202 @@
+[
+  {
+    "task_code": "ن.ط-01",
+    "week_target": 1,
+    "title": "تشكيل أندية وجماعات النشاط الطلابي وفق ميول الطلاب",
+    "execution_method": "تشكيل",
+    "execution_time": "الأسبوع 1",
+    "evidence": "كشف الأندية والجماعات",
+    "category": "خطة النشاط"
+  },
+  {
+    "task_code": "ن.ط-02",
+    "week_target": 2,
+    "title": "إعداد خطة النشاط الفصلي للبرامج الثقافية والاجتماعية والعلمية والفنية والرياضية",
+    "execution_method": "تخطيط",
+    "execution_time": "الأسبوع 2",
+    "evidence": "خطة النشاط الفصلي",
+    "category": "خطة النشاط",
+    "shared_with": "وكيل شؤون الطلاب"
+  },
+  {
+    "task_code": "ن.ط-03",
+    "week_target": 3,
+    "title": "تنفيذ البرامج الثقافية والإذاعة المدرسية",
+    "execution_method": "تنفيذ",
+    "execution_time": "الأسبوع 3",
+    "evidence": "سجل البرامج الثقافية",
+    "category": "البرامج الطلابية",
+    "program_id": "school_broadcast",
+    "goal_id": "G7",
+    "task_type": "educational",
+    "cadence": "ongoing"
+  },
+  {
+    "task_code": "ن.ط-04",
+    "week_target": 4,
+    "title": "تنفيذ فعاليات اليوم الوطني للمملكة",
+    "execution_method": "فعالية",
+    "execution_time": "الأسبوع 4",
+    "evidence": "تقرير فعاليات اليوم الوطني",
+    "category": "المناسبات",
+    "shared_with": "وكيل شؤون الطلاب",
+    "program_id": "national_day",
+    "goal_id": "G7",
+    "task_type": "educational",
+    "seasonal": true
+  },
+  {
+    "task_code": "ن.ط-05",
+    "week_target": 5,
+    "title": "تنفيذ البرامج الاجتماعية",
+    "execution_method": "تنفيذ",
+    "execution_time": "الأسبوع 5",
+    "evidence": "سجل البرامج الاجتماعية",
+    "category": "البرامج الطلابية"
+  },
+  {
+    "task_code": "ن.ط-06",
+    "week_target": 6,
+    "title": "تنفيذ البرامج العلمية",
+    "execution_method": "تنفيذ",
+    "execution_time": "الأسبوع 6",
+    "evidence": "سجل البرامج العلمية",
+    "category": "البرامج الطلابية"
+  },
+  {
+    "task_code": "ن.ط-07",
+    "week_target": 7,
+    "title": "تنفيذ البرامج الفنية",
+    "execution_method": "تنفيذ",
+    "execution_time": "الأسبوع 7",
+    "evidence": "سجل البرامج الفنية",
+    "category": "البرامج الطلابية"
+  },
+  {
+    "task_code": "ن.ط-08",
+    "week_target": 8,
+    "title": "تنفيذ البرامج الرياضية",
+    "execution_method": "تنفيذ",
+    "execution_time": "الأسبوع 8",
+    "evidence": "سجل البرامج الرياضية",
+    "category": "البرامج الطلابية",
+    "program_id": "sports_contests",
+    "goal_id": "G7",
+    "task_type": "educational",
+    "cadence": "ongoing"
+  },
+  {
+    "task_code": "ن.ط-09",
+    "week_target": 9,
+    "title": "تنظيم المعرض المدرسي الداخلي لأعمال الطلاب",
+    "execution_method": "معرض",
+    "execution_time": "الأسبوع 9",
+    "evidence": "توثيق المعرض",
+    "category": "المنافسات والمعارض"
+  },
+  {
+    "task_code": "ن.ط-10",
+    "week_target": 10,
+    "title": "توثيق حضور الطلاب لمجالات النشاط",
+    "execution_method": "توثيق",
+    "execution_time": "الأسبوع 10",
+    "evidence": "و.ط.ع.ن 01-05",
+    "category": "خطة النشاط",
+    "shared_with": "وكيل شؤون الطلاب"
+  },
+  {
+    "task_code": "ن.ط-11",
+    "week_target": 11,
+    "title": "استكمال موافقات أولياء الأمور لمشاركة الأبناء في النشاط",
+    "execution_method": "موافقة",
+    "execution_time": "الأسبوع 11",
+    "evidence": "و.ط.ع.ن 02-05",
+    "category": "المنافسات والمعارض",
+    "shared_with": "الموجه الطلابي"
+  },
+  {
+    "task_code": "ن.ط-12",
+    "week_target": 12,
+    "title": "المشاركة في المنافسات الميدانية",
+    "execution_method": "مشاركة",
+    "execution_time": "الأسبوع 12",
+    "evidence": "خطابات المشاركة",
+    "category": "المنافسات والمعارض",
+    "shared_with": "الموجه الطلابي"
+  },
+  {
+    "task_code": "ن.ط-13",
+    "week_target": 13,
+    "title": "تنفيذ المسابقات الثقافية والعلمية داخل المدرسة",
+    "execution_method": "مسابقة",
+    "execution_time": "الأسبوع 13",
+    "evidence": "نتائج المسابقات",
+    "category": "المنافسات والمعارض",
+    "program_id": "speech_contest",
+    "goal_id": "G7",
+    "task_type": "educational",
+    "cadence": "ongoing"
+  },
+  {
+    "task_code": "ن.ط-14",
+    "week_target": 14,
+    "title": "المشاركة في المعارض المدرسية الخارجية",
+    "execution_method": "مشاركة",
+    "execution_time": "الأسبوع 14",
+    "evidence": "توثيق المعارض",
+    "category": "المنافسات والمعارض",
+    "shared_with": "وكيل شؤون الطلاب"
+  },
+  {
+    "task_code": "ن.ط-15",
+    "week_target": 15,
+    "title": "حصر المشاركات الطلابية وتوثيق شواهدها",
+    "execution_method": "حصر",
+    "execution_time": "الأسبوع 15",
+    "evidence": "ملف الشواهد",
+    "category": "التقرير والتكريم"
+  },
+  {
+    "task_code": "ن.ط-16",
+    "week_target": 16,
+    "title": "إعداد التقرير الختامي للنشاط الطلابي",
+    "execution_method": "تقرير",
+    "execution_time": "الأسبوع 16",
+    "evidence": "مسودة التقرير الختامي",
+    "category": "التقرير والتكريم"
+  },
+  {
+    "task_code": "ن.ط-17",
+    "week_target": 17,
+    "title": "تكريم الطلاب المشاركين في الأنشطة",
+    "execution_method": "تكريم",
+    "execution_time": "الأسبوع 17",
+    "evidence": "كشف التكريم",
+    "category": "التقرير والتكريم",
+    "shared_with": "وكيل شؤون الطلاب والموجه الطلابي"
+  },
+  {
+    "task_code": "ن.ط-18",
+    "week_target": 18,
+    "title": "رفع التقرير الختامي للنشاط الطلابي",
+    "execution_method": "رفع",
+    "execution_time": "الأسبوع 18",
+    "evidence": "التقرير الختامي المعتمد",
+    "category": "التقرير والتكريم",
+    "shared_with": "وكيل شؤون الطلاب"
+  },
+  {
+    "task_code": "ن.ط-د4ب-01",
+    "week_target": 0,
+    "title": "تنفيذ مبادرة اليوم العالمي للعصا البيضاء (موسمي)",
+    "execution_method": "فعالية",
+    "execution_time": "موسم المبادرة",
+    "evidence": "تقرير/شاهد TPL-01",
+    "category": "المناسبات",
+    "program_id": "white_cane_day",
+    "goal_id": "G7",
+    "task_type": "educational",
+    "seasonal": true,
+    "cadence": "seasonal"
+  }
+]

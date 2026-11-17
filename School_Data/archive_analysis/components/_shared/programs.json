@@ -1,0 +1,937 @@
+{
+  "meta": {
+    "count": 47,
+    "decision": 155,
+    "note": "د5 N=3 · خ-الإغلاق مرحلة 1"
+  },
+  "programs": [
+    {
+      "id": "loss",
+      "name": "معالجة الفاقد التعليمي والرفع التحصيلي",
+      "label": "معالجة الفاقد",
+      "kind": "برنامج",
+      "target_audience": "الطلاب الحاصلون على تقدير دون المتوسط في الاختبارات التشخيصية",
+      "domain": "نواتج التعلم",
+      "duration": "الأسابيع الستة الأولى من الفصل الدراسي",
+      "owner_role": "vice_teachers",
+      "goal_ref": "G3",
+      "success_indicator": "انتقال 80% من الطلاب المستهدفين إلى مستوى متوسط فأعلى",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "discipline",
+      "name": "تعزيز الانضباط المدرسي والحد من الغياب",
+      "label": "الانضباط",
+      "kind": "برنامج",
+      "target_audience": "جميع طلاب المدرسة (مع تركيز على متكرري الغياب)",
+      "domain": "نواتج التعلم",
+      "duration": "مستمر طوال العام الدراسي",
+      "owner_role": "vice_students",
+      "goal_ref": "G5",
+      "success_indicator": "تحقيق نسبة انضباط عامة لا تقل عن 96% طوال العام الدراسي",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "career",
+      "name": "التوجيه المهني والتعليمي",
+      "label": "التوجيه المهني",
+      "kind": "برنامج",
+      "target_audience": "طلاب الصف الثالث المتوسط",
+      "domain": "نواتج التعلم",
+      "duration": "الفصل الدراسي الثاني",
+      "owner_role": "student_counselor",
+      "goal_ref": "G5",
+      "success_indicator": "إكمال 100% من طلاب الثالث متوسط لمقياس الميول وجلسة توجيه واحدة على الأقل",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "gifted",
+      "name": "رعاية الموهوبين والمبتكرين",
+      "label": "رعاية الموهوبين",
+      "kind": "برنامج",
+      "target_audience": "الطلاب الموهوبون",
+      "domain": "التعليم والتعلم",
+      "duration": "مستمر طوال العام الدراسي",
+      "owner_role": "activity_leader",
+      "goal_ref": "G3",
+      "success_indicator": "خطة رعاية موثّقة لـ 100% من المرشحين ومشاركة 70% منهم في نشاط إثرائي فصلي على الأقل",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "partnership",
+      "name": "الشراكة المجتمعية لدعم التعلم",
+      "label": "الشراكة المجتمعية",
+      "kind": "برنامج",
+      "target_audience": "أولياء الأمور، المجتمع المحلي",
+      "domain": "الإدارة المدرسية",
+      "duration": "مستمر طوال العام الدراسي",
+      "owner_role": "principal",
+      "goal_ref": "G7",
+      "success_indicator": "تحقيق 5 شراكات فاعلة سنوياً وحضور أولياء أمور لا يقل عن 70% في اللقاءات المعتمدة",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "safety",
+      "name": "الأمن والسلامة المدرسية",
+      "label": "الأمن والسلامة",
+      "kind": "برنامج",
+      "target_audience": "جميع المنسوبين والطلاب",
+      "domain": "البيئة المدرسية",
+      "duration": "مستمر طوال العام الدراسي",
+      "owner_role": "vice_students",
+      "goal_ref": "G4",
+      "success_indicator": "تنفيذ 100% من فرضيات الإخلاء المجدولة ورفع نواقص السلامة بمحاضر رسمية",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "nafs",
+      "name": "نافس للاستعداد للاختبارات الوطنية",
+      "label": "نافس",
+      "kind": "برنامج",
+      "target_audience": "طلاب الصفوف المستهدفة في نافس",
+      "domain": "نواتج التعلم",
+      "duration": "قبل نافس وخلال فترات المراجعة المعتمدة",
+      "owner_role": "vice_teachers",
+      "goal_ref": "G3",
+      "success_indicator": "تحسن متوسط المدرسة في نافس بنسبة لا تقل عن 10% عن العام السابق",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "support",
+      "name": "حصص الدعم والتقوية",
+      "label": "الدعم والتقوية",
+      "kind": "برنامج",
+      "target_audience": "الطلاب الحاصلون على تقدير دون المتوسط في الاختبارات التشخيصية",
+      "domain": "نواتج التعلم",
+      "duration": "فصلي وفق جدول الدعم المعتمد",
+      "owner_role": "vice_teachers",
+      "goal_ref": "G3",
+      "success_indicator": "انتقال 70% من المستهدفين مستوىً تحصيلياً واحداً على الأقل",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "visits",
+      "name": "الزيارات الصفية الاستطلاعية والتقويمية",
+      "label": "الزيارات الصفية",
+      "kind": "برنامج",
+      "target_audience": "جميع معلمي المواد",
+      "domain": "التعليم والتعلم",
+      "duration": "مستمر وفق خطة الزيارات",
+      "owner_role": "vice_teachers",
+      "goal_ref": "G2",
+      "success_indicator": "تنفيذ 100% من الزيارات المخططة ووصول 85% من المعلمين لتطبيق الاستراتيجيات المستهدفة",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "plc",
+      "name": "مجتمعات التعلم المهنية (PLCs)",
+      "label": "مجتمعات التعلم",
+      "kind": "برنامج",
+      "target_audience": "مجتمعات معلمي المواد",
+      "domain": "التعليم والتعلم",
+      "duration": "مستمر طوال العام",
+      "owner_role": "vice_teachers",
+      "goal_ref": "G2",
+      "success_indicator": "عقد مجتمع تعلم واحد على الأقل لكل تخصص شهرياً مع محضر وأثر موثّق",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "evacuation",
+      "name": "فرضيات الإخلاء الدورية",
+      "label": "فرضيات الإخلاء",
+      "kind": "برنامج",
+      "target_audience": "جميع المنسوبين والطلاب",
+      "domain": "البيئة المدرسية",
+      "duration": "ثلاث فرضيات على الأقل خلال العام",
+      "owner_role": "vice_students",
+      "goal_ref": "G4",
+      "success_indicator": "تنفيذ 100% من الفرضيات المجدولة (3 سنوياً)",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "building",
+      "name": "صيانة المبنى والمرافق",
+      "label": "صيانة المبنى",
+      "kind": "برنامج",
+      "target_audience": "جميع المنسوبين والطلاب",
+      "domain": "البيئة المدرسية",
+      "duration": "مستمر مع جولات شهرية",
+      "owner_role": "vice_students",
+      "goal_ref": "G4",
+      "success_indicator": "إغلاق 80% من ملاحظات الصيانة المرفوعة خلال الفصل وإخراج مؤشري المبنى من التهيئة",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "parent_meet",
+      "name": "لقاء الشراكة مع أولياء الأمور",
+      "label": "لقاء أولياء الأمور",
+      "kind": "برنامج",
+      "target_audience": "أولياء الأمور، المجتمع المحلي",
+      "domain": "الإدارة المدرسية",
+      "duration": "لقاءات فصلية وفق التقويم",
+      "owner_role": "principal",
+      "goal_ref": "G7",
+      "success_indicator": "حضور لا يقل عن 70% من أولياء الأمور المستدعين في اللقاءات المعتمدة",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "irtiqaa",
+      "name": "رائد الشراكة المجتمعية (ارتقاء)",
+      "label": "ارتقاء",
+      "kind": "مبادرة",
+      "target_audience": "أولياء الأمور، المجتمع المحلي",
+      "domain": "الإدارة المدرسية",
+      "duration": "مستمر وفق مبادرات ارتقاء",
+      "owner_role": "activity_leader",
+      "goal_ref": "G7",
+      "success_indicator": "تنفيذ مبادرتين ارتقاء على الأقل لكل فصل دراسي بأثر موثّق",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "volunteer",
+      "name": "العمل التطوعي الطلابي",
+      "label": "التطوع الطلابي",
+      "kind": "برنامج",
+      "target_audience": "جميع طلاب المدرسة",
+      "domain": "نواتج التعلم",
+      "duration": "مستمر مع مناسبات وطنية ومجتمعية",
+      "owner_role": "activity_leader",
+      "goal_ref": "G7",
+      "success_indicator": "مشاركة لا تقل عن 60% من الطلاب في عمل تطوعي واحد على الأقل سنوياً",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "planning",
+      "name": "التخطيط الاستراتيجي المدرسي",
+      "label": "التخطيط الاستراتيجي",
+      "kind": "برنامج",
+      "target_audience": "فريق القيادة وأصحاب الخطط",
+      "domain": "الإدارة المدرسية",
+      "duration": "بداية العام مع مراجعات فصلية",
+      "owner_role": "principal",
+      "goal_ref": "G1",
+      "success_indicator": "اعتماد الخطة في وقتها وتنفيذ لا يقل عن 90% من البرامج التطويرية المخططة",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "pd",
+      "name": "التطوير المهني الداخلي",
+      "label": "التطوير المهني",
+      "kind": "برنامج",
+      "target_audience": "المعلمون والإداريون",
+      "domain": "الإدارة المدرسية",
+      "duration": "فصلي وفق خطة التطوير المهني",
+      "owner_role": "vice_teachers",
+      "goal_ref": "G6",
+      "success_indicator": "حضور 100% من المعلمين لبرنامج تطويري واحد على الأقل كل فصل",
+      "source": "program_registry.TEMPLATES"
+    },
+    {
+      "id": "fun_math",
+      "name": "مبادرة الرياضيات الممتعة",
+      "label": "الرياضيات الممتعة",
+      "kind": "مبادرة",
+      "target_audience": "",
+      "domain": "نواتج التعلم",
+      "duration": "",
+      "owner_role": "teacher",
+      "goal_ref": "G3",
+      "register_id": 3,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-5",
+        "2-2-1-1"
+      ],
+      "archive_ref": 75,
+      "source": "archive:17_programs_by_staff_plan.md#75 · قرار 143",
+      "status": "معتمد"
+    },
+    {
+      "id": "comm_skills",
+      "name": "برنامج مهارات التواصل",
+      "label": "مهارات التواصل",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "نواتج التعلم",
+      "duration": "",
+      "owner_role": "teacher",
+      "goal_ref": "G2",
+      "register_id": 3,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2",
+        "2-1-1-5"
+      ],
+      "archive_ref": 76,
+      "source": "archive:17_programs_by_staff_plan.md#76 · قرار 143",
+      "status": "معتمد"
+    },
+    {
+      "id": "study_skills",
+      "name": "برنامج مهارات المذاكرة",
+      "label": "مهارات المذاكرة",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "نواتج التعلم",
+      "duration": "",
+      "owner_role": "teacher",
+      "goal_ref": "G3",
+      "register_id": 3,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-5",
+        "2-2-1-1"
+      ],
+      "archive_ref": 77,
+      "source": "archive:17_programs_by_staff_plan.md#77 · قرار 143",
+      "status": "معتمد"
+    },
+    {
+      "id": "basic_mastery",
+      "name": "برنامج إتقان المهارات الأساسية",
+      "label": "إتقان المهارات الأساسية",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "نواتج التعلم",
+      "duration": "",
+      "owner_role": "teacher",
+      "goal_ref": "G3",
+      "register_id": 3,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-2-1-1",
+        "2-2-1-2"
+      ],
+      "archive_ref": 78,
+      "source": "archive:17_programs_by_staff_plan.md#78 · قرار 143",
+      "status": "معتمد"
+    },
+    {
+      "id": "subject_support_teacher",
+      "name": "برنامج دعم في المواد الأساسية",
+      "label": "دعم المواد (خطة المعلم)",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "نواتج التعلم",
+      "duration": "",
+      "owner_role": "teacher",
+      "goal_ref": "G3",
+      "register_id": 3,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-2-1-1",
+        "2-2-1-3"
+      ],
+      "archive_ref": 79,
+      "source": "archive:17_programs_by_staff_plan.md#79 · قرار 143 · ملاحظة: يختلف عن support (وكيل تعليمية)",
+      "status": "معتمد"
+    },
+    {
+      "id": "critical_thinking",
+      "name": "برنامج التفكير الناقد",
+      "label": "التفكير الناقد",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "",
+      "owner_role": "teacher",
+      "goal_ref": "G2",
+      "register_id": 3,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-5",
+        "2-2-1-1"
+      ],
+      "archive_ref": 80,
+      "source": "archive:17_programs_by_staff_plan.md#80 · قرار 143",
+      "status": "معتمد"
+    },
+    {
+      "id": "creative_writing",
+      "name": "برنامج الكتابة الإبداعية",
+      "label": "الكتابة الإبداعية",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "نواتج التعلم",
+      "duration": "",
+      "owner_role": "teacher",
+      "goal_ref": "G3",
+      "register_id": 3,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2",
+        "2-2-1-1"
+      ],
+      "archive_ref": 81,
+      "source": "archive:17_programs_by_staff_plan.md#81 · قرار 143",
+      "status": "معتمد"
+    },
+    {
+      "id": "creative_writing_club",
+      "name": "نادي الكتابة الإبداعية",
+      "label": "نادي الكتابة الإبداعية",
+      "kind": "نادي",
+      "target_audience": "",
+      "domain": "نواتج التعلم",
+      "duration": "",
+      "owner_role": "teacher",
+      "goal_ref": "G3",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2"
+      ],
+      "archive_ref": 82,
+      "source": "archive:17_programs_by_staff_plan.md#82 · قرار 143",
+      "status": "معتمد"
+    },
+    {
+      "id": "rifq",
+      "name": "برنامج رفق للحد من التنمر",
+      "label": "رفق",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "نواتج التعلم",
+      "duration": "",
+      "owner_role": "vice_students",
+      "owner_roles": [
+        "vice_students",
+        "student_counselor"
+      ],
+      "goal_ref": "G5",
+      "register_id": 4,
+      "success_indicator": "",
+      "indicator_codes": [
+        "1-2-1-1"
+      ],
+      "mechanism": "رصد الحالات · جلسات توعية · توثيق عبر TPL-05/TPL-07 تحت إشراف وكيل الطلاب والموجه",
+      "archive_ref": 42,
+      "source": "archive:17_programs_by_staff_plan.md#42 · م5/د2 · قرار 148",
+      "status": "معتمد",
+      "batch": "د2"
+    },
+    {
+      "id": "green_school",
+      "name": "مبادرة مدرسة خضراء",
+      "label": "مدرسة خضراء",
+      "kind": "مبادرة",
+      "target_audience": "",
+      "domain": "البيئة المدرسية",
+      "duration": "",
+      "owner_role": "vice_students",
+      "owner_roles": [
+        "vice_students"
+      ],
+      "goal_ref": "G4",
+      "register_id": 6,
+      "success_indicator": "",
+      "indicator_codes": [],
+      "mechanism": "فعاليات بيئية موثّقة · متابعة عبر سجل البيئة · TPL-01 عند التوثيق",
+      "archive_ref": 31,
+      "source": "archive:17_programs_by_staff_plan.md#31 · م5/د2 · قرار 148",
+      "status": "معتمد",
+      "batch": "د2"
+    },
+    {
+      "id": "tree_season",
+      "name": "مبادرة موسم التشجير الوطني",
+      "label": "التشجير الوطني",
+      "kind": "مبادرة",
+      "target_audience": "",
+      "domain": "البيئة المدرسية",
+      "duration": "",
+      "owner_role": "vice_students",
+      "owner_roles": [
+        "vice_students"
+      ],
+      "goal_ref": "G4",
+      "register_id": 6,
+      "success_indicator": "",
+      "indicator_codes": [],
+      "mechanism": "مشاركة موسمية في التشجير · توثيق شاهد/تقرير",
+      "archive_ref": 39,
+      "source": "archive:17_programs_by_staff_plan.md#39 · م5/د2 · قرار 148",
+      "status": "معتمد",
+      "batch": "د2",
+      "seasonal": true
+    },
+    {
+      "id": "disciplined_class",
+      "name": "مسابقة الفصل المنضبط",
+      "label": "الفصل المنضبط",
+      "kind": "مسابقة",
+      "target_audience": "",
+      "domain": "نواتج التعلم",
+      "duration": "",
+      "owner_role": "vice_students",
+      "owner_roles": [
+        "vice_students"
+      ],
+      "goal_ref": "G5",
+      "register_id": 4,
+      "success_indicator": "",
+      "indicator_codes": [
+        "1-2-1-1"
+      ],
+      "mechanism": "مسابقة فصول بمعايير مواظبة/سلوك · توثيق عبر TPL-01 · ليس بديلاً عن برنامج الانضباط النووي",
+      "archive_ref": 43,
+      "source": "archive:17_programs_by_staff_plan.md#43 · م5/د2 · قرار 148",
+      "status": "معتمد",
+      "batch": "د2"
+    },
+    {
+      "id": "reading_init",
+      "name": "مبادرة القراءة",
+      "label": "مبادرة القراءة",
+      "kind": "مبادرة",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "",
+      "owner_role": "librarian",
+      "owner_roles": [
+        "librarian"
+      ],
+      "goal_ref": "G2",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2"
+      ],
+      "mechanism": "تنفيذ عبر أمين مصادر التعلم · توثيق TPL-05/TPL-01 · بلا اختراع مؤشر رقمي",
+      "archive_ref": 85,
+      "source": "archive:17_programs_by_staff_plan.md#85 · م5/د3-أ · قرار 149",
+      "status": "معتمد",
+      "batch": "د3-أ",
+      "seasonal": false
+    },
+    {
+      "id": "reading_for_all",
+      "name": "مبادرة القراءة للجميع",
+      "label": "القراءة للجميع",
+      "kind": "مبادرة",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "",
+      "owner_role": "librarian",
+      "owner_roles": [
+        "librarian"
+      ],
+      "goal_ref": "G2",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2"
+      ],
+      "mechanism": "تنفيذ عبر أمين مصادر التعلم · توثيق TPL-05/TPL-01 · بلا اختراع مؤشر رقمي",
+      "archive_ref": 86,
+      "source": "archive:17_programs_by_staff_plan.md#86 · م5/د3-أ · قرار 149",
+      "status": "معتمد",
+      "batch": "د3-أ",
+      "seasonal": false
+    },
+    {
+      "id": "reading_club",
+      "name": "نادي القراءة",
+      "label": "نادي القراءة",
+      "kind": "نادي",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "",
+      "owner_role": "librarian",
+      "owner_roles": [
+        "librarian"
+      ],
+      "goal_ref": "G2",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2"
+      ],
+      "mechanism": "تنفيذ عبر أمين مصادر التعلم · توثيق TPL-05/TPL-01 · بلا اختراع مؤشر رقمي",
+      "archive_ref": 87,
+      "source": "archive:17_programs_by_staff_plan.md#87 · م5/د3-أ · قرار 149",
+      "status": "معتمد",
+      "batch": "د3-أ",
+      "seasonal": false
+    },
+    {
+      "id": "free_reading_week",
+      "name": "أسبوع القراءة الحرة",
+      "label": "أسبوع القراءة الحرة",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "",
+      "owner_role": "librarian",
+      "owner_roles": [
+        "librarian"
+      ],
+      "goal_ref": "G2",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2"
+      ],
+      "mechanism": "تنفيذ عبر أمين مصادر التعلم · توثيق TPL-05/TPL-01 · بلا اختراع مؤشر رقمي",
+      "archive_ref": 88,
+      "source": "archive:17_programs_by_staff_plan.md#88 · م5/د3-أ · قرار 149",
+      "status": "معتمد",
+      "batch": "د3-أ",
+      "seasonal": true
+    },
+    {
+      "id": "sources_research",
+      "name": "برنامج البحث في المصادر",
+      "label": "البحث في المصادر",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "",
+      "owner_role": "librarian",
+      "owner_roles": [
+        "librarian"
+      ],
+      "goal_ref": "G2",
+      "register_id": 6,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2"
+      ],
+      "mechanism": "تنفيذ عبر أمين مصادر التعلم · توثيق TPL-05/TPL-01 · بلا اختراع مؤشر رقمي",
+      "archive_ref": 89,
+      "source": "archive:17_programs_by_staff_plan.md#89 · م5/د3-أ · قرار 149",
+      "status": "معتمد",
+      "batch": "د3-أ",
+      "seasonal": false
+    },
+    {
+      "id": "library_free_reading",
+      "name": "برنامج القراءة الحرة في حصص المكتبة",
+      "label": "قراءة في حصص المكتبة",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "",
+      "owner_role": "librarian",
+      "owner_roles": [
+        "librarian"
+      ],
+      "goal_ref": "G2",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2"
+      ],
+      "mechanism": "تنفيذ عبر أمين مصادر التعلم · توثيق TPL-05/TPL-01 · بلا اختراع مؤشر رقمي",
+      "archive_ref": 90,
+      "source": "archive:17_programs_by_staff_plan.md#90 · م5/د3-أ · قرار 149",
+      "status": "معتمد",
+      "batch": "د3-أ",
+      "seasonal": false
+    },
+    {
+      "id": "seerah_reading_contest",
+      "name": "مسابقة القراءة في السيرة النبوية",
+      "label": "مسابقة قراءة السيرة",
+      "kind": "مسابقة",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "",
+      "owner_role": "librarian",
+      "owner_roles": [
+        "librarian"
+      ],
+      "goal_ref": "G2",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2"
+      ],
+      "mechanism": "تنفيذ عبر أمين مصادر التعلم · توثيق TPL-05/TPL-01 · بلا اختراع مؤشر رقمي",
+      "archive_ref": 91,
+      "source": "archive:17_programs_by_staff_plan.md#91 · م5/د3-أ · قرار 149",
+      "status": "معتمد",
+      "batch": "د3-أ",
+      "seasonal": false
+    },
+    {
+      "id": "reading_contest",
+      "name": "مسابقة القراءة",
+      "label": "مسابقة القراءة",
+      "kind": "مسابقة",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "",
+      "owner_role": "librarian",
+      "owner_roles": [
+        "librarian"
+      ],
+      "goal_ref": "G2",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "2-1-1-2"
+      ],
+      "mechanism": "تنفيذ عبر أمين مصادر التعلم · توثيق TPL-05/TPL-01 · بلا اختراع مؤشر رقمي",
+      "archive_ref": 92,
+      "source": "archive:17_programs_by_staff_plan.md#92 · م5/د3-أ · قرار 149",
+      "status": "معتمد",
+      "batch": "د3-أ",
+      "seasonal": false
+    },
+    {
+      "id": "national_day",
+      "name": "برنامج اليوم الوطني",
+      "label": "اليوم الوطني",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "المجتمع المدرسي",
+      "duration": "موسمي — اليوم الوطني",
+      "owner_role": "activity_leader",
+      "owner_roles": [
+        "activity_leader"
+      ],
+      "goal_ref": "G7",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "mechanism": "فعاليات اليوم الوطني · توثيق TPL-01/TPL-08a · بند ن.ط-04 في بنك الرائد",
+      "archive_ref": 58,
+      "source": "archive:17_programs_by_staff_plan.md#58 · م5/د4-أ · قرار 151",
+      "status": "معتمد",
+      "batch": "د4-أ",
+      "seasonal": true
+    },
+    {
+      "id": "school_broadcast",
+      "name": "برنامج الإذاعة المدرسية",
+      "label": "الإذاعة المدرسية",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "المجتمع المدرسي",
+      "duration": "مستمر طوال العام",
+      "owner_role": "activity_leader",
+      "owner_roles": [
+        "activity_leader"
+      ],
+      "goal_ref": "G7",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "mechanism": "تشغيل إذاعة مدرسية منتظمة · توثيق TPL-01 · بند ن.ط-03",
+      "archive_ref": 67,
+      "source": "archive:17_programs_by_staff_plan.md#67 · م5/د4-ب · قرار 152",
+      "status": "معتمد",
+      "batch": "د4-ب",
+      "seasonal": false,
+      "cadence": "ongoing"
+    },
+    {
+      "id": "radio_program",
+      "name": "برنامج إذاعي",
+      "label": "برنامج إذاعي",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "المجتمع المدرسي",
+      "duration": "مستمر طوال العام",
+      "owner_role": "activity_leader",
+      "owner_roles": [
+        "activity_leader"
+      ],
+      "goal_ref": "G7",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "mechanism": "فقرات إذاعية مجدولة · توثيق TPL-01 · قريب من #67 — مراجعة دمج لاحقة",
+      "archive_ref": 64,
+      "source": "archive:17_programs_by_staff_plan.md#64 · م5/د4-ب · قرار 152",
+      "status": "معتمد",
+      "batch": "د4-ب",
+      "seasonal": false,
+      "cadence": "ongoing",
+      "near_duplicate_of_archive": 67
+    },
+    {
+      "id": "white_cane_day",
+      "name": "مبادرة اليوم العالمي للعصا البيضاء",
+      "label": "اليوم العالمي للعصا البيضاء",
+      "kind": "مبادرة",
+      "target_audience": "",
+      "domain": "المجتمع المدرسي",
+      "duration": "موسمي",
+      "owner_role": "activity_leader",
+      "owner_roles": [
+        "activity_leader"
+      ],
+      "goal_ref": "G7",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "mechanism": "فعالية توعية موسمية · توثيق TPL-01",
+      "archive_ref": 63,
+      "source": "archive:17_programs_by_staff_plan.md#63 · م5/د4-ب · قرار 152",
+      "status": "معتمد",
+      "batch": "د4-ب",
+      "seasonal": true,
+      "cadence": "seasonal"
+    },
+    {
+      "id": "speech_contest",
+      "name": "مسابقة الإلقاء",
+      "label": "مسابقة الإلقاء",
+      "kind": "مسابقة",
+      "target_audience": "",
+      "domain": "المجتمع المدرسي",
+      "duration": "مستمر وفق خطة النشاط",
+      "owner_role": "activity_leader",
+      "owner_roles": [
+        "activity_leader"
+      ],
+      "goal_ref": "G7",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "mechanism": "مسابقة إلقاء داخل المدرسة · توثيق TPL-01 · بند ن.ط-13",
+      "archive_ref": 65,
+      "source": "archive:17_programs_by_staff_plan.md#65 · م5/د4-ج · قرار 154",
+      "status": "معتمد",
+      "batch": "د4-ج",
+      "seasonal": false,
+      "cadence": "ongoing"
+    },
+    {
+      "id": "sports_contests",
+      "name": "برنامج المسابقات الرياضية",
+      "label": "المسابقات الرياضية",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "المجتمع المدرسي",
+      "duration": "مستمر وفق خطة النشاط",
+      "owner_role": "activity_leader",
+      "owner_roles": [
+        "activity_leader"
+      ],
+      "goal_ref": "G7",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "mechanism": "مسابقات رياضية مجدولة · توثيق TPL-01 · بند ن.ط-08",
+      "archive_ref": 69,
+      "source": "archive:17_programs_by_staff_plan.md#69 · م5/د4-ج · قرار 154",
+      "status": "معتمد",
+      "batch": "د4-ج",
+      "seasonal": false,
+      "cadence": "ongoing"
+    },
+    {
+      "id": "calligraphy_speech_contest",
+      "name": "مسابقة الخط والإلقاء · مطوية «لغتي هويتي»",
+      "label": "مسابقة الخط والإلقاء",
+      "kind": "مسابقة",
+      "target_audience": "",
+      "domain": "المجتمع المدرسي",
+      "duration": "مستمر وفق خطة النشاط",
+      "owner_role": "activity_leader",
+      "owner_roles": [
+        "activity_leader"
+      ],
+      "goal_ref": "G7",
+      "register_id": 5,
+      "success_indicator": "",
+      "indicator_codes": [
+        "1-3-1-3"
+      ],
+      "mechanism": "مسابقة خط/إلقاء مع مطوية لغتي هويتي · توثيق TPL-01",
+      "archive_ref": 73,
+      "source": "archive:17_programs_by_staff_plan.md#73 · م5/د4-ج · قرار 154",
+      "status": "معتمد",
+      "batch": "د4-ج",
+      "seasonal": false,
+      "cadence": "ongoing"
+    },
+    {
+      "id": "physics_med_day",
+      "name": "اليوم العالمي للفيزياء الطبية ودور ماري كوري",
+      "label": "الفيزياء الطبية",
+      "kind": "برنامج",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "موسمي",
+      "owner_role": "lab_tech",
+      "owner_roles": [
+        "lab_tech"
+      ],
+      "goal_ref": "G2",
+      "register_id": 6,
+      "success_indicator": "",
+      "indicator_codes": [],
+      "mechanism": "فعالية توعية علمية موسمية · توثيق TPL-01 · بند LAB-01",
+      "archive_ref": 83,
+      "source": "archive:17_programs_by_staff_plan.md#83 · خ-إغلاق/د5 · قرار 155",
+      "status": "معتمد",
+      "batch": "د5",
+      "seasonal": true,
+      "cadence": "seasonal"
+    },
+    {
+      "id": "lab_setup",
+      "name": "مبادرة تجهيز معمل العلوم",
+      "label": "تجهيز معمل العلوم",
+      "kind": "مبادرة",
+      "target_audience": "",
+      "domain": "التعليم والتعلم",
+      "duration": "مستمر",
+      "owner_role": "lab_tech",
+      "owner_roles": [
+        "lab_tech"
+      ],
+      "goal_ref": "G4",
+      "register_id": 6,
+      "success_indicator": "",
+      "indicator_codes": [],
+      "mechanism": "تجهيز ومتابعة المعامل · توثيق TPL-05 · بند LAB-02",
+      "archive_ref": 84,
+      "source": "archive:17_programs_by_staff_plan.md#84 · خ-إغلاق/د5 · قرار 155",
+      "status": "معتمد",
+      "batch": "د5",
+      "seasonal": false,
+      "cadence": "ongoing"
+    },
+    {
+      "id": "digital_transform",
+      "name": "مبادرة التحول الرقمي",
+      "label": "التحول الرقمي",
+      "kind": "مبادرة",
+      "target_audience": "",
+      "domain": "الإدارة المدرسية",
+      "duration": "مستمر",
+      "owner_role": "admin_assistant",
+      "owner_roles": [
+        "admin_assistant"
+      ],
+      "goal_ref": "G6",
+      "register_id": 1,
+      "success_indicator": "",
+      "indicator_codes": [],
+      "mechanism": "تنسيق التحول الرقمي الإداري · توثيق TPL-05 · بند ADM-01",
+      "archive_ref": 74,
+      "source": "archive:17_programs_by_staff_plan.md#74 · خ-إغلاق/د5 · قرار 155",
+      "status": "معتمد",
+      "batch": "د5",
+      "seasonal": false,
+      "cadence": "ongoing"
+    }
+  ]
+}

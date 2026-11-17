@@ -1,0 +1,32 @@
+[
+  {
+    "task_code": "LAB-01",
+    "week_target": 1,
+    "title": "اليوم العالمي للفيزياء الطبية ودور ماري كوري (مرشّح معرفة #83)",
+    "execution_method": "فعالية",
+    "execution_time": "موسمي",
+    "evidence": "تقرير / TPL-01",
+    "category": "مرشحو المختبر",
+    "archive_ref": 83,
+    "task_type": "educational",
+    "goal_id": "G2",
+    "program_id": "physics_med_day",
+    "seasonal": true,
+    "cadence": "seasonal"
+  },
+  {
+    "task_code": "LAB-02",
+    "week_target": 2,
+    "title": "مبادرة تجهيز معمل العلوم (مرشّح معرفة #84)",
+    "execution_method": "تجهيز",
+    "execution_time": "فصلي",
+    "evidence": "سجل بيئة / TPL-05",
+    "category": "مرشحو المختبر",
+    "archive_ref": 84,
+    "task_type": "educational",
+    "goal_id": "G4",
+    "program_id": "lab_setup",
+    "seasonal": false,
+    "cadence": "ongoing"
+  }
+]

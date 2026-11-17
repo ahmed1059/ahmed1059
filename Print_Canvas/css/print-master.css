@@ -1,0 +1,332 @@
+/* قرار 296 — المقاسات الحية تأتي من PrintMasterCore.options عبر arm().
+   الاحتياط هنا يطابق الافتراضي: هامش 15mm، رأس 40mm، تذييل 20mm. */
+
+@page print-master-a4 {
+  size: A4 portrait;
+  margin: 15mm;
+}
+
+@page print-master-a4-landscape {
+  size: A4 landscape;
+  margin: 15mm;
+}
+
+.pm-document {
+  width: 210mm;
+  max-width: 210mm;
+  margin: 0 auto 12px;
+  background: #ffffff;
+  color: #1a1a1a;
+  box-sizing: border-box;
+}
+
+.pm-document.pm-landscape {
+  width: 297mm;
+  max-width: 297mm;
+}
+
+.pm-sheet {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.pm-sheet > thead > tr > td,
+.pm-sheet > tfoot > tr > td,
+.pm-sheet > tbody > tr > td {
+  padding: 0;
+  border: 0;
+  vertical-align: top;
+}
+
+.pm-head {
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.pm-foot,
+.pm-foot-slot {
+  height: var(--pm-footer-height, 20mm);
+  min-height: var(--pm-footer-height, 20mm);
+  box-sizing: border-box;
+}
+
+.pm-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8mm;
+  border-top: 0.4mm solid #005a53;
+  color: #0b5e56;
+  font-size: 9pt;
+  line-height: 1.3;
+  background: #ffffff;
+}
+
+.pm-clearance {
+  display: block;
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+.pm-body {
+  box-sizing: border-box;
+}
+
+.pm-signoff {
+  break-inside: avoid;
+  break-after: avoid;
+  page-break-inside: avoid;
+  page-break-after: avoid;
+  margin-top: 6mm;
+}
+
+.pm-page-num::after {
+  content: "";
+}
+
+@media screen {
+  .aj-print-stage-page .pm-document {
+    box-sizing: border-box;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 0;
+    box-shadow: 0 12px 28px rgba(8, 40, 36, 0.12);
+    outline: 2px solid #005a53;
+    outline-offset: -2px;
+  }
+
+  .aj-print-stage-page .pm-document.pm-landscape {
+    width: 297mm;
+    min-height: 210mm;
+  }
+}
+
+.pm-stress .pm-title {
+  margin: 0 0 8mm;
+  font-size: 22pt;
+  line-height: 1.4;
+}
+
+.pm-stress-copy {
+  margin: 0 0 8mm;
+  font-size: 12pt;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.pm-stress-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 8mm;
+}
+
+.pm-stress-table th,
+.pm-stress-table td {
+  border: 0.2mm solid #9eb0aa;
+  padding: 1.6mm 2mm;
+  text-align: right;
+  font-size: 11pt;
+}
+
+.pm-stress-figure {
+  width: 100%;
+  height: 42mm;
+  margin: 0;
+  border: 0.3mm solid #005a53;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.pm-stress-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media print {
+  body.app-journey.print-master {
+    page: print-master-a4;
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body.app-journey.print-master.print-master-landscape {
+    page: print-master-a4-landscape;
+  }
+
+  body.app-journey.print-master .aj-shell,
+  body.app-journey.print-master .aj-topbar,
+  body.app-journey.print-master .aj-bottom-nav,
+  body.app-journey.print-master .aj-drawer,
+  body.app-journey.print-master .aj-backdrop,
+  body.app-journey.print-master .aj-toast,
+  body.app-journey.print-master .aj-modal,
+  body.app-journey.print-master #aj-auth-gate,
+  body.app-journey.print-master .aj-print-preview-bar,
+  body.app-journey.print-master .aj-preview-files,
+  body.app-journey.print-master .no-print,
+  body.app-journey.print-master button {
+    display: none !important;
+  }
+
+  body.app-journey.print-master .aj-print-stage,
+  body.app-journey.print-master .aj-print-stage-page,
+  body.app-journey.print-master .pm-document {
+    position: static !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+
+  body.app-journey.print-master .pm-document {
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.app-journey.print-master.print-official-core:not(.print-official-multi):not(.print-official-list) .pm-document {
+    box-sizing: border-box !important;
+    position: relative !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 15mm !important;
+    overflow: hidden !important;
+  }
+
+  body.app-journey.print-master.print-master-landscape.print-official-core:not(.print-official-multi):not(.print-official-list) .pm-document {
+    width: 297mm !important;
+    max-width: 297mm !important;
+    height: 210mm !important;
+    min-height: 210mm !important;
+    max-height: 210mm !important;
+  }
+
+  body.app-journey.print-master.print-official-core:not(.print-official-multi):not(.print-official-list) .pm-foot {
+    left: 15mm !important;
+    right: 15mm !important;
+  }
+
+  body.app-journey.print-master .pm-head,
+  body.app-journey.print-master .pm-foot,
+  body.app-journey.print-master .doc-official-header,
+  body.app-journey.print-master .header-divider-bar {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body.app-journey.print-master .pm-sheet > thead {
+    display: table-header-group;
+  }
+
+  body.app-journey.print-master .pm-sheet > tfoot {
+    display: table-footer-group;
+  }
+
+  body.app-journey.print-master .pm-sheet > tbody {
+    display: table-row-group;
+  }
+
+  body.app-journey.print-master .pm-body table thead {
+    display: table-header-group;
+  }
+
+  body.app-journey.print-master .pm-body table tr,
+  body.app-journey.print-master .tpl-data-table tr,
+  body.app-journey.print-master .tpl-master-sheet tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  body.app-journey.print-master .pm-page-num::after {
+    content: counter(page);
+  }
+
+  body.app-journey.print-master .pm-head {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body.app-journey.print-master .pm-head .doc-official-header {
+    width: 100% !important;
+    grid-template-columns: minmax(0, 140px) minmax(0, 1fr) minmax(0, 140px) !important;
+  }
+
+  body.app-journey.print-master .pm-head .header-logo-left,
+  body.app-journey.print-master .pm-head .header-logo-right {
+    min-width: 0 !important;
+    max-width: 140px !important;
+    overflow: visible !important;
+  }
+
+  body.app-journey.print-master .pm-head .doc-official-header img {
+    display: inline-block !important;
+    visibility: visible !important;
+    max-height: 52px !important;
+    max-width: 140px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+
+  body.app-journey.print-master .pm-sheet > tfoot > tr > td {
+    height: var(--pm-footer-height, 20mm);
+  }
+
+  body.app-journey.print-master .pm-foot-slot {
+    height: var(--pm-footer-height, 20mm) !important;
+    min-height: var(--pm-footer-height, 20mm) !important;
+  }
+
+  body.app-journey.print-master .pm-foot {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--pm-footer-height, 20mm) !important;
+    min-height: var(--pm-footer-height, 20mm) !important;
+    margin: 0;
+    background: #ffffff;
+  }
+
+  body.app-journey.print-master .pm-clearance {
+    display: block !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  body.app-journey.print-master .pm-end {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  body.app-journey.print-master .pm-signoff {
+    break-inside: avoid !important;
+    break-after: avoid !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+    margin-bottom: 0 !important;
+  }
+
+  body.app-journey.print-master .pm-signoff .doc-signoff-block {
+    margin-top: 6mm !important;
+    margin-bottom: 0 !important;
+  }
+}

@@ -1,0 +1,2 @@
+cd C:\Users\Toshiba\Desktop\School_Governance_System_1059
+python -c "from Core_Engine.task_engine import generate_plans; r = generate_plans(region='المدينة المنورة', stage='متوسط', gender='male', semester='1', excel_path='School_Data/noor_sample.xlsx'); print(r['plans']['principal']['weeks'][0]['tasks'][0]['title']); print(r['plans']['principal']['weeks'][0]['executor']['name'])"

@@ -1,0 +1,650 @@
+{
+  "school_governance_remaining_suite": {
+    "version": "1.0.1",
+    "school": "متوسطة سعد بن الربيع الأنصاري",
+    "academic_year": "1448",
+    "principal": "نايف بن سمير حجيف المخلفي",
+    "region": "المدينة المنورة",
+    "office": "مكتب التعليم بقباء",
+    "framework": "هيئة تقويم التعليم والتدريب — التقويم والاعتماد المدرسي",
+
+    "print_footer_standard": {
+      "height_mm": 8,
+      "style": "border-top: 1px solid #1A3A52; padding-top: 4px; font-size: 9px; color: #5C6B7A",
+      "content_template": "وثيقة إدارية رسمية معتمدة — متوسطة سعد بن الربيع الأنصاري | صفحة {page}/{total_pages}",
+      "applies_to": ["ELR", "SFR", "SSR", "LRR", "MIN", "MND", "RPT-ETEC"]
+    },
+
+    "operational_registers_schemas": {
+      "section_id": "OPS-REG-01",
+      "total_registers": 4,
+
+      "employee_leave_register": {
+        "register_code": "ELR",
+        "register_name": "سجل استئذان الموظفين",
+        "register_name_en": "Employee Leave Register",
+        "linked_indicators": ["1-4-1-2", "1-2-1-2", "1-1-1-2"],
+        "numbering_pattern": "ELR-1448-{seq:05d}",
+        "archival_path": "evidence/1448/employee_leave/{month}/{record_code}/",
+        "parties": {
+          "input_by": "المساعد الإداري",
+          "target": "الموظف المستأذن",
+          "supervisor": "وكيل الشؤون المدرسية",
+          "approver": "مدير المدرسة"
+        },
+        "signatures_matrix": [
+          "الموظف المستأذن",
+          "المساعد الإداري (المُدخل)",
+          "وكيل الشؤون المدرسية",
+          "مدير المدرسة + ختم"
+        ],
+        "fields": {
+          "employee_info": {
+            "employee_name": { "label": "اسم الموظف", "type": "autocomplete", "required": true, "source": "noor_teachers" },
+            "employee_nid": { "label": "السجل المدني", "type": "text", "required": true, "source": "noor" },
+            "job_title": { "label": "الوظيفة", "type": "dropdown", "required": true, "options": ["معلم", "وكيل شؤون تعليمية", "وكيل شؤون مدرسية", "وكيل شؤون طلاب", "موجه طلابي", "رائد نشاط", "محضر مختبر", "محضر معمل حاسب", "أمين مصادر تعلم", "مساعد إداري", "مشرف تربوي", "إداري"] },
+            "grade_or_level": {
+              "label": "المستوى / المرتبة الوظيفية",
+              "type": "conditional_dropdown",
+              "depends_on": "job_title",
+              "options_teacher": ["المستوى الأول", "المستوى الثاني", "المستوى الثالث", "المستوى الرابع", "المستوى الخامس", "المستوى السادس", "رتبة ممارس", "رتبة متقدم", "رتبة خبير"],
+              "options_admin": ["المرتبة الرابعة", "المرتبة الخامسة", "المرتبة السادسة", "المرتبة السابعة", "المرتبة الثامنة", "المرتبة التاسعة", "المرتبة العاشرة"]
+            }
+          },
+          "leave_details": {
+            "exit_reason": { "label": "مبررات الخروج", "type": "dropdown", "required": true, "options": ["ظرف عائلي طارئ", "مراجعة طبية", "إجراء رسمي حكومي", "عمل ميداني رسمي", "اجتماع خارجي معتمد", "حالة طارئة موثقة", "أخرى - يذكر"] },
+            "exit_time": { "label": "وقت الخروج", "type": "time", "required": true },
+            "expected_return_time": { "label": "وقت العودة المتوقع", "type": "time", "required": true },
+            "actual_return_time": { "label": "وقت العودة الفعلي", "type": "time", "required": false },
+            "return_code": { "label": "رمز العودة", "type": "dropdown", "required": true, "options": ["عودة في الوقت المحدد", "عودة متأخرة 15 دقيقة", "عودة متأخرة 30 دقيقة", "عودة متأخرة أكثر من ساعة", "لم يعد - استئذان كامل", "عودة طارئة (نصف يوم)"] }
+          },
+          "evidence": {
+            "attachment_type": { "label": "المرفق", "type": "dropdown", "required": false, "options": ["طلب رسمي مصدق", "تقرير طبي", "دعوة رسمية", "أمر إداري", "لا يوجد مرفق"] },
+            "verification_notes": { "label": "ملاحظات التحقق", "type": "textarea", "required": false, "max_length": 200 }
+          }
+        }
+      },
+
+      "school_fund_register": {
+        "register_code": "SFR",
+        "register_name": "سجل الصندوق المدرسي",
+        "register_name_en": "School Fund Register",
+        "linked_indicators": ["1-4-1-3", "1-1-1-1", "2-1-1-5"],
+        "numbering_pattern": "SFR-1448-{seq:05d}",
+        "archival_path": "evidence/1448/school_fund/{transaction_type}/{record_code}/",
+        "parties": {
+          "input_by": "أمين الصندوق (المساعد الإداري)",
+          "target": "الصندوق المدرسي",
+          "supervisor": "وكيل الشؤون المدرسية",
+          "approver": "مدير المدرسة + لجنة الصندوق"
+        },
+        "signatures_matrix": [
+          "أمين الصندوق",
+          "المستفيد / المورد",
+          "وكيل الشؤون المدرسية",
+          "مدير المدرسة + ختم"
+        ],
+        "fields": {
+          "transaction_info": {
+            "transaction_type": { "label": "نوع المعاملة", "type": "dropdown", "required": true, "options": ["إيراد نقدي", "إيراد خدمي", "تبرع", "رعاية", "مصروف - مشتريات", "مصروف - صيانة", "مصروف - أنشطة", "مصروف - كهرباء ومياه", "تحويل داخلي"] },
+            "transaction_class": {
+              "label": "التصنيف المحاسبي",
+              "type": "computed",
+              "formula": "['إيراد نقدي', 'إيراد خدمي', 'تبرع', 'رعاية'].includes(transaction_type) ? 'income' : (transaction_type === 'تحويل داخلي' ? 'neutral' : 'expense')"
+            },
+            "transaction_date": { "label": "تاريخ المعاملة", "type": "hijri_date", "required": true },
+            "amount": { "label": "المبلغ (ريال)", "type": "number", "required": true, "min": 0, "max": 1000000 },
+            "source_entity": { "label": "جهة الإيراد", "type": "dropdown", "required": false, "options": ["وزارة التعليم", "إدارة التعليم", "المجتمع المحلي", "أولياء الأمور", "جهة خاصة", "جمعية خيرية", "تبرع فردي", "لا ينطبق"] },
+            "vendor_name": { "label": "اسم المورد", "type": "text", "required": false, "max_length": 100 },
+            "description": { "label": "وصف المعاملة", "type": "textarea", "required": true, "max_length": 300 }
+          },
+          "purchase_details": {
+            "items_purchased": { "label": "الأصناف المشتراة", "type": "tags", "required": false, "hint": "أضف كل صنف على حدة" },
+            "quantity": { "label": "الكمية", "type": "number", "required": false, "min": 1 },
+            "unit_price": { "label": "سعر الوحدة", "type": "number", "required": false, "min": 0 },
+            "total_price": { "label": "الإجمالي", "type": "computed", "formula": "quantity * unit_price" },
+            "purchase_purpose": { "label": "الغرض من الشراء", "type": "dropdown", "required": false, "options": ["مستلزمات تعليمية", "صيانة مرافق", "تجديد أجهزة", "أنشطة طلابية", "ضيافة وتكريم", "مطبوعات ومستلزمات مكتبية", "احتياجات طارئة", "لا ينطبق"] }
+          },
+          "financial_summary": {
+            "opening_balance": { "label": "الرصيد الافتتاحي", "type": "number", "required": true, "min": 0 },
+            "balance_after_transaction": { 
+              "label": "الرصيد بعد المعاملة", 
+              "type": "computed", 
+              "formula": "opening_balance + (transaction_class === 'income' ? amount : (transaction_class === 'expense' ? -amount : 0))" 
+            },
+            "budget_category": { "label": "بند الميزانية", "type": "dropdown", "required": true, "options": ["بند التشغيل والصيانة", "بند الأنشطة الطلابية", "بند المستلزمات التعليمية", "بند الضيافة", "بند الطوارئ", "بند عام"] }
+          },
+          "evidence": {
+            "invoice_number": { "label": "رقم الفاتورة", "type": "text", "required": false },
+            "receipt_attached": { "label": "الإيصال مرفق", "type": "boolean", "required": true },
+            "attachment_type": { "label": "نوع المرفق", "type": "multi_dropdown", "required": true, "options": ["فاتورة ضريبية", "إيصال استلام", "كشف حساب بنكي", "أمر شراء معتمد", "عقد مورد", "صور المستلزمات"] }
+          }
+        }
+      },
+
+      "schedule_and_substitution_register": {
+        "register_code": "SSR",
+        "register_name": "سجل الجدول والانتظار والمناوبة",
+        "register_name_en": "Schedule and Substitution Register",
+        "linked_indicators": ["1-1-1-1", "1-4-1-5", "2-1-1-2"],
+        "numbering_pattern": "SSR-1448-{seq:05d}",
+        "archival_path": "evidence/1448/schedule/{month}/{record_code}/",
+        "parties": {
+          "input_by": "مسؤول الجدول (وكيل الشؤون التعليمية)",
+          "target": "المعلمون والفصول",
+          "supervisor": "وكيل الشؤون التعليمية",
+          "approver": "مدير المدرسة"
+        },
+        "signatures_matrix": [
+          "المعلم المُناوب / المكلف",
+          "وكيل الشؤون التعليمية",
+          "مدير المدرسة + ختم"
+        ],
+        "fields": {
+          "schedule_info": {
+            "record_type": { "label": "نوع السجل", "type": "dropdown", "required": true, "options": ["جدول أسبوعي أساسي", "تعديل جدول طارئ", "حصص انتظار", "مناوبة إشراف", "توزيع أنصبة"] },
+            "academic_week": { "label": "الأسبوع الدراسي", "type": "dropdown", "required": true, "options": ["الأسبوع الأول", "الأسبوع الثاني", "الأسبوع الثالث", "الأسبوع الرابع", "الأسبوع الخامس", "الأسبوع السادس", "الأسبوع السابع", "الأسبوع الثامن", "الأسبوع التاسع", "الأسبوع العاشر", "الأسبوع الحادي عشر", "الأسبوع الثاني عشر", "الأسبوع الثالث عشر", "الأسبوع الرابع عشر", "الأسبوع الخامس عشر", "الأسبوع السادس عشر", "الأسبوع السابع عشر", "الأسبوع الثامن عشر"] },
+            "day": { "label": "اليوم", "type": "dropdown", "required": true, "options": ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس"] }
+          },
+          "substitution_details": {
+            "absent_teacher": { "label": "المعلم الغائب", "type": "autocomplete", "required": false, "source": "noor_teachers" },
+            "substitute_teacher": { "label": "المعلم البديل", "type": "autocomplete", "required": true, "source": "noor_teachers" },
+            "period": { "label": "الحصة", "type": "dropdown", "required": true, "options": ["الأولى", "الثانية", "الثالثة", "الرابعة", "الخامسة", "السادسة", "السابعة"] },
+            "class": { "label": "الفصل", "type": "dropdown", "required": true, "options": ["أول متوسط / 1", "أول متوسط / 2", "أول متوسط / 3", "أول متوسط / 4", "ثاني متوسط / 1", "ثاني متوسط / 2", "ثاني متوسط / 3", "ثاني متوسط / 4", "ثالث متوسط / 1", "ثالث متوسط / 2", "ثالث متوسط / 3", "ثالث متوسط / 4"] },
+            "subject": { "label": "المادة", "type": "dropdown", "required": true, "options": ["لغتي الخالدة", "الرياضيات", "العلوم", "اللغة الإنجليزية", "الدراسات الإسلامية", "الاجتماعيات", "المهارات الرقمية", "التربية الفنية", "التربية البدنية", "المهارات الحياتية"] },
+            "absence_reason": { "label": "سبب الغياب", "type": "dropdown", "required": false, "options": ["إجازة رسمية", "إجازة مرضية", "استئذان شخصي", "مهمة رسمية", "دورة تدريبية", "بدون عذر", "لا ينطبق"] }
+          },
+          "supervision_details": {
+            "supervision_location": { "label": "موقع المناوبة", "type": "dropdown", "required": false, "options": ["الفناء الرئيسي", "الممر العلوي", "الممر السفلي", "بوابة الدخول", "المقصف", "دورات المياه", "الساحة الرياضية"] },
+            "supervision_period": { "label": "فترة المناوبة", "type": "dropdown", "required": false, "options": ["قبل الطابور", "أثناء الطابور", "بين الحصص", "أثناء الفسحة", "بعد الانصراف"] }
+          },
+          "evidence": {
+            "attachment_type": { "label": "نوع الشاهد", "type": "multi_dropdown", "required": true, "options": ["جدول أسبوعي معتمد", "بيان توقيعات المناوبة", "كشف الحضور من نور", "خطاب تعديل رسمي"] }
+          }
+        }
+      },
+
+      "learning_resources_register": {
+        "register_code": "LRR",
+        "register_name": "سجل مصادر التعلم",
+        "register_name_en": "Learning Resources Register",
+        "linked_indicators": ["2-1-1-6", "3-1-1-1", "2-1-1-4", "3-2-1-6"],
+        "numbering_pattern": "LRR-1448-{seq:05d}",
+        "archival_path": "evidence/1448/learning_resources/{activity_type}/{record_code}/",
+        "parties": {
+          "input_by": "أمين مصادر التعلم",
+          "target": "الطلاب والموظفون",
+          "supervisor": "وكيل الشؤون التعليمية",
+          "approver": "مدير المدرسة"
+        },
+        "signatures_matrix": [
+          "أمين مصادر التعلم",
+          "المستعير / المشارك",
+          "وكيل الشؤون التعليمية",
+          "مدير المدرسة + ختم"
+        ],
+        "fields": {
+          "record_info": {
+            "record_type": { "label": "نوع السجل", "type": "dropdown", "required": true, "options": ["استعارة كتب", "استعارة مراجع", "زيارة فصول", "أنشطة قرائية", "جرد المصادر", "صيانة أجهزة", "تحدي القراءة"] },
+            "record_date": { "label": "تاريخ التسجيل", "type": "hijri_date", "required": true },
+            "academic_term": { "label": "الفصل الدراسي", "type": "dropdown", "required": true, "options": ["الفصل الأول", "الفصل الثاني", "الفصل الثالث"] }
+          },
+          "borrower_info": {
+            "borrower_type": { "label": "نوع المستعير", "type": "dropdown", "required": true, "options": ["طالب", "معلم", "إداري", "ولي أمر", "زائر خارجي"] },
+            "borrower_name": { "label": "اسم المستعير", "type": "autocomplete", "required": true, "sources": ["noor_students", "noor_teachers"] },
+            "borrower_nid": { "label": "السجل المدني", "type": "text", "required": false, "source": "noor" },
+            "class_or_dept": { "label": "الصف / القسم", "type": "dropdown", "required": false, "options": ["أول متوسط / 1", "أول متوسط / 2", "أول متوسط / 3", "أول متوسط / 4", "ثاني متوسط / 1", "ثاني متوسط / 2", "ثاني متوسط / 3", "ثاني متوسط / 4", "ثالث متوسط / 1", "ثالث متوسط / 2", "ثالث متوسط / 3", "ثالث متوسط / 4", "إدارة المدرسة", "الهيئة التعليمية"] }
+          },
+          "resource_info": {
+            "resource_type": { "label": "نوع المصدر", "type": "dropdown", "required": true, "options": ["كتاب علمي", "مرجع دراسي", "مجلة", "قصة", "موسوعة", "خرائط تعليمية", "مجسمات", "وسائط سمعية", "وسائط بصرية", "أجهزة حاسوب", "ألواح ذكية"] },
+            "resource_title": { "label": "عنوان المصدر", "type": "text", "required": true, "max_length": 150 },
+            "resource_code": { "label": "رقم التصنيف", "type": "text", "required": false },
+            "borrow_date": { "label": "تاريخ الاستعارة", "type": "hijri_date", "required": true },
+            "due_date": { "label": "تاريخ الإرجاع المتوقع", "type": "hijri_date", "required": true },
+            "return_date": { "label": "تاريخ الإرجاع الفعلي", "type": "hijri_date", "required": false },
+            "return_status": { "label": "حالة الإرجاع", "type": "dropdown", "required": true, "options": ["مُرجع في الوقت", "مُرجع متأخر", "مستعار حالياً", "لم يُرجع - مفقود", "تالف عند الإرجاع"] }
+          },
+          "activity_details": {
+            "activity_type": { "label": "نوع النشاط", "type": "dropdown", "required": false, "options": ["قراءة حرة", "قراءة موجهة", "بحث علمي", "عرض تقديمي", "مسابقة قراءة", "ورشة عمل", "حلقة نقاش", "زيارة موجهة", "معرض كتاب", "تحدي القراءة العربي"] },
+            "participants_count": { "label": "عدد المشاركين", "type": "number", "required": false, "min": 0, "max": 500 },
+            "learning_outcome": { "label": "ناتج التعلم المحقق", "type": "textarea", "required": false, "max_length": 300 }
+          },
+          "evidence": {
+            "attachment_type": { "label": "نوع الشاهد", "type": "multi_dropdown", "required": true, "options": ["سجل إعارة موقّع", "كشف إلكتروني من النظام", "صور النشاط", "تقرير إنجاز مصور", "شهادة مشاركة", "بيان توقيعات"] }
+          }
+        }
+      }
+    },
+
+    "committee_meeting_minutes_bank": {
+      "section_id": "COMM-MIN-01",
+      "total_committees": 9,
+      "template_header": {
+        "kingdom": "المملكة العربية السعودية",
+        "ministry": "وزارة التعليم",
+        "education_department": "الإدارة العامة للتعليم بمنطقة المدينة المنورة",
+        "education_office": "مكتب التعليم بقباء",
+        "school": "متوسطة سعد بن الربيع الأنصاري",
+        "academic_year": "العام الدراسي 1448هـ"
+      },
+      "meeting_metadata": {
+        "meeting_code_pattern": "MIN-{committee_code}-1448-{seq:03d}",
+        "meeting_type_options": ["اجتماع دوري شهري", "اجتماع فصلي", "اجتماع طارئ", "اجتماع استثنائي", "اجتماع ختامي"],
+        "attendance_quorum": "يجب حضور ثلثي الأعضاء على الأقل لصحة الانعقاد",
+        "decision_rule": "تصدر القرارات بموافقة الأغلبية الحاضرة"
+      },
+      "committees": {
+        "accreditation_and_excellence": {
+          "committee_code": "ACC",
+          "committee_name": "لجنة التميز والجودة والاعتماد المدرسي",
+          "chairperson": "نايف بن سمير حجيف المخلفي",
+          "rapporteur": "المعلم المكلف بمنسق الجودة",
+          "standard_agenda": [
+            "مراجعة محضر الاجتماع السابق ومتابعة تنفيذ القرارات",
+            "عرض نتائج التقويم الذاتي وتحديث نسب الجاهزية",
+            "مناقشة الشواهد الناقصة وخطة استكمالها",
+            "مناقشة مستجدات الاعتماد المدرسي مع هيئة تقويم التعليم",
+            "تحديد موعد الزيارة الميدانية الداخلية للمراجعة",
+            "أي موضوعات أخرى يراها رئيس اللجنة"
+          ],
+          "sample_recommendations": [
+            "استكمال رفع {evidence_count} شاهداً على المنصة الرقمية قبل تاريخ {deadline}.",
+            "تنفيذ زيارة ميدانية داخلية شاملة يوم {internal_visit_date} برئاسة مدير المدرسة.",
+            "اعتماد تقرير الجاهزية الحالي برفع النسبة إلى {target_percentage}% بنهاية الفصل."
+          ],
+          "signatures_matrix": ["رئيس اللجنة (المدير)", "المقرر", "جميع الأعضاء", "اعتماد المدير + ختم"]
+        },
+        "academic_achievement_and_nafes": {
+          "committee_code": "AAN",
+          "committee_name": "لجنة التحصيل الدراسي واختبارات نافس",
+          "chairperson": "نايف بن سمير حجيف المخلفي",
+          "rapporteur": "معلم الرياضيات المتميز",
+          "standard_agenda": [
+            "مراجعة محضر الاجتماع السابق",
+            "تحليل نتائج اختبارات نافس الأخيرة",
+            "مناقشة الفجوات المهارية في المواد الثلاث",
+            "مراجعة الخطط العلاجية والإثرائية",
+            "مناقشة نتائج الاختبارات الفصلية",
+            "التوصيات والقرارات"
+          ],
+          "sample_recommendations": [
+            "تكثيف حصص التقوية في {weak_subject} بمعدل {sessions_per_week} حصص أسبوعياً.",
+            "تشكيل مجتمعات تعلم مصغرة لمعلمي {target_subjects} لمتابعة الخطط العلاجية.",
+            "تنفيذ اختبار محاكي لنافس في الأسبوع {test_week} ورفع نتائجه للجنة."
+          ],
+          "signatures_matrix": ["رئيس اللجنة (المدير)", "وكيل الشؤون التعليمية", "المقرر", "معلمو المواد الثلاث", "اعتماد المدير + ختم"]
+        },
+        "student_guidance_and_care": {
+          "committee_code": "SGC",
+          "committee_name": "لجنة التوجيه الطلابي والرعاية التحصيلية والسلوكية",
+          "chairperson": "نايف بن سمير حجيف المخلفي",
+          "rapporteur": "الموجه الطلابي",
+          "standard_agenda": [
+            "مراجعة محضر الاجتماع السابق",
+            "عرض إحصاءات الحالات السلوكية والتحصيلية",
+            "مناقشة دراسات الحالة الفردية",
+            "مراجعة برامج التوجيه الوقائية",
+            "مناقشة حالات التنمر أو العنف",
+            "التوصيات والقرارات"
+          ],
+          "sample_recommendations": [
+            "إحالة {case_count} حالة إلى جلسات إرشادية فردية مع المرشد الطلابي.",
+            "تفعيل برنامج {program_name} للحد من ظاهرة {phenomenon} في الفصل الدراسي.",
+            "تكريم {honored_count} طالباً متميزاً سلوكياً في حفل نهاية الفصل."
+          ],
+          "signatures_matrix": ["رئيس اللجنة (المدير)", "وكيل شؤون الطلاب", "الموجه الطلابي", "رائد النشاط", "معلمون أعضاء"]
+        },
+        "safety_security_and_crisis": {
+          "committee_code": "SSC",
+          "committee_name": "لجنة الأمن والسلامة والطوارئ",
+          "chairperson": "نايف بن سمير حجيف المخلفي",
+          "rapporteur": "منسق الأمن والسلامة",
+          "standard_agenda": [
+            "مراجعة محضر الاجتماع السابق",
+            "تقرير عن جولة تفتيشية لمرافق المدرسة",
+            "مراجعة خطط الإخلاء والطوارئ",
+            "مناقشة احتياجات الصيانة العاجلة",
+            "استعراض نتائج التدريبات الميدانية",
+            "التوصيات والقرارات"
+          ],
+          "sample_recommendations": [
+            "تنفيذ تدريب إخلاء شامل يوم {drill_date} بمشاركة جميع منسوبي المدرسة.",
+            "رفع طلب صيانة عاجل لـ {maintenance_items} إلى إدارة التعليم.",
+            "توفير {safety_equipment_count} قطعة إضافية من معدات السلامة في {location}."
+          ],
+          "signatures_matrix": ["رئيس اللجنة (المدير)", "وكيل الشؤون المدرسية", "المقرر", "أعضاء الفريق", "اعتماد المدير + ختم"]
+        },
+        "national_events_and_activities": {
+          "committee_code": "NEA",
+          "committee_name": "لجنة المناسبات الوطنية والفعاليات والنشاط الطلابي",
+          "chairperson": "نايف بن سمير حجيف المخلفي",
+          "rapporteur": "رائد النشاط الطلابي",
+          "standard_agenda": [
+            "مراجعة محضر الاجتماع السابق",
+            "مناقشة خطة المناسبات القادمة",
+            "مراجعة برامج النشاط الطلابي المنفذة",
+            "مناقشة المشاركات الخارجية",
+            "مراجعة مسابقات الطلاب",
+            "التوصيات والقرارات"
+          ],
+          "sample_recommendations": [
+            "تنفيذ برنامج احتفالي لليوم الوطني يوم {national_day_date} بمشاركة {student_count} طالباً.",
+            "ترشيح {nominated_count} طالباً للمشاركة في مسابقة {competition_name} على مستوى الإدارة.",
+            "تنظيم معرض {exhibition_name} في الأسبوع {week} بمشاركة {participant_count} طالباً."
+          ],
+          "signatures_matrix": ["رئيس اللجنة (المدير)", "وكيل شؤون الطلاب", "رائد النشاط", "المقرر", "معلمون أعضاء"]
+        },
+        "learning_resources_and_digital": {
+          "committee_code": "LRD",
+          "committee_name": "لجنة مصادر التعلم والتحول الرقمي",
+          "chairperson": "نايف بن سمير حجيف المخلفي",
+          "rapporteur": "أمين مصادر التعلم",
+          "standard_agenda": [
+            "مراجعة محضر الاجتماع السابق",
+            "عرض إحصاءات الاستعارة واستخدام المصادر",
+            "مراجعة تفعيل منصة مدرستي",
+            "مناقشة تحديات البنية الرقمية",
+            "الأنشطة القرائية والمسابقات",
+            "التوصيات والقرارات"
+          ],
+          "sample_recommendations": [
+            "تنظيم مسابقة {reading_competition} بمشاركة {participant_count} طالباً خلال {duration}.",
+            "تحديث {resource_count} مصدراً رقمياً في مكتبة المدرسة.",
+            "تنفيذ دورة تدريبية للمعلمين على استخدام {digital_platform} يوم {training_date}."
+          ],
+          "signatures_matrix": ["رئيس اللجنة (المدير)", "وكيل الشؤون التعليمية", "أمين مصادر التعلم", "محضر معمل الحاسب", "اعتماد المدير + ختم"]
+        },
+        "school_fund_and_procurement": {
+          "committee_code": "SFP",
+          "committee_name": "لجنة الصندوق المدرسي والمشتريات",
+          "chairperson": "نايف بن سمير حجيف المخلفي",
+          "rapporteur": "أمين الصندوق",
+          "standard_agenda": [
+            "مراجعة محضر الاجتماع السابق",
+            "استعراض التقرير المالي للفترة",
+            "مناقشة طلبات الشراء المقدمة",
+            "مراجعة الرصيد الحالي والالتزامات",
+            "مناقشة فرص تنويع مصادر الدخل",
+            "التوصيات والقرارات"
+          ],
+          "sample_recommendations": [
+            "اعتماد مشتريات بمبلغ {amount} ريال لفئة {budget_category}.",
+            "تفعيل مبادرة {fundraising_initiative} لتنويع مصادر الدخل.",
+            "ترحيل رصيد قدره {carried_amount} ريال للفصل القادم."
+          ],
+          "signatures_matrix": ["رئيس اللجنة (المدير)", "وكيل الشؤون المدرسية", "أمين الصندوق", "مراجع داخلي", "اعتماد المدير + ختم"]
+        },
+        "schedule_and_substitutions": {
+          "committee_code": "SCS",
+          "committee_name": "لجنة الجدول والانتظار والمناوبة",
+          "chairperson": "نايف بن سمير حجيف المخلفي",
+          "rapporteur": "مسؤول الجدول المدرسي",
+          "standard_agenda": [
+            "مراجعة محضر الاجتماع السابق",
+            "مناقشة تعديلات الجدول القادمة",
+            "مراجعة حصص الانتظار والمناوبات",
+            "استعراض شكاوى المعلمين",
+            "مناقشة العدالة في التوزيع",
+            "التوصيات والقرارات"
+          ],
+          "sample_recommendations": [
+            "إعادة توزيع {periods_count} حصة انتظار على المعلمين وفق مبدأ العدالة.",
+            "اعتماد جدول المناوبة لشهر {month} بمشاركة {teachers_count} معلماً.",
+            "تعديل جدول الفصل {class} وفق ملاحظات المعلمين."
+          ],
+          "signatures_matrix": ["رئيس اللجنة (المدير)", "وكيل الشؤون التعليمية", "مسؤول الجدول", "معلمون أعضاء"]
+        },
+        "emergency_intervention_team": {
+          "committee_code": "EIT",
+          "committee_name": "فريق التدخل السريع وإدارة الأزمات",
+          "chairperson": "نايف بن سمير حجيف المخلفي",
+          "rapporteur": "منسق الأمن والسلامة",
+          "standard_agenda": [
+            "مراجعة محضر الاجتماع السابق",
+            "استعراض الحالات الطارئة في الفترة الأخيرة",
+            "مراجعة جاهزية الفريق",
+            "مناقشة سيناريوهات الطوارئ المحتملة",
+            "التنسيق مع الجهات الخارجية",
+            "التوصيات والقرارات"
+          ],
+          "sample_recommendations": [
+            "تنفيذ تدريب محاكاة لحالة إخلاء طارئ يوم {drill_date} بمشاركة الفريق والأجهزة المعنية.",
+            "تحديث أرقام الطوارئ والجهات الداعمة في لوحة الإرشادات.",
+            "توفير {equipment_count} حقيبة إسعافات إضافية في {location}."
+          ],
+          "signatures_matrix": ["رئيس الفريق (المدير)", "وكيل الشؤون المدرسية", "المقرر", "أعضاء الفريق", "اعتماد المدير + ختم"]
+        }
+      }
+    },
+
+    "staff_appointment_letter_template": {
+      "section_id": "STAFF-APPT-01",
+      "template_id": "TPL-STAFF-MANDATE-001",
+      "document_type": "خطاب تكليف إداري رسمي",
+      "print_layout": "A4-Portrait",
+      "header": {
+        "kingdom": "المملكة العربية السعودية",
+        "ministry": "وزارة التعليم",
+        "education_department": "الإدارة العامة للتعليم بمنطقة المدينة المنورة",
+        "education_office": "مكتب التعليم بقباء",
+        "school": "متوسطة سعد بن الربيع الأنصاري",
+        "vision_logo": "رؤية المملكة 2030"
+      },
+      "letter_metadata": {
+        "letter_number": "رقم الخطاب: {letter_seq}-1448",
+        "letter_date": "التاريخ: {hijri_date}هـ",
+        "archive_ref": "المرجع الأرشيفي: MND-1448-{staff_nid}-{seq}"
+      },
+      "recipient_block": {
+        "recipient_title": "المكرم /",
+        "recipient_name": "{staff_full_name}",
+        "recipient_job": "{staff_job_title}",
+        "greeting": "السلام عليكم ورحمة الله وبركاته،"
+      },
+      "preamble": {
+        "text": "إن مدير مدرسة سعد بن الربيع الأنصاري، وبناءً على الصلاحيات الممنوحة لمديري المدارس بموجب الدليل التنظيمي والإجرائي لمدارس التعليم العام، واستناداً إلى قرار مجلس الإدارة المدرسية رقم ({decision_code}) وتاريخ ({decision_date})هـ، وحرصاً على تحقيق أهداف المدرسة التطويرية وتوزيع المهام والمسؤوليات وفقاً للكفايات والخبرات المتوفرة..."
+      },
+      "mandate_body": {
+        "intro": "نكلفكم بمهام العضوية في:",
+        "committees_list": [
+          "لجنة {committee_1_name} بصفة {role_in_committee_1} اعتباراً من {start_date_1} ولمدة {duration_1}.",
+          "فريق عمل {team_2_name} بصفة {role_in_team_2} اعتباراً من {start_date_2} ولمدة {duration_2}."
+        ],
+        "tasks_section": {
+          "label": "المهام والمسؤوليات الموكلة إليكم",
+          "tasks": [
+            "المهمة الأولى: {task_1}",
+            "المهمة الثانية: {task_2}",
+            "المهمة الثالثة: {task_3}",
+            "المهمة الرابعة: {task_4}",
+            "المهمة الخامسة: {task_5}"
+          ]
+        },
+        "support_note": "وسيُمنح لكم الدعم الكامل لأداء المهام على الوجه الأكمل، ويُحسب هذا التكليف ضمن أعمالكم الموثقة في ملف الأداء الوظيفي."
+      },
+      "closing_statement": "نأمل البدء بممارسة المهام فور استلام هذا التكليف، مع ضرورة رفع تقارير دورية عن سير الأعمال والإنجازات إلى إدارة المدرسة. والله ولي التوفيق.",
+      "signature_block": {
+        "principal_label": "مدير المدرسة",
+        "principal_name": "نايف بن سمير حجيف المخلفي",
+        "signature_label": "التوقيع:",
+        "stamp_label": "ختم المدرسة"
+      },
+      "acknowledgment": {
+        "label": "إقرار الاستلام والتوقيع بالعلم",
+        "fields": [
+          "الاسم الكامل: {staff_full_name}",
+          "السجل المدني: {staff_nid}",
+          "الصفة الوظيفية: {staff_job_title}",
+          "رقم الجوال: {staff_mobile}",
+          "تاريخ الاستلام: {receive_date}هـ",
+          "التوقيع: ______________________"
+        ],
+        "text": "أقر باستلام نسخة من هذا التكليف واطلاعي الكامل على جميع المهام والمسؤوليات المذكورة أعلاه، وأتعهد بالالتزام التام بتنفيذها على الوجه الأكمل وفق الأنظمة واللوائح المعتمدة."
+      },
+      "cc_block": {
+        "label": "نسخة معطاة إلى",
+        "recipients": ["ملف الموظف", "الجهة ذات العلاقة", "الأرشيف الإداري"]
+      }
+    },
+
+    "etec_self_assessment_rollup_report": {
+      "section_id": "ETEC-ROLLUP-01",
+      "report_id": "RPT-ETEC-1448-ANNUAL",
+      "report_type": "تقرير التقويم الذاتي السنوي التجميعي",
+      "report_title": "التقرير السنوي للتقويم الذاتي والاعتماد المدرسي — 1448هـ",
+      "print_layout": "A4-Landscape",
+      "generated_for": "المقوم الخارجي — هيئة تقويم التعليم والتدريب",
+      "school_header": {
+        "school_name": "متوسطة سعد بن الربيع الأنصاري",
+        "school_id": "S-40341",
+        "region": "المدينة المنورة",
+        "office": "مكتب التعليم بقباء",
+        "principal": "نايف بن سمير حجيف المخلفي",
+        "total_students": 341,
+        "total_staff": 38,
+        "total_classrooms": 12
+      },
+      "executive_summary": {
+        "overall_score": "{overall_percentage}%",
+        "overall_level": "{overall_level}",
+        "comparison_with_previous_year": "{delta}%",
+        "key_achievements": [
+          "تحسن في مجال {strongest_domain} بنسبة {strongest_delta}%.",
+          "استكمال رفع {completed_evidence} شاهداً على منصة التقويم الذاتي.",
+          "تجاوز مستهدف {achieved_target} في {achievement_area}."
+        ],
+        "key_challenges": [
+          "استمرار الفجوة في {weakest_domain} بنسبة {gap}%.",
+          "الحاجة إلى تطوير {improvement_area} لتلبية معايير الاعتماد."
+        ]
+      },
+      "domains_rollup": {
+        "total_domains": 4,
+        "total_standards": 11,
+        "total_indicators": 52,
+        "domains": [
+          {
+            "domain_code": "1",
+            "domain_name": "الإدارة المدرسية",
+            "domain_name_en": "School Leadership",
+            "total_indicators": 19,
+            "achieved_indicators": "{achieved_admin}",
+            "percentage": "{admin_percentage}%",
+            "level": "{admin_level}",
+            "standards": [
+              { "standard_code": "1-1", "standard_name": "التخطيط", "indicators_count": 2, "achieved": "{achieved_planning}", "percentage": "{planning_percentage}%" },
+              { "standard_code": "1-2", "standard_name": "قيادة العملية التعليمية", "indicators_count": 5, "achieved": "{achieved_leadership}", "percentage": "{leadership_percentage}%" },
+              { "standard_code": "1-3", "standard_name": "المجتمع المدرسي", "indicators_count": 3, "achieved": "{achieved_community}", "percentage": "{community_percentage}%" },
+              { "standard_code": "1-4", "standard_name": "التطوير المؤسسي", "indicators_count": 7, "achieved": "{achieved_development}", "percentage": "{development_percentage}%" },
+              { "standard_code": "1-5", "standard_name": "حقوق المتعلم وحمايته", "indicators_count": 2, "achieved": "{achieved_rights}", "percentage": "{rights_percentage}%" }
+            ],
+            "linked_committees": ["ACC", "AAN", "SFP", "SCS"],
+            "evidence_count": "{admin_evidence_count}"
+          },
+          {
+            "domain_code": "2",
+            "domain_name": "التعليم والتعلم",
+            "domain_name_en": "Teaching and Learning",
+            "total_indicators": 13,
+            "achieved_indicators": "{achieved_teaching}",
+            "percentage": "{teaching_percentage}%",
+            "level": "{teaching_level}",
+            "standards": [
+              { "standard_code": "2-1", "standard_name": "بناء خبرات التعلم", "indicators_count": 9, "achieved": "{achieved_experiences}", "percentage": "{experiences_percentage}%" },
+              { "standard_code": "2-2", "standard_name": "تقويم التعلم", "indicators_count": 4, "achieved": "{achieved_evaluation}", "percentage": "{evaluation_percentage}%" }
+            ],
+            "linked_committees": ["VIS", "LRD", "SSC"],
+            "evidence_count": "{teaching_evidence_count}"
+          },
+          {
+            "domain_code": "3",
+            "domain_name": "نواتج التعلم",
+            "domain_name_en": "Learning Outcomes",
+            "total_indicators": 13,
+            "achieved_indicators": "{achieved_outcomes}",
+            "percentage": "{outcomes_percentage}%",
+            "level": "{outcomes_level}",
+            "standards": [
+              { "standard_code": "3-1", "standard_name": "التحصيل التعليمي", "indicators_count": 6, "achieved": "{achieved_achievement}", "percentage": "{achievement_percentage}%" },
+              { "standard_code": "3-2", "standard_name": "التطور الشخصي والصحي والاجتماعي", "indicators_count": 7, "achieved": "{achieved_personal}", "percentage": "{personal_percentage}%" }
+            ],
+            "linked_committees": ["AAN", "SGC", "NEA"],
+            "evidence_count": "{outcomes_evidence_count}",
+            "nafes_results": {
+              "arabic": { "current": "{arabic_score}%", "target": "70%", "gap": "{arabic_gap}%" },
+              "math": { "current": "{math_score}%", "target": "70%", "gap": "{math_gap}%" },
+              "science": { "current": "{science_score}%", "target": "70%", "gap": "{science_gap}%" }
+            }
+          },
+          {
+            "domain_code": "4",
+            "domain_name": "البيئة المدرسية",
+            "domain_name_en": "School Environment",
+            "total_indicators": 7,
+            "achieved_indicators": "{achieved_environment}",
+            "percentage": "{environment_percentage}%",
+            "level": "{environment_level}",
+            "standards": [
+              { "standard_code": "4-1", "standard_name": "المبنى المدرسي", "indicators_count": 4, "achieved": "{achieved_building}", "percentage": "{building_percentage}%" },
+              { "standard_code": "4-2", "standard_name": "الأمن والسلامة", "indicators_count": 3, "achieved": "{achieved_safety}", "percentage": "{safety_percentage}%" }
+            ],
+            "linked_committees": ["SSC", "EIT"],
+            "evidence_count": "{environment_evidence_count}"
+          }
+        ]
+      },
+      "evidence_summary": {
+        "total_evidence": "{total_evidence_count}",
+        "by_type": [
+          { "type": "محضر اجتماع رسمي معتمد", "count": "{count_meetings}" },
+          { "type": "خطة عمل معتمدة ومؤرخة", "count": "{count_plans}" },
+          { "type": "استمارة متابعة فردية", "count": "{count_forms}" },
+          { "type": "تقرير ختامي مصور", "count": "{count_reports}" },
+          { "type": "كشف درجات من نور", "count": "{count_grades}" },
+          { "type": "شهادة شكر وتكريم", "count": "{count_certificates}" },
+          { "type": "بيان توقيعات واستلام", "count": "{count_signatures}" }
+        ]
+      },
+      "recommendations": {
+        "immediate_actions": [
+          "معالجة الفجوة في مؤشر {critical_indicator} قبل الزيارة الميدانية.",
+          "استكمال {missing_evidence} شاهداً ناقصاً في {target_domain}.",
+          "تنفيذ {training_count} ورشة تدريبية للمعلمين على {training_topic}."
+        ],
+        "strategic_priorities": [
+          "تحسين نتائج نافس في {weakest_subject} بنسبة {target_improvement}%.",
+          "رفع نسبة الجاهزية الكلية إلى {target_readiness}% بنهاية العام.",
+          "تطوير نظام المتابعة الداخلية لضمان الاستدامة."
+        ]
+      },
+      "approval_block": {
+        "prepared_by": "فريق التقويم الذاتي",
+        "reviewed_by": "لجنة التميز والجودة",
+        "approved_by": "مدير المدرسة: نايف بن سمير حجيف المخلفي",
+        "school_stamp": "ختم المدرسة",
+        "submission_date": "{submission_date}هـ"
+      }
+    },
+
+    "system_metadata": {
+      "total_sections": 4,
+      "total_registers_schemas": 4,
+      "total_committees": 9,
+      "total_meeting_recommendations": 27,
+      "total_appointment_template": 1,
+      "total_rollup_domains": 4,
+      "total_rollup_standards": 11,
+      "total_rollup_indicators": 52,
+      "linked_evidence_types": 7,
+      "version": "1.0.1",
+      "created_at": "1448-05-06",
+      "framework": "هيئة تقويم التعليم والتدريب — ETEC",
+      "integration_endpoints": {
+        "registers_generator": "/api/registers/generate/{register_code}",
+        "minutes_generator": "/api/committees/{committee_code}/minutes",
+        "appointment_generator": "/api/staff/{staff_nid}/appointment-letter",
+        "rollup_generator": "/api/reports/etec-annual-rollup"
+      }
+    }
+  }
+}

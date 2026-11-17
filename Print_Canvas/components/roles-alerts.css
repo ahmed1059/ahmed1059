@@ -1,0 +1,113 @@
+.notify-wrap {
+    position: relative;
+}
+
+.notify-badge {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: #dc2626;
+    color: #ffffff;
+    font-size: 10px;
+    line-height: 16px;
+    text-align: center;
+}
+
+.notify-badge[hidden] {
+    display: none;
+}
+
+.notify-panel {
+    position: absolute;
+    top: 46px;
+    left: 0;
+    width: min(360px, 86vw);
+    max-height: 420px;
+    overflow: auto;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+    text-align: right;
+    z-index: 30;
+}
+
+.notify-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.notify-tabs button {
+    border: 1px solid #99f6e4;
+    background: #f8fafc;
+    border-radius: 8px;
+    min-height: 32px;
+    padding: 0 10px;
+    font-family: "Tajawal", "Cairo", sans-serif;
+    cursor: pointer;
+}
+
+.notify-tabs button.is-active {
+    background: #0d766e;
+    color: #ffffff;
+}
+
+.notify-item {
+    display: block;
+    width: 100%;
+    margin: 0 0 8px;
+    padding: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #ffffff;
+    text-align: right;
+    cursor: pointer;
+    font-family: "Tajawal", "Cairo", sans-serif;
+}
+
+.notify-item strong,
+.notify-item span {
+    display: block;
+}
+
+.notify-priority-1 {
+    border-color: #fecaca;
+}
+
+.composite-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-inline-start: 8px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #f0fdfa;
+    color: #115e59;
+    font-size: 14px;
+}
+
+#self-achievement {
+    margin: 12px 0;
+}
+
+body.role-self #plan-generator,
+body.role-self .booklet,
+body.role-self .plan-switch,
+body.role-self #tab-committees,
+body.role-self #nav-committees,
+body.role-self #tab-measurement,
+body.role-self #nav-measurement,
+body.role-self .kpi-grid,
+body.role-supervision .kpi-staff,
+body.role-supervision #tab-committees,
+body.role-supervision #nav-committees,
+body.role-self #print-measurement,
+body.role-supervision #print-measurement {
+    display: none !important;
+}

@@ -1,0 +1,1904 @@
+{
+  "meta": {
+    "created": "2026-11-01",
+    "purpose": "قاعدة ربط برنامج النواة ← هدف استراتيجي / أهداف تفصيلية / مؤشرات ETEC — بلا اختراع وبلا كتابة فوق programs.json",
+    "rule": "الخلية بلا مصدر موثّق تبقى فارغة؛ التعارضات تُعرض ولا تُدمَج تلقائيًا في النواة",
+    "sources": {
+      "programs_json": "Print_Canvas/components/_shared/programs.json",
+      "principal": "Core_Engine/content_bank/principal.json",
+      "etec": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+      "desktop_txt": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+      "sample_plan_1447": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)"
+    },
+    "confidence_legend": {
+      "saved": "موجود في programs.json",
+      "source_explicit": "منصوص صراحة في ملف السجلات/التقارير على سطح المكتب",
+      "etec_aligned": "محاذاة بنص مؤشر إطار هيئة التقويم 2026 المحفوظ في المشروع",
+      "reference_analog": "من نموذج خطة تشغيلية عامة 1447 — مرجع نظري فقط",
+      "saved_keep": "يُبقى المحفوظ مع تنبيه مراجعة",
+      "unmapped": "لا مصدر كافٍ"
+    },
+    "stats": {
+      "total": 47,
+      "decision_approved": 15,
+      "with_executive_fields": 3,
+      "open_conflicts": 0
+    },
+    "telegram_note": "لم يُسحب محتوى تيليجرام في هذه الجولة (قيود جلب خارجي). اعتمدنا الملف المحلي + إطار الهيئة داخل المشروع + نموذج خطة عامة منشور.",
+    "not_applied_to_programs_json": true,
+    "updated": "2026-11-01",
+    "decision_wave": "168-b / أمر رئيس المشروع — اعتماد تعارضات + برامج المدير الثلاثة",
+    "scope": "خطتي فقط · لا كتيب · لا programs.json",
+    "code_schema_note": "رموز التهيئة الرسمية: 1-3-1-3 · 2-1-1-7 · 4-1-1-1 · 4-1-1-3. aliases الخاطئة السابقة موثّقة في performance_metrics.code_aliases.",
+    "ssot_wave": "A-SSOT-correct"
+  },
+  "programs": [
+    {
+      "program_id": "loss",
+      "name": "معالجة الفاقد التعليمي والرفع التحصيلي",
+      "kind": "برنامج",
+      "owner_role": "vice_teachers",
+      "register_id": 3,
+      "register_label": "سجل المناهج والتقويم",
+      "strategic_goal": {
+        "id": "G3",
+        "text": "رفع مستوى التحصيل العلمي للطلاب وتحسين نتائجهم في الاختبارات الوطنية (نافس).",
+        "domain": "نواتج التعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "3-1-1-1",
+          "text": "يحقق المتعلمون نتائج مرتفعة في مجال القراءة وفقًا للاختبارات الوطنية.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "نتائج القراءة — اختبارات وطنية"
+        },
+        {
+          "code": "3-1-1-2",
+          "text": "يحقق المتعلمون نتائج مرتفعة في مجال الرياضيات وفقًا للاختبارات الوطنية.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "نتائج الرياضيات — اختبارات وطنية"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "تقديم دروس تقوية للمستفيدين ذوي الأداء المنخفض في المواد الأساسية",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "هدف تفصيلي 2/2 في نموذج 1447"
+        }
+      ],
+      "success_indicator_saved": "انتقال 80% من الطلاب المستهدفين إلى مستوى متوسط فأعلى",
+      "target_audience_saved": "الطلاب الحاصلون على تقدير دون المتوسط في الاختبارات التشخيصية",
+      "duration_saved": "الأسابيع الستة الأولى من الفصل الدراسي",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "discipline",
+      "name": "تعزيز الانضباط المدرسي والحد من الغياب",
+      "kind": "برنامج",
+      "owner_role": "vice_students",
+      "strategic_goal": {
+        "id": "G5",
+        "text": "تعزيز السلوك الإيجابي والصحة النفسية والجسدية للطلاب.",
+        "domain": "التطور الشخصي والصحي والاجتماعي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-2-1-3",
+          "text": "تطبق المدرسة إجراءات محددة؛ لدعم الانضباط المدرسي، وتتابع الالتزام بها.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "سجلات الغياب/الانضباط — المؤشر 1-2-1-3"
+        },
+        {
+          "code": "3-2-1-5",
+          "text": "يلتزم المتعلمون بقواعد السلوك والانضباط المدرسي.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "التزام المتعلمين بقواعد السلوك والانضباط"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "توعية جميع الطلاب بأهمية الانضباط المدرسي",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "هدف تفصيلي 4/4"
+        }
+      ],
+      "success_indicator_saved": "تحقيق نسبة انضباط عامة لا تقل عن 96% طوال العام الدراسي",
+      "target_audience_saved": "جميع طلاب المدرسة (مع تركيز على متكرري الغياب)",
+      "duration_saved": "مستمر طوال العام الدراسي",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "career",
+      "name": "التوجيه المهني والتعليمي",
+      "kind": "برنامج",
+      "owner_role": "student_counselor",
+      "strategic_goal": {
+        "id": "G5",
+        "text": "تعزيز السلوك الإيجابي والصحة النفسية والجسدية للطلاب.",
+        "domain": "التطور الشخصي والصحي والاجتماعي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-2-1-5",
+          "text": "تنفذ المدرسة برامج وأنشطة إثرائية؛ لتطوير مواهب المتعلمين، وتهيئهم للمستقبل، وتتابعها.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "برامج تهيئ المتعلمين لمستقبلهم الأكاديمي والمهني"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "إكمال 100% من طلاب الثالث متوسط لمقياس الميول وجلسة توجيه واحدة على الأقل",
+      "target_audience_saved": "طلاب الصف الثالث المتوسط",
+      "duration_saved": "الفصل الدراسي الثاني",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "gifted",
+      "name": "رعاية الموهوبين والمبتكرين",
+      "kind": "برنامج",
+      "owner_role": "activity_leader",
+      "strategic_goal": {
+        "id": "G3",
+        "text": "رفع مستوى التحصيل العلمي للطلاب وتحسين نتائجهم في الاختبارات الوطنية (نافس).",
+        "domain": "نواتج التعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-2-1-5",
+          "text": "تنفذ المدرسة برامج وأنشطة إثرائية؛ لتطوير مواهب المتعلمين، وتهيئهم للمستقبل، وتتابعها.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "سجلات رعاية الموهوبين/الكشف — المؤشر 1-2-1-5"
+        },
+        {
+          "code": "2-1-1-1",
+          "text": "توفر المدرسة فرصًا متكافئة للتعلم تلبي احتياجات المتعلمين، ومنهم ذوو الإعاقة والموهوبون.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "فرص متكافئة للموهوبين"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "خطة رعاية موثّقة لـ 100% من المرشحين ومشاركة 70% منهم في نشاط إثرائي فصلي على الأقل",
+      "target_audience_saved": "الطلاب الموهوبون",
+      "duration_saved": "مستمر طوال العام الدراسي",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "partnership",
+      "name": "الشراكة المجتمعية لدعم التعلم",
+      "kind": "برنامج",
+      "owner_role": "principal",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "المؤشر 1-3-1-3 — الشراكة المجتمعية لدعم التعلم"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "بناء شراكات نوعية موثقة مع مؤسسات المجتمع وأولياء الأمور وتوظيفها في برامج تخدم التعلم",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "من تعريف رسالة الشراكة في ملف السجلات"
+        },
+        {
+          "text": "بناء شراكات مع مؤسسات المجتمع المحلي لدعم البرامج التعليمية",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "هدف تفصيلي 3/5"
+        }
+      ],
+      "success_indicator_saved": "تحقيق 5 شراكات فاعلة سنوياً وحضور أولياء أمور لا يقل عن 70% في اللقاءات المعتمدة",
+      "target_audience_saved": "أولياء الأمور، المجتمع المحلي",
+      "duration_saved": "مستمر طوال العام الدراسي",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "safety",
+      "name": "الأمن والسلامة المدرسية",
+      "kind": "برنامج",
+      "owner_role": "vice_students",
+      "strategic_goal": {
+        "id": "G4",
+        "text": "توفير بيئة مدرسية آمنة وصحية محفزة على التعلم وفق معايير الأمن والسلامة.",
+        "domain": "البيئة المدرسية",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "4-2-1-1",
+          "text": "تتوافر في مبنى المدرسة ومرافقها جميع متطلبات الأمن والسلامة.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "متطلبات الأمن والسلامة"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "تنفيذ 100% من فرضيات الإخلاء المجدولة ورفع نواقص السلامة بمحاضر رسمية",
+      "target_audience_saved": "جميع المنسوبين والطلاب",
+      "duration_saved": "مستمر طوال العام الدراسي",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "nafs",
+      "name": "نافس للاستعداد للاختبارات الوطنية",
+      "kind": "برنامج",
+      "owner_role": "vice_teachers",
+      "strategic_goal": {
+        "id": "G3",
+        "text": "رفع مستوى التحصيل العلمي للطلاب وتحسين نتائجهم في الاختبارات الوطنية (نافس).",
+        "domain": "نواتج التعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "3-1-1-1",
+          "text": "يحقق المتعلمون نتائج مرتفعة في مجال القراءة وفقًا للاختبارات الوطنية.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": ""
+        },
+        {
+          "code": "3-1-1-2",
+          "text": "يحقق المتعلمون نتائج مرتفعة في مجال الرياضيات وفقًا للاختبارات الوطنية.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": ""
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "تدريب المستهدفين على المفاهيم الأساسية في اختبارات نافس",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "هدف تفصيلي 3/2"
+        }
+      ],
+      "success_indicator_saved": "تحسن متوسط المدرسة في نافس بنسبة لا تقل عن 10% عن العام السابق",
+      "target_audience_saved": "طلاب الصفوف المستهدفة في نافس",
+      "duration_saved": "قبل نافس وخلال فترات المراجعة المعتمدة",
+      "conflicts": [],
+      "notes": "ملف سطح المكتب يذكر «تقرير مبادرة الاستعداد للاختبارات الوطنية نافس» دون أهداف تفصيلية محفوظة.",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "support",
+      "name": "حصص الدعم والتقوية",
+      "kind": "برنامج",
+      "owner_role": "vice_teachers",
+      "strategic_goal": {
+        "id": "G3",
+        "text": "رفع مستوى التحصيل العلمي للطلاب وتحسين نتائجهم في الاختبارات الوطنية (نافس).",
+        "domain": "نواتج التعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-6",
+          "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "المهارات القرائية والعددية الأساسية"
+        },
+        {
+          "code": "2-2-1-3",
+          "text": "تحلل المدرسة نتائج التقويم، وتوظفها في تحسين عمليات التعليم والتعلم والتقويم.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "توظيف نتائج التقويم في التحسين"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "تقديم دروس تقوية للمستفيدين ذوي الأداء المنخفض في المواد الأساسية",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "هدف تفصيلي 2/2"
+        }
+      ],
+      "success_indicator_saved": "انتقال 70% من المستهدفين مستوىً تحصيلياً واحداً على الأقل",
+      "target_audience_saved": "الطلاب الحاصلون على تقدير دون المتوسط في الاختبارات التشخيصية",
+      "duration_saved": "فصلي وفق جدول الدعم المعتمد",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "visits",
+      "name": "الزيارات الصفية الاستطلاعية والتقويمية",
+      "kind": "برنامج",
+      "owner_role": "vice_teachers",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [],
+      "detailed_objectives": [
+        {
+          "text": "تحسين الممارسات التدريسية عبر الزيارات الصفية",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "من هدف تفصيلي 1/1 في نموذج خطة 1447 — ليس محفوظًا لهذه المدرسة"
+        }
+      ],
+      "success_indicator_saved": "تنفيذ 100% من الزيارات المخططة ووصول 85% من المعلمين لتطبيق الاستراتيجيات المستهدفة",
+      "target_audience_saved": "جميع معلمي المواد",
+      "duration_saved": "مستمر وفق خطة الزيارات",
+      "conflicts": [],
+      "notes": "لا وسم مؤشر صريح باسم الزيارات في ملف سطح المكتب؛ الهدف الاستراتيجي G2 محفوظ.",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "plc",
+      "name": "مجتمعات التعلم المهنية (PLCs)",
+      "kind": "برنامج",
+      "owner_role": "vice_teachers",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-4-1-5",
+          "text": "تدعم المدرسة التطوير المهني لمنسوبيها وفقًا لنتائج التقويم وتحليل احتياجاتهم.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "التطوير المهني وفق الاحتياج — يقابل في ملف سطح المكتب عنوانًا قديم الترقيم 1-4-1-2"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "عقد مجتمع تعلم واحد على الأقل لكل تخصص شهرياً مع محضر وأثر موثّق",
+      "target_audience_saved": "مجتمعات معلمي المواد",
+      "duration_saved": "مستمر طوال العام",
+      "conflicts": [],
+      "notes": "تنبيه ترقيم: ملف السجلات يذكر 1-4-1-2 للتطوير المهني؛ إطار المشروع 2026 يضع النص في 1-4-1-5.",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "evacuation",
+      "name": "فرضيات الإخلاء الدورية",
+      "kind": "برنامج",
+      "owner_role": "vice_students",
+      "strategic_goal": {
+        "id": "G4",
+        "text": "توفير بيئة مدرسية آمنة وصحية محفزة على التعلم وفق معايير الأمن والسلامة.",
+        "domain": "البيئة المدرسية",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "4-2-1-1",
+          "text": "تتوافر في مبنى المدرسة ومرافقها جميع متطلبات الأمن والسلامة.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "متطلبات الأمن والسلامة / فرضيات الإخلاء ضمن شواهد الأمن"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "تنفيذ 100% من الفرضيات المجدولة (3 سنوياً)",
+      "target_audience_saved": "جميع المنسوبين والطلاب",
+      "duration_saved": "ثلاث فرضيات على الأقل خلال العام",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "building",
+      "name": "صيانة المبنى والمرافق",
+      "kind": "برنامج",
+      "owner_role": "vice_students",
+      "strategic_goal": {
+        "id": "G4",
+        "text": "توفير بيئة مدرسية آمنة وصحية محفزة على التعلم وفق معايير الأمن والسلامة.",
+        "domain": "البيئة المدرسية",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "4-2-1-2",
+          "text": "تتابع المدرسة صيانة المبنى، وجميع مرافقه وتجهيزاته بشكل دوري.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "متابعة صيانة المبنى ومرافقه"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "تعزيز الوعي بأهمية الحفاظ على مرافق المدرسة",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "هدف تفصيلي 1/3"
+        }
+      ],
+      "success_indicator_saved": "إغلاق 80% من ملاحظات الصيانة المرفوعة خلال الفصل وإخراج مؤشري المبنى من التهيئة",
+      "target_audience_saved": "جميع المنسوبين والطلاب",
+      "duration_saved": "مستمر مع جولات شهرية",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "parent_meet",
+      "name": "لقاء الشراكة مع أولياء الأمور",
+      "kind": "برنامج",
+      "owner_role": "principal",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-2",
+          "text": "تعزز المدرسة مشاركة الأسرة في تعلم أبنائهم، والتحضير لمستقبلهم.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "مشاركة الأسرة في تعلم الأبناء"
+        },
+        {
+          "code": "1-3-1-1",
+          "text": "تعزز المدرسة بناء العلاقات الإيجابية والتعاون في المجتمع المدرسي.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "مجالس أولياء الأمور — العلاقات الإيجابية (قريب)"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "تعزيز التواصل بين المدرسة وأولياء الأمور من خلال لقاءات دورية",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "هدف تفصيلي 1/5"
+        },
+        {
+          "text": "تشجيع أولياء الأمور على المشاركة في الأنشطة المدرسية",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "هدف تفصيلي 2/5"
+        }
+      ],
+      "success_indicator_saved": "حضور لا يقل عن 70% من أولياء الأمور المستدعين في اللقاءات المعتمدة",
+      "target_audience_saved": "أولياء الأمور، المجتمع المحلي",
+      "duration_saved": "لقاءات فصلية وفق التقويم",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "irtiqaa",
+      "name": "رائد الشراكة المجتمعية (ارتقاء)",
+      "kind": "مبادرة",
+      "owner_role": "activity_leader",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "تنسيق الشراكة المجتمعية"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "بناء شراكات نوعية موثقة وتنسيق تفعيلها مع لجنة التوجيه والتميز",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "من تعريف منسق الشراكة في ملف السجلات"
+        }
+      ],
+      "success_indicator_saved": "تنفيذ مبادرتين ارتقاء على الأقل لكل فصل دراسي بأثر موثّق",
+      "target_audience_saved": "أولياء الأمور، المجتمع المحلي",
+      "duration_saved": "مستمر وفق مبادرات ارتقاء",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "volunteer",
+      "name": "العمل التطوعي الطلابي",
+      "kind": "برنامج",
+      "owner_role": "activity_leader",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "3-2-1-4",
+          "text": "يشارك المتعلمون في الأنشطة المجتمعية والأعمال التطوعية.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "مشاركة المتعلمين في الأنشطة المجتمعية والأعمال التطوعية"
+        },
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "الشراكة المجتمعية — ربط ثانوي محفوظ سابقًا في الأرشيف"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "مشاركة لا تقل عن 60% من الطلاب في عمل تطوعي واحد على الأقل سنوياً",
+      "target_audience_saved": "جميع طلاب المدرسة",
+      "duration_saved": "مستمر مع مناسبات وطنية ومجتمعية",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "planning",
+      "name": "التخطيط الاستراتيجي المدرسي",
+      "kind": "برنامج",
+      "owner_role": "principal",
+      "strategic_goal": {
+        "id": "G1",
+        "text": "تطوير منظومة القيادة المدرسية وتفعيل التخطيط الاستراتيجي المبني على البيانات.",
+        "domain": "القيادة المدرسية",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-1-1-1",
+          "text": "تضع المدرسة خطة تشغيلية شاملة وفق أهداف تطويرية محددة.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "خطة تشغيلية شاملة"
+        },
+        {
+          "code": "1-1-1-2",
+          "text": "تتابع المدرسة تنفيذ خطتها التشغيلية، وتطورها بما يضمن تحقيق أهدافها.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "متابعة الخطة التشغيلية"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "اعتماد الخطة في وقتها وتنفيذ لا يقل عن 90% من البرامج التطويرية المخططة",
+      "target_audience_saved": "فريق القيادة وأصحاب الخطط",
+      "duration_saved": "بداية العام مع مراجعات فصلية",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "pd",
+      "name": "التطوير المهني الداخلي",
+      "kind": "برنامج",
+      "owner_role": "vice_teachers",
+      "strategic_goal": {
+        "id": "G6",
+        "text": "تطوير الكوادر التعليمية والإدارية مهنيًا وتحسين كفاءتهم.",
+        "domain": "التطوير المؤسسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-4-1-5",
+          "text": "تدعم المدرسة التطوير المهني لمنسوبيها وفقًا لنتائج التقويم وتحليل احتياجاتهم.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "التطوير المهني للمنسوبين"
+        },
+        {
+          "code": "1-4-1-4",
+          "text": "تدعم المدرسة منسوبيها للحصول على الرخصة المهنية، وتتابعها.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "الرخصة المهنية"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "تنفيذ دورة تدريبية داخلية دورية لرفع كفاءة المهارات التدريسية",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "هدف تفصيلي 3/1 في نموذج 1447"
+        }
+      ],
+      "success_indicator_saved": "حضور 100% من المعلمين لبرنامج تطويري واحد على الأقل كل فصل",
+      "target_audience_saved": "المعلمون والإداريون",
+      "duration_saved": "فصلي وفق خطة التطوير المهني",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "fun_math",
+      "name": "مبادرة الرياضيات الممتعة",
+      "kind": "مبادرة",
+      "owner_role": "teacher",
+      "strategic_goal": {
+        "id": "G3",
+        "text": "رفع مستوى التحصيل العلمي للطلاب وتحسين نتائجهم في الاختبارات الوطنية (نافس).",
+        "domain": "نواتج التعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-5",
+          "text": "تنفذ المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-2-1-1",
+          "text": "تطبق المدرسة أساليب وأدوات تقويم متنوعة؛ للكشف عن مستويات أداء المتعلمين المختلفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "comm_skills",
+      "name": "برنامج مهارات التواصل",
+      "kind": "برنامج",
+      "owner_role": "teacher",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-1-1-5",
+          "text": "تنفذ المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "study_skills",
+      "name": "برنامج مهارات المذاكرة",
+      "kind": "برنامج",
+      "owner_role": "teacher",
+      "strategic_goal": {
+        "id": "G3",
+        "text": "رفع مستوى التحصيل العلمي للطلاب وتحسين نتائجهم في الاختبارات الوطنية (نافس).",
+        "domain": "نواتج التعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-5",
+          "text": "تنفذ المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-2-1-1",
+          "text": "تطبق المدرسة أساليب وأدوات تقويم متنوعة؛ للكشف عن مستويات أداء المتعلمين المختلفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "basic_mastery",
+      "name": "برنامج إتقان المهارات الأساسية",
+      "kind": "برنامج",
+      "owner_role": "teacher",
+      "strategic_goal": {
+        "id": "G3",
+        "text": "رفع مستوى التحصيل العلمي للطلاب وتحسين نتائجهم في الاختبارات الوطنية (نافس).",
+        "domain": "نواتج التعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-2-1-1",
+          "text": "تطبق المدرسة أساليب وأدوات تقويم متنوعة؛ للكشف عن مستويات أداء المتعلمين المختلفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-2-1-2",
+          "text": "تطبق المدرسة أساليب وأدوات متنوعة؛ لتقويم نواتج التعلم المستهدفة في مناهج التعليم.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-1-1-6",
+          "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "المهارات الأساسية"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "subject_support_teacher",
+      "name": "برنامج دعم في المواد الأساسية",
+      "kind": "برنامج",
+      "owner_role": "teacher",
+      "strategic_goal": {
+        "id": "G3",
+        "text": "رفع مستوى التحصيل العلمي للطلاب وتحسين نتائجهم في الاختبارات الوطنية (نافس).",
+        "domain": "نواتج التعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-2-1-1",
+          "text": "تطبق المدرسة أساليب وأدوات تقويم متنوعة؛ للكشف عن مستويات أداء المتعلمين المختلفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-2-1-3",
+          "text": "تحلل المدرسة نتائج التقويم، وتوظفها في تحسين عمليات التعليم والتعلم والتقويم.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "critical_thinking",
+      "name": "برنامج التفكير الناقد",
+      "kind": "برنامج",
+      "owner_role": "teacher",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-5",
+          "text": "تنفذ المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-2-1-1",
+          "text": "تطبق المدرسة أساليب وأدوات تقويم متنوعة؛ للكشف عن مستويات أداء المتعلمين المختلفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-1-1-7",
+          "text": "تنمي المدرسة مهارات التفكير والبحث والابتكار لدى المتعلمين.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "تنمية مهارات التفكير"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "creative_writing",
+      "name": "برنامج الكتابة الإبداعية",
+      "kind": "برنامج",
+      "owner_role": "teacher",
+      "strategic_goal": {
+        "id": "G3",
+        "text": "رفع مستوى التحصيل العلمي للطلاب وتحسين نتائجهم في الاختبارات الوطنية (نافس).",
+        "domain": "نواتج التعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-2-1-1",
+          "text": "تطبق المدرسة أساليب وأدوات تقويم متنوعة؛ للكشف عن مستويات أداء المتعلمين المختلفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-1-1-7",
+          "text": "تنمي المدرسة مهارات التفكير والبحث والابتكار لدى المتعلمين.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "مهارات التفكير والبحث والابتكار"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "creative_writing_club",
+      "name": "نادي الكتابة الإبداعية",
+      "kind": "نادي",
+      "owner_role": "teacher",
+      "strategic_goal": {
+        "id": "G3",
+        "text": "رفع مستوى التحصيل العلمي للطلاب وتحسين نتائجهم في الاختبارات الوطنية (نافس).",
+        "domain": "نواتج التعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-1-1-7",
+          "text": "تنمي المدرسة مهارات التفكير والبحث والابتكار لدى المتعلمين.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": ""
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "rifq",
+      "name": "برنامج رفق للحد من التنمر",
+      "kind": "برنامج",
+      "owner_role": "vice_students",
+      "strategic_goal": {
+        "id": "G5",
+        "text": "تعزيز السلوك الإيجابي والصحة النفسية والجسدية للطلاب.",
+        "domain": "التطور الشخصي والصحي والاجتماعي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-2-1-1",
+          "text": "تعزز المدرسة القيم الإسلامية، والهوية الوطنية.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "1-2-1-1"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "green_school",
+      "name": "مبادرة مدرسة خضراء",
+      "kind": "مبادرة",
+      "owner_role": "vice_students",
+      "strategic_goal": {
+        "id": "G4",
+        "text": "توفير بيئة مدرسية آمنة وصحية محفزة على التعلم وفق معايير الأمن والسلامة.",
+        "domain": "البيئة المدرسية",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "مذكورة ضمن فرص تطوع الشراكة المجتمعية تحت 1-3-1-3"
+        },
+        {
+          "code": "4-2-1-3",
+          "text": "تتابع المدرسة نظافة المبنى المدرسي، وجميع مرافقه بشكل مستمر.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "نظافة/بيئة — محاذاة ثانوية"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "tree_season",
+      "name": "مبادرة موسم التشجير الوطني",
+      "kind": "مبادرة",
+      "owner_role": "vice_students",
+      "strategic_goal": {
+        "id": "G4",
+        "text": "توفير بيئة مدرسية آمنة وصحية محفزة على التعلم وفق معايير الأمن والسلامة.",
+        "domain": "البيئة المدرسية",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "مبادرة مجتمعية/بيئية ضمن شراكة"
+        },
+        {
+          "code": "3-2-1-4",
+          "text": "يشارك المتعلمون في الأنشطة المجتمعية والأعمال التطوعية.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "مشاركة في أنشطة مجتمعية"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "disciplined_class",
+      "name": "مسابقة الفصل المنضبط",
+      "kind": "مسابقة",
+      "owner_role": "vice_students",
+      "strategic_goal": {
+        "id": "G5",
+        "text": "تعزيز السلوك الإيجابي والصحة النفسية والجسدية للطلاب.",
+        "domain": "التطور الشخصي والصحي والاجتماعي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-2-1-1",
+          "text": "تعزز المدرسة القيم الإسلامية، والهوية الوطنية.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        },
+        {
+          "code": "3-2-1-5",
+          "text": "يلتزم المتعلمون بقواعد السلوك والانضباط المدرسي.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "1-2-1-1",
+          "3-2-1-5"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "reading_init",
+      "name": "مبادرة القراءة",
+      "kind": "مبادرة",
+      "owner_role": "librarian",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        },
+        {
+          "code": "2-1-1-6",
+          "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "تحسين مهارة القراءة لدى نسبة مستهدفة من الطلاب",
+          "confidence": "reference_analog",
+          "source": "خطة تشغيلية نموذجية 1447 (مرجع نظري فقط — ليست بيانات هذه المدرسة)",
+          "note": "هدف تفصيلي 1/2"
+        }
+      ],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "2-1-1-2",
+          "2-1-1-6"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "reading_for_all",
+      "name": "مبادرة القراءة للجميع",
+      "kind": "مبادرة",
+      "owner_role": "librarian",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        },
+        {
+          "code": "2-1-1-6",
+          "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "2-1-1-2",
+          "2-1-1-6"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "reading_club",
+      "name": "نادي القراءة",
+      "kind": "نادي",
+      "owner_role": "librarian",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        },
+        {
+          "code": "2-1-1-6",
+          "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "2-1-1-2",
+          "2-1-1-6"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "free_reading_week",
+      "name": "أسبوع القراءة الحرة",
+      "kind": "برنامج",
+      "owner_role": "librarian",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        },
+        {
+          "code": "2-1-1-6",
+          "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "2-1-1-2",
+          "2-1-1-6"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "sources_research",
+      "name": "برنامج البحث في المصادر",
+      "kind": "برنامج",
+      "owner_role": "librarian",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        },
+        {
+          "code": "2-1-1-6",
+          "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "2-1-1-2",
+          "2-1-1-6"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "library_free_reading",
+      "name": "برنامج القراءة الحرة في حصص المكتبة",
+      "kind": "برنامج",
+      "owner_role": "librarian",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        },
+        {
+          "code": "2-1-1-6",
+          "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "2-1-1-2",
+          "2-1-1-6"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "seerah_reading_contest",
+      "name": "مسابقة القراءة في السيرة النبوية",
+      "kind": "مسابقة",
+      "owner_role": "librarian",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-1-1-6",
+          "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "قراءة"
+        },
+        {
+          "code": "1-2-1-1",
+          "text": "تعزز المدرسة القيم الإسلامية، والهوية الوطنية.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "قيم وهوية"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "reading_contest",
+      "name": "مسابقة القراءة",
+      "kind": "مسابقة",
+      "owner_role": "librarian",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-2",
+          "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+          "confidence": "saved",
+          "source": "Print_Canvas/components/_shared/programs.json",
+          "note": "حقل indicator_codes في النواة"
+        },
+        {
+          "code": "2-1-1-6",
+          "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": ""
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "national_day",
+      "name": "برنامج اليوم الوطني",
+      "kind": "برنامج",
+      "owner_role": "activity_leader",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        },
+        {
+          "code": "3-2-1-1",
+          "text": "يظهر المتعلمون الاعتزاز بالقيم والهوية الوطنية.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "تفعيل شراكات مجتمعية فعلية مع مؤسسات محلية، وتطوير خطة تشغيلية أكثر مرونة وطموحاً.",
+          "confidence": "source_explicit",
+          "source": "خطة التحسين الرسمية لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "من خطة التحسين — يخدم 1-3-1-3 (تهيئة). تصحيح: ليس 3-1-3-1."
+        }
+      ],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "موسمي — اليوم الوطني",
+      "conflicts": [],
+      "notes": "الإبقاء على 1-3-1-3 + إضافة 3-2-1-1 (الهوية — تميز في التقرير).",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "1-3-1-3",
+          "3-2-1-1"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      },
+      "executive_fields": {
+        "executive_goal": "تفعيل شراكات مجتمعية فعلية مع مؤسسات محلية، وتطوير خطة تشغيلية أكثر مرونة وطموحاً.",
+        "duration": "فصل دراسي كامل",
+        "implementers": "مدير المدرسة",
+        "shared_with": "لجنة التميز",
+        "external_support": "فارغ معتمد",
+        "success_indicator": "فارغ معتمد",
+        "source_duration": "خطة التحسين الرسمية لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+        "source_roles": "خطة التحسين الرسمية لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+        "note": "مؤشرات نافس تخص التحصيل؛ هذه البرامج مربوطة بالشراكة 1-3-1-3."
+      }
+    },
+    {
+      "program_id": "school_broadcast",
+      "name": "برنامج الإذاعة المدرسية",
+      "kind": "برنامج",
+      "owner_role": "activity_leader",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "تفعيل شراكات مجتمعية فعلية مع مؤسسات محلية، وتطوير خطة تشغيلية أكثر مرونة وطموحاً.",
+          "confidence": "source_explicit",
+          "source": "خطة التحسين الرسمية لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "من خطة التحسين — يخدم 1-3-1-3 (تهيئة). تصحيح: ليس 3-1-3-1."
+        }
+      ],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "مستمر طوال العام",
+      "conflicts": [],
+      "notes": "الإبقاء على 1-3-1-3 — الإذاعة تخدم الشراكة (تهيئة).",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "1-3-1-3"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      },
+      "executive_fields": {
+        "executive_goal": "تفعيل شراكات مجتمعية فعلية مع مؤسسات محلية، وتطوير خطة تشغيلية أكثر مرونة وطموحاً.",
+        "duration": "فصل دراسي كامل",
+        "implementers": "مدير المدرسة",
+        "shared_with": "لجنة التميز",
+        "external_support": "فارغ معتمد",
+        "success_indicator": "فارغ معتمد",
+        "source_duration": "خطة التحسين الرسمية لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+        "source_roles": "خطة التحسين الرسمية لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+        "note": "مؤشرات نافس تخص التحصيل؛ هذه البرامج مربوطة بالشراكة 1-3-1-3."
+      }
+    },
+    {
+      "program_id": "radio_program",
+      "name": "برنامج إذاعي",
+      "kind": "برنامج",
+      "owner_role": "activity_leader",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [
+        {
+          "text": "تفعيل شراكات مجتمعية فعلية مع مؤسسات محلية، وتطوير خطة تشغيلية أكثر مرونة وطموحاً.",
+          "confidence": "source_explicit",
+          "source": "خطة التحسين الرسمية لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "من خطة التحسين — يخدم 1-3-1-3 (تهيئة). تصحيح: ليس 3-1-3-1."
+        }
+      ],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "مستمر طوال العام",
+      "conflicts": [],
+      "notes": "مكرر (موسوم) · الإبقاء على 1-3-1-3.",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "1-3-1-3"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      },
+      "executive_fields": {
+        "executive_goal": "تفعيل شراكات مجتمعية فعلية مع مؤسسات محلية، وتطوير خطة تشغيلية أكثر مرونة وطموحاً.",
+        "duration": "فصل دراسي كامل",
+        "implementers": "مدير المدرسة",
+        "shared_with": "لجنة التميز",
+        "external_support": "فارغ معتمد",
+        "success_indicator": "فارغ معتمد",
+        "source_duration": "خطة التحسين الرسمية لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+        "source_roles": "خطة التحسين الرسمية لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+        "note": "مؤشرات نافس تخص التحصيل؛ هذه البرامج مربوطة بالشراكة 1-3-1-3."
+      }
+    },
+    {
+      "program_id": "white_cane_day",
+      "name": "مبادرة اليوم العالمي للعصا البيضاء",
+      "kind": "مبادرة",
+      "owner_role": "activity_leader",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "موسمي",
+      "conflicts": [],
+      "notes": "يوجد عنوان مبادرة في ملف السجلات دون أهداف تفصيلية ولا وسم مؤشر ملاصق للاسم.",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "1-3-1-3"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "speech_contest",
+      "name": "مسابقة الإلقاء",
+      "kind": "مسابقة",
+      "owner_role": "activity_leader",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "مستمر وفق خطة النشاط",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "1-3-1-3"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "sports_contests",
+      "name": "برنامج المسابقات الرياضية",
+      "kind": "برنامج",
+      "owner_role": "activity_leader",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        },
+        {
+          "code": "3-2-1-3",
+          "text": "يظهر المتعلمون التزامًا بالممارسات الصحية السليمة.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "مستمر وفق خطة النشاط",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "1-3-1-3",
+          "3-2-1-3"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "calligraphy_speech_contest",
+      "name": "مسابقة الخط والإلقاء · مطوية «لغتي هويتي»",
+      "kind": "مسابقة",
+      "owner_role": "activity_leader",
+      "strategic_goal": {
+        "id": "G7",
+        "text": "تعزيز الشراكة المجتمعية مع أولياء الأمور والمؤسسات المحلية.",
+        "domain": "المجتمع المدرسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "1-3-1-3",
+          "text": "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع.",
+          "confidence": "decision_approved",
+          "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي · التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)",
+          "note": "معتمد بقرار رئيس المشروع استنادًا للتقرير الخارجي"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "مستمر وفق خطة النشاط",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "decision_approved",
+      "decision": {
+        "approved": true,
+        "final_indicator_codes": [
+          "1-3-1-3"
+        ],
+        "source": "اعتماد رئيس المشروع — جدول التعارضات النهائي",
+        "external_report": "التقرير الخارجي لمدرسة سعد بن الربيع (قرار رئيس المشروع 2026-11-01)"
+      }
+    },
+    {
+      "program_id": "physics_med_day",
+      "name": "اليوم العالمي للفيزياء الطبية ودور ماري كوري",
+      "kind": "برنامج",
+      "owner_role": "lab_tech",
+      "strategic_goal": {
+        "id": "G2",
+        "text": "تحسين جودة عمليات التعليم والتعلم من خلال بناء خبرات تعلمية فاعلة وتقويم مستمر.",
+        "domain": "التعليم والتعلم",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-5",
+          "text": "تنفذ المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "أنشطة تعلم تطبيقية"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "موسمي",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "aligned_only"
+    },
+    {
+      "program_id": "lab_setup",
+      "name": "مبادرة تجهيز معمل العلوم",
+      "kind": "مبادرة",
+      "owner_role": "lab_tech",
+      "strategic_goal": {
+        "id": "G4",
+        "text": "توفير بيئة مدرسية آمنة وصحية محفزة على التعلم وفق معايير الأمن والسلامة.",
+        "domain": "البيئة المدرسية",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "4-1-1-3",
+          "text": "تتوافر فصول ومعامل ملائمة للعملية التعليمية تلبي احتياجات المتعلمين، ومنهم ذوو الإعاقة.",
+          "confidence": "source_explicit",
+          "source": "C:\\\\Users\\\\Toshiba\\\\Desktop\\\\البرامج والتقارير والسجلات والمحاضر .txt",
+          "note": "فصول ومعامل ملائمة"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "مستمر",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "linked"
+    },
+    {
+      "program_id": "digital_transform",
+      "name": "مبادرة التحول الرقمي",
+      "kind": "مبادرة",
+      "owner_role": "admin_assistant",
+      "strategic_goal": {
+        "id": "G6",
+        "text": "تطوير الكوادر التعليمية والإدارية مهنيًا وتحسين كفاءتهم.",
+        "domain": "التطوير المؤسسي",
+        "confidence": "saved",
+        "source": "Print_Canvas/components/_shared/programs.json + Core_Engine/content_bank/principal.json"
+      },
+      "indicators": [
+        {
+          "code": "2-1-1-4",
+          "text": "تفعل المدرسة التقنية الرقمية؛ لدعم تعلم المتعلمين وتلبية احتياجاتهم.",
+          "confidence": "etec_aligned",
+          "source": "Core_Engine/registers_bank/registers_lookup_data.json → etec_framework (وثيقة هيئة التقويم 2026)",
+          "note": "تفعيل التقنية الرقمية"
+        }
+      ],
+      "detailed_objectives": [],
+      "success_indicator_saved": "",
+      "target_audience_saved": "",
+      "duration_saved": "مستمر",
+      "conflicts": [],
+      "notes": "",
+      "link_status": "aligned_only"
+    }
+  ]
+}

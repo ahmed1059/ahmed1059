@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>معاينة Hybrid — شريط الأسبوع + لوحة اليوم</title>
+  <link rel="stylesheet" href="css/erp-nav.css?v=erp142">
+  <style>
+    body { margin: 0; padding: 20px; background: #eef4f2; font-family: Tajawal, sans-serif; }
+    .wrap { max-width: 980px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 12px 30px rgba(8,40,36,.12); }
+    h1 { color: #0b5e56; margin: 0 0 6px; font-size: 22px; }
+    .wash-hint { color: #5c675f; margin: 0 0 14px; }
+    .wash-save, .wash-add, .wash-back {
+      border: 0; border-radius: 10px; padding: 8px 12px; font: inherit; font-weight: 700; cursor: pointer;
+      background: #0b5e56; color: #fff;
+    }
+    .wash-add { background: #2f7f76; }
+    .soft-day-badge { background: #e8f6f3; color: #0b5e56; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-style: normal; }
+    .program-table { width: 100%; border-collapse: collapse; }
+    .program-table th, .program-table td { border: 1px solid #d5e4df; padding: 8px; text-align: right; }
+    .program-table th { background: #e8f6f3; color: #0b5e56; }
+  </style>
+</head>
+<body>
+  <div class="wrap soft-periods-board soft-day-board">
+    <h1>متابعة اليوم — Hybrid</h1>
+    <p class="wash-hint">شريط أسبوع (أسهم + 5 أيام + نقاط الحالة) ثم لوحة اليوم بجدول الفترات الثلاث.</p>
+
+    <div class="soft-week-strip">
+      <div class="soft-week-strip-top">
+        <label class="soft-term-field"><span>الفصل</span>
+          <select><option>كل الأسابيع</option><option>الفصل الأول</option><option selected>الفصل الثاني</option></select>
+        </label>
+        <div class="soft-week-label"><strong>أسبوع 10</strong><span>25 أكتوبر — 29 أكتوبر</span></div>
+        <button type="button" class="wash-save">اليوم</button>
+      </div>
+      <div class="soft-week-strip-row">
+        <button type="button" class="soft-week-nav" aria-label="السابق">‹</button>
+        <div class="soft-day-strip">
+          <button type="button" class="soft-day-chip soft-day-strip-chip"><strong>الأحد</strong><small>25 أكتوبر</small><span class="soft-day-dots"><span class="soft-dot is-ready"></span><span class="soft-dot is-warn"></span><span class="soft-dot is-muted"></span></span></button>
+          <button type="button" class="soft-day-chip soft-day-strip-chip is-on is-today"><strong>الإثنين</strong><small>26 أكتوبر</small><span class="soft-day-dots"><span class="soft-dot is-ready"></span><span class="soft-dot is-ready"></span><span class="soft-dot is-warn"></span></span></button>
+          <button type="button" class="soft-day-chip soft-day-strip-chip"><strong>الثلاثاء</strong><small>27 أكتوبر</small><span class="soft-day-dots"><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+          <button type="button" class="soft-day-chip soft-day-strip-chip"><strong>الأربعاء</strong><small>28 أكتوبر</small><span class="soft-day-dots"><span class="soft-dot is-warn"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+          <button type="button" class="soft-day-chip soft-day-strip-chip"><strong>الخميس</strong><small>29 أكتوبر</small><span class="soft-day-dots"><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span><span class="soft-dot is-muted"></span></span></button>
+        </div>
+        <button type="button" class="soft-week-nav" aria-label="التالي">›</button>
+      </div>
+      <p class="soft-dot-legend">
+        <span class="soft-dot is-ready"></span> منفّذ+شاهد
+        <span class="soft-dot is-warn"></span> منفّذ بلا شاهد
+        <span class="soft-dot is-muted"></span> لم يُحدَّث
+      </p>
+    </div>
+
+    <div class="daily-toolbar soft-day-toolbar" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button type="button" class="wash-save">حفظ اليوم</button>
+      <button type="button" class="wash-add">معاينة</button>
+      <button type="button" class="wash-save">طباعة</button>
+      <button type="button" class="wash-add">تعبئة اليوم</button>
+    </div>
+
+    <article class="soft-day-card">
+      <header class="soft-day-card-head">
+        <div><strong>الإثنين</strong><span>26 أكتوبر 2026م</span></div>
+        <em class="soft-day-badge">اليوم</em>
+      </header>
+      <table class="program-table soft-day-table">
+        <thead><tr><th>الفترة</th><th>التنفيذ</th><th>الشاهد</th><th>المرفق</th><th>ملاحظة</th></tr></thead>
+        <tbody>
+          <tr class="soft-day-row is-ready is-selected"><td><strong>الاصطفاف</strong></td><td>منفّذ</td><td>مرفوع</td><td><div class="soft-day-thumbs"><figure class="soft-day-thumb"><span class="soft-day-file-kind">صورة</span><button class="soft-day-thumb-del" type="button">×</button></figure></div></td><td>—</td></tr>
+          <tr class="soft-day-row is-ready"><td><strong>الاستراحة</strong></td><td>منفّذ</td><td>مرفوع</td><td><div class="soft-day-thumbs"><figure class="soft-day-thumb"><span class="soft-day-file-kind">صورة</span><button class="soft-day-thumb-del" type="button">×</button></figure></div></td><td>—</td></tr>
+          <tr class="soft-day-row is-warn"><td><strong>الصلاة</strong></td><td>منفّذ</td><td>ناقص</td><td><span class="soft-day-empty-media">—</span></td><td>بانتظار صورة</td></tr>
+        </tbody>
+      </table>
+      <div class="soft-day-tools">
+        <button type="button" class="wash-save">رفع شاهد ▾</button>
+        <span class="soft-upload-hint">الرفع لـ: الاصطفاف</span>
+      </div>
+    </article>
+  </div>
+</body>
+</html>

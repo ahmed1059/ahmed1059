@@ -1,0 +1,127 @@
+/* قالب العرض: شاشة واحدة في كل وجهة. لا يمس إطار الوثيقة ولا ترويستها ولا شريط الاعتماد. */
+
+@media screen {
+    body {
+        background: #F4F1EA;
+    }
+
+    .app-header.command-bar {
+        background: #FFFFFF;
+        border-bottom: 1px solid #E7E2D8;
+    }
+
+    #quiet-lobby,
+    .sidebar-return-btn {
+        display: none !important;
+    }
+
+    body.view-home #quiet-back {
+        display: none !important;
+    }
+
+    body.view-home .dashboard-alerts,
+    body.view-home #measurement-center,
+    body.view-home #workspace,
+    body.view-home #register-filters {
+        display: none !important;
+    }
+
+    body.view-home .app-main {
+        display: block !important;
+        height: auto !important;
+        min-height: 0 !important;
+    }
+
+    body.view-home #home-registers {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 280px)) !important;
+        justify-content: start;
+        gap: 16px;
+        margin: 0 !important;
+        padding: 24px;
+    }
+
+    body.view-home #home-registers .reg-card {
+        width: 280px;
+        max-width: 100%;
+        min-height: 176px !important;
+    }
+
+    body.view-home #home-registers .reg-card h3 {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: unset !important;
+        line-height: 1.45;
+    }
+
+    body.view-home #home-registers::before {
+        content: "السجلات";
+        grid-column: 1 / -1;
+        font-size: 22px;
+        font-weight: 800;
+        color: #1C1917;
+    }
+
+    body.view-registers #home-dashboard,
+    body.view-registers #measurement-center,
+    body.view-registers #plan-generator,
+    body.view-registers #booklet {
+        display: none !important;
+    }
+
+    body.view-measurement #home-registers,
+    body.view-measurement .dashboard-alerts,
+    body.view-measurement #workspace,
+    body.view-measurement #register-filters,
+    body.view-measurement #registers-portal {
+        display: none !important;
+    }
+
+    body.view-measurement #home-dashboard,
+    body.view-measurement #measurement-center {
+        display: block !important;
+    }
+
+    body.view-plans #home-dashboard,
+    body.view-plans #registers-portal,
+    body.view-plans #register-filters,
+    body.view-plans #measurement-center {
+        display: none !important;
+    }
+
+    body.view-plans #workspace,
+    body.view-plans #plan-form {
+        display: block !important;
+    }
+
+    body.view-committees #home-dashboard,
+    body.view-committees #registers-portal,
+    body.view-committees #plan-generator,
+    body.view-committees #measurement-center {
+        display: none !important;
+    }
+
+    .reg-card,
+    .status-card,
+    .kpi-card {
+        background: #FFFFFF;
+        border: 1px solid #E7E2D8;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(28, 25, 23, 0.05);
+    }
+
+    #register-filters {
+        padding: 16px 24px 0;
+    }
+}
+
+@media screen and (max-width: 699px) {
+    body.view-home #home-registers {
+        grid-template-columns: 1fr !important;
+        padding: 16px;
+    }
+
+    body.view-home #home-registers .reg-card {
+        width: 100%;
+    }
+}

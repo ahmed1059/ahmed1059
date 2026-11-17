@@ -1,0 +1,40 @@
+{
+  "store": "School_Data/school_1059.db",
+  "note": "السجلات في جداول القاعدة. هذا الملف خريطة الترابط فقط، وليس نسخة ثانية من الأسماء.",
+  "sources": {
+    "staff": {
+      "table": "noor_staff",
+      "api": "/api/noor/staff",
+      "dependents": ["staff-registry", "leadership", "planning-team", "intro", "signature"]
+    },
+    "students": {
+      "table": "noor_students",
+      "api": "/api/noor/students",
+      "dependents": ["school-slide", "absence"]
+    },
+    "indicators": {
+      "table": "evaluation_indicators",
+      "api": "/api/evaluation",
+      "dependents": ["indicator-registry", "domains-slide"]
+    },
+    "nafs": {
+      "table": "nafs_cards",
+      "api": "/api/nafs",
+      "dependents": ["nafs-card", "nafs-slide"]
+    },
+    "programs": {
+      "table": "school_programs",
+      "api": "/api/programs",
+      "dependents": ["school-programs", "program-slide"]
+    },
+    "improvement": {
+      "table": "improvement_actions",
+      "api": "/api/improvement",
+      "dependents": ["improvement-plan", "improvement-slide"]
+    },
+    "leadership": {
+      "store": "board1059.leadership",
+      "dependents": ["planning-team", "intro", "signature"]
+    }
+  }
+}
