@@ -98,7 +98,7 @@
   ];
   var DEFAULT_VIEW = "view-desk";
   var VIEW_TITLES = {
-    "view-home": "خريطة المراحل",
+    "view-home": "المحطات الأربع",
     "view-desk": "مكتبي",
     "view-license-form": "تعبئة الرخص المهنية",
     "view-visits": "الزيارات الصفية",
@@ -141,6 +141,44 @@
   var SIGNATURE_INK = "#000080";
   var PLAN_GOALS_PLACEHOLDER = "";
 
+  /* الوحدة 2: المحطات الأربع المعتمدة — لا localStorage للبيانات */
+  var STATION_BY_VIEW = {
+    "view-school": "foundation",
+    "view-leadership": "foundation",
+    "view-committees": "foundation",
+    "view-calendar": "foundation",
+    "view-occasions": "foundation",
+    "view-letterhead": "foundation",
+    "view-backup": "foundation",
+    "view-noor-import": "foundation",
+    "view-import-center": "foundation",
+    "view-accounts": "foundation",
+    "view-permissions": "foundation",
+    "view-trash": "foundation",
+    "view-audit": "foundation",
+    "view-health": "foundation",
+    "view-planning": "planning",
+    "view-smart-planning": "planning",
+    "view-program-add": "planning",
+    "view-plan-details": "planning",
+    "view-staff": "planning",
+    "view-deliverables": "planning",
+    "view-students-lists": "planning",
+    "view-student-registry": "planning",
+    "view-execution": "registers",
+    "view-council-details": "registers",
+    "view-visits": "registers",
+    "view-visits-plan": "registers",
+    "view-evidence": "registers",
+    "view-env-evidence": "registers",
+    "view-license-form": "registers",
+    "view-practice-evidence": "registers",
+    "view-performance": "measurement",
+    "view-external-eval": "measurement",
+    "view-soft-follow": "measurement",
+    "view-tasks": "measurement",
+    "view-task-details": "measurement"
+  };
   var stageButtons = document.querySelectorAll("[data-aj-stage]");
   var statusEl = document.getElementById("aj-status");
   var loadingEl = document.getElementById("aj-loading");
@@ -2103,6 +2141,7 @@
 
   function syncChrome(viewId) {
     var isHome = viewId === "view-home" || viewId === "view-desk";
+    var stationId = STATION_BY_VIEW[viewId] || "";
     if (topbarTitle) {
       topbarTitle.textContent = VIEW_TITLES[viewId] || "رحلة المدير";
     }
@@ -2112,7 +2151,7 @@
         backBtn.setAttribute("href", "#view-tasks");
         backBtn.textContent = "رجوع";
       } else if (viewId === "view-plan-details") {
-        backBtn.setAttribute("href", "#view-desk");
+        backBtn.setAttribute("href", "#view-planning");
         backBtn.textContent = "العودة";
       } else if (viewId === "view-council-details") {
         backBtn.setAttribute("href", "#view-execution");
@@ -2126,6 +2165,7 @@
     markCurrent('a[href="#view-desk"]', viewId === "view-desk");
     markCurrent('a[href="#view-performance"]', viewId === "view-performance");
     markCurrent('a[href="#view-soft-follow"]', viewId === "view-soft-follow");
+    markCurrent('a[href="#view-external-eval"]', viewId === "view-external-eval");
     markCurrent('a[href="#view-tasks"]', viewId === "view-tasks" || viewId === "view-task-details");
     markCurrent(
       'a[href="#view-planning"]',
@@ -2154,23 +2194,27 @@
       'a[href="#view-execution"]',
       viewId === "view-execution" || viewId === "view-council-details"
     );
+    markCurrent('a[href="#view-visits"]', viewId === "view-visits" || viewId === "view-visits-plan");
+    markCurrent('a[href="#view-visits-plan"]', viewId === "view-visits-plan");
     markCurrent('a[href="#view-evidence"]', viewId === "view-evidence" || viewId === "view-env-evidence");
+    markCurrent('a[href="#view-env-evidence"]', viewId === "view-env-evidence");
+    markCurrent('a[href="#view-license-form"]', viewId === "view-license-form");
+    markCurrent('a[href="#view-practice-evidence"]', viewId === "view-practice-evidence");
     markCurrent('a[href="#view-profile"]', viewId === "view-profile");
     markCurrent('a[href="#view-portfolio"]', viewId === "view-portfolio");
-    if (viewId === "view-performance" || viewId === "view-soft-follow") {
-      openStage("follow");
-    } else if (viewId === "view-tasks" || viewId === "view-task-details") {
-      openStage("tasks");
-    } else if (viewId === "view-desk" || viewId === "view-planning" || viewId === "view-smart-planning" || viewId === "view-program-add" || viewId === "view-plan-details" || viewId === "view-staff" || viewId === "view-deliverables" || viewId === "view-students-lists" || viewId === "view-student-registry") {
-      openStage("plan");
-    } else if (viewId === "view-school" || viewId === "view-leadership" || viewId === "view-committees" || viewId === "view-calendar" || viewId === "view-occasions" || viewId === "view-letterhead" || viewId === "view-backup" || viewId === "view-noor-import" || viewId === "view-import-center" || viewId === "view-accounts" || viewId === "view-permissions" || viewId === "view-trash" || viewId === "view-audit" || viewId === "view-health") {
-      openStage("settings");
-    } else if (viewId === "view-execution") {
-      openStage("exec");
-    } else if (viewId === "view-council-details") {
-      openStage("print");
-    } else if (viewId === "view-evidence" || viewId === "view-env-evidence") {
-      openStage("evidence");
+    markCurrent('.aj-bottom-nav a[href="#view-desk"]', viewId === "view-desk");
+    document.querySelectorAll(".aj-bottom-nav a[data-aj-station]").forEach(function (link) {
+      var linkStation = link.getAttribute("data-aj-station") || "";
+      if (stationId && linkStation === stationId) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+    if (stationId) {
+      openStage(stationId);
+    } else {
+      openStage("");
     }
     if (window.matchMedia("(min-width: 768px) and (max-width: 1099px)").matches) {
       openStage("");

@@ -59,16 +59,14 @@
   #aj-home-link::before { content: "مك"; }
   #aj-profile-link::before { content: "مل"; }
   #aj-portfolio-link::before { content: "سج"; }
-  .aj-legacy-link::before { content: "قد"; }
+  #aj-stations-map-link::before { content: "خر"; }
+  .aj-legacy-link::before { content: "مر"; }
   .aj-logout-btn::before { content: "خ"; }
 
-  .aj-stage-toggle[data-aj-stage="plan"]::before { content: "تخ"; }
-  .aj-stage-toggle[data-aj-stage="settings"]::before { content: "إع"; }
-  .aj-stage-toggle[data-aj-stage="tasks"]::before { content: "مه"; }
-  .aj-stage-toggle[data-aj-stage="exec"]::before { content: "تن"; }
-  .aj-stage-toggle[data-aj-stage="print"]::before { content: "طب"; }
-  .aj-stage-toggle[data-aj-stage="follow"]::before { content: "مت"; }
-  .aj-stage-toggle[data-aj-stage="evidence"]::before { content: "شه"; }
+  .aj-stage-toggle[data-aj-stage="foundation"]::before { content: "تأ"; }
+  .aj-stage-toggle[data-aj-stage="planning"]::before { content: "خط"; }
+  .aj-stage-toggle[data-aj-stage="registers"]::before { content: "سج"; }
+  .aj-stage-toggle[data-aj-stage="measurement"]::before { content: "قي"; }
 
   .aj-stage {
     position: relative;
