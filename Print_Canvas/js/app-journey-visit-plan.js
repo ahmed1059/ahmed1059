@@ -97,8 +97,8 @@
   }
 
   function paint() {
-    var body = document.getElementById("aj-plan-body");
-    var status = document.getElementById("aj-plan-status");
+    var body = document.getElementById("aj-visit-plan-body");
+    var status = document.getElementById("aj-visit-plan-status");
     if (!body) {
       return;
     }
@@ -122,7 +122,7 @@
   }
 
   function readRows() {
-    var body = document.getElementById("aj-plan-body");
+    var body = document.getElementById("aj-visit-plan-body");
     if (!body) {
       return [];
     }
@@ -283,10 +283,10 @@
   }
 
   function bind() {
-    var table = document.getElementById("aj-plan-table");
-    var distributeButton = document.getElementById("aj-plan-distribute");
-    var saveButton = document.getElementById("aj-plan-save");
-    var printButton = document.getElementById("aj-plan-print");
+    var table = document.getElementById("aj-visit-plan-table");
+    var distributeButton = document.getElementById("aj-visit-plan-distribute");
+    var saveButton = document.getElementById("aj-visit-plan-save");
+    var printButton = document.getElementById("aj-visit-plan-print");
     if (!table || table.dataset.bound === "1") {
       return;
     }
@@ -306,7 +306,11 @@
       saveButton.addEventListener("click", save);
     }
     if (printButton) {
-      printButton.addEventListener("click", printPlan);
+      printButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        printPlan();
+      });
     }
   }
 

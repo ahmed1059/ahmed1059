@@ -25,6 +25,11 @@ tmp/
 temp/
 .cache/
 
+# Smoke run outputs (keep protocol/scripts tracked)
+artifacts/smoke/*.png
+artifacts/smoke/*.json
+artifacts/smoke/*.webm
+
 # Large artifacts (keep repo/publish under size limits)
 *.zip
 school_1059_dump.sql

@@ -314,7 +314,70 @@ body.app-journey:not(.aj-auth-ready) .aj-backdrop {
   max-width: 960px;
 }
 
-.aj-view[hidden] {
+/* الوحدة 3: عزل بصري صارم على الشاشة فقط — لا يمس @media print / A4 */
+@media screen {
+  .aj-view[hidden],
+  .aj-view:not(.is-active) {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    inset-inline-start: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+  }
+
+  .aj-view.is-active {
+    display: block !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    inset: auto !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    clip: auto !important;
+  }
+
+  body.aj-off-desk #view-desk {
+    display: none !important;
+  }
+}
+
+.aj-journey-steps,
+.aj-hub-cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.aj-journey-steps li,
+.aj-hub-cards li {
+  margin: 0;
+}
+
+.aj-journey-steps .aj-task-btn,
+.aj-hub-cards .aj-task-btn {
+  width: 100%;
+  justify-content: center;
+  min-height: 48px;
+}
+
+.aj-desk-today {
+  margin: 0 0 20px;
+  padding: 12px 0 4px;
+  border-bottom: 1px solid var(--aj-border);
+}
+
+.aj-field-quick {
+  margin-top: 16px;
+}
+
+.aj-field-only[hidden] {
   display: none !important;
 }
 
@@ -974,8 +1037,13 @@ body.app-journey:not(.aj-auth-ready) .aj-backdrop {
   }
 }
 
-@media (max-width: 767px) {
-  .aj-smart-cards {
+/* وضع الميدان السريع (< 1024px): بطاقات رأسية، أزرار لمس، شريط سفلي */
+@media screen and (max-width: 1023px) {
+  .aj-smart-cards,
+  .aj-home-stages,
+  .aj-cards,
+  .aj-journey-steps,
+  .aj-hub-cards {
     grid-template-columns: 1fr;
   }
 
@@ -1033,7 +1101,7 @@ body.app-journey:not(.aj-auth-ready) .aj-backdrop {
 
   .aj-menu-btn,
   .aj-back-btn {
-    min-height: 40px;
+    min-height: 44px;
     padding: 0 12px;
     border: 2px solid var(--aj-teal);
     background: #ffffff;
@@ -1131,14 +1199,73 @@ body.app-journey:not(.aj-auth-ready) .aj-backdrop {
     text-align: center;
     text-decoration: none;
     cursor: pointer;
+    min-height: 48px;
   }
 
   .aj-bottom-nav a[aria-current="page"] {
     background: #e8f3f1;
   }
 
+  .aj-task-btn,
+  .aj-detail-btn {
+    min-height: 48px;
+    font-size: 1rem;
+  }
+
   .aj-evidence-cards .aj-card {
     padding-top: 12px;
+  }
+
+  /* إغلاق ألواح الظل المطلقة من الشريط الضيق — لا تسرب فوق المحتوى */
+  body.app-journey .aj-stage-panel.is-open {
+    position: static !important;
+    inset: auto !important;
+    width: auto !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    padding: 8px 0 0 !important;
+    background: transparent !important;
+  }
+
+  body.app-journey .aj-stage-toggle:hover::after,
+  body.app-journey .aj-stage-toggle:focus-visible::after {
+    content: none !important;
+  }
+
+  body.app-journey.aj-mode-field .aj-field-only {
+    display: block !important;
+  }
+}
+
+/* وضع الإدارة والطباعة (>= 1024px): قائمة جانبية كاملة + جداول */
+@media screen and (min-width: 1024px) {
+  body.app-journey.aj-mode-admin .aj-bottom-nav,
+  body.app-journey.aj-mode-admin .aj-topbar,
+  body.app-journey.aj-mode-admin .aj-backdrop {
+    display: none !important;
+  }
+
+  body.app-journey.aj-mode-admin .aj-shell {
+    display: grid;
+    grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
+  }
+
+  body.app-journey.aj-mode-admin .aj-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    transform: none !important;
+  }
+
+  body.app-journey.aj-mode-admin .aj-table-scroll,
+  body.app-journey.aj-mode-admin .aj-plan-wrap,
+  body.app-journey.aj-mode-admin .aj-formation-table {
+    overflow-x: auto;
+  }
+
+  body.app-journey.aj-mode-admin .aj-field-only {
+    display: none !important;
   }
 }
 
@@ -1740,6 +1867,7 @@ body.aj-modal-open {
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
+  align-items: center;
   padding: 10px 12px;
   background: #0b5e56;
 }
@@ -1749,17 +1877,37 @@ body.aj-modal-open {
     display: flex !important;
   }
 
+  /* زر الإغلاق جانباً دون تغطية زر «طباعة» في الوسط */
   body.app-journey.is-print-preview #aj-print-preview-close {
-    position: fixed;
-    top: 10px;
-    left: 12px;
-    z-index: 5100;
+    position: static;
+    order: 99;
+    margin-inline-start: auto;
+    z-index: auto;
+  }
+
+  /* الرسالة الإرشادية الخضراء أسفل الشريط حتى لا تغطي زر الطباعة */
+  body.app-journey.is-print-preview .aj-toast {
+    top: auto;
+    bottom: 24px;
+    left: 16px;
+    right: auto;
+    transform: none;
+    z-index: 5200;
+    max-width: min(22rem, calc(100% - 32px));
   }
 }
 
 .aj-print-preview-bar .aj-detail-btn {
   background: #ffffff;
   color: #0b5e56;
+  position: relative;
+  z-index: 3;
+}
+
+#aj-print-preview-go {
+  order: -1;
+  font-weight: 800;
+  box-shadow: 0 0 0 2px #ffffff;
 }
 
 .aj-print-file-name {
@@ -1868,6 +2016,7 @@ body.aj-modal-open {
     margin: 0 !important;
     height: auto !important;
     min-height: 0 !important;
+    overflow: visible !important;
   }
 
   .aj-skip,
@@ -1912,6 +2061,45 @@ body.aj-modal-open {
     display: none !important;
   }
 
+  /* إجبار حاوية المعاينة على الظهور عند الطباعة — لا تُخفيها قواعد العزل */
+  body.app-journey.is-print-preview #aj-print-stage:not([hidden]),
+  body.app-journey.print-official-core #aj-print-stage:not([hidden]) {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    inset: auto !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    z-index: auto !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.app-journey.is-print-preview #aj-print-stage:not([hidden]) #aj-print-stage-page,
+  body.app-journey.print-official-core #aj-print-stage:not([hidden]) #aj-print-stage-page {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 0 auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+  }
+
+  body.app-journey.is-print-preview #aj-print-stage:not([hidden]) #aj-print-stage-page *,
+  body.app-journey.print-official-core #aj-print-stage:not([hidden]) #aj-print-stage-page * {
+    visibility: visible !important;
+  }
+
+  body.app-journey.is-print-preview .aj-shell,
+  body.app-journey.print-official-core .aj-shell {
+    display: none !important;
+  }
+
   #view-council-details,
   .aj-council-doc,
   .aj-council-attendance,
@@ -1948,6 +2136,7 @@ body.aj-modal-open {
 
   body.app-journey.print-official-core .aj-print-stage {
     display: block !important;
+    visibility: visible !important;
     background: #ffffff !important;
   }
 
@@ -1973,12 +2162,13 @@ body.aj-modal-open {
     page-break-after: auto;
   }
 
+  /* تجنّب height:0 الذي يُنتج صفحة بيضاء في بعض المتصفحات */
   html:has(body.app-journey.print-official-core:not(.print-official-multi):not(.print-official-list)),
   body.app-journey.print-official-core:not(.print-official-multi):not(.print-official-list) {
-    height: 0 !important;
+    height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -1986,18 +2176,20 @@ body.aj-modal-open {
   body.app-journey.print-official-core:not(.print-official-multi):not(.print-official-list) .aj-print-stage,
   body.app-journey.print-official-core:not(.print-official-multi):not(.print-official-list) .aj-print-stage-page {
     display: block !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
+    visibility: visible !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
     right: auto !important;
     width: 210mm !important;
     max-width: 210mm !important;
-    height: 297mm !important;
-    margin: 0 !important;
+    height: auto !important;
+    min-height: 297mm !important;
+    margin: 0 auto !important;
     padding: 0 !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     background: #ffffff !important;
-    z-index: 1 !important;
+    z-index: auto !important;
     box-sizing: border-box !important;
     scrollbar-width: none !important;
   }

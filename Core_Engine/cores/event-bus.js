@@ -5,6 +5,7 @@
   var socket = null;
   var timer = null;
   var pending = {};
+  var wsAbandoned = false;
   var routes = {
     school_settings: "app:settings:saved",
     leadership_seat: "app:leadership:saved",
@@ -88,9 +89,29 @@
     pollTimer = root.setInterval(poll, 4000);
   }
 
+  function abandonWebSocket() {
+    wsAbandoned = true;
+    if (socket) {
+      try {
+        socket.onclose = null;
+        socket.onerror = null;
+        socket.onmessage = null;
+        socket.close();
+      } catch (ignore) {
+        /* صامت */
+      }
+      socket = null;
+    }
+    startPoll();
+  }
+
   function connect() {
-    if (typeof root.WebSocket !== "function") {
+    if (wsAbandoned) {
       startPoll();
+      return;
+    }
+    if (typeof root.WebSocket !== "function") {
+      abandonWebSocket();
       return;
     }
     if (socket && (socket.readyState === 0 || socket.readyState === 1)) {
@@ -100,7 +121,7 @@
     try {
       socket = new root.WebSocket(protocol + root.location.host + "/ws/events");
     } catch (error) {
-      startPoll();
+      abandonWebSocket();
       return;
     }
     socket.onmessage = function (event) {
@@ -110,15 +131,20 @@
         return;
       }
     };
+    socket.onerror = function () {
+      /* المتصفح قد يسجّل فشلاً واحداً؛ نوقف إعادة المحاولة فوراً */
+      abandonWebSocket();
+    };
     socket.onclose = function () {
-      socket = null;
-      startPoll();
-      root.setTimeout(connect, 8000);
+      /* إن أُغلق دون onerror سابقاً — لا نعيد الاتصال لإبقاء Console نظيفاً */
+      if (!wsAbandoned) {
+        abandonWebSocket();
+      }
     };
   }
 
   root.EventBus = {
-    version: "294",
+    version: "295",
     connect: connect,
     startPoll: startPoll
   };

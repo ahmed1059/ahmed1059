@@ -69,6 +69,15 @@
   var VIEWS = [
     "view-home",
     "view-desk",
+    "view-station-foundation",
+    "view-station-planning",
+    "view-station-registers",
+    "view-station-measurement",
+    "view-access-hub",
+    "view-calendar-hub",
+    "view-system-care",
+    "view-term-schedule",
+    "view-nafes",
     "view-license-form",
     "view-visits",
     "view-visits-plan",
@@ -111,25 +120,34 @@
   var VIEW_TITLES = {
     "view-home": "المحطات الأربع",
     "view-desk": "مكتبي",
+    "view-station-foundation": "التأسيس والإعدادات المركزية",
+    "view-station-planning": "الخطط المدرسية",
+    "view-station-registers": "السجلات والمحاضر والشواهد",
+    "view-station-measurement": "القياس والاعتماد المدرسي",
+    "view-access-hub": "إدارة الحسابات وهندسة الصلاحيات",
+    "view-calendar-hub": "التقويم المعتمد والمناسبات",
+    "view-system-care": "النسخ الاحتياطي والتدقيق وفحص النظام",
+    "view-term-schedule": "التوزيع الزمني على الفصلين",
+    "view-nafes": "ملف التدريب والقياس (نافس)",
     "view-license-form": "تعبئة الرخص المهنية",
     "view-visits": "الزيارات الصفية",
     "view-visits-plan": "الخطة السنوية للزيارات الصفية",
     "view-practice-evidence": "شواهد الممارسات",
-    "view-performance": "مؤشرات الأداء",
-    "view-tasks": "مهام اليوم",
+    "view-performance": "مؤشرات الأداء (SSOT)",
+    "view-tasks": "التنبيهات ومهام اليوم",
     "view-task-details": "تفاصيل المهمة",
-    "view-planning": "تخطيطي",
+    "view-planning": "الخطة التشغيلية للمدرسة",
     "view-smart-planning": "الخطط الذكية",
-    "view-program-add": "إضافة برنامج",
+    "view-program-add": "إضافة برنامج / مبادرة",
     "view-staff": "سجل المنسوبين",
     "view-school": "بيانات المدرسة",
-    "view-external-eval": "نتائج التقويم الخارجي",
+    "view-external-eval": "التقويم الذاتي والاعتماد الخارجي (ETEC)",
     "view-leadership": "التشكيل القيادي",
-    "view-committees": "تشكيل اللجان",
-    "view-deliverables": "تسليمات المعلم",
+    "view-committees": "تشكيل اللجان والمجالس",
+    "view-deliverables": "تسليمات المعلمين ومتابعة الأداء",
     "view-calendar": "التقويم المعتمد",
     "view-occasions": "المناسبات",
-    "view-letterhead": "الترويسة والأختام",
+    "view-letterhead": "الترويسة والأختام الرسمية",
     "view-backup": "النسخ الاحتياطي",
     "view-noor-import": "الاستيراد من نور",
     "view-import-center": "الاستيراد من نور",
@@ -141,54 +159,62 @@
     "view-students-lists": "قوائم الطلاب",
     "view-student-registry": "سجل طلاب المدرسة",
     "view-plan-details": "تفاصيل الخطة",
-    "view-execution": "مركز التنفيذ",
+    "view-execution": "مركز التنفيذ ومحاضر اللجان",
     "view-council-details": "محضر المجلس",
-    "view-evidence": "شواهدي",
-    "view-env-evidence": "شواهد البرامج والبيئة",
+    "view-evidence": "معرض الشواهد الشامل",
+    "view-env-evidence": "شواهد البرامج والبيئة المدرسية",
     "view-profile": "ملفي الشخصي",
     "view-portfolio": "سجل الإنجاز",
     "view-soft-follow": "المتابعة اللاصفية"
   };
   var SIGNATURE_INK = "#000080";
   var PLAN_GOALS_PLACEHOLDER = "";
+  var FIELD_MODE_MQ = "(max-width: 1023px)";
 
-  /* الوحدة 2: المحطات الأربع المعتمدة — لا localStorage للبيانات */
+  /* الوحدة 3: رحلة متسلسلة + عزل شاشة واحدة — لا localStorage للبيانات */
   var STATION_BY_VIEW = {
+    "view-station-foundation": "foundation",
     "view-school": "foundation",
-    "view-leadership": "foundation",
-    "view-committees": "foundation",
-    "view-calendar": "foundation",
-    "view-occasions": "foundation",
     "view-letterhead": "foundation",
-    "view-backup": "foundation",
     "view-noor-import": "foundation",
     "view-import-center": "foundation",
+    "view-staff": "foundation",
+    "view-students-lists": "foundation",
+    "view-student-registry": "foundation",
+    "view-leadership": "foundation",
+    "view-committees": "foundation",
+    "view-access-hub": "foundation",
     "view-accounts": "foundation",
     "view-permissions": "foundation",
+    "view-calendar-hub": "foundation",
+    "view-calendar": "foundation",
+    "view-occasions": "foundation",
+    "view-system-care": "foundation",
+    "view-backup": "foundation",
     "view-trash": "foundation",
     "view-audit": "foundation",
     "view-health": "foundation",
+    "view-station-planning": "planning",
     "view-planning": "planning",
     "view-smart-planning": "planning",
     "view-program-add": "planning",
     "view-plan-details": "planning",
-    "view-staff": "planning",
-    "view-deliverables": "planning",
-    "view-students-lists": "planning",
-    "view-student-registry": "planning",
+    "view-term-schedule": "planning",
+    "view-station-registers": "registers",
     "view-execution": "registers",
     "view-council-details": "registers",
     "view-visits": "registers",
     "view-visits-plan": "registers",
+    "view-deliverables": "registers",
     "view-evidence": "registers",
     "view-env-evidence": "registers",
     "view-license-form": "registers",
     "view-practice-evidence": "registers",
+    "view-station-measurement": "measurement",
     "view-performance": "measurement",
+    "view-nafes": "measurement",
     "view-external-eval": "measurement",
-    "view-soft-follow": "measurement",
-    "view-tasks": "measurement",
-    "view-task-details": "measurement"
+    "view-soft-follow": "measurement"
   };
   var stageButtons = document.querySelectorAll("[data-aj-stage]");
   var statusEl = document.getElementById("aj-status");
@@ -310,7 +336,7 @@
   var planDetailErrorEl = document.getElementById("aj-plan-detail-error");
   var planApproveBtn = document.getElementById("aj-plan-approve");
   var planEditBtn = document.getElementById("aj-plan-edit");
-  var planPrintBtn = document.getElementById("aj-plan-print");
+  var planPrintBtn = document.querySelector("#view-plan-details #aj-plan-print");
   var planPrint122Btn = document.getElementById("aj-plan-print-122");
   var planPrint131Btn = document.getElementById("aj-plan-print-131");
   var planWitness131Btn = document.getElementById("aj-plan-witness-131");
@@ -531,7 +557,7 @@
   }
 
   function softFetch(url) {
-    return fetch(url, { cache: "no-store" }).then(
+    return fetch(url, { headers: authHeaders(), cache: "no-store" }).then(
       function (response) {
         return response.ok ? response.json() : null;
       },
@@ -1222,12 +1248,68 @@
     stageButtons.forEach(function (button) {
       var id = button.getAttribute("data-aj-stage");
       var panel = document.getElementById("aj-panel-" + id);
-      var active = id === stageId;
+      var active = !!stageId && id === stageId;
       button.setAttribute("aria-expanded", active ? "true" : "false");
       if (panel) {
         panel.classList.toggle("is-open", active);
       }
     });
+  }
+
+  function isFieldMode() {
+    return window.matchMedia(FIELD_MODE_MQ).matches;
+  }
+
+  function syncAdaptiveMode() {
+    var field = isFieldMode();
+    document.body.classList.toggle("aj-mode-field", field);
+    document.body.classList.toggle("aj-mode-admin", !field);
+    document.querySelectorAll(".aj-field-only").forEach(function (node) {
+      node.hidden = !field;
+    });
+  }
+
+  function isolateViews(viewId) {
+    var known = {};
+    VIEWS.forEach(function (id) {
+      known[id] = true;
+    });
+    document.querySelectorAll(".aj-main > .aj-view").forEach(function (section) {
+      var id = section.id || "";
+      var active = id === viewId;
+      section.hidden = !active;
+      section.classList.toggle("is-active", active);
+      if (active) {
+        section.style.removeProperty("display");
+      } else {
+        section.style.display = "none";
+      }
+      if (id && !known[id] && !active) {
+        section.hidden = true;
+        section.classList.remove("is-active");
+        section.style.display = "none";
+      }
+    });
+    VIEWS.forEach(function (id) {
+      var section = document.getElementById(id);
+      if (!section) {
+        return;
+      }
+      var active = id === viewId;
+      section.hidden = !active;
+      section.classList.toggle("is-active", active);
+      if (active) {
+        section.style.removeProperty("display");
+      } else {
+        section.style.display = "none";
+      }
+    });
+    document.body.classList.toggle("aj-on-desk", viewId === "view-desk");
+    document.body.classList.toggle("aj-off-desk", viewId !== "view-desk");
+    setDrawer(false);
+    if (isFieldMode()) {
+      openStage(STATION_BY_VIEW[viewId] || "");
+    }
   }
 
   function setDrawer(open) {
@@ -1893,6 +1975,110 @@
       });
   }
 
+  function loadNafesMetrics() {
+    var loading = document.getElementById("aj-nafes-loading");
+    var status = document.getElementById("aj-nafes-status");
+    var host = document.getElementById("aj-nafes-cards");
+    if (!host) {
+      return;
+    }
+    setHidden(loading, false);
+    setTextStatus(status, "", false);
+    host.innerHTML = "";
+    fetchSsot()
+      .then(function (payload) {
+        if (!payload || !payload.data) {
+          throw new Error("تعذر عرض ملف نافس حالياً.");
+        }
+        var nafes = (payload.data && payload.data.nafes) || {};
+        [
+          { row: nafes.reading },
+          { row: nafes.math },
+          { row: nafes.science }
+        ].forEach(function (item) {
+          if (!item.row) {
+            return;
+          }
+          host.appendChild(metricCard(item.row.label || "مؤشر نافس", formatScore(item.row), "نافس"));
+        });
+        if (!host.children.length) {
+          setTextStatus(status, "لا توجد مؤشرات نافس محفوظة بعد.", false);
+        } else {
+          setTextStatus(status, "", false);
+        }
+      })
+      .catch(function (error) {
+        host.innerHTML = "";
+        setTextStatus(status, (error && error.message) || "تعذر عرض نافس.", true);
+      })
+      .finally(function () {
+        setHidden(loading, true);
+      });
+  }
+
+  function loadTermSchedule() {
+    var status = document.getElementById("aj-term-status");
+    var summary = document.getElementById("aj-term-summary");
+    var host = document.getElementById("aj-term-cards");
+    if (!host) {
+      return;
+    }
+    host.innerHTML = "";
+    if (summary) {
+      summary.textContent = "";
+    }
+    setTextStatus(status, "جارٍ التحميل...", false);
+    fetch("/api/session/calendar", { headers: authHeaders(), cache: "no-store" })
+      .then(function (res) {
+        return res.json().then(function (body) {
+          if (!res.ok) {
+            throw new Error((body && body.detail) || "تعذر قراءة التقويم المعتمد.");
+          }
+          return body;
+        });
+      })
+      .then(function (cal) {
+        var termCount = Number(cal.termCount || 2) || 2;
+        var year = cal.year || "";
+        var region = cal.region || "makkah";
+        if (summary) {
+          summary.textContent = "عدد الفصول: " + termCount + (year ? " · العام: " + year : "");
+        }
+        var qs =
+          "/api/session/calendar/stations?year=" +
+          encodeURIComponent(year) +
+          "&region=" +
+          encodeURIComponent(region);
+        return fetch(qs, { headers: authHeaders(), cache: "no-store" })
+          .then(function (res) {
+            return res.json().then(function (body) {
+              if (!res.ok) {
+                throw new Error((body && body.detail) || "تعذر قراءة المحطات الزمنية.");
+              }
+              return body;
+            });
+          })
+          .then(function (body) {
+            var stations = body.items || [];
+            stations.forEach(function (row, index) {
+              var title = (row && row.title) || "محطة " + (index + 1);
+              var meta = [row && row.hijriStart, row && row.gregorianStart, row && row.note]
+                .filter(Boolean)
+                .join(" · ");
+              host.appendChild(metricCard(title, meta || "—", termCount === 2 ? "توزيع على فصلين" : ""));
+            });
+            if (!stations.length) {
+              setTextStatus(status, "لا محطات زمنية محفوظة بعد. عدّل التقويم المعتمد أولاً.", false);
+            } else {
+              setTextStatus(status, "", false);
+            }
+          });
+      })
+      .catch(function (error) {
+        setTextStatus(status, (error && error.message) || "تعذر تحميل التوزيع الزمني.", true);
+      });
+  }
+
   function taskDateLabel(item) {
     if (item.hijri_date) {
       return item.hijri_date;
@@ -2153,6 +2339,7 @@
   function syncChrome(viewId) {
     var isHome = viewId === "view-home" || viewId === "view-desk";
     var stationId = STATION_BY_VIEW[viewId] || "";
+    syncAdaptiveMode();
     if (topbarTitle) {
       topbarTitle.textContent = VIEW_TITLES[viewId] || "رحلة المدير";
     }
@@ -2161,12 +2348,18 @@
       if (viewId === "view-task-details") {
         backBtn.setAttribute("href", "#view-tasks");
         backBtn.textContent = "رجوع";
+      } else if (viewId === "view-tasks") {
+        backBtn.setAttribute("href", "#view-desk");
+        backBtn.textContent = "مكتبي";
       } else if (viewId === "view-plan-details") {
         backBtn.setAttribute("href", "#view-planning");
         backBtn.textContent = "العودة";
       } else if (viewId === "view-council-details") {
         backBtn.setAttribute("href", "#view-execution");
         backBtn.textContent = "رجوع";
+      } else if (stationId) {
+        backBtn.setAttribute("href", "#view-station-" + stationId);
+        backBtn.textContent = "المحطة";
       } else {
         backBtn.setAttribute("href", "#view-home");
         backBtn.textContent = "رجوع";
@@ -2174,7 +2367,12 @@
     }
     markCurrent('a[href="#view-home"]', viewId === "view-home");
     markCurrent('a[href="#view-desk"]', viewId === "view-desk");
+    markCurrent('a[href="#view-station-foundation"]', viewId === "view-station-foundation" || stationId === "foundation");
+    markCurrent('a[href="#view-station-planning"]', viewId === "view-station-planning" || stationId === "planning");
+    markCurrent('a[href="#view-station-registers"]', viewId === "view-station-registers" || stationId === "registers");
+    markCurrent('a[href="#view-station-measurement"]', viewId === "view-station-measurement" || stationId === "measurement");
     markCurrent('a[href="#view-performance"]', viewId === "view-performance");
+    markCurrent('a[href="#view-nafes"]', viewId === "view-nafes");
     markCurrent('a[href="#view-soft-follow"]', viewId === "view-soft-follow");
     markCurrent('a[href="#view-external-eval"]', viewId === "view-external-eval");
     markCurrent('a[href="#view-tasks"]', viewId === "view-tasks" || viewId === "view-task-details");
@@ -2184,15 +2382,19 @@
     );
     markCurrent('a[href="#view-smart-planning"]', viewId === "view-smart-planning");
     markCurrent('a[href="#view-program-add"]', viewId === "view-program-add");
+    markCurrent('a[href="#view-term-schedule"]', viewId === "view-term-schedule");
     markCurrent('a[href="#view-staff"]', viewId === "view-staff");
     markCurrent('a[href="#view-school"]', viewId === "view-school");
     markCurrent('a[href="#view-leadership"]', viewId === "view-leadership");
     markCurrent('a[href="#view-committees"]', viewId === "view-committees");
     markCurrent('a[href="#view-deliverables"]', viewId === "view-deliverables");
+    markCurrent('a[href="#view-calendar-hub"]', viewId === "view-calendar-hub" || viewId === "view-calendar" || viewId === "view-occasions");
     markCurrent('a[href="#view-calendar"]', viewId === "view-calendar");
     markCurrent('a[href="#view-occasions"]', viewId === "view-occasions");
     markCurrent('a[href="#view-letterhead"]', viewId === "view-letterhead");
+    markCurrent('a[href="#view-system-care"]', viewId === "view-system-care" || viewId === "view-backup" || viewId === "view-audit" || viewId === "view-health" || viewId === "view-trash");
     markCurrent('a[href="#view-backup"]', viewId === "view-backup");
+    markCurrent('a[href="#view-access-hub"]', viewId === "view-access-hub" || viewId === "view-accounts" || viewId === "view-permissions");
     markCurrent('a[href="#view-noor-import"]', viewId === "view-noor-import" || viewId === "view-import-center");
     markCurrent('a[href="#view-import-center"]', viewId === "view-import-center" || viewId === "view-noor-import");
     markCurrent('a[href="#view-accounts"]', viewId === "view-accounts");
@@ -2205,9 +2407,9 @@
       'a[href="#view-execution"]',
       viewId === "view-execution" || viewId === "view-council-details"
     );
-    markCurrent('a[href="#view-visits"]', viewId === "view-visits" || viewId === "view-visits-plan");
+    markCurrent('a[href="#view-visits"]', viewId === "view-visits");
     markCurrent('a[href="#view-visits-plan"]', viewId === "view-visits-plan");
-    markCurrent('a[href="#view-evidence"]', viewId === "view-evidence" || viewId === "view-env-evidence");
+    markCurrent('a[href="#view-evidence"]', viewId === "view-evidence");
     markCurrent('a[href="#view-env-evidence"]', viewId === "view-env-evidence");
     markCurrent('a[href="#view-license-form"]', viewId === "view-license-form");
     markCurrent('a[href="#view-practice-evidence"]', viewId === "view-practice-evidence");
@@ -2222,12 +2424,9 @@
         link.removeAttribute("aria-current");
       }
     });
-    if (stationId) {
+    if (!isFieldMode() && stationId) {
       openStage(stationId);
-    } else {
-      openStage("");
-    }
-    if (window.matchMedia("(min-width: 768px) and (max-width: 1099px)").matches) {
+    } else if (!isFieldMode()) {
       openStage("");
     }
   }
@@ -2571,15 +2770,7 @@
       return;
     }
 
-    VIEWS.forEach(function (id) {
-      var section = document.getElementById(id);
-      if (!section) {
-        return;
-      }
-      var active = id === viewId;
-      section.hidden = !active;
-      section.style.display = active ? "block" : "none";
-    });
+    isolateViews(viewId);
 
     if (window.AjCommittees && typeof window.AjCommittees.shouldRedirect === "function" && window.AjCommittees.shouldRedirect(viewId)) {
       window.location.replace("#view-committees");
@@ -2587,7 +2778,6 @@
     }
 
     syncChrome(viewId);
-    setDrawer(false);
 
     if (viewId === "view-desk") {
       if (window.AjDesk && typeof window.AjDesk.load === "function") {
@@ -2646,6 +2836,22 @@
 
     if (viewId === "view-performance") {
       loadPerformanceMetrics();
+      return;
+    }
+    if (viewId === "view-nafes") {
+      loadNafesMetrics();
+      return;
+    }
+    if (viewId === "view-term-schedule") {
+      loadTermSchedule();
+      return;
+    }
+    if (viewId === "view-system-care") {
+      if (currentUser) {
+        document.querySelectorAll("#view-system-care .aj-principal-only").forEach(function (node) {
+          node.hidden = String(currentUser.role || "").indexOf("مدير") !== 0;
+        });
+      }
       return;
     }
     if (viewId === "view-soft-follow") {
@@ -2822,6 +3028,10 @@
   }
   if (planPrintBtn) {
     planPrintBtn.addEventListener("click", function () {
+      var details = document.getElementById("view-plan-details");
+      if (!details || details.hidden || !details.classList.contains("is-active")) {
+        return;
+      }
       if (String(pendingPlanDetailId) === "operational-plan" && window.Plan111 && typeof window.Plan111.open === "function") {
         window.Plan111.open().catch(function (error) {
           showToast((error && error.message) || "تعذر تجهيز حزمة الخطة.", "error");
@@ -3971,17 +4181,25 @@
     return Promise.all(jobs);
   }
 
-  function printOfficialPreview() {
+  function prepareOfficialPrintStage() {
     var core = window.OfficialFrameCore;
     if (!printStagePageEl || !officialPreviewHtml) {
-      showToast("لا معاينة للطباعة.", "error");
-      return;
+      return false;
     }
     if (printStageEl) {
       printStageEl.hidden = false;
+      printStageEl.style.display = "block";
+      printStageEl.style.visibility = "visible";
     }
+    if (printStagePageEl) {
+      printStagePageEl.style.display = "block";
+      printStagePageEl.style.visibility = "visible";
+    }
+    document.body.classList.add("is-print-preview");
     if (core && typeof core.armPrintPage === "function") {
       core.armPrintPage(officialPreviewArm || {});
+    } else {
+      document.body.classList.add("print-official-core");
     }
     Array.prototype.forEach.call(printStagePageEl.querySelectorAll("img.sig-image"), function (img) {
       img.removeAttribute("onerror");
@@ -3990,6 +4208,14 @@
       img.style.visibility = "visible";
       img.style.opacity = "1";
     });
+    return true;
+  }
+
+  function printOfficialPreview() {
+    if (!prepareOfficialPrintStage()) {
+      showToast("لا معاينة للطباعة.", "error");
+      return;
+    }
     materializeBlobImages(printStagePageEl).then(function () {
       waitOfficialPreviewImages(printStagePageEl, function () {
         var named = printStagePageEl.querySelector(".pm-document");
@@ -4020,6 +4246,12 @@
     }
   }
 
+  window.addEventListener("beforeprint", function () {
+    if (!document.body.classList.contains("is-print-preview")) {
+      return;
+    }
+    prepareOfficialPrintStage();
+  });
   window.addEventListener("afterprint", restorePreviewChrome);
 
   function showOfficialPreview(html, opts) {
@@ -4028,6 +4260,9 @@
       showToast("لوحة المعاينة غير موجودة.", "error");
       return;
     }
+    /* امسح أي معاينة سابقة فوراً حتى لا تبقى بطاقة برنامج قديمة ظاهرة */
+    printStagePageEl.innerHTML = "";
+    officialPreviewFiles = [];
     officialPreviewArm = opts.arm || {};
     officialPreviewHtml = html || "";
     var smartName = "";
@@ -4064,8 +4299,13 @@
     officialPreviewFiles = Array.isArray(opts.files) ? opts.files : [];
     appendPreviewFilesStrip(officialPreviewFiles);
     printStageEl.hidden = false;
+    printStageEl.style.removeProperty("display");
+    printStageEl.style.removeProperty("visibility");
+    printStagePageEl.style.removeProperty("display");
+    printStagePageEl.style.removeProperty("visibility");
     printStageEl.scrollTop = 0;
     document.body.classList.add("is-print-preview");
+    document.body.classList.remove("print-official-core", "print-official-list", "print-official-multi", "print-official-landscape");
   }
 
   if (printStageGoBtn) {
@@ -11574,11 +11814,35 @@
 
   stageButtons.forEach(function (button) {
     button.addEventListener("click", function () {
-      var id = button.getAttribute("data-aj-stage");
+      var hub = button.getAttribute("data-aj-station-hub") || "";
+      var id = button.getAttribute("data-aj-stage") || "";
+      if (hub) {
+        if (window.location.hash === hub) {
+          openStage(button.getAttribute("aria-expanded") === "true" ? "" : id);
+          return;
+        }
+        window.location.hash = hub.replace(/^#/, "");
+        return;
+      }
       var expanded = button.getAttribute("aria-expanded") === "true";
       openStage(expanded ? "" : id);
     });
   });
+
+  if (window.matchMedia) {
+    var fieldMq = window.matchMedia(FIELD_MODE_MQ);
+    var onFieldChange = function () {
+      syncAdaptiveMode();
+      if (document.body.classList.contains("aj-auth-ready")) {
+        router();
+      }
+    };
+    if (typeof fieldMq.addEventListener === "function") {
+      fieldMq.addEventListener("change", onFieldChange);
+    } else if (typeof fieldMq.addListener === "function") {
+      fieldMq.addListener(onFieldChange);
+    }
+  }
 
   if (menuOpen) {
     menuOpen.addEventListener("click", function () {
@@ -11599,7 +11863,7 @@
   document.querySelectorAll('a[href^="#view-"]').forEach(function (link) {
     link.addEventListener("click", function () {
       setDrawer(false);
-      if (window.matchMedia("(min-width: 768px) and (max-width: 1099px)").matches) {
+      if (isFieldMode()) {
         openStage("");
       }
     });
@@ -11607,7 +11871,7 @@
 
   if (document.getElementById("aj-main")) {
     document.getElementById("aj-main").addEventListener("click", function () {
-      if (window.matchMedia("(min-width: 768px) and (max-width: 1099px)").matches) {
+      if (isFieldMode()) {
         openStage("");
       }
     });

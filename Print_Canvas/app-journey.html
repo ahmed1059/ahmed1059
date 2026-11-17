@@ -8,11 +8,11 @@
   <link rel="stylesheet" href="css/ds-tokens.css?v=ds1">
   <link rel="stylesheet" href="css/ds-components.css?v=ds1">
   <link rel="stylesheet" href="css/media-governance.css?v=aj146">
-  <link rel="stylesheet" href="css/app-journey.css?v=aj184">
+  <link rel="stylesheet" href="css/app-journey.css?v=aj187">
   <link rel="stylesheet" href="css/responsive.css?v=r292">
   <link rel="stylesheet" href="css/print-master.css?v=c301">
 </head>
-<body class="app-journey">
+<body class="app-journey aj-mode-admin">
   <p id="aj-browser-warn" class="aj-browser-warn" hidden>يرجى تحديث المتصفح للحصول على أفضل تجربة</p>
   <a class="aj-skip" href="#aj-main">تخطَّ إلى المحتوى</a>
   <div id="aj-toast" class="aj-toast" hidden role="status" aria-live="polite"></div>
@@ -84,56 +84,48 @@
 
       <ul class="aj-stages" aria-label="المحطات الأربع المعتمدة">
         <li class="aj-stage">
-          <button type="button" class="aj-stage-toggle" data-aj-stage="foundation" aria-expanded="false" aria-controls="aj-panel-foundation">التأسيس والإعدادات المركزية</button>
+          <button type="button" class="aj-stage-toggle" data-aj-stage="foundation" data-aj-station-hub="#view-station-foundation" aria-expanded="false" aria-controls="aj-panel-foundation">التأسيس والإعدادات المركزية</button>
           <div class="aj-stage-panel" id="aj-panel-foundation" role="region" aria-label="التأسيس والإعدادات المركزية">
             <a class="aj-task-btn" id="aj-task-school" href="#view-school">بيانات المدرسة</a>
-            <a class="aj-task-btn" id="aj-task-leadership" href="#view-leadership">التشكيل القيادي</a>
-            <a class="aj-task-btn" id="aj-task-committees" href="#view-committees">تشكيل اللجان</a>
+            <a class="aj-task-btn" href="#view-letterhead">الترويسة والأختام الرسمية</a>
             <a class="aj-task-btn" href="#view-import-center">الاستيراد من نور</a>
-            <a class="aj-task-btn" href="#view-calendar">التقويم المعتمد</a>
-            <a class="aj-task-btn" href="#view-occasions">المناسبات</a>
-            <a class="aj-task-btn" href="#view-letterhead">الترويسة والأختام</a>
-            <a class="aj-task-btn" href="#view-backup">النسخ الاحتياطي</a>
-            <a class="aj-task-btn" href="#view-accounts">إدارة الحسابات</a>
-            <a class="aj-task-btn" href="#view-permissions">هندسة الصلاحيات</a>
-            <a class="aj-task-btn aj-principal-only" href="#view-trash" hidden>سلة المهملات</a>
-            <a class="aj-task-btn aj-principal-only" href="#view-audit" hidden>سجل التدقيق</a>
-            <a class="aj-task-btn aj-principal-only" href="#view-health" hidden>فحص النظام</a>
-            <button type="button" class="aj-task-btn aj-principal-only" id="aj-pilot-support-clear" hidden>حذف التسكين التجريبي</button>
-            <button type="button" class="aj-task-btn aj-principal-only" id="aj-pilot-support-draw" hidden>إعادة التسكين العشوائي</button>
-          </div>
-        </li>
-        <li class="aj-stage">
-          <button type="button" class="aj-stage-toggle" data-aj-stage="planning" aria-expanded="false" aria-controls="aj-panel-planning">الخطط المدرسية</button>
-          <div class="aj-stage-panel" id="aj-panel-planning" role="region" aria-label="الخطط المدرسية">
-            <a class="aj-task-btn" id="aj-task-planning" href="#view-planning">الخطط والبرامج</a>
-            <a class="aj-task-btn" id="aj-task-smart" href="#view-smart-planning">الخطط الذكية</a>
-            <a class="aj-task-btn" id="aj-task-program-add" href="#view-program-add">إضافة برنامج</a>
             <a class="aj-task-btn" id="aj-task-staff" href="#view-staff">سجل المنسوبين</a>
-            <a class="aj-task-btn" id="aj-task-deliverables" href="#view-deliverables">تسليمات المعلم</a>
             <a class="aj-task-btn" href="#view-students-lists">قوائم الطلاب</a>
-            <a class="aj-task-btn" href="#view-student-registry">سجل طلاب المدرسة</a>
+            <a class="aj-task-btn" id="aj-task-leadership" href="#view-leadership">التشكيل القيادي</a>
+            <a class="aj-task-btn" id="aj-task-committees" href="#view-committees">تشكيل اللجان والمجالس</a>
+            <a class="aj-task-btn" href="#view-access-hub">إدارة الحسابات وهندسة الصلاحيات</a>
+            <a class="aj-task-btn" href="#view-calendar-hub">التقويم المعتمد والمناسبات</a>
+            <a class="aj-task-btn" href="#view-system-care">النسخ الاحتياطي والتدقيق وفحص النظام</a>
           </div>
         </li>
         <li class="aj-stage">
-          <button type="button" class="aj-stage-toggle" data-aj-stage="registers" aria-expanded="false" aria-controls="aj-panel-registers">السجلات والمحاضر والشواهد</button>
+          <button type="button" class="aj-stage-toggle" data-aj-stage="planning" data-aj-station-hub="#view-station-planning" aria-expanded="false" aria-controls="aj-panel-planning">الخطط المدرسية</button>
+          <div class="aj-stage-panel" id="aj-panel-planning" role="region" aria-label="الخطط المدرسية">
+            <a class="aj-task-btn" id="aj-task-planning" href="#view-planning">الخطة التشغيلية للمدرسة</a>
+            <a class="aj-task-btn" id="aj-task-smart" href="#view-smart-planning">الخطط الذكية</a>
+            <a class="aj-task-btn" id="aj-task-program-add" href="#view-program-add">إضافة برنامج / مبادرة</a>
+            <a class="aj-task-btn" href="#view-term-schedule">التوزيع الزمني على الفصلين</a>
+          </div>
+        </li>
+        <li class="aj-stage">
+          <button type="button" class="aj-stage-toggle" data-aj-stage="registers" data-aj-station-hub="#view-station-registers" aria-expanded="false" aria-controls="aj-panel-registers">السجلات والمحاضر والشواهد</button>
           <div class="aj-stage-panel" id="aj-panel-registers" role="region" aria-label="السجلات والمحاضر والشواهد">
-            <a class="aj-task-btn" id="aj-task-execution" href="#view-execution">مركز التنفيذ والمحاضر</a>
-            <a class="aj-task-btn" href="#view-visits">الزيارات الصفية</a>
+            <a class="aj-task-btn" id="aj-task-execution" href="#view-execution">مركز التنفيذ ومحاضر اللجان</a>
             <a class="aj-task-btn" href="#view-visits-plan">الخطة السنوية للزيارات</a>
-            <a class="aj-task-btn" id="aj-task-evidence" href="#view-evidence">معرض الشواهد</a>
-            <a class="aj-task-btn" href="#view-env-evidence">شواهد البرامج والبيئة</a>
+            <a class="aj-task-btn" href="#view-visits">الزيارات الصفية</a>
+            <a class="aj-task-btn" id="aj-task-deliverables" href="#view-deliverables">تسليمات المعلمين ومتابعة الأداء</a>
+            <a class="aj-task-btn" href="#view-env-evidence">شواهد البرامج والبيئة المدرسية</a>
             <a class="aj-task-btn aj-leadership-only" href="#view-license-form" hidden>تعبئة الرخص المهنية</a>
             <a class="aj-task-btn aj-leadership-only" href="#view-practice-evidence" hidden>شواهد الممارسات</a>
+            <a class="aj-task-btn" id="aj-task-evidence" href="#view-evidence">معرض الشواهد الشامل</a>
           </div>
         </li>
         <li class="aj-stage">
-          <button type="button" class="aj-stage-toggle" data-aj-stage="measurement" aria-expanded="false" aria-controls="aj-panel-measurement">القياس والاعتماد المدرسي</button>
+          <button type="button" class="aj-stage-toggle" data-aj-stage="measurement" data-aj-station-hub="#view-station-measurement" aria-expanded="false" aria-controls="aj-panel-measurement">القياس والاعتماد المدرسي</button>
           <div class="aj-stage-panel" id="aj-panel-measurement" role="region" aria-label="القياس والاعتماد المدرسي">
-            <a class="aj-task-btn" id="aj-task-today" href="#view-tasks">التنبيهات ومهام اليوم</a>
             <a class="aj-task-btn" id="aj-task-ssot" href="#view-performance">مؤشرات الأداء (SSOT)</a>
-            <a class="aj-task-btn" href="#view-external-eval">نتائج التقويم الخارجي (ETEC)</a>
-            <a class="aj-task-btn" id="aj-task-soft" href="#view-soft-follow">المتابعة اللاصفية</a>
+            <a class="aj-task-btn" id="aj-task-nafes" href="#view-nafes">ملف التدريب والقياس (نافس)</a>
+            <a class="aj-task-btn" href="#view-external-eval">التقويم الذاتي والاعتماد الخارجي (ETEC)</a>
           </div>
         </li>
       </ul>
@@ -157,6 +149,11 @@
         <section class="aj-owner-only aj-legacy-quiet" id="aj-legacy-entry" hidden>
           <p class="aj-legacy-quiet-note">مسار مراجعة معزول عن المحطات الأربع — لا يُستخدم للعمل اليومي.</p>
           <a class="aj-legacy-quiet-link" href="dashboard.html#review">النظام السابق (مراجعة فقط)</a>
+        </section>
+        <section class="aj-desk-today" id="aj-desk-today" aria-label="مهام اليوم">
+          <h2 class="aj-group-title">التنبيهات ومهام اليوم</h2>
+          <p class="aj-lede">تبقى هنا في مكتبي — ليست ضمن محطة القياس.</p>
+          <a class="aj-detail-btn" id="aj-task-today" href="#view-tasks">فتح التنبيهات ومهام اليوم</a>
         </section>
         <section class="aj-opinion" id="aj-opinion" aria-label="إبداء الرأي">
           <h2 class="aj-group-title">رأيك في المعاينة</h2>
@@ -206,9 +203,9 @@
       <section id="view-visits-plan" class="aj-view wash-board" hidden>
         <h1>الخطة السنوية للزيارات الصفية</h1>
         <p class="aj-lede">صف لكل معلم من السجل. زيارتان في السنة، والثالثة عند الحاجة. التاريخ من أسابيع التقويم المحفوظة، وإن لم تُحفظ يبقى فارغاً.</p>
-        <p class="aj-status" id="aj-plan-status" role="status" aria-live="polite"></p>
+        <p class="aj-status" id="aj-visit-plan-status" role="status" aria-live="polite"></p>
         <div class="aj-plan-wrap">
-          <table class="aj-plan-table" id="aj-plan-table">
+          <table class="aj-plan-table" id="aj-visit-plan-table">
             <thead>
               <tr>
                 <th>م</th>
@@ -221,13 +218,13 @@
                 <th>ملحوظات</th>
               </tr>
             </thead>
-            <tbody id="aj-plan-body"></tbody>
+            <tbody id="aj-visit-plan-body"></tbody>
           </table>
         </div>
         <div class="aj-detail-actions">
-          <button type="button" class="aj-detail-btn" id="aj-plan-distribute">توزيع تلقائي</button>
-          <button type="button" class="aj-detail-btn" id="aj-plan-save">حفظ الخطة</button>
-          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-plan-print">طباعة الخطة</button>
+          <button type="button" class="aj-detail-btn" id="aj-visit-plan-distribute">توزيع تلقائي</button>
+          <button type="button" class="aj-detail-btn" id="aj-visit-plan-save">حفظ الخطة</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-visit-plan-print">طباعة الخطة</button>
           <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-desk">العودة</a>
         </div>
       </section>
@@ -284,37 +281,142 @@
 
       <section id="view-home" class="aj-view" hidden>
         <h1>المحطات الأربع</h1>
-        <p class="aj-lede">تسلسل إداري واحد: تأسيس ← تخطيط ← سجلات وشواهد ← قياس واعتماد.</p>
+        <p class="aj-lede">رحلة عمل متسلسلة من بداية العام إلى نهايته: تأسيس ← تخطيط ← سجلات وشواهد ← قياس واعتماد.</p>
         <ul class="aj-home-stages" aria-label="بطاقات المحطات الأربع">
           <li class="aj-home-card" data-aj-station="foundation">
             <h2>التأسيس والإعدادات المركزية</h2>
-            <p>بيانات المدرسة، استيراد نور، وتشكيل اللجان.</p>
-            <a class="aj-task-btn" href="#view-school">بيانات المدرسة</a>
-            <a class="aj-task-btn" href="#view-import-center">الاستيراد من نور</a>
-            <a class="aj-task-btn" href="#view-committees">تشكيل اللجان</a>
+            <p>من بيانات المدرسة إلى النسخ الاحتياطي وفحص النظام.</p>
+            <a class="aj-task-btn" href="#view-station-foundation">فتح رحلة التأسيس</a>
           </li>
           <li class="aj-home-card" data-aj-station="planning">
             <h2>الخطط المدرسية</h2>
-            <p>توليد الخطط التشغيلية، الجدولة، واعتماد الخطة.</p>
-            <a class="aj-task-btn" href="#view-planning">الخطط والبرامج</a>
-            <a class="aj-task-btn" href="#view-smart-planning">الخطط الذكية</a>
-            <a class="aj-task-btn" href="#view-program-add">إضافة برنامج</a>
+            <p>الخطة التشغيلية، الخطط الذكية، البرامج، والتوزيع على الفصلين.</p>
+            <a class="aj-task-btn" href="#view-station-planning">فتح رحلة الخطط</a>
           </li>
           <li class="aj-home-card" data-aj-station="registers">
             <h2>السجلات والمحاضر والشواهد</h2>
-            <p>السجلات، محاضر اللجان، الشواهد، والطباعة الرسمية A4.</p>
-            <a class="aj-task-btn" href="#view-execution">مركز التنفيذ والمحاضر</a>
-            <a class="aj-task-btn" href="#view-evidence">معرض الشواهد</a>
-            <a class="aj-task-btn" href="#view-visits">الزيارات الصفية</a>
+            <p>التنفيذ، الزيارات، التسليمات، الرخص، ومعرض الشواهد — مع طباعة A4.</p>
+            <a class="aj-task-btn" href="#view-station-registers">فتح رحلة السجلات</a>
           </li>
           <li class="aj-home-card" data-aj-station="measurement">
             <h2>القياس والاعتماد المدرسي</h2>
-            <p>التنبيهات الحرجة، المؤشرات، نواتج التعلم، وتقرير ETEC.</p>
-            <a class="aj-task-btn" href="#view-tasks">التنبيهات ومهام اليوم</a>
-            <a class="aj-task-btn" href="#view-performance">مؤشرات الأداء (SSOT)</a>
-            <a class="aj-task-btn" href="#view-external-eval">التقويم الخارجي (ETEC)</a>
+            <p>مؤشرات SSOT، ملف نافس، والتقويم الذاتي والاعتماد الخارجي.</p>
+            <a class="aj-task-btn" href="#view-station-measurement">فتح رحلة القياس</a>
           </li>
         </ul>
+      </section>
+
+      <section id="view-station-foundation" class="aj-view" hidden>
+        <h1>التأسيس والإعدادات المركزية</h1>
+        <p class="aj-lede">خطوات بداية العام بالترتيب. اختر خطوة واحدة — تُغلق بقية الشاشات.</p>
+        <ol class="aj-journey-steps" aria-label="رحلة التأسيس">
+          <li><a class="aj-task-btn" href="#view-school">بيانات المدرسة</a></li>
+          <li><a class="aj-task-btn" href="#view-letterhead">الترويسة والأختام الرسمية</a></li>
+          <li><a class="aj-task-btn" href="#view-import-center">الاستيراد من نور</a></li>
+          <li><a class="aj-task-btn" href="#view-staff">سجل المنسوبين</a></li>
+          <li><a class="aj-task-btn" href="#view-students-lists">قوائم الطلاب</a></li>
+          <li><a class="aj-task-btn" href="#view-leadership">التشكيل القيادي</a></li>
+          <li><a class="aj-task-btn" href="#view-committees">تشكيل اللجان والمجالس</a></li>
+          <li><a class="aj-task-btn" href="#view-access-hub">إدارة الحسابات وهندسة الصلاحيات</a></li>
+          <li><a class="aj-task-btn" href="#view-calendar-hub">التقويم المعتمد والمناسبات</a></li>
+          <li><a class="aj-task-btn" href="#view-system-care">النسخ الاحتياطي والتدقيق وفحص النظام</a></li>
+        </ol>
+      </section>
+
+      <section id="view-station-planning" class="aj-view" hidden>
+        <h1>الخطط المدرسية</h1>
+        <p class="aj-lede">تسلسل التخطيط التشغيلي حتى التوزيع على الفصلين.</p>
+        <ol class="aj-journey-steps" aria-label="رحلة الخطط">
+          <li><a class="aj-task-btn" href="#view-planning">الخطة التشغيلية للمدرسة</a></li>
+          <li><a class="aj-task-btn" href="#view-smart-planning">الخطط الذكية</a></li>
+          <li><a class="aj-task-btn" href="#view-program-add">إضافة برنامج / مبادرة</a></li>
+          <li><a class="aj-task-btn" href="#view-term-schedule">التوزيع الزمني على الفصلين</a></li>
+        </ol>
+      </section>
+
+      <section id="view-station-registers" class="aj-view" hidden>
+        <h1>السجلات والمحاضر والشواهد</h1>
+        <p class="aj-lede">من محاضر التنفيذ إلى معرض الشواهد الشامل.</p>
+        <ol class="aj-journey-steps" aria-label="رحلة السجلات">
+          <li><a class="aj-task-btn" href="#view-execution">مركز التنفيذ ومحاضر اللجان</a></li>
+          <li><a class="aj-task-btn" href="#view-visits-plan">الخطة السنوية للزيارات</a></li>
+          <li><a class="aj-task-btn" href="#view-visits">الزيارات الصفية</a></li>
+          <li><a class="aj-task-btn" href="#view-deliverables">تسليمات المعلمين ومتابعة الأداء</a></li>
+          <li><a class="aj-task-btn" href="#view-env-evidence">شواهد البرامج والبيئة المدرسية</a></li>
+          <li><a class="aj-task-btn aj-leadership-only" href="#view-license-form" hidden>تعبئة الرخص المهنية</a></li>
+          <li><a class="aj-task-btn aj-leadership-only" href="#view-practice-evidence" hidden>شواهد الممارسات</a></li>
+          <li><a class="aj-task-btn" href="#view-evidence">معرض الشواهد الشامل</a></li>
+        </ol>
+        <div class="aj-field-quick aj-field-only" hidden>
+          <a class="aj-detail-btn" href="#view-evidence">رفع شاهد سريع</a>
+        </div>
+      </section>
+
+      <section id="view-station-measurement" class="aj-view" hidden>
+        <h1>القياس والاعتماد المدرسي</h1>
+        <p class="aj-lede">المؤشرات ثم نافس ثم الاعتماد الخارجي. التنبيهات تبقى في مكتبي.</p>
+        <ol class="aj-journey-steps" aria-label="رحلة القياس">
+          <li><a class="aj-task-btn" href="#view-performance">مؤشرات الأداء (SSOT)</a></li>
+          <li><a class="aj-task-btn" href="#view-nafes">ملف التدريب والقياس (نافس)</a></li>
+          <li><a class="aj-task-btn" href="#view-external-eval">التقويم الذاتي والاعتماد الخارجي (ETEC)</a></li>
+        </ol>
+      </section>
+
+      <section id="view-access-hub" class="aj-view" hidden>
+        <h1>إدارة الحسابات وهندسة الصلاحيات</h1>
+        <p class="aj-lede">شاشة واحدة للوصول إلى الحسابات والصلاحيات دون بقاء مكتبي في الخلفية.</p>
+        <ul class="aj-hub-cards" aria-label="أدوات الوصول">
+          <li><a class="aj-task-btn" href="#view-accounts">إدارة الحسابات</a></li>
+          <li><a class="aj-task-btn" href="#view-permissions">هندسة الصلاحيات</a></li>
+        </ul>
+      </section>
+
+      <section id="view-calendar-hub" class="aj-view" hidden>
+        <h1>التقويم المعتمد والمناسبات</h1>
+        <p class="aj-lede">التقويم الرسمي ثم سجل المناسبات.</p>
+        <ul class="aj-hub-cards" aria-label="التقويم والمناسبات">
+          <li><a class="aj-task-btn" href="#view-calendar">التقويم المعتمد</a></li>
+          <li><a class="aj-task-btn" href="#view-occasions">المناسبات</a></li>
+        </ul>
+      </section>
+
+      <section id="view-system-care" class="aj-view wash-board" hidden>
+        <h1>النسخ الاحتياطي والتدقيق وفحص النظام</h1>
+        <p class="aj-lede">أدوات الصيانة مجمّعة هنا حمايةً للبيانات. التسكين التجريبي للمدير فقط.</p>
+        <ul class="aj-hub-cards" aria-label="أدوات النظام">
+          <li><a class="aj-task-btn" href="#view-backup">النسخ الاحتياطي</a></li>
+          <li><a class="aj-task-btn aj-principal-only" href="#view-audit" hidden>سجل التدقيق</a></li>
+          <li><a class="aj-task-btn aj-principal-only" href="#view-health" hidden>فحص النظام</a></li>
+          <li><a class="aj-task-btn aj-principal-only" href="#view-trash" hidden>سلة المهملات</a></li>
+        </ul>
+        <div class="aj-detail-actions aj-principal-only" id="aj-system-care-pilot" hidden>
+          <button type="button" class="aj-task-btn aj-principal-only" id="aj-pilot-support-clear" hidden>حذف التسكين التجريبي</button>
+          <button type="button" class="aj-task-btn aj-principal-only" id="aj-pilot-support-draw" hidden>إعادة التسكين العشوائي</button>
+        </div>
+      </section>
+
+      <section id="view-term-schedule" class="aj-view" hidden>
+        <h1>التوزيع الزمني على الفصلين</h1>
+        <p class="aj-lede">عرض توزيع العام على الفصلين من التقويم المعتمد وأسابيع الفصل المحفوظة.</p>
+        <p class="aj-status" id="aj-term-status" role="status" aria-live="polite"></p>
+        <p class="aj-summary" id="aj-term-summary"></p>
+        <ul class="aj-cards" id="aj-term-cards" aria-label="محطات الفصلين"></ul>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn" href="#view-calendar">تعديل التقويم المعتمد</a>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-station-planning">العودة لرحلة الخطط</a>
+        </div>
+      </section>
+
+      <section id="view-nafes" class="aj-view" hidden>
+        <h1>ملف التدريب والقياس (نافس)</h1>
+        <p class="aj-lede">مؤشرات نافس من مصدر الحقيقة الواحد دون خلط مع لوحة المؤشرات العامة.</p>
+        <p class="aj-loading" id="aj-nafes-loading" hidden>جارٍ التحميل...</p>
+        <p class="aj-status" id="aj-nafes-status" role="status" aria-live="polite"></p>
+        <ul class="aj-cards" id="aj-nafes-cards" aria-label="مؤشرات نافس"></ul>
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-performance">مؤشرات الأداء (SSOT)</a>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-station-measurement">العودة لرحلة القياس</a>
+        </div>
       </section>
 
       <section id="view-smart-planning" class="aj-view" hidden>
@@ -533,7 +635,7 @@
       </section>
 
       <section id="view-external-eval" class="aj-view wash-board" hidden>
-        <h1>نتائج التقويم الخارجي</h1>
+        <h1>التقويم الذاتي والاعتماد الخارجي (ETEC)</h1>
         <p class="aj-lede" id="aj-eval-hint"></p>
         <p class="aj-status" id="aj-eval-status" role="status"></p>
         <canvas id="aj-eval-chart" width="640" height="280" aria-label="تطور الأداء العام"></canvas>
@@ -1598,10 +1700,10 @@
 
   <nav class="aj-bottom-nav" aria-label="تنقل المحطات">
     <a href="#view-desk">مكتبي</a>
-    <a href="#view-school" data-aj-station="foundation">تأسيس</a>
-    <a href="#view-planning" data-aj-station="planning">خطط</a>
-    <a href="#view-execution" data-aj-station="registers">سجلات</a>
-    <a href="#view-performance" data-aj-station="measurement">قياس</a>
+    <a href="#view-station-foundation" data-aj-station="foundation">تأسيس</a>
+    <a href="#view-station-planning" data-aj-station="planning">خطط</a>
+    <a href="#view-station-registers" data-aj-station="registers">سجلات</a>
+    <a href="#view-station-measurement" data-aj-station="measurement">قياس</a>
     <button type="button" id="aj-menu-open-bottom">المحطات</button>
   </nav>
 
@@ -1614,11 +1716,11 @@
   <script src="/cores/deficiency-core.js?v=c274"></script>
   <script src="js/print-templates.js?v=aj175"></script>
   <script src="/cores/print-core.js?v=c287"></script>
-  <script src="/cores/event-bus.js?v=c294"></script>
+  <script src="/cores/event-bus.js?v=c295"></script>
   <script src="/cores/consistency-core.js?v=c282"></script>
   <script src="/cores/evaluation-core.js?v=c284"></script>
   <script src="/cores/template-engine.js?v=c286"></script>
-  <script src="js/app-journey.js?v=aj185"></script>
+  <script src="js/app-journey.js?v=aj189"></script>
   <script src="js/app-journey-indicator-files.js?v=aj1"></script>
   <script src="js/app-journey-deliverable-file.js?v=c298"></script>
   <script src="js/app-journey-plan-111.js?v=aj175"></script>
@@ -1632,6 +1734,6 @@
   <script src="js/app-journey-student-registry.js?v=aj145"></script>
   <script src="js/app-journey-evaluation.js?v=c284"></script>
   <script src="js/app-journey-visits.js?v=aj9"></script>
-  <script src="js/app-journey-visit-plan.js?v=aj2"></script>
+  <script src="js/app-journey-visit-plan.js?v=aj3"></script>
 </body>
 </html>
