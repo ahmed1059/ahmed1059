@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets & local env (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials/
+
+# Local / runtime data (backup separately; do not push live DB by default)
+*.db-journal
+*.sqlite3-journal
+*.log
+logs/
+tmp/
+temp/
+.cache/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*~
+
+# Node (if any tooling appears later)
+node_modules/
+dist/
+build/
+
+# Backups created by the import script (keep local only)
+_backups/
+*.zip.bak
+School_Governance_System_1059_backup_*/
