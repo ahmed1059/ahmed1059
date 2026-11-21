@@ -3353,6 +3353,34 @@ body.app-journey.print-official-core .aj-env-students-table th {
   align-items: flex-start;
 }
 
+.aj-committee-boards {
+  display: grid;
+  gap: 18px;
+  width: 100%;
+}
+
+.aj-committee-board {
+  background: #ffffff;
+  border: 1px solid #d5e2dc;
+  border-radius: 8px;
+  padding: 10px 12px 14px;
+}
+
+.aj-committee-board .aj-group-title {
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #0b5e56;
+}
+
+.aj-committee-board .aj-formation-table {
+  margin-top: 0;
+}
+
+.aj-committee-empty td {
+  color: #5c675f;
+  font-size: 13px;
+}
+
 .aj-formation-table {
   width: 100%;
   border-collapse: collapse;
