@@ -805,6 +805,7 @@ def draw_committees(x_session_token: str = Header(default="")):
             lead.get("students"),
             lead.get("school"),
             lead.get("counselor"),
+            lead.get("counselor_2"),
             lead.get("activity"),
         }
         reserved.discard("")
