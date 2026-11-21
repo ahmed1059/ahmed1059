@@ -88,7 +88,55 @@
     if (text.indexOf("لغتي") !== -1 || text.indexOf("عربي") !== -1 || text.indexOf("لغةعربية") !== -1 || text.indexOf("اللغةالعربية") !== -1) {
       return "اللغة العربية";
     }
+    if (text.indexOf("إسلام") !== -1 || text.indexOf("اسلام") !== -1 || text.indexOf("توحيد") !== -1 || text.indexOf("فقه") !== -1) {
+      return "الدراسات الإسلامية";
+    }
+    if (text.indexOf("English") !== -1 || text.indexOf("انجليز") !== -1 || text.indexOf("إنجليز") !== -1 || text.indexOf("انجلي") !== -1) {
+      return "اللغة الإنجليزية";
+    }
+    if (text.indexOf("اجتماع") !== -1 || text.indexOf("دراساتاجتماع") !== -1 || text.indexOf("وطني") !== -1) {
+      return "الدراسات الاجتماعية";
+    }
+    if (text.indexOf("رقمي") !== -1 || text.indexOf("حاسب") !== -1 || text.indexOf("حاسوب") !== -1 || text.indexOf("تقنية") !== -1) {
+      return "المهارات الرقمية";
+    }
     return String(value || "").trim();
+  }
+
+  function curriculumSubjectKey(value) {
+    var normalized = subjectOf(value);
+    var map = (curriculumMap && curriculumMap.subjects) || {};
+    if (normalized && map[normalized]) {
+      return normalized;
+    }
+    if (normalized === "اللغة العربية" && map["لغتي الخالدة"]) {
+      return "لغتي الخالدة";
+    }
+    var raw = String(value || "").trim();
+    if (raw && map[raw]) {
+      return raw;
+    }
+    if (map["لغتي الخالدة"] && /لغتي|عربي/.test(raw.replace(/\s+/g, ""))) {
+      return "لغتي الخالدة";
+    }
+    return normalized && map[normalized] ? normalized : "";
+  }
+
+  function gradeKey(value) {
+    var text = String(value || "").replace(/\s+/g, " ").trim();
+    if (!text) {
+      return "";
+    }
+    if (/أول|1\s*م|الأول/.test(text)) {
+      return "الأول المتوسط";
+    }
+    if (/ثان|2\s*م|الثاني/.test(text)) {
+      return "الثاني المتوسط";
+    }
+    if (/ثالث|3\s*م|الثالث/.test(text)) {
+      return "الثالث المتوسط";
+    }
+    return text;
   }
 
   function subjectBankKey(value) {
@@ -125,16 +173,23 @@
     return {
       subject: value("aj-visit-subject"),
       lesson: value("aj-visit-lesson") || "الدرس",
-      visitType: value("aj-visit-type")
+      skill: value("aj-visit-skill") || "المهارة المستهدفة",
+      unit: value("aj-visit-unit") || "",
+      week: value("aj-visit-week") || "",
+      grade: value("aj-visit-grade") || "",
+      visitType: value("aj-visit-type"),
+      visitDate: value("aj-visit-date")
     };
   }
 
   function fillTokens(text, ctx) {
     var lesson = (ctx && ctx.lesson) || "الدرس";
     var subject = subjectOf((ctx && ctx.subject) || "") || "المادة";
+    var skill = (ctx && ctx.skill) || "المهارة المستهدفة";
     return String(text || "")
       .replace(/\{\{\s*lesson\s*\}\}/g, lesson)
-      .replace(/\{\{\s*subject\s*\}\}/g, subject);
+      .replace(/\{\{\s*subject\s*\}\}/g, subject)
+      .replace(/\{\{\s*skill\s*\}\}/g, skill);
   }
 
   function mapFill(list, ctx) {
@@ -282,6 +337,7 @@
     if (band) {
       band.textContent = !any ? "" : total >= 90 ? "ممتاز" : total >= 75 ? "متقدم" : total >= 60 ? "متمكن" : "بحاجة إلى دعم";
     }
+    suggestFollowUp(false);
   }
 
   function syncPhrase(row, force, ctx) {
@@ -348,6 +404,7 @@
     var formCtx = {
       subject: subjectValue,
       lesson: item.lesson || "الدرس",
+      skill: item.skill || "المهارة المستهدفة",
       visitType: item.visit_type || ""
     };
     var rows = state.criteria.map(function (spec) {
@@ -377,7 +434,10 @@
       + field("الفصل", "<select id=\"aj-visit-section\">" + options(["1", "2", "3", "4"], item.section_no, "") + "</select>")
       + field("المادة", "<select id=\"aj-visit-subject\">" + options(subjects, subjectValue, "") + "</select>")
       + field("الحصة", "<select id=\"aj-visit-period\">" + options(["1", "2", "3", "4", "5", "6", "7"], item.period_no, "") + "</select>")
+      + field("أسبوع المقرر", "<select id=\"aj-visit-week\">" + options(weekOptionsFor(subjectValue, item.grade), item.week || "", "أسبوع المقرر") + "</select>")
+      + field("الوحدة", "<input id=\"aj-visit-unit\" type=\"text\" value=\"" + escapeHtml(item.unit || "") + "\">")
       + field("موضوع الدرس", "<input id=\"aj-visit-lesson\" type=\"text\" value=\"" + escapeHtml(item.lesson || "") + "\">")
+      + field("المهارة", "<input id=\"aj-visit-skill\" type=\"text\" value=\"" + escapeHtml(item.skill || "") + "\">")
       + field("تاريخ الزيارة", "<span class=\"aj-visit-dates\"><input id=\"aj-visit-date\" type=\"date\" value=\"" + escapeHtml(item.visit_date || "") + "\"><input id=\"aj-visit-hijri\" type=\"text\" value=\"" + escapeHtml(cleanHijri(item.visit_date_hijri || "")) + "\" placeholder=\"التاريخ الهجري\"></span>")
       + "</div>"
       + "<h2 class=\"aj-group-title\">بنود التقويم</h2>"
@@ -429,8 +489,16 @@
     if (planBox && (isAutoText(planBox.value) || (notesBox && notesBox.dataset.auto === "1"))) {
       planBox.dataset.auto = "1";
     }
+    ["aj-visit-unit", "aj-visit-lesson", "aj-visit-skill", "aj-visit-follow-g"].forEach(function (id) {
+      var node = document.getElementById(id);
+      if (node && !String(node.value || "").trim()) {
+        node.dataset.auto = "1";
+      }
+    });
+    applyCurriculumFill(false);
     writeAdvice(false);
     paintTotal();
+    suggestFollowUp(false);
   }
 
   function readCriteria() {
@@ -463,7 +531,10 @@
       section_no: value("aj-visit-section"),
       subject: value("aj-visit-subject"),
       period_no: value("aj-visit-period"),
+      week: value("aj-visit-week"),
+      unit: value("aj-visit-unit"),
       lesson: value("aj-visit-lesson"),
+      skill: value("aj-visit-skill"),
       teacher_rank: value("aj-visit-rank"),
       visit_date: value("aj-visit-date"),
       visit_date_hijri: cleanHijri(value("aj-visit-hijri")),
@@ -483,6 +554,170 @@
   }
 
   var phraseBank = null;
+  var curriculumMap = null;
+  var calendarStarts = null;
+
+  function loadCurriculumMap() {
+    if (curriculumMap) {
+      return Promise.resolve(curriculumMap);
+    }
+    return fetch("data/curriculum-map.json", { cache: "no-store" }).then(function (response) {
+      if (!response.ok) {
+        throw new Error("تعذر قراءة خريطة المناهج");
+      }
+      return response.json();
+    }).then(function (pack) {
+      curriculumMap = pack && pack.subjects ? pack : { subjects: {} };
+      return curriculumMap;
+    }).catch(function () {
+      curriculumMap = { subjects: {} };
+      return curriculumMap;
+    });
+  }
+
+  function loadCalendarStarts() {
+    if (calendarStarts) {
+      return Promise.resolve(calendarStarts);
+    }
+    return fetch("data/calendar_1448.json", { cache: "no-store" }).then(function (response) {
+      return response && response.ok ? response.json() : {};
+    }).catch(function () {
+      return {};
+    }).then(function (pack) {
+      var year = (pack && pack["1448"]) || pack || {};
+      var region = year["المدينة المنورة"] || year["مكة المكرمة"] || Object.keys(year).map(function (key) {
+        return year[key];
+      })[0] || {};
+      calendarStarts = region;
+      return calendarStarts;
+    });
+  }
+
+  function isoAddDays(iso, days) {
+    var date = new Date(String(iso || "") + "T12:00:00");
+    if (Number.isNaN(date.getTime())) {
+      return "";
+    }
+    date.setDate(date.getDate() + Number(days || 0));
+    var y = date.getFullYear();
+    var m = String(date.getMonth() + 1);
+    var d = String(date.getDate());
+    if (m.length < 2) m = "0" + m;
+    if (d.length < 2) d = "0" + d;
+    return y + "-" + m + "-" + d;
+  }
+
+  function schoolWeekOf(iso) {
+    var starts = calendarStarts || {};
+    var visit = new Date(String(iso || "") + "T12:00:00");
+    if (Number.isNaN(visit.getTime())) {
+      return 0;
+    }
+    var best = null;
+    Object.keys(starts).forEach(function (sem) {
+      var info = starts[sem] || {};
+      var start = new Date(String(info.start || "") + "T12:00:00");
+      if (Number.isNaN(start.getTime()) || visit < start) {
+        return;
+      }
+      var weeks = Number(info.weeks || 18) || 18;
+      var diff = Math.floor((visit.getTime() - start.getTime()) / 86400000);
+      var week = Math.floor(diff / 7) + 1;
+      if (week < 1 || week > weeks) {
+        return;
+      }
+      if (!best || start > best.start) {
+        best = { week: week, start: start, semester: sem };
+      }
+    });
+    return best ? best.week : 0;
+  }
+
+  function curriculumEntry(subject, grade, week) {
+    var subjects = (curriculumMap && curriculumMap.subjects) || {};
+    var subj = curriculumSubjectKey(subject);
+    var grd = gradeKey(grade);
+    var book = subjects[subj] || {};
+    var gradeBook = book[grd] || {};
+    return gradeBook[String(week || "")] || null;
+  }
+
+  function weekOptionsFor(subject, grade) {
+    var subjects = (curriculumMap && curriculumMap.subjects) || {};
+    var subj = curriculumSubjectKey(subject);
+    var grd = gradeKey(grade);
+    var gradeBook = ((subjects[subj] || {})[grd]) || {};
+    return Object.keys(gradeBook).sort(function (a, b) {
+      return Number(a) - Number(b);
+    }).map(function (week) {
+      var entry = gradeBook[week] || {};
+      return {
+        value: week,
+        label: "أ" + week + " — " + (entry.lesson || entry.unit || week)
+      };
+    });
+  }
+
+  function applyCurriculumFill(force) {
+    var ctx = visitContext();
+    var weekNode = document.getElementById("aj-visit-week");
+    var unitNode = document.getElementById("aj-visit-unit");
+    var lessonNode = document.getElementById("aj-visit-lesson");
+    var skillNode = document.getElementById("aj-visit-skill");
+    var optionsList = weekOptionsFor(ctx.subject, ctx.grade);
+    var selectedWeek = ctx.week;
+    if (weekNode) {
+      if (!selectedWeek || force) {
+        var autoWeek = schoolWeekOf(ctx.visitDate);
+        if (autoWeek) {
+          selectedWeek = String(autoWeek);
+        }
+      }
+      weekNode.innerHTML = options(optionsList, selectedWeek, "أسبوع المقرر");
+      if (selectedWeek) {
+        weekNode.value = selectedWeek;
+      }
+    }
+    var entry = curriculumEntry(ctx.subject, ctx.grade, weekNode ? weekNode.value : selectedWeek);
+    if (!entry) {
+      return null;
+    }
+    if (unitNode && (force || unitNode.dataset.auto === "1" || !unitNode.value.trim())) {
+      unitNode.value = entry.unit || "";
+      unitNode.dataset.auto = "1";
+    }
+    if (lessonNode && (force || lessonNode.dataset.auto === "1" || !lessonNode.value.trim())) {
+      lessonNode.value = entry.lesson || "";
+      lessonNode.dataset.auto = "1";
+    }
+    if (skillNode && (force || skillNode.dataset.auto === "1" || !skillNode.value.trim())) {
+      skillNode.value = entry.skill || "";
+      skillNode.dataset.auto = "1";
+    }
+    return entry;
+  }
+
+  function suggestFollowUp(force) {
+    var dateNode = document.getElementById("aj-visit-date");
+    var followG = document.getElementById("aj-visit-follow-g");
+    var band = document.getElementById("aj-visit-band");
+    if (!dateNode || !followG || !dateNode.value) {
+      return;
+    }
+    var needsSupport = band && /بحاجة/.test(String(band.textContent || ""));
+    var totalNode = document.getElementById("aj-visit-total");
+    var total = totalNode ? Number(totalNode.textContent || "") : NaN;
+    if (!needsSupport && !(isFinite(total) && total < 60)) {
+      return;
+    }
+    if (!force && followG.value && followG.dataset.auto !== "1") {
+      return;
+    }
+    // 14–21 يوماً: نأخذ 18 يوماً وسط المجال
+    followG.value = isoAddDays(dateNode.value, 18);
+    followG.dataset.auto = "1";
+    applyHijri("aj-visit-follow-g", "aj-visit-follow-h");
+  }
 
   function loadPhraseBank() {
     if (phraseBank) {
@@ -517,66 +752,88 @@
     }).slice().sort(function (a, b) {
       return (RATIO[a.level] || 0) - (RATIO[b.level] || 0);
     });
+    var byId = {};
+    ranked.forEach(function (row) {
+      byId[row.id] = row;
+    });
+    var planningNone = byId.planning && byId.planning.level === "none";
     var strengths = [];
     var feedback = [];
     var improvement = [];
     var picks = { strength: [], feedback: [] };
     var usedFeedback = [];
+
+    function acceptableStrength(row, sentence) {
+      if (!sentence) {
+        return false;
+      }
+      if (planningNone && row.id === "strategies" && /وافق الهدف|ناسب الهدف|هدف الحصة|هدف \{\{lesson\}\}/.test(sentence)) {
+        return false;
+      }
+      if (planningNone && /وافق الهدف|وافقت الهدف/.test(sentence)) {
+        return false;
+      }
+      return true;
+    }
+
     ranked.forEach(function (row) {
       var pack = linePack(row.id, row.level, ctx);
       pack.strength.forEach(function (sentence) {
-        if (sentence && picks.strength.indexOf(sentence) < 0) {
+        if (acceptableStrength(row, sentence) && picks.strength.indexOf(sentence) < 0) {
           picks.strength.push(sentence);
         }
       });
-      pack.feedback.forEach(function (sentence) {
-        if (sentence && picks.feedback.indexOf(sentence) < 0) {
-          picks.feedback.push(sentence);
-        }
-      });
-      if (pack.strength[0] && strengths.indexOf(pack.strength[0]) < 0 && strengths.length < 3) {
-        strengths.push(pack.strength[0]);
-      }
-      var tip = pack.feedback[0] || "";
-      if (tip && usedFeedback.indexOf(tip) < 0 && feedback.length < 5) {
-        feedback.push(tip);
-        usedFeedback.push(tip);
-      }
-      var need = pack.need[0] || "";
-      if (need && improvement.length < 3) {
-        var clash = feedback.some(function (line) {
-          return normalizeOverlap(line, need);
-        }) || improvement.some(function (line) {
-          return normalizeOverlap(line, need);
+      // التغذية الراجعة للبنود الناقصة فقط (أقل من الدرجة الكاملة)
+      if (row.level && row.level !== "high") {
+        pack.feedback.forEach(function (sentence) {
+          if (sentence && picks.feedback.indexOf(sentence) < 0) {
+            picks.feedback.push(sentence);
+          }
         });
-        if (!clash) {
-          improvement.push(need);
+        var tip = pack.feedback[0] || "";
+        if (tip && usedFeedback.indexOf(tip) < 0 && feedback.length < 5) {
+          feedback.push(tip);
+          usedFeedback.push(tip);
+        }
+        var need = pack.need[0] || "";
+        if (need && improvement.length < 4) {
+          var clash = feedback.some(function (line) {
+            return normalizeOverlap(line, need);
+          }) || improvement.some(function (line) {
+            return normalizeOverlap(line, need);
+          });
+          if (!clash) {
+            improvement.push(need);
+          }
+        }
+      }
+      if (row.level === "high" || row.level === "met") {
+        var strength = pack.strength[0] || "";
+        if (acceptableStrength(row, strength) && strengths.indexOf(strength) < 0 && strengths.length < 3) {
+          // إن كانت strategies met مع تخطيط صفر، استبدل بعبارة محتوى الدرس
+          if (planningNone && row.id === "strategies") {
+            strength = fillTokens("اختيار الاستراتيجية ناسب محتوى {{lesson}} المعروض دون ادعاء وضوح هدف مكتوب.", ctx);
+          }
+          if (strength) {
+            strengths.push(strength);
+          }
         }
       }
     });
-    if (feedback.length < 4) {
-      picks.feedback.forEach(function (sentence) {
-        if (feedback.length >= 5) {
-          return;
-        }
-        if (sentence && usedFeedback.indexOf(sentence) < 0) {
-          feedback.push(sentence);
-          usedFeedback.push(sentence);
-        }
-      });
-    }
+
+    // لا تُملأ التغذية الراجعة من بنود مكتملة حتى لو بقيت قصيرة
     var intro = pickIntro(ctx);
     if (!strengths.length && !feedback.length && !improvement.length && !intro) {
       return null;
     }
-    var numbered = improvement.map(function (step, index) {
+    var numbered = improvement.slice(0, 4).map(function (step, index) {
       return (index + 1) + ". " + step;
     });
     return {
       intro: intro,
       strengths: strengths.join(" "),
       recommendations: feedback.slice(0, 5).join(" "),
-      improvement: numbered.join(" "),
+      improvement: numbered.join("\n"),
       picks: picks
     };
   }
@@ -783,25 +1040,49 @@
   }
 
   function printRecord(record) {
-    var master = window.PrintMasterCore;
-    if (!master || typeof master.sheet !== "function" || !window.AJPrint) {
+    if (!window.PrintEngine || typeof window.PrintEngine.open !== "function") {
+      toast("بوابة PrintEngine غير محمّلة.", "error");
+      return;
+    }
+    if (!window.PrintMasterCore || typeof window.PrintMasterCore.sheet !== "function") {
       toast("نواة الطباعة غير محمّلة.", "error");
       return;
     }
-    var ids = [record.visitor_id].filter(Boolean);
-    loadPhraseBank().then(function () {
-      return fetch("/api/session/signatures?ids=" + encodeURIComponent(ids.join(",")), {
-      headers: authHeaders(),
-      cache: "no-store"
-    }).then(function (response) {
-      return response.ok ? response.json() : { signatures: {} };
-    }).catch(function () {
-      return { signatures: {} };
-    }).then(function (payload) {
-      var signs = payload.signatures || {};
+    var ids = [record.visitor_id, record.teacher_id, state.managerId].filter(Boolean);
+    Promise.all([
+      loadPhraseBank(),
+      loadCurriculumMap(),
+      fetch("/api/session/signatures?ids=" + encodeURIComponent(ids.join(",")), {
+        headers: authHeaders(),
+        cache: "no-store"
+      }).then(function (response) {
+        return response.ok ? response.json() : { signatures: {} };
+      }).catch(function () {
+        return { signatures: {} };
+      }),
+      fetch("/api/session/leadership", { headers: authHeaders(), cache: "no-store" })
+        .then(function (response) {
+          return response.ok ? response.json() : {};
+        }).catch(function () {
+          return {};
+        })
+    ]).then(function (parts) {
+      var signs = (parts[2] && parts[2].signatures) || {};
+      var leadership = parts[3] || {};
+      var managerId = state.managerId || leadership.manager || "";
+      var managerName = "";
+      state.staff.forEach(function (person) {
+        if (String(person.id) === String(managerId)) {
+          managerName = person.name || "";
+        }
+      });
+      if (!managerName && leadership.manager_name) {
+        managerName = leadership.manager_name;
+      }
       var printCtx = {
         subject: record.subject || "",
         lesson: record.lesson || "الدرس",
+        skill: record.skill || "المهارة المستهدفة",
         visitType: record.visit_type || ""
       };
       var spoken = textFromLevels(record.criteria || [], printCtx);
@@ -815,20 +1096,15 @@
       } else if (spoken && planAuto) {
         record.improvement = spoken.improvement;
       }
-      if (spoken && record.recommendations && record.improvement) {
-        var feedbackBits = String(record.recommendations).split(/[.؟!]\s+/).filter(Boolean);
-        var planBits = String(record.improvement).split(/\s*(?=\d+\.\s)/).filter(Boolean);
-        var uniquePlan = planBits.filter(function (step) {
-          return !feedbackBits.some(function (line) {
-            return normalizeOverlap(line, step);
-          });
-        });
-        if (uniquePlan.length) {
-          record.improvement = uniquePlan.map(function (step, index) {
-            var cleaned = String(step).replace(/^\d+\.\s*/, "").trim();
-            return (index + 1) + ". " + cleaned;
-          }).join(" ");
+      if (record.improvement) {
+        var planBits = String(record.improvement).split(/\n+/).filter(Boolean);
+        if (planBits.length === 1) {
+          planBits = String(record.improvement).split(/\s*(?=\d+\.\s)/).filter(Boolean);
         }
+        record.improvement = planBits.map(function (step, index) {
+          var cleaned = String(step).replace(/^\d+\.\s*/, "").trim();
+          return (index + 1) + ". " + cleaned;
+        }).join("\n");
       }
       var rows = (record.criteria || []).map(function (row) {
         return "<tr><td style=\"width:24%;padding:1mm 1.5mm;border:1px solid #9db8b2;font-size:11px;\">" + escapeHtml(row.label) + "</td>"
@@ -836,13 +1112,15 @@
           + "<td style=\"width:52%;padding:1mm;border:1px solid #9db8b2;font-size:11px;\">" + escapeHtml(fillTokens(row.phrase || "", printCtx)) + "</td>"
           + "<td style=\"width:10%;padding:1mm;border:1px solid #9db8b2;font-size:11px;text-align:center;\">" + escapeHtml(row.points) + "</td></tr>";
       }).join("");
-      var metaPairs = [
+      var metaGrid = [
         ["المعلم", record.teacher_name],
         ["المسمى الوظيفي", record.teacher_rank || rankMatch(record.teacher_id)],
         ["المادة", subjectOf(record.subject)],
         ["الصف", [record.grade, record.section_no ? "فصل " + record.section_no : ""].filter(Boolean).join(" · ")],
         ["الحصة", record.period_no],
+        ["الوحدة", record.unit],
         ["الدرس", record.lesson],
+        ["المهارة", record.skill],
         ["نوع الزيارة", record.visit_type],
         ["المؤشر", record.indicator],
         ["التاريخ", dateLine(record.visit_date_hijri, record.visit_date)],
@@ -850,61 +1128,46 @@
       ].filter(function (pair) {
         return String(pair[1] || "").trim();
       });
-      var metaCells = metaPairs.map(function (pair) {
-        return "<td style=\"width:50%;padding:0.6mm 1.2mm;border:1px solid #9db8b2;font-size:11px;vertical-align:top;\">"
-          + "<strong>" + escapeHtml(pair[0]) + ":</strong> " + escapeHtml(pair[1]) + "</td>";
-      });
-      var metaRows = [];
-      for (var mi = 0; mi < metaCells.length; mi += 2) {
-        metaRows.push("<tr>" + metaCells[mi] + (metaCells[mi + 1] || "<td style=\"width:50%;border:1px solid #9db8b2;\"></td>") + "</tr>");
-      }
-      var meta = "<table style=\"width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 2mm;\">"
-        + metaRows.join("") + "</table>";
-      var extra = "";
-      if (record.visit_intro) {
-        extra += "<p class=\"tpl-p\" style=\"margin:1mm 0;\">" + escapeHtml(record.visit_intro) + "</p>";
-      }
-      if (record.strengths) {
-        extra += "<p class=\"tpl-p\" style=\"margin:1mm 0;\"><strong>أبرز جوانب التميز:</strong> " + escapeHtml(record.strengths) + "</p>";
-      }
-      if (record.recommendations) {
-        extra += "<p class=\"tpl-p\" style=\"margin:1mm 0;\"><strong>التغذية الراجعة المقدمة:</strong> " + escapeHtml(record.recommendations) + "</p>";
-      }
-      if (record.improvement) {
-        extra += "<p class=\"tpl-p\" style=\"margin:1mm 0;\"><strong>خطة التحسين:</strong> " + escapeHtml(record.improvement) + "</p>";
-      }
-      var follow = dateLine(record.follow_hijri, record.follow_gregorian);
-      if (follow) {
-        extra += "<p class=\"tpl-p\"><strong>موعد المتابعة:</strong> " + escapeHtml(follow) + "</p>";
-      }
-      var totalLine = record.band
-        ? "<p class=\"tpl-p\"><strong>المجموع:</strong> " + escapeHtml(record.total) + " — " + escapeHtml(record.band) + "</p>"
-        : "";
-      var body = "<div style=\"margin:3mm 8mm 2mm;\">" + meta
-        + "<table style=\"width:100%;border-collapse:collapse;table-layout:fixed;margin:0 auto;\"><thead><tr>"
+      var sections = [];
+      sections.push("<table style=\"width:100%;border-collapse:collapse;table-layout:fixed;margin:0 auto;\"><thead><tr>"
         + "<th style=\"width:24%;padding:1mm;border:1px solid #0b5e56;font-size:11px;\">البند</th>"
         + "<th style=\"width:14%;padding:1mm;border:1px solid #0b5e56;font-size:11px;\">المستوى</th>"
         + "<th style=\"width:52%;padding:1mm;border:1px solid #0b5e56;font-size:11px;\">العبارة</th>"
         + "<th style=\"width:10%;padding:1mm;border:1px solid #0b5e56;font-size:11px;\">الدرجة</th>"
-        + "</tr></thead><tbody>" + rows + "</tbody></table>" + totalLine + extra + "</div>";
-      var columns = [
-        { roleTitle: record.visitor_role || "الزائر", name: record.visitor_name || "", signature: signs[record.visitor_id] || "" }
-      ];
-      var html = master.sheet({
-        strictIdentity: true,
+        + "</tr></thead><tbody>" + rows + "</tbody></table>");
+      if (record.band) {
+        sections.push("<p class=\"tpl-p\"><strong>المجموع:</strong> " + escapeHtml(record.total) + " — " + escapeHtml(record.band) + "</p>");
+      }
+      if (record.visit_intro) {
+        sections.push("<p class=\"tpl-p\">" + escapeHtml(record.visit_intro) + "</p>");
+      }
+      if (record.strengths) {
+        sections.push("<p class=\"tpl-p\"><strong>أبرز جوانب التميز:</strong> " + escapeHtml(record.strengths) + "</p>");
+      }
+      if (record.recommendations) {
+        sections.push("<p class=\"tpl-p\"><strong>التغذية الراجعة المقدمة:</strong> " + escapeHtml(record.recommendations) + "</p>");
+      }
+      if (record.improvement) {
+        sections.push("<p class=\"tpl-p\" style=\"white-space:pre-line;\"><strong>خطة التحسين:</strong>\n" + escapeHtml(record.improvement) + "</p>");
+      }
+      var follow = dateLine(record.follow_hijri, record.follow_gregorian);
+      if (follow) {
+        sections.push("<p class=\"tpl-p\"><strong>موعد المتابعة:</strong> " + escapeHtml(follow) + "</p>");
+      }
+      window.PrintEngine.open("master-sheet", {
+        docTitle: "تقرير زيارة صفية",
         orientation: "landscape",
-        title: "تقرير زيارة صفية",
-        bodyHtml: body,
-        signoff: true,
-        columns: columns,
         kind: "document",
-        fileName: "تقرير زيارة - " + (record.teacher_name || "")
+        fileName: "تقرير زيارة - " + (record.teacher_name || ""),
+        metaGrid: metaGrid,
+        sectionsHtml: sections.join(""),
+        signatures: [
+          { roleTitle: "المعلم المُزار", name: record.teacher_name || "", signature: signs[record.teacher_id] || "" },
+          { roleTitle: "الزائر المقيّم", name: record.visitor_name || "", signature: signs[record.visitor_id] || "" },
+          { roleTitle: "مدير المدرسة", name: managerName || "مدير المدرسة", signature: signs[managerId] || "" }
+        ],
+        multiPage: false
       });
-      window.AJPrint.show(html, {
-        pdfTitle: "تقرير زيارة - " + (record.teacher_name || ""),
-        arm: { orientation: "landscape" }
-      });
-    });
     });
   }
 
@@ -945,7 +1208,10 @@
       grade: body.grade,
       section_no: body.section_no,
       period_no: body.period_no,
+      week: body.week,
+      unit: body.unit,
       lesson: body.lesson,
+      skill: body.skill,
       visit_type: body.visit_type,
       indicator: body.indicator,
       visit_date: body.visit_date,
@@ -1012,8 +1278,12 @@
       }
       if (event.target.id === "aj-visit-date") {
         applyHijri("aj-visit-date", "aj-visit-hijri");
+        applyCurriculumFill(true);
+        refreshPhrases(false);
+        suggestFollowUp(true);
       }
       if (event.target.id === "aj-visit-follow-g") {
+        event.target.dataset.auto = "";
         applyHijri("aj-visit-follow-g", "aj-visit-follow-h");
       }
       if (event.target.id === "aj-visit-teacher") {
@@ -1031,15 +1301,32 @@
             subject.insertAdjacentHTML("beforeend", "<option value=\"" + escapeHtml(taught) + "\">" + escapeHtml(taught) + "</option>");
           }
           subject.value = taught;
+          applyCurriculumFill(true);
           refreshPhrases(false);
         }
       }
-      if (event.target.id === "aj-visit-subject" || event.target.id === "aj-visit-type") {
+      if (event.target.id === "aj-visit-subject" || event.target.id === "aj-visit-grade" || event.target.id === "aj-visit-week") {
+        if (event.target.id === "aj-visit-week") {
+          var unitNode = document.getElementById("aj-visit-unit");
+          var lessonNode = document.getElementById("aj-visit-lesson");
+          var skillNode = document.getElementById("aj-visit-skill");
+          if (unitNode) unitNode.dataset.auto = "1";
+          if (lessonNode) lessonNode.dataset.auto = "1";
+          if (skillNode) skillNode.dataset.auto = "1";
+        }
+        applyCurriculumFill(event.target.id !== "aj-visit-week");
         refreshPhrases(false);
+      }
+      if (event.target.id === "aj-visit-type") {
+        refreshPhrases(false);
+      }
+      if (event.target.id === "aj-visit-unit" || event.target.id === "aj-visit-skill") {
+        event.target.dataset.auto = "";
       }
     });
     form.addEventListener("input", function (event) {
-      if (event.target && event.target.id === "aj-visit-lesson") {
+      if (event.target && (event.target.id === "aj-visit-lesson" || event.target.id === "aj-visit-skill")) {
+        event.target.dataset.auto = "";
         refreshPhrases(false);
       }
     });
@@ -1138,7 +1425,9 @@
       }).catch(function () {
         return {};
       }),
-      loadPhraseBank()
+      loadPhraseBank(),
+      loadCurriculumMap(),
+      loadCalendarStarts()
     ]).then(function (parts) {
       var pack = parts[0];
       var people = (parts[1].people || []).filter(function (person) {
