@@ -1,5 +1,13 @@
 # قرارات ملف البرامج — 2026-11-07
 
+## قرار 301 — Master Print Shell هجين (مرحلة صفر) (2026-11-21)
+- نعتمد عقد JSON صارم وبوابة وحيدة `PrintEngine.open(templateType, payload)`.
+- التنفيذ الفوري عبر Sandboxed Hidden Iframe معزول عن CSS الواجهة، وملف الورق الوحيد للطباعة المعزولة: `Print_Canvas/css/print-shell.css`.
+- التركيب يبقى `PrintMasterCore` و`OfficialFrameCore` بمقاسات القرارات الحالية: هامش محتوى 15mm، رأس 40، تذييل 20.
+- مسار المعاينة يبقى `#aj-print-stage` على الشاشة فقط؛ زر الطباعة وCtrl+P داخل المعاينة يمرّان عبر `PrintEngine.printFromStage` لا عبر `window.print()` على مستند الرحلة.
+- PDF الخادمي مؤجّل كزر اختياري بعد استقرار العزل.
+- لا تُضاف كتل `@media print` أو استدعاءات `window.print()` جديدة خارج نواة الطباعة. حارس الدخان يتحقق من وجود PrintEngine وprint-shell ومن خلو `app-journey.js` من `window.print(`.
+
 ## قرار 300 — تفريغ البيانات للسحابة (2026-11-12)
 - `export_data.py` يقرأ القاعدة المحلية وملفات `sig_*.png` ويكتب `school_1059_dump.sql`. لا يعدل القاعدة.
 - `import_data.py` يكتب فقط في `DATABASE_PATH` إن كانت قاعدة فارغة ومختلفة عن الملف المحلي، ثم يعيد ملفات التوقيع.
