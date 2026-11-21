@@ -8,7 +8,7 @@
 
   var VERSION = "301-phase0";
   var FRAME_ID = "pe-print-frame";
-  var SHELL_HREF = "/css/print-shell.css?v=pe1";
+  var SHELL_HREF = "/css/print-shell.css?v=pe2";
   var lastPayload = null;
   var lastHtml = "";
   var lastArm = {};
@@ -244,7 +244,12 @@
     var shown = preview(html, {
       pdfTitle: payload.docTitle || payload.title || "",
       arm: arm,
-      file: payload.file || {}
+      file: Object.assign({
+        kind: sheetOpts.kind,
+        committeeName: payload.committeeName || "",
+        title: sheetOpts.title,
+        fileName: sheetOpts.fileName
+      }, payload.file || {})
     });
     if (payload.autoPrint) {
       return printHtml(html, { pdfTitle: payload.docTitle || payload.title || "", arm: arm });
