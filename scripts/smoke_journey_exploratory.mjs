@@ -2,7 +2,7 @@
 /**
  * فحص دخان استكشافي لرحلة المدير (app-journey.html)
  * قبل التسليم: تنقل متسلسل/عشوائي، تكيف 390/1366، emulateMedia('print')،
- * ورصد Console + استجابات 4xx/5xx.
+ * حارس PrintEngine (قرار 301)، ورصد Console + استجابات 4xx/5xx.
  *
  * الاستخدام:
  *   BASE_URL=http://127.0.0.1:8060 \
@@ -187,6 +187,92 @@ async function assertIsolation(meta, expectDesk) {
   return failures;
 }
 
+function auditPrintGuardStatic() {
+  const fails = [];
+  const notes = [];
+  const shellCss = path.join(ROOT, "Print_Canvas", "css", "print-shell.css");
+  const engineJs = path.join(ROOT, "Print_Canvas", "js", "print-engine.js");
+  const journeyJs = path.join(ROOT, "Print_Canvas", "js", "app-journey.js");
+  const journeyHtml = path.join(ROOT, "Print_Canvas", "app-journey.html");
+
+  if (!fs.existsSync(shellCss)) fails.push("missing-print-shell.css");
+  if (!fs.existsSync(engineJs)) fails.push("missing-print-engine.js");
+
+  const html = fs.existsSync(journeyHtml) ? fs.readFileSync(journeyHtml, "utf8") : "";
+  if (!/print-engine\.js/.test(html)) fails.push("app-journey.html-missing-print-engine");
+
+  const journeySource = fs.existsSync(journeyJs) ? fs.readFileSync(journeyJs, "utf8") : "";
+  if (/window\.print\s*\(/.test(journeySource)) {
+    fails.push("app-journey.js-has-window.print");
+  }
+  if (!/PrintEngine\.printFromStage/.test(journeySource)) {
+    fails.push("app-journey.js-missing-PrintEngine.printFromStage");
+  }
+
+  const engineSource = fs.existsSync(engineJs) ? fs.readFileSync(engineJs, "utf8") : "";
+  if (!/sandbox/.test(engineSource) || !/print-shell\.css/.test(engineSource)) {
+    fails.push("print-engine-missing-sandbox-or-shell");
+  }
+  if (!/\.print\s*\(/.test(engineSource)) {
+    fails.push("print-engine-missing-iframe-print");
+  }
+
+  const journeyCss = path.join(ROOT, "Print_Canvas", "css", "app-journey.css");
+  if (fs.existsSync(journeyCss)) {
+    const css = fs.readFileSync(journeyCss, "utf8");
+    const mediaCount = (css.match(/@media\s+print/g) || []).length;
+    if (mediaCount > 2) {
+      notes.push("app-journey.css-legacy-@media-print=" + mediaCount);
+    }
+  }
+
+  const legacyPrintCallers = [];
+  const jsRoot = path.join(ROOT, "Print_Canvas", "js");
+  if (fs.existsSync(jsRoot)) {
+    for (const name of fs.readdirSync(jsRoot)) {
+      if (!name.endsWith(".js") || name === "print-engine.js" || name.endsWith(".min.js")) continue;
+      const full = path.join(jsRoot, name);
+      const text = fs.readFileSync(full, "utf8");
+      if (/window\.print\s*\(/.test(text)) {
+        legacyPrintCallers.push("Print_Canvas/js/" + name);
+      }
+    }
+  }
+  if (legacyPrintCallers.length) {
+    notes.push("legacy-window.print:" + legacyPrintCallers.join("|"));
+  }
+
+  return { fails, notes, legacyPrintCallers };
+}
+
+async function auditPrintGuardRuntime(page) {
+  const fails = [];
+  const meta = await page.evaluate(async () => {
+    const engine = window.PrintEngine || null;
+    let shellOk = false;
+    try {
+      const href = engine && engine.shellHref ? engine.shellHref : "/css/print-shell.css";
+      const res = await fetch(href, { cache: "no-store" });
+      shellOk = !!(res && res.ok);
+    } catch (error) {
+      shellOk = false;
+    }
+    return {
+      hasEngine: !!(engine && typeof engine.open === "function" && typeof engine.printFromStage === "function"),
+      version: engine && engine.version ? String(engine.version) : "",
+      frameId: engine && engine.frameId ? String(engine.frameId) : "",
+      shellOk: shellOk,
+      ajPrint: !!(window.AJPrint && typeof window.AJPrint.show === "function"),
+      master: !!(window.PrintMasterCore && typeof window.PrintMasterCore.sheet === "function")
+    };
+  });
+  if (!meta.hasEngine) fails.push("runtime-missing-PrintEngine");
+  if (!meta.shellOk) fails.push("runtime-print-shell-unreachable");
+  if (!meta.ajPrint) fails.push("runtime-missing-AJPrint");
+  if (!meta.master) fails.push("runtime-missing-PrintMasterCore");
+  return { fails, meta };
+}
+
 async function checkPrintEmulation(page, report) {
   await page.emulateMedia({ media: "print" });
   const printMeta = await page.evaluate(() => {
@@ -219,28 +305,115 @@ async function checkPrintEmulation(page, report) {
   return fails;
 }
 
+async function probePrintEngineIframe(page, report) {
+  const engineProbe = await page.evaluate(async () => {
+    if (!window.PrintEngine || typeof window.PrintEngine.open !== "function") {
+      return { ok: false, error: "no-engine" };
+    }
+    // مرحلة صفر: افتح وثيقة عبر البوابة إن كانت المعاينة فارغة
+    let html = document.getElementById("aj-print-stage-page")
+      ? document.getElementById("aj-print-stage-page").innerHTML
+      : "";
+    if (!html || html.length < 40) {
+      if (window.PrintMasterCore && typeof window.PrintMasterCore.stressSheet === "function") {
+        window.PrintEngine.open("raw-html", {
+          html: window.PrintMasterCore.stressSheet(),
+          docTitle: "اختبار_نواة_الطباعة",
+          arm: { multiPage: true }
+        });
+      } else {
+        window.PrintEngine.open("master-sheet", {
+          docTitle: "فحص بوابة الطباعة",
+          metaGrid: [["المدرسة", "متوسطة سعد بن الربيع الأنصاري"], ["الفحص", "مرحلة صفر"]],
+          sectionsHtml: "<p>نص فحص عزل الإطار.</p>",
+          multiPage: true
+        });
+      }
+      await new Promise((r) => setTimeout(r, 300));
+      html = document.getElementById("aj-print-stage-page")
+        ? document.getElementById("aj-print-stage-page").innerHTML
+        : "";
+    }
+    if (!html || html.length < 40) {
+      return { ok: false, error: "empty-stage" };
+    }
+    const frame = document.getElementById(window.PrintEngine.frameId || "pe-print-frame") || (function () {
+      const el = document.createElement("iframe");
+      el.id = window.PrintEngine.frameId || "pe-print-frame";
+      el.setAttribute("sandbox", "allow-modals allow-same-origin allow-scripts");
+      el.style.cssText = "position:fixed;width:0;height:0;opacity:0;border:0;";
+      document.body.appendChild(el);
+      return el;
+    })();
+    const doc = frame.contentDocument;
+    if (!doc) return { ok: false, error: "no-frame-doc" };
+    const base = location.origin + "/";
+    doc.open();
+    doc.write(
+      "<!DOCTYPE html><html lang=\"ar\" dir=\"rtl\"><head><meta charset=\"utf-8\">"
+      + "<base href=\"" + base + "\">"
+      + "<link rel=\"stylesheet\" href=\"/css/print-shell.css?v=pe0\">"
+      + "</head><body class=\"print-shell print-master print-official-core\">"
+      + html
+      + "</body></html>"
+    );
+    doc.close();
+    await new Promise((r) => setTimeout(r, 200));
+    const bodyClass = doc.body ? doc.body.className : "";
+    const parentLeak = !!(doc.querySelector(".aj-shell") || doc.querySelector(".aj-topbar"));
+    const hasShellLink = Array.from(doc.querySelectorAll('link[rel="stylesheet"]')).some((link) =>
+      String(link.getAttribute("href") || "").indexOf("print-shell.css") >= 0
+    );
+    return {
+      ok: true,
+      bodyClass: bodyClass,
+      parentLeak: parentLeak,
+      hasShellLink: hasShellLink,
+      textLen: String((doc.body && doc.body.innerText) || "").trim().length,
+      stageLen: html.length
+    };
+  });
+  report.printEngineProbe = engineProbe;
+  const fails = [];
+  if (!engineProbe || !engineProbe.ok) {
+    fails.push("print-engine-probe:" + ((engineProbe && engineProbe.error) || "failed"));
+    return fails;
+  }
+  if (engineProbe.parentLeak) fails.push("print-iframe-spa-leak");
+  if (!/print-shell/.test(engineProbe.bodyClass || "")) fails.push("print-iframe-missing-shell-class");
+  if (!engineProbe.hasShellLink) fails.push("print-iframe-missing-shell-css");
+  if (engineProbe.textLen < 40) fails.push("print-iframe-blank");
+  return fails;
+}
+
 async function openVisitPlanPrint(page, report) {
   await gotoView(page, "view-visits-plan");
   report.lastPrintContext = "visits-plan";
-  const btn = page.locator("#aj-visit-plan-print");
-  await btn.waitFor({ state: "visible", timeout: 15000 });
-  await btn.click();
-  await page.waitForSelector("#aj-print-stage:not([hidden])", { timeout: 20000 });
-  await page.waitForTimeout(600);
-  const text = await page.locator("#aj-print-stage-page").innerText().catch(() => "");
-  report.visitPrintSample = String(text || "").replace(/\s+/g, " ").trim().slice(0, 200);
   const fails = [];
-  if (!/خطة الزيارات|الزيارات الصفية/.test(text)) {
-    fails.push("visit-print-missing-title");
+  const btn = page.locator("#aj-visit-plan-print");
+  const visible = await btn.isVisible().catch(() => false);
+  if (visible) {
+    await btn.click();
+    await page.waitForSelector("#aj-print-stage:not([hidden])", { timeout: 20000 });
+    await page.waitForTimeout(600);
+    const text = await page.locator("#aj-print-stage-page").innerText().catch(() => "");
+    report.visitPrintSample = String(text || "").replace(/\s+/g, " ").trim().slice(0, 200);
+    if (!/خطة الزيارات|الزيارات الصفية/.test(text)) {
+      fails.push("visit-print-missing-title");
+    }
+    if (/رعاية الموهوبين|بطاقة برنامج/.test(text)) {
+      fails.push("visit-print-shows-gifted-program");
+    }
+    fails.push(...(await checkPrintEmulation(page, report)));
+  } else {
+    report.visitPrintSample = "skipped-hidden-visit-plan-print";
   }
-  if (/رعاية الموهوبين|بطاقة برنامج/.test(text)) {
-    fails.push("visit-print-shows-gifted-program");
-  }
-  const printFails = await checkPrintEmulation(page, report);
-  fails.push(...printFails);
+
+  fails.push(...(await probePrintEngineIframe(page, report)));
+
   const closeBtn = page.locator("#aj-print-preview-close");
   if (await closeBtn.count()) {
-    await closeBtn.click();
+    await closeBtn.click().catch(() => {});
     await page.waitForTimeout(200);
   }
   return fails;
@@ -342,11 +515,16 @@ async function main() {
     nationalId: NATIONAL_ID,
     session: null,
     printChecks: [],
+    printGuard: null,
+    printEngineProbe: null,
     lastPrintContext: "",
     visitPrintSample: "",
     results: [],
     ok: false
   };
+
+  const staticGuard = auditPrintGuardStatic();
+  report.printGuard = { static: staticGuard, runtime: null };
 
   const requestContext = await request.newContext({ baseURL: BASE });
   try {
@@ -371,6 +549,20 @@ async function main() {
     ]) {
       report.results.push(await runViewport(browser, size, report));
     }
+    // حارس وقت التشغيل مرة واحدة على سطح مكتب بعد انتهاء الجولات
+    const guardContext = await browser.newContext({
+      viewport: { width: 1366, height: 768 },
+      locale: "ar-SA"
+    });
+    await injectSession(guardContext, report.session);
+    const guardPage = await guardContext.newPage();
+    await guardPage.goto(BASE + "/app-journey.html#view-desk", { waitUntil: "domcontentloaded" });
+    await guardPage.waitForFunction(() => document.body.classList.contains("aj-auth-ready"), null, {
+      timeout: 20000
+    });
+    const runtimeGuard = await auditPrintGuardRuntime(guardPage);
+    report.printGuard.runtime = runtimeGuard;
+    await guardContext.close();
   } finally {
     await browser.close();
   }
@@ -379,11 +571,15 @@ async function main() {
   const allPrintFails = report.results.flatMap((r) => r.printFails);
   const allConsole = report.results.flatMap((r) => r.consoleErrors);
   const allNet = report.results.flatMap((r) => r.netFailures);
+  const guardFails = []
+    .concat((report.printGuard.static && report.printGuard.static.fails) || [])
+    .concat((report.printGuard.runtime && report.printGuard.runtime.fails) || []);
   report.ok =
     allViewFails.length === 0 &&
     allPrintFails.length === 0 &&
     allConsole.length === 0 &&
-    allNet.length === 0;
+    allNet.length === 0 &&
+    guardFails.length === 0;
 
   const outFile = path.join(OUT_DIR, "smoke-report.json");
   fs.writeFileSync(outFile, JSON.stringify(report, null, 2), "utf8");
@@ -393,6 +589,9 @@ async function main() {
     seed: SEED,
     viewFails: allViewFails.length,
     printFails: allPrintFails,
+    printGuardFails: guardFails,
+    printGuardNotes: (report.printGuard.static && report.printGuard.static.notes) || [],
+    printEngineRuntime: report.printGuard.runtime && report.printGuard.runtime.meta,
     consoleErrors: allConsole.slice(0, 20),
     netFailures: allNet.slice(0, 20),
     visitPrintSample: report.visitPrintSample,

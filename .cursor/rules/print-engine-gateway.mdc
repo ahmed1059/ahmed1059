@@ -1,0 +1,13 @@
+---
+description: بوابة PrintEngine الوحيدة للطباعة — لا @media print ولا window.print خارج النواة
+globs: Print_Canvas/js/app-journey*.js,Print_Canvas/css/app-journey.css,Print_Canvas/js/print-engine.js,Print_Canvas/css/print-shell.css
+alwaysApply: false
+---
+
+# بوابة الطباعة (قرار 301)
+
+- كل طباعة جديدة عبر `PrintEngine.open(templateType, payload)` أو `PrintEngine.printHtml` / `printFromStage`.
+- ممنوع إضافة `@media print` في `app-journey.css` أو وحدات الرحلة.
+- ممنوع `window.print()` في وحدات الرحلة؛ الاستثناء الوحيد داخل iframe في `print-engine.js`.
+- مقاسات الورق المعتمدة: هامش 15mm، رأس 40mm، تذييل 20mm عبر `PrintMasterCore` / `print-shell.css`.
+- PDF الخادمي مؤجّل حتى استقرار العزل.

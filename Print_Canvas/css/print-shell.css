@@ -1,0 +1,401 @@
+/* print-shell.css — مرحلة صفر: ورقة معزولة داخل Sandboxed Iframe فقط.
+ * مقاسات معتمدة: هامش محتوى 15mm، رأس 40، تذييل 20 (قرارات 281/287/296/301).
+ * لا تعتمد على CSS واجهة app-journey. */
+
+@page print-master-a4 {
+  size: A4 portrait;
+  margin: 15mm;
+}
+
+@page print-master-a4-landscape {
+  size: A4 landscape;
+  margin: 15mm;
+}
+
+html,
+body.print-shell {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #ffffff !important;
+  color: #1a1a1a;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+body.print-shell {
+  page: print-master-a4;
+  font-family: "Traditional Arabic", "Simplified Arabic", Tahoma, sans-serif;
+}
+
+body.print-shell.print-master-landscape,
+body.print-shell.print-official-landscape {
+  page: print-master-a4-landscape;
+}
+
+img[src*="ministry_logo"]:not(.tpl-evidence-tile img),
+img[src*="vision_2030"]:not(.tpl-evidence-tile img),
+.doc-official-header img,
+header img:not(.tpl-evidence-tile img):not(.sig-image) {
+  max-height: 52px !important;
+  max-width: 140px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+}
+
+.official-document-frame {
+  border: 2px solid #005a53 !important;
+  padding: 15mm !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+  margin: 0 auto !important;
+  width: 210mm !important;
+  max-width: none !important;
+  min-height: 297mm !important;
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+.doc-official-header {
+  display: grid !important;
+  grid-template-columns: 140px 1fr 140px !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding-bottom: 8px !important;
+  border-bottom: 2px solid #005a53 !important;
+  margin-bottom: 8px !important;
+}
+
+.doc-official-header .header-logo-right { text-align: right !important; }
+.doc-official-header .header-logo-left { text-align: left !important; }
+
+.doc-official-header .header-center-titles {
+  color: #005a53 !important;
+  font-weight: bold !important;
+  line-height: 1.4 !important;
+  font-size: 0.88rem !important;
+}
+
+.doc-official-header .header-center-titles .school-name-title {
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+}
+
+.header-divider-bar {
+  height: 6px !important;
+  background: #e2e8f0 !important;
+  border: 1px solid #cbd5e1 !important;
+  margin-bottom: 12px !important;
+}
+
+.doc-official-title {
+  margin: 0 0 6mm;
+  text-align: center;
+  color: #0b5e56;
+  font-size: 16pt;
+  line-height: 1.4;
+}
+
+.doc-signoff-block {
+  margin-top: auto !important;
+  width: 100% !important;
+  border-top: 2px solid #005a53 !important;
+  padding-top: 0 !important;
+}
+
+.doc-signoff-block .signoff-title-bar {
+  background: #004d46 !important;
+  color: #ffffff !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  font-size: 0.82rem !important;
+  padding: 3px 0 !important;
+}
+
+.doc-signoff-block .signoff-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr !important;
+  border: 1px solid #005a53 !important;
+  border-top: none !important;
+  text-align: center !important;
+  background: #ffffff !important;
+}
+
+.doc-signoff-block .signoff-col {
+  padding: 8px 6px !important;
+  border-left: 1px solid #005a53 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 85px !important;
+}
+
+.doc-signoff-block .signoff-col:last-child {
+  border-left: none !important;
+}
+
+.doc-signoff-block .role-title {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  color: #004d46 !important;
+}
+
+.doc-signoff-block .sig-placeholder {
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 3px 0 !important;
+  overflow: hidden !important;
+}
+
+.doc-signoff-block .sig-placeholder img {
+  max-height: 44px !important;
+  max-width: 120px !important;
+  object-fit: contain !important;
+}
+
+img.sig-image {
+  max-height: 12mm !important;
+  max-width: 32mm !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+.doc-signoff-block .person-name {
+  font-size: 0.76rem !important;
+  color: #1e293b !important;
+  font-weight: 600 !important;
+}
+
+.doc-signoff-block .sig-placeholder .sig-line {
+  display: block;
+  width: 72%;
+  height: 36px;
+  margin: 0 auto;
+  border-bottom: 1px solid #1c1917;
+}
+
+.pm-document {
+  width: 210mm;
+  max-width: 210mm;
+  margin: 0 auto;
+  background: #ffffff;
+  color: #1a1a1a;
+  box-sizing: border-box;
+}
+
+.pm-document.pm-landscape {
+  width: 297mm;
+  max-width: 297mm;
+}
+
+.pm-sheet {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.pm-sheet > thead > tr > td,
+.pm-sheet > tfoot > tr > td,
+.pm-sheet > tbody > tr > td {
+  padding: 0;
+  border: 0;
+  vertical-align: top;
+}
+
+.pm-head {
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.pm-foot,
+.pm-foot-slot {
+  height: var(--pm-footer-height, 20mm);
+  min-height: var(--pm-footer-height, 20mm);
+  box-sizing: border-box;
+}
+
+.pm-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8mm;
+  border-top: 0.4mm solid #005a53;
+  color: #0b5e56;
+  font-size: 9pt;
+  line-height: 1.3;
+  background: #ffffff;
+}
+
+.pm-clearance {
+  display: block;
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
+.pm-body {
+  box-sizing: border-box;
+}
+
+.pm-signoff {
+  break-inside: avoid;
+  break-after: avoid;
+  page-break-inside: avoid;
+  page-break-after: avoid;
+  margin-top: 6mm;
+}
+
+.pm-page-num::after {
+  content: "";
+}
+
+.pm-stress .pm-title {
+  margin: 0 0 8mm;
+  font-size: 22pt;
+  line-height: 1.4;
+}
+
+.pm-stress-copy {
+  margin: 0 0 8mm;
+  font-size: 12pt;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.pm-stress-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 8mm;
+}
+
+.pm-stress-table th,
+.pm-stress-table td {
+  border: 0.2mm solid #9eb0aa;
+  padding: 1.6mm 2mm;
+  text-align: right;
+  font-size: 11pt;
+}
+
+.pm-stress-figure {
+  width: 100%;
+  height: 42mm;
+  margin: 0;
+  border: 0.3mm solid #005a53;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.pm-stress-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media print {
+  body.print-shell {
+    background: #ffffff !important;
+  }
+
+  body.print-shell .pm-document {
+    position: static !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  body.print-shell:not(.print-official-multi):not(.print-official-list) .pm-document {
+    box-sizing: border-box !important;
+    position: relative !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    padding: 15mm !important;
+    overflow: hidden !important;
+  }
+
+  body.print-shell.print-master-landscape:not(.print-official-multi):not(.print-official-list) .pm-document {
+    width: 297mm !important;
+    max-width: 297mm !important;
+    height: 210mm !important;
+    min-height: 210mm !important;
+    max-height: 210mm !important;
+  }
+
+  body.print-shell .pm-sheet > thead {
+    display: table-header-group;
+  }
+
+  body.print-shell .pm-sheet > tfoot {
+    display: table-footer-group;
+  }
+
+  body.print-shell .pm-sheet > tbody {
+    display: table-row-group;
+  }
+
+  body.print-shell .pm-body table thead {
+    display: table-header-group;
+  }
+
+  body.print-shell .pm-body table tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  body.print-shell .pm-page-num::after {
+    content: counter(page);
+  }
+
+  body.print-shell .pm-head .doc-official-header {
+    width: 100% !important;
+    grid-template-columns: minmax(0, 140px) minmax(0, 1fr) minmax(0, 140px) !important;
+  }
+
+  body.print-shell .pm-sheet > tfoot > tr > td {
+    height: var(--pm-footer-height, 20mm);
+  }
+
+  body.print-shell .pm-foot {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--pm-footer-height, 20mm) !important;
+    min-height: var(--pm-footer-height, 20mm) !important;
+    margin: 0;
+    background: #ffffff;
+  }
+
+  body.print-shell:not(.print-official-multi):not(.print-official-list) .pm-foot {
+    left: 15mm !important;
+    right: 15mm !important;
+  }
+
+  body.print-shell .pm-end,
+  body.print-shell .pm-signoff {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  body.print-shell .pm-signoff .doc-signoff-block {
+    margin-top: 6mm !important;
+    margin-bottom: 0 !important;
+  }
+}

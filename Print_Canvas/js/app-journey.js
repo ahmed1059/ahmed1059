@@ -4225,7 +4225,23 @@
         } else if (smart) {
           document.title = smart;
         }
-        window.print();
+        if (window.AJPrint) {
+          window.AJPrint._lastArm = officialPreviewArm || {};
+          window.AJPrint._lastTitle = smart || document.title || "";
+        }
+        /* مرحلة صفر: الطباعة من Sandboxed Iframe عبر PrintEngine فقط */
+        if (window.PrintEngine && typeof window.PrintEngine.printFromStage === "function") {
+          window.PrintEngine.printFromStage({
+            pdfTitle: smart || document.title || "",
+            arm: officialPreviewArm || {}
+          }).then(function () {
+            restorePreviewChrome();
+          }).catch(function () {
+            restorePreviewChrome();
+          });
+          return;
+        }
+        showToast("نواة PrintEngine غير محمّلة.", "error");
         restorePreviewChrome();
       });
     });
@@ -4265,6 +4281,10 @@
     officialPreviewFiles = [];
     officialPreviewArm = opts.arm || {};
     officialPreviewHtml = html || "";
+    if (window.AJPrint) {
+      window.AJPrint._lastArm = officialPreviewArm;
+      window.AJPrint._lastTitle = opts.pdfTitle || "";
+    }
     var smartName = "";
     var namedNode = document.createElement("div");
     namedNode.innerHTML = officialPreviewHtml;
