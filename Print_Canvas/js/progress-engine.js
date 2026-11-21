@@ -375,11 +375,28 @@ var ProgressEngine = (function () {
         if (printButton) {
             printButton.addEventListener("click", function () {
                 document.body.classList.add("printing-measure");
-                window.addEventListener("afterprint", function cleanup() {
+                function cleanup() {
                     document.body.classList.remove("printing-measure");
-                    window.removeEventListener("afterprint", cleanup);
+                }
+                var pane = document.getElementById("measurement-center");
+                var html = pane ? pane.outerHTML : "";
+                if (!window.PrintEngine || typeof window.PrintEngine.gate !== "function") {
+                    console.error("PrintEngine غير محمّل.");
+                    cleanup();
+                    return;
+                }
+                var printed = window.PrintEngine.gate(html, {
+                    multiPage: true,
+                    orientation: "portrait",
+                    docTitle: "لوحة القياس"
                 });
-                window.print();
+                if (printed && typeof printed.finally === "function") {
+                    printed.finally(cleanup);
+                } else if (printed && typeof printed.then === "function") {
+                    printed.then(cleanup, cleanup);
+                } else {
+                    cleanup();
+                }
             });
         }
     }

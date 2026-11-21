@@ -88,11 +88,18 @@
 
   function visitCell(prefix, item) {
     var iso = item[prefix + "_date"] || "";
+    var curriculum = "";
+    if (prefix === "visit_1" || prefix === "visit_2") {
+      curriculum = "<input data-field=\"" + prefix + "_unit\" type=\"hidden\" value=\"" + escapeHtml(item[prefix + "_unit"] || "") + "\">"
+        + "<input data-field=\"" + prefix + "_lesson\" type=\"text\" placeholder=\"الدرس\" value=\"" + escapeHtml(item[prefix + "_lesson"] || "") + "\">"
+        + "<input data-field=\"" + prefix + "_skill\" type=\"text\" placeholder=\"المهارة\" value=\"" + escapeHtml(item[prefix + "_skill"] || "") + "\">";
+    }
     return "<div class=\"aj-plan-visit\">"
       + "<span class=\"aj-visit-dates\"><input type=\"date\" data-field=\"" + prefix + "_date\" value=\"" + escapeHtml(iso) + "\">"
       + "<span class=\"aj-plan-hijri\">" + escapeHtml(dateLabel(iso)) + "</span></span>"
       + "<select data-field=\"" + prefix + "_period\">" + periodOptions(item[prefix + "_period"]) + "</select>"
       + "<select data-field=\"" + prefix + "_visitor\">" + visitorOptions(item[prefix + "_visitor"]) + "</select>"
+      + curriculum
       + "</div>";
   }
 

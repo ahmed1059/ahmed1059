@@ -6,11 +6,33 @@
   var BANK_URL = "data/committees-bank.json";
   var SEAT_LABEL = {
     chair: "رئيس",
+    deputy: "نائب",
+    secretary: "مقرر",
     member: "عضو",
+    student: "ممثل طلاب",
+    parent: "ممثل أولياء الأمور",
     exofficio: "بحكم المنصب"
   };
   var committeesBank = null;
   var committeesBankPromise = null;
+
+  function seatLabel(seat, body) {
+    var fromBank = body && body.bank_meta && body.bank_meta.seat_labels;
+    if (fromBank && fromBank[seat]) {
+      return fromBank[seat];
+    }
+    return SEAT_LABEL[seat] || seat || "";
+  }
+
+  function missingLine(quota) {
+    var missing = (quota && quota.missing) || [];
+    if (!missing.length) {
+      return "";
+    }
+    return missing.map(function (item) {
+      return (item.count || 1) + " " + (item.label || item.seat || "");
+    }).join(" + ");
+  }
 
   function currentUser() {
     try {
@@ -71,7 +93,7 @@
     }
     mine.forEach(function (item) {
       var li = document.createElement("li");
-      li.textContent = item.title + " — " + (SEAT_LABEL[item.seat] || item.seat);
+      li.textContent = item.title + " — " + seatLabel(item.seat, body);
       box.appendChild(li);
     });
   }
@@ -97,27 +119,50 @@
     host.innerHTML = "";
     host.className = "aj-committee-boards";
     (body.committees || []).forEach(function (committee) {
+      var quota = committee.quota || {};
       var board = document.createElement("section");
-      board.className = "aj-committee-board";
+      board.className = "aj-committee-board aj-governance-card" + (quota.complete ? " is-complete" : " is-incomplete");
       board.setAttribute("data-committee", committee.id || "");
+
       var head = document.createElement("div");
       head.className = "aj-committee-board-head";
+      var titleWrap = document.createElement("div");
+      titleWrap.className = "aj-governance-title-wrap";
       var title = document.createElement("h2");
       title.className = "aj-group-title";
       title.textContent = committee.title || "";
-      head.appendChild(title);
-      if ((committee.members || []).length) {
-        var printBtn = document.createElement("button");
-        printBtn.type = "button";
-        printBtn.className = "aj-detail-btn aj-detail-btn-secondary";
-        printBtn.textContent = "طباعة قرار اللجنة";
-        printBtn.setAttribute("data-print-committee", committee.id || "");
-        printBtn.addEventListener("click", function () {
-          printFormation(body, { committeeId: committee.id });
-        });
-        head.appendChild(printBtn);
-      }
+      titleWrap.appendChild(title);
+      var badge = document.createElement("span");
+      badge.className = "aj-quota-badge";
+      badge.textContent = quota.badge || ((committee.members || []).length + "/?");
+      titleWrap.appendChild(badge);
+      head.appendChild(titleWrap);
+
+      var printBtn = document.createElement("button");
+      printBtn.type = "button";
+      printBtn.className = "aj-detail-btn aj-detail-btn-secondary";
+      printBtn.textContent = "طباعة قرار اللجنة";
+      printBtn.setAttribute("data-print-committee", committee.id || "");
+      printBtn.disabled = !(committee.members || []).length;
+      printBtn.addEventListener("click", function () {
+        printFormation(body, { committeeId: committee.id });
+      });
+      head.appendChild(printBtn);
       board.appendChild(head);
+
+      var status = document.createElement("p");
+      status.className = "aj-quota-status";
+      status.setAttribute("role", "status");
+      if (quota.complete) {
+        status.textContent = "✅ مكتملة النصاب (" + (quota.badge || "") + " أعضاء).";
+      } else {
+        var gap = missingLine(quota);
+        status.textContent = gap
+          ? "⚠️ غير مكتملة — متبقي: (" + gap + ")"
+          : "⚠️ غير مكتملة — (" + (quota.badge || "") + ")";
+      }
+      board.appendChild(status);
+
       var scroller = document.createElement("div");
       scroller.className = "aj-table-scroll";
       var table = document.createElement("table");
@@ -135,11 +180,21 @@
         var row = document.createElement("tr");
         row.setAttribute("data-nid", member.national_id || "");
         row.setAttribute("data-committee", committee.id);
-        var seat = SEAT_LABEL[member.seat] || member.seat || "";
+        if (member.by_office) {
+          row.classList.add("is-by-office");
+        }
+        var seat = seatLabel(member.seat, body);
         row.innerHTML = "<td></td><td></td><td class=\"aj-formation-sign\"></td><td></td>";
         row.children[0].textContent = seat;
-        row.children[1].textContent = member.name || "";
-        if (body.is_principal) {
+        if (member.by_office) {
+          var office = document.createElement("span");
+          office.className = "aj-office-chip";
+          office.textContent = "بحكم المنصب";
+          row.children[0].appendChild(document.createTextNode(" "));
+          row.children[0].appendChild(office);
+        }
+        row.children[1].textContent = member.name || member.display_name || "";
+        if (body.is_principal && !member.by_office) {
           var remove = document.createElement("button");
           remove.type = "button";
           remove.className = "aj-detail-btn aj-detail-btn-secondary";
@@ -156,7 +211,7 @@
         tbody.appendChild(row);
       });
       if (body.is_principal) {
-        tbody.appendChild(addRow(committee));
+        tbody.appendChild(addRow(committee, body));
       }
       table.appendChild(tbody);
       scroller.appendChild(table);
@@ -166,57 +221,148 @@
     paintSignatures(body);
   }
 
-  function addRow(committee) {
+  function firstMissing(committee) {
+    var missing = (committee.quota && committee.quota.missing) || [];
+    return missing.length ? missing[0] : { seat: "member", kind: "staff", label: "عضو" };
+  }
+
+  function addRow(committee, body) {
+    var need = firstMissing(committee);
+    var kind = String(need.kind || "staff");
     var row = document.createElement("tr");
     row.className = "aj-committee-add-row";
     row.setAttribute("data-committee", committee.id || "");
-    var select = document.createElement("select");
-    select.className = "aj-soft-note aj-committee-add-person";
-    select.setAttribute("aria-label", "اختر منسوباً");
-    var empty = document.createElement("option");
-    empty.value = "";
-    empty.textContent = "اختر منسوباً";
-    select.appendChild(empty);
-    (window.AjCommittees.staff || []).forEach(function (person) {
-      if (!person || person.active === false) {
-        return;
-      }
-      var option = document.createElement("option");
-      option.value = person.id;
-      option.textContent = person.name;
-      select.appendChild(option);
-    });
-    var seat = document.createElement("select");
-    seat.className = "aj-soft-note aj-committee-add-seat";
-    seat.setAttribute("aria-label", "الدور");
-    [["member", "عضو"], ["chair", "رئيس"], ["exofficio", "بحكم المنصب"]].forEach(function (pair) {
-      var option = document.createElement("option");
-      option.value = pair[0];
-      option.textContent = pair[1];
-      seat.appendChild(option);
-    });
-    var add = document.createElement("button");
-    add.type = "button";
-    add.className = "aj-detail-btn";
-    add.textContent = "إضافة عضو +";
-    add.addEventListener("click", function () {
-      if (!select.value) {
-        toast("اختر منسوباً من السجل.", "error");
-        return;
-      }
-      changeSeat("/api/session/committees/seat", {
-        committee_id: committee.id,
-        national_id: select.value,
-        seat: seat.value
-      });
-    });
     var cell = document.createElement("td");
     cell.colSpan = 4;
     var bar = document.createElement("div");
     bar.className = "aj-committee-add-bar";
-    bar.appendChild(select);
-    bar.appendChild(seat);
-    bar.appendChild(add);
+
+    var seat = document.createElement("select");
+    seat.className = "aj-soft-note aj-committee-add-seat";
+    seat.setAttribute("aria-label", "الدور");
+    [["chair", "رئيس"], ["deputy", "نائب"], ["secretary", "مقرر"], ["member", "عضو"], ["student", "ممثل طلاب"], ["parent", "ممثل أولياء الأمور"]].forEach(function (pair) {
+      var option = document.createElement("option");
+      option.value = pair[0];
+      option.textContent = pair[1];
+      if (pair[0] === (need.seat || "member")) {
+        option.selected = true;
+      }
+      seat.appendChild(option);
+    });
+
+    var hint = document.createElement("span");
+    hint.className = "aj-add-hint";
+    hint.textContent = need.label ? ("المطلوب: " + need.label) : "";
+
+    var add = document.createElement("button");
+    add.type = "button";
+    add.className = "aj-detail-btn";
+    add.textContent = "إضافة +";
+
+    if (kind === "student" || (kind === "student_or_parent" && need.seat === "student")) {
+      var studentSelect = document.createElement("select");
+      studentSelect.className = "aj-soft-note aj-committee-add-person";
+      studentSelect.setAttribute("aria-label", "اختر طالباً");
+      var emptyS = document.createElement("option");
+      emptyS.value = "";
+      emptyS.textContent = "اختر طالباً";
+      studentSelect.appendChild(emptyS);
+      (window.AjCommittees.students || []).forEach(function (student) {
+        var option = document.createElement("option");
+        option.value = student.id || student.national_id || "";
+        option.textContent = (student.name || "") + (student.grade || student.section
+          ? " — " + [student.grade, student.section].filter(Boolean).join("/")
+          : "");
+        studentSelect.appendChild(option);
+      });
+      add.addEventListener("click", function () {
+        if (!studentSelect.value) {
+          toast("اختر طالباً من السجل.", "error");
+          return;
+        }
+        var picked = (window.AjCommittees.students || []).find(function (item) {
+          return String(item.id || item.national_id) === String(studentSelect.value);
+        });
+        changeSeat("/api/session/committees/seat", {
+          committee_id: committee.id,
+          national_id: studentSelect.value,
+          seat: seat.value || "student",
+          member_kind: "student",
+          display_name: picked ? picked.name : ""
+        });
+      });
+      bar.appendChild(hint);
+      bar.appendChild(studentSelect);
+      bar.appendChild(seat);
+      bar.appendChild(add);
+    } else if (kind === "parent" || kind === "student_or_parent") {
+      var nameInput = document.createElement("input");
+      nameInput.type = "text";
+      nameInput.className = "aj-soft-note aj-committee-add-person";
+      nameInput.setAttribute("aria-label", "اسم ولي الأمر");
+      nameInput.placeholder = "اسم ولي الأمر";
+      add.addEventListener("click", function () {
+        var name = String(nameInput.value || "").trim();
+        if (!name) {
+          toast("أدخل اسم ولي الأمر للاعتماد.", "error");
+          return;
+        }
+        changeSeat("/api/session/committees/seat", {
+          committee_id: committee.id,
+          national_id: "parent:" + name,
+          seat: seat.value || "parent",
+          member_kind: "parent",
+          display_name: name
+        });
+      });
+      bar.appendChild(hint);
+      bar.appendChild(nameInput);
+      bar.appendChild(seat);
+      bar.appendChild(add);
+    } else {
+      var select = document.createElement("select");
+      select.className = "aj-soft-note aj-committee-add-person";
+      select.setAttribute("aria-label", "اختر منسوباً");
+      var empty = document.createElement("option");
+      empty.value = "";
+      empty.textContent = kind === "admin" ? "اختر إدارياً" : "اختر منسوباً";
+      select.appendChild(empty);
+      var preferTeacher = kind === "teacher" || /معلم/.test(String(need.label || ""));
+      var preferAdmin = kind === "admin" || /إداري|محضر/.test(String(need.label || ""));
+      (window.AjCommittees.staff || []).forEach(function (person) {
+        if (!person || person.active === false) {
+          return;
+        }
+        var role = String(person.role || "");
+        if (preferTeacher && role.indexOf("معلم") < 0) {
+          return;
+        }
+        if (preferAdmin && role.indexOf("معلم") >= 0) {
+          return;
+        }
+        var option = document.createElement("option");
+        option.value = person.id;
+        option.textContent = person.name;
+        select.appendChild(option);
+      });
+      add.addEventListener("click", function () {
+        if (!select.value) {
+          toast("اختر منسوباً من السجل.", "error");
+          return;
+        }
+        changeSeat("/api/session/committees/seat", {
+          committee_id: committee.id,
+          national_id: select.value,
+          seat: seat.value || "member",
+          member_kind: "staff"
+        });
+      });
+      bar.appendChild(hint);
+      bar.appendChild(select);
+      bar.appendChild(seat);
+      bar.appendChild(add);
+    }
+
     cell.appendChild(bar);
     row.appendChild(cell);
     return row;
@@ -332,7 +478,29 @@
         window.AjCommittees.staff = [];
         return [];
       });
-    return staffLoad.then(function () {
+    var studentsLoad = window.AjCommittees.students
+      ? Promise.resolve(window.AjCommittees.students)
+      : fetch("/api/session/noor-students", { headers: authHeaders(), cache: "no-store" }).then(function (response) {
+        return response.ok ? response.json() : { students: [] };
+      }).then(function (body) {
+        var list = (body && (body.students || body.people || body.items)) || [];
+        window.AjCommittees.students = list.map(function (row) {
+          return {
+            id: row.id || row.national_id || row.student_id || "",
+            national_id: row.national_id || row.id || "",
+            name: row.name || row.student_name || "",
+            grade: row.grade || row.class_name || "",
+            section: row.section || row.فصل || ""
+          };
+        }).filter(function (row) {
+          return row.id || row.name;
+        });
+        return window.AjCommittees.students;
+      }).catch(function () {
+        window.AjCommittees.students = [];
+        return [];
+      });
+    return Promise.all([staffLoad, studentsLoad]).then(function () {
       return jsonFetch("/api/session/committees", {
         headers: authHeaders(),
         cache: "no-store"
@@ -514,7 +682,11 @@
   }
 
   function formationDateLine(body) {
-    var iso = String((body && body.drawn_at) || "").trim();
+    // تاريخ صدور القرار = بداية العام (أسبوع 1) من المرجع؛ لا تاريخ السحب/الطباعة
+    var iso = String((body && body.decree_date) || "").trim();
+    if (!iso) {
+      iso = String((body && body.drawn_at) || "").trim();
+    }
     if (!iso) {
       return "";
     }
@@ -747,6 +919,7 @@
   window.AjCommittees = {
     cache: null,
     staff: null,
+    students: null,
     gateRequired: false,
     load: load,
     afterAuth: afterAuth,

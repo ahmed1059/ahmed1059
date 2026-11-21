@@ -1,9 +1,9 @@
 {
   "meta": {
     "academic_year": "1448",
-    "source": "الدليل التنظيمي لمدارس التعليم العام",
+    "source": "الدليل التنظيمي لمدارس التعليم العام — المرحلة المتوسطة",
     "system_code": "1059",
-    "description": "بنك ديباجة قرارات تشكيل اللجان ومهامها التنظيمية"
+    "description": "بنك ديباجة قرارات تشكيل اللجان ونصاب المقاعد والمهام التنظيمية"
   },
   "decree": {
     "title_general": "قرار إداري بتشكيل اللجان المدرسية",
@@ -15,96 +15,218 @@
     "intro_general": "تقرر تشكيل اللجان المدرسية للعام الدراسي 1448هـ على النحو الآتي، مع التزام كل لجنة بمهامها التنظيمية والتربوية المبينة تحت عنوانها.",
     "intro_single": "تقرر تشكيل {{committee_name}} للعام الدراسي 1448هـ، وتكليف رئيسها وأعضائها بالمهام الآتية."
   },
+  "seat_order": ["chair", "deputy", "secretary", "member", "student", "parent"],
+  "seat_labels": {
+    "chair": "رئيس",
+    "deputy": "نائب",
+    "secretary": "مقرر",
+    "member": "عضو",
+    "student": "ممثل طلاب",
+    "parent": "ممثل أولياء الأمور"
+  },
   "committees": {
     "admin": {
       "title": "اللجنة الإدارية",
+      "size": 5,
       "tasks": [
         "متابعة تنفيذ الخطط التشغيلية والبرامج المدرسية ورفع تقارير دورية لقيادة المدرسة.",
         "تنسيق أعمال اللجان المدرسية ودعم تكاملها مع مؤشرات الأداء المعتمدة.",
         "دراسة المقترحات الإدارية والتنظيمية واقتراح الحلول المناسبة.",
         "المساهمة في تهيئة بيئة مدرسية آمنة ومنظمة تدعم جودة التعليم."
-      ]
+      ],
+      "quotas": {
+        "fixed": [
+          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
+          { "seat": "deputy", "source": "leadership.education", "label": "وكيل الشؤون التعليمية" },
+          { "seat": "member", "source": "leadership.school", "label": "وكيل الشؤون المدرسية" }
+        ],
+        "open": [
+          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم متميز" }
+        ]
+      }
     },
     "guidance": {
       "title": "لجنة التوجيه والإرشاد",
+      "size": 6,
       "tasks": [
         "تخطيط وتنفيذ برامج التوجيه والإرشاد الطلابي وفق الخطة المعتمدة.",
         "متابعة حالات الطلاب المحتاجين للدعم النفسي والسلوكي والأكاديمي.",
         "التنسيق مع أولياء الأمور لتعزيز الشراكة في رعاية الطلاب.",
         "توثيق أعمال الإرشاد والشواهد المرتبطة بالمؤشرات ذات الصلة."
-      ]
+      ],
+      "quotas": {
+        "fixed": [
+          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
+          { "seat": "deputy", "source": "leadership.students", "label": "وكيل شؤون الطلاب" },
+          { "seat": "secretary", "source": "leadership.counselor", "label": "الموجه الطلابي", "optional": true }
+        ],
+        "open": [
+          { "seat": "member", "kind": "teacher", "count": 3, "label": "معلم رائد فصل" }
+        ]
+      }
     },
     "achievement": {
       "title": "لجنة التحصيل الدراسي",
+      "size": 6,
       "tasks": [
         "تحليل نتائج التحصيل الدراسي واقتراح خطط تحسين مبنية على الشواهد.",
         "متابعة البرامج العلاجية والإثرائية وقياس أثرها على تعلم الطلاب.",
         "دعم معلمي المواد في تعزيز نواتج التعلم ومهارات التقويم.",
         "رفع توصيات تحسين التحصيل لقيادة المدرسة في مواعيد المراجعة."
-      ]
+      ],
+      "quotas": {
+        "fixed": [
+          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
+          { "seat": "deputy", "source": "leadership.education", "label": "وكيل الشؤون التعليمية" },
+          { "seat": "member", "source": "leadership.counselor", "label": "الموجه الطلابي", "optional": true }
+        ],
+        "open": [
+          { "seat": "member", "kind": "teacher", "count": 3, "label": "معلم تخصص أساسي", "hint": "لغتي، الرياضيات، العلوم" }
+        ]
+      }
     },
     "excellence": {
-      "title": "لجنة التميز",
+      "title": "لجنة التميز والجودة",
+      "size": 6,
       "tasks": [
         "اكتشاف المواهب والتميز الطلابي ورعايتها وفق الضوابط المعتمدة.",
         "تنظيم المسابقات والمعارض والفعاليات المرتبطة بالتميز المدرسي.",
         "توثيق إنجازات التميز وربطها بمؤشرات الأداء والشواهد.",
         "اقتراح مبادرات نوعية ترفع مستوى التميز داخل المدرسة."
-      ]
+      ],
+      "quotas": {
+        "fixed": [
+          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
+          { "seat": "deputy", "source": "leadership.education", "label": "وكيل الشؤون التعليمية" },
+          { "seat": "secretary", "source": "staff.quality", "label": "منسق الجودة/التميز", "optional": true }
+        ],
+        "open": [
+          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم" },
+          { "seat": "student", "kind": "student_or_parent", "count": 1, "label": "ممثل طلاب أو أولياء أمور" }
+        ]
+      }
     },
     "fund": {
-      "title": "فريق الصندوق المدرسي",
+      "title": "لجنة الصندوق المدرسي",
+      "size": 5,
       "tasks": [
         "إدارة موارد الصندوق المدرسي وفق الأنظمة واللوائح المالية المعتمدة.",
         "إعداد المقترحات المالية للبرامج والأنشطة ورفعها للاعتماد.",
         "متابعة الصرف والتوثيق المالي وحفظ المستندات ذات العلاقة.",
         "تقديم تقارير دورية عن حالة الصندوق واحتياجاته."
-      ]
+      ],
+      "quotas": {
+        "fixed": [
+          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
+          { "seat": "deputy", "source": "leadership.school", "label": "وكيل الشؤون المدرسية" },
+          { "seat": "secretary", "source": "staff.treasurer", "label": "أمين الصندوق", "optional": true }
+        ],
+        "open": [
+          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم" }
+        ]
+      }
     },
     "budget": {
       "title": "لجنة الميزانية التشغيلية",
+      "size": 5,
       "tasks": [
         "المشاركة في إعداد الميزانية التشغيلية وفق أولويات المدرسة.",
         "متابعة تنفيذ البنود المالية المعتمدة وضبط أولويات الصرف.",
         "اقتراح تحسينات لرفع كفاءة الإنفاق التشغيلي.",
         "رفع تقارير متابعة الميزانية لقيادة المدرسة في مواعيدها."
-      ]
+      ],
+      "quotas": {
+        "fixed": [
+          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
+          { "seat": "deputy", "source": "leadership.school", "label": "وكيل الشؤون المدرسية" },
+          { "seat": "member", "source": "leadership.education", "label": "وكيل الشؤون التعليمية" }
+        ],
+        "open": [
+          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم" }
+        ]
+      }
     },
     "safety": {
-      "title": "فريق الأمن والسلامة المدرسية",
+      "title": "لجنة الأمن والسلامة المدرسية",
+      "size": 5,
       "tasks": [
         "متابعة خطة الأمن والسلامة وتطبيق إجراءات الإخلاء والطوارئ.",
         "رصد المخاطر في المبنى المدرسي واقتراح المعالجات العاجلة.",
         "التوعية بسلوكيات السلامة للطلاب والمنسوبين.",
         "توثيق الجولات والتدريبات والشواهد المرتبطة بالسلامة."
-      ]
+      ],
+      "quotas": {
+        "fixed": [
+          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
+          { "seat": "deputy", "source": "leadership.school", "label": "وكيل الشؤون المدرسية" },
+          { "seat": "secretary", "source": "staff.safety", "label": "منسق الأمن والسلامة", "optional": true }
+        ],
+        "open": [
+          { "seat": "member", "kind": "teacher", "count": 1, "label": "معلم" },
+          { "seat": "member", "kind": "admin", "count": 1, "label": "إداري أو محضر مختبر" }
+        ]
+      }
     },
     "activity": {
-      "title": "لجنة النشاط والمناسبات",
+      "title": "لجنة النشاط الطلابي",
+      "size": 6,
       "tasks": [
         "تخطيط وتنفيذ الأنشطة الطلابية والمناسبات المدرسية وفق التقويم المعتمد.",
         "تنظيم مشاركة الطلاب في البرامج اللاصفية ومتابعة أثرها.",
         "التنسيق مع اللجان الأخرى لدعم الفعاليات المشتركة.",
         "توثيق الأنشطة بالشواهد والصور وفق ضوابط النشر المعتمدة."
-      ]
+      ],
+      "quotas": {
+        "fixed": [
+          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
+          { "seat": "deputy", "source": "leadership.students", "label": "وكيل شؤون الطلاب" },
+          { "seat": "secretary", "source": "leadership.activity", "label": "رائد النشاط" }
+        ],
+        "open": [
+          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم" },
+          { "seat": "student", "kind": "student", "count": 1, "label": "ممثل طلاب" }
+        ]
+      }
     },
     "discipline": {
-      "title": "لجنة الانضباط والتدخل السريع",
+      "title": "لجنة الانضباط المدرسي",
+      "size": 6,
       "tasks": [
         "تعزيز قيم الانضباط المدرسي ومتابعة المخالفات وفق لائحة السلوك.",
         "التدخل السريع في الحالات الطارئة السلوكية والتنظيمية.",
         "التنسيق مع التوجيه والإرشاد في الحالات التي تتطلب دعماً متخصصاً.",
         "رفع توصيات تحسين الانضباط وحفظ سجل المتابعة."
-      ]
+      ],
+      "quotas": {
+        "fixed": [
+          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
+          { "seat": "deputy", "source": "leadership.students", "label": "وكيل شؤون الطلاب" },
+          { "seat": "secretary", "source": "leadership.counselor", "label": "الموجه الطلابي", "optional": true }
+        ],
+        "open": [
+          { "seat": "member", "kind": "teacher", "count": 3, "label": "معلم" }
+        ]
+      }
     },
     "special": {
-      "title": "فريق التربية الخاصة",
+      "title": "لجنة التربية الخاصة",
+      "size": 5,
       "tasks": [
         "دعم الطلاب ذوي الاحتياجات الخاصة وفق الخطط الفردية المعتمدة.",
         "التنسيق مع المعلمين لتكييف الممارسات التعليمية داخل الصف.",
         "متابعة الخدمات المساندة وتوثيق التقدم والشواهد.",
         "رفع الاحتياجات والتوصيات لقيادة المدرسة والجهات المختصة."
-      ]
+      ],
+      "quotas": {
+        "fixed": [
+          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
+          { "seat": "deputy", "source": "leadership.students", "label": "وكيل شؤون الطلاب" },
+          { "seat": "member", "source": "leadership.counselor", "label": "الموجه الطلابي", "optional": true }
+        ],
+        "open": [
+          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم تربية خاصة أو معلم" }
+        ]
+      }
     }
   }
 }

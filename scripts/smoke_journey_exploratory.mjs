@@ -304,7 +304,7 @@ function auditPrintGuardStatic() {
     }
   }
   if (legacyPrintCallers.length) {
-    notes.push("legacy-window.print:" + legacyPrintCallers.join("|"));
+    fails.push("legacy-window.print:" + legacyPrintCallers.join("|"));
   }
 
   return { fails, notes, legacyPrintCallers };

@@ -655,12 +655,27 @@ var GovernanceSuite = (function () {
         if (landscape) {
             document.body.classList.add("printing-rollup");
         }
-        window.addEventListener("afterprint", function cleanup() {
+        function cleanup() {
             document.body.classList.remove("printing-committee", "printing-rollup");
             sheet.hidden = true;
-            window.removeEventListener("afterprint", cleanup);
+        }
+        if (!window.PrintEngine || typeof window.PrintEngine.gate !== "function") {
+            console.error("PrintEngine غير محمّل.");
+            cleanup();
+            return;
+        }
+        var printed = window.PrintEngine.gate(sheet.outerHTML, {
+            multiPage: true,
+            orientation: landscape ? "landscape" : "portrait",
+            docTitle: "تقرير حوكمة"
         });
-        window.print();
+        if (printed && typeof printed.finally === "function") {
+            printed.finally(cleanup);
+        } else if (printed && typeof printed.then === "function") {
+            printed.then(cleanup, cleanup);
+        } else {
+            cleanup();
+        }
     }
 
     var ready = Promise.all([

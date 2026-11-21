@@ -49,16 +49,58 @@
         document.body.appendChild(node);
         node.querySelector("#print-preview-go").addEventListener("click", function () {
             waitForImages(function () {
-                if (document.body.classList.contains("print-book")) {
-                    isolateBookletForPrint();
-                    window.print();
+                if (!window.PrintEngine || typeof window.PrintEngine.gate !== "function") {
+                    console.error("PrintEngine غير محمّل.");
                     return;
                 }
-                if (window.OfficialFrameCore && typeof window.OfficialFrameCore.armPrintPage === "function"
-                    && document.body.classList.contains("print-official-core")) {
-                    window.OfficialFrameCore.armPrintPage();
+                var html = "";
+                var opts = { multiPage: true, orientation: "portrait" };
+                if (document.body.classList.contains("print-book")) {
+                    isolateBookletForPrint();
+                    var booklet = document.getElementById("booklet");
+                    html = booklet ? booklet.outerHTML : "";
+                } else if (document.body.classList.contains("print-official-core")) {
+                    if (window.OfficialFrameCore && typeof window.OfficialFrameCore.armPrintPage === "function") {
+                        window.OfficialFrameCore.armPrintPage(
+                            document.body.classList.contains("print-official-landscape")
+                                ? { orientation: "landscape" }
+                                : {}
+                        );
+                    }
+                    var frameHost = document.getElementById("official-frame-host");
+                    html = frameHost ? frameHost.innerHTML : "";
+                    if (document.body.classList.contains("print-official-landscape")) {
+                        opts.orientation = "landscape";
+                    }
+                    if (document.body.classList.contains("print-official-multi")
+                        || document.body.classList.contains("print-official-list")) {
+                        opts.multiPage = true;
+                        opts.list = document.body.classList.contains("print-official-list");
+                    }
+                } else if (document.body.classList.contains("print-deck")) {
+                    var deck = document.querySelector(".slide-deck");
+                    html = deck ? deck.outerHTML : "";
+                    opts.orientation = "landscape";
+                    opts.multiPage = !document.body.classList.contains("print-deck-one");
+                } else {
+                    var stage = document.getElementById("aj-print-stage-page")
+                        || document.getElementById("council-print-host")
+                        || document.getElementById("improvement-print-host");
+                    html = stage ? (stage.innerHTML || stage.outerHTML) : "";
                 }
-                window.print();
+                var printed = window.PrintEngine.gate(html, opts);
+                function afterGate() {
+                    if (document.body.classList.contains("print-book")) {
+                        restoreBookletAfterPrint();
+                    }
+                }
+                if (printed && typeof printed.finally === "function") {
+                    printed.finally(afterGate);
+                } else if (printed && typeof printed.then === "function") {
+                    printed.then(afterGate, afterGate);
+                } else {
+                    afterGate();
+                }
             });
         });
         node.querySelector("#print-preview-close").addEventListener("click", closePrintPreview);

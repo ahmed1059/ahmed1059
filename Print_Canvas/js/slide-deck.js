@@ -1011,7 +1011,28 @@ function printDeck(oneSlide) {
         return;
     }
     document.body.classList.add('print-deck');
-    window.print();
+    var root = document.querySelector('.slide-deck');
+    var html = root ? root.outerHTML : '';
+    function cleanup() {
+        document.body.classList.remove('print-deck', 'print-deck-one');
+    }
+    if (!window.PrintEngine || typeof window.PrintEngine.gate !== 'function') {
+        console.error('PrintEngine غير محمّل.');
+        cleanup();
+        return;
+    }
+    var printed = window.PrintEngine.gate(html, {
+        multiPage: !oneSlide,
+        orientation: 'landscape',
+        docTitle: 'شرائح الخطة'
+    });
+    if (printed && typeof printed.finally === 'function') {
+        printed.finally(cleanup);
+    } else if (printed && typeof printed.then === 'function') {
+        printed.then(cleanup, cleanup);
+    } else {
+        cleanup();
+    }
 }
 
 function mountSlideDeck(pane) {
