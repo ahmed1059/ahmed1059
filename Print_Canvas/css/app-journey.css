@@ -3381,6 +3381,33 @@ body.app-journey.print-official-core .aj-env-students-table th {
   font-size: 13px;
 }
 
+.aj-committee-add-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.aj-committee-add-bar .aj-committee-add-person {
+  flex: 1 1 220px;
+  min-width: 180px;
+  max-width: 100%;
+  width: auto;
+}
+
+.aj-committee-add-bar .aj-committee-add-seat {
+  flex: 0 0 140px;
+  width: 140px;
+  max-width: 100%;
+}
+
+.aj-committee-add-bar .aj-detail-btn {
+  flex: 0 0 auto;
+  margin: 0;
+  white-space: nowrap;
+}
+
 .aj-formation-table {
   width: 100%;
   border-collapse: collapse;
@@ -3404,7 +3431,43 @@ body.app-journey.print-official-core .aj-env-students-table th {
 
 .aj-formation-table select,
 .aj-formation-table button {
-  margin-inline-start: 8px;
+  margin-inline-start: 0;
+}
+
+/* معاينة تشكيل اللجان على الشاشة قبل الطباعة */
+body.is-print-preview .aj-committee-print-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin: 0 0 12px;
+  border: 1px solid #0b5e56;
+}
+
+body.is-print-preview .aj-committee-print-table th,
+body.is-print-preview .aj-committee-print-table td {
+  border: 1px solid #cbd5e1;
+  padding: 6px 8px;
+  text-align: right;
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+body.is-print-preview .aj-committee-print-table thead th {
+  background: #e8f2ef;
+  color: #0b5e56;
+  border-color: #0b5e56;
+}
+
+body.is-print-preview .aj-committee-print-title {
+  margin: 12px 0 6px;
+  color: #0b5e56;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+body.is-print-preview .aj-committee-print-sig {
+  max-height: 42px;
+  max-width: 120px;
 }
 
 .aj-indicator-file select {
