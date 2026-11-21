@@ -3,7 +3,8 @@
     "academic_year": "1448",
     "source": "الدليل التنظيمي لمدارس التعليم العام — المرحلة المتوسطة",
     "system_code": "1059",
-    "description": "بنك ديباجة قرارات تشكيل اللجان ونصاب المقاعد والمهام التنظيمية"
+    "description": "بنك ديباجة قرارات تشكيل اللجان ونصاب المقاعد والمهام التنظيمية — مرجع المسح المدرسي + الدليل التنظيمي",
+    "counselors_expected": 2
   },
   "decree": {
     "title_general": "قرار إداري بتشكيل اللجان المدرسية",
@@ -27,10 +28,10 @@
   "committees": {
     "admin": {
       "title": "اللجنة الإدارية",
-      "size": 5,
+      "size": 10,
       "tasks": [
         "متابعة تنفيذ الخطط التشغيلية والبرامج المدرسية ورفع تقارير دورية لقيادة المدرسة.",
-        "تنسيق أعمال اللجان المدرسية ودعم تكاملها مع مؤشرات الأداء المعتمدة.",
+        "تنسيق أعمال اللجان المدرسية وفرق العمل ودعم تكاملها مع مؤشرات الأداء المعتمدة.",
         "دراسة المقترحات الإدارية والتنظيمية واقتراح الحلول المناسبة.",
         "المساهمة في تهيئة بيئة مدرسية آمنة ومنظمة تدعم جودة التعليم."
       ],
@@ -38,10 +39,14 @@
         "fixed": [
           { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
           { "seat": "deputy", "source": "leadership.education", "label": "وكيل الشؤون التعليمية" },
-          { "seat": "member", "source": "leadership.school", "label": "وكيل الشؤون المدرسية" }
+          { "seat": "member", "source": "leadership.students", "label": "وكيل شؤون الطلاب والمدرسة" },
+          { "seat": "member", "source": "leadership.counselor", "label": "موجه طلابي" },
+          { "seat": "member", "source": "leadership.counselor_2", "label": "موجه طلابي" },
+          { "seat": "member", "source": "leadership.activity", "label": "رائد النشاط" },
+          { "seat": "member", "source": "staff.admin_assistant", "label": "مساعد إداري", "optional": true }
         ],
         "open": [
-          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم متميز" }
+          { "seat": "member", "kind": "teacher", "count": 3, "label": "معلم متميز" }
         ]
       }
     },
@@ -58,10 +63,11 @@
         "fixed": [
           { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
           { "seat": "deputy", "source": "leadership.students", "label": "وكيل شؤون الطلاب" },
-          { "seat": "secretary", "source": "leadership.counselor", "label": "الموجه الطلابي", "optional": true }
+          { "seat": "secretary", "source": "leadership.counselor", "label": "الموجه الطلابي (مقرر)" },
+          { "seat": "member", "source": "leadership.counselor_2", "label": "الموجه الطلابي", "optional": true }
         ],
         "open": [
-          { "seat": "member", "kind": "teacher", "count": 3, "label": "معلم رائد فصل" }
+          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم رائد فصل" }
         ]
       }
     },
@@ -78,16 +84,17 @@
         "fixed": [
           { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
           { "seat": "deputy", "source": "leadership.education", "label": "وكيل الشؤون التعليمية" },
-          { "seat": "member", "source": "leadership.counselor", "label": "الموجه الطلابي", "optional": true }
+          { "seat": "member", "source": "leadership.counselor", "label": "الموجه الطلابي" },
+          { "seat": "member", "source": "leadership.counselor_2", "label": "الموجه الطلابي", "optional": true }
         ],
         "open": [
-          { "seat": "member", "kind": "teacher", "count": 3, "label": "معلم تخصص أساسي", "hint": "لغتي، الرياضيات، العلوم" }
+          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم تخصص أساسي", "hint": "لغتي، الرياضيات، العلوم" }
         ]
       }
     },
     "excellence": {
-      "title": "لجنة التميز والجودة",
-      "size": 6,
+      "title": "لجنة التميز",
+      "size": 8,
       "tasks": [
         "اكتشاف المواهب والتميز الطلابي ورعايتها وفق الضوابط المعتمدة.",
         "تنظيم المسابقات والمعارض والفعاليات المرتبطة بالتميز المدرسي.",
@@ -97,32 +104,41 @@
       "quotas": {
         "fixed": [
           { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
-          { "seat": "deputy", "source": "leadership.education", "label": "وكيل الشؤون التعليمية" },
-          { "seat": "secretary", "source": "staff.quality", "label": "منسق الجودة/التميز", "optional": true }
+          { "seat": "member", "source": "leadership.education", "label": "وكيل الشؤون التعليمية" },
+          { "seat": "member", "source": "leadership.students", "label": "وكيل شؤون الطلاب والمدرسة" },
+          { "seat": "secretary", "source": "staff.admin_assistant", "label": "مساعد إداري (مقرر)" },
+          { "seat": "member", "source": "leadership.counselor", "label": "موجه طلابي" },
+          { "seat": "member", "source": "leadership.activity", "label": "رائد النشاط" },
+          { "seat": "member", "source": "staff.health", "label": "موجه صحي", "optional": true }
         ],
         "open": [
-          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم" },
-          { "seat": "student", "kind": "student_or_parent", "count": 1, "label": "ممثل طلاب أو أولياء أمور" }
+          { "seat": "member", "kind": "teacher", "count": 1, "label": "معلم" }
         ]
       }
     },
     "fund": {
-      "title": "لجنة الصندوق المدرسي",
+      "title": "فريق عمل الصندوق المدرسي",
       "size": 5,
       "tasks": [
-        "إدارة موارد الصندوق المدرسي وفق الأنظمة واللوائح المالية المعتمدة.",
-        "إعداد المقترحات المالية للبرامج والأنشطة ورفعها للاعتماد.",
-        "متابعة الصرف والتوثيق المالي وحفظ المستندات ذات العلاقة.",
-        "تقديم تقارير دورية عن حالة الصندوق واحتياجاته."
+        "إعداد الميزانية التشغيلية للمدرسة (الإيرادات المتوقعة وجدول المصروفات) ورفعها للاعتماد.",
+        "الصرف من الميزانية التشغيلية وفق البنود المعتمدة.",
+        "متابعة الصرف ومراجعة المستندات المالية.",
+        "مراجعة التقارير الدورية للميزانية.",
+        "إعداد التقرير المالي السنوي الختامي ورفعه للاعتماد.",
+        "العمل على تنمية موارد المدرسة وفق الأنظمة.",
+        "تسجيل الإيرادات والمصروفات في السجلات الإلكترونية والورقية.",
+        "جرد وتوثيق التبرعات الواردة.",
+        "رفع التقرير المالي السنوي للجهات المختصة في إدارة التعليم."
       ],
       "quotas": {
         "fixed": [
-          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
-          { "seat": "deputy", "source": "leadership.school", "label": "وكيل الشؤون المدرسية" },
-          { "seat": "secretary", "source": "staff.treasurer", "label": "أمين الصندوق", "optional": true }
+          { "seat": "chair", "source": "leadership.school", "label": "وكيل الشؤون المدرسية (رئيساً للفريق)" },
+          { "seat": "member", "source": "leadership.counselor", "label": "موجه طلابي" },
+          { "seat": "member", "source": "leadership.activity", "label": "رائد النشاط" },
+          { "seat": "secretary", "source": "staff.admin_assistant", "label": "مساعد إداري (مقرر)" }
         ],
         "open": [
-          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم" }
+          { "seat": "member", "kind": "teacher", "count": 1, "label": "معلم ترشحه اللجنة الإدارية" }
         ]
       }
     },
@@ -137,18 +153,19 @@
       ],
       "quotas": {
         "fixed": [
-          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
-          { "seat": "deputy", "source": "leadership.school", "label": "وكيل الشؤون المدرسية" },
-          { "seat": "member", "source": "leadership.education", "label": "وكيل الشؤون التعليمية" }
+          { "seat": "chair", "source": "leadership.school", "label": "وكيل الشؤون المدرسية" },
+          { "seat": "secretary", "source": "staff.admin_assistant", "label": "مساعد إداري (مقرر)" },
+          { "seat": "member", "source": "leadership.counselor", "label": "موجه طلابي" },
+          { "seat": "member", "source": "leadership.activity", "label": "رائد النشاط" }
         ],
         "open": [
-          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم" }
+          { "seat": "member", "kind": "teacher", "count": 1, "label": "معلم ترشحه اللجنة الإدارية" }
         ]
       }
     },
     "safety": {
-      "title": "لجنة الأمن والسلامة المدرسية",
-      "size": 5,
+      "title": "فريق عمل الأمن والسلامة المدرسية",
+      "size": 6,
       "tasks": [
         "متابعة خطة الأمن والسلامة وتطبيق إجراءات الإخلاء والطوارئ.",
         "رصد المخاطر في المبنى المدرسي واقتراح المعالجات العاجلة.",
@@ -157,13 +174,13 @@
       ],
       "quotas": {
         "fixed": [
-          { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
-          { "seat": "deputy", "source": "leadership.school", "label": "وكيل الشؤون المدرسية" },
-          { "seat": "secretary", "source": "staff.safety", "label": "منسق الأمن والسلامة", "optional": true }
+          { "seat": "chair", "source": "leadership.school", "label": "وكيل الشؤون المدرسية (رئيساً للفريق)" },
+          { "seat": "secretary", "source": "leadership.counselor", "label": "موجه طلابي (عضواً ومقرراً)" },
+          { "seat": "member", "source": "staff.safety", "label": "منسق الأمن والسلامة", "optional": true },
+          { "seat": "member", "source": "staff.health", "label": "موجه صحي", "optional": true }
         ],
         "open": [
-          { "seat": "member", "kind": "teacher", "count": 1, "label": "معلم" },
-          { "seat": "member", "kind": "admin", "count": 1, "label": "إداري أو محضر مختبر" }
+          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم ترشحه اللجنة الإدارية" }
         ]
       }
     },
@@ -201,10 +218,11 @@
         "fixed": [
           { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
           { "seat": "deputy", "source": "leadership.students", "label": "وكيل شؤون الطلاب" },
-          { "seat": "secretary", "source": "leadership.counselor", "label": "الموجه الطلابي", "optional": true }
+          { "seat": "secretary", "source": "leadership.counselor", "label": "الموجه الطلابي (مقرر)" },
+          { "seat": "member", "source": "leadership.counselor_2", "label": "الموجه الطلابي", "optional": true }
         ],
         "open": [
-          { "seat": "member", "kind": "teacher", "count": 3, "label": "معلم" }
+          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم" }
         ]
       }
     },
@@ -221,10 +239,11 @@
         "fixed": [
           { "seat": "chair", "source": "leadership.manager", "label": "مدير المدرسة" },
           { "seat": "deputy", "source": "leadership.students", "label": "وكيل شؤون الطلاب" },
-          { "seat": "member", "source": "leadership.counselor", "label": "الموجه الطلابي", "optional": true }
+          { "seat": "member", "source": "leadership.counselor", "label": "الموجه الطلابي" },
+          { "seat": "member", "source": "leadership.counselor_2", "label": "الموجه الطلابي", "optional": true }
         ],
         "open": [
-          { "seat": "member", "kind": "teacher", "count": 2, "label": "معلم تربية خاصة أو معلم" }
+          { "seat": "member", "kind": "teacher", "count": 1, "label": "معلم تربية خاصة أو معلم" }
         ]
       }
     }

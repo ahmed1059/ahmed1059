@@ -19,10 +19,10 @@ COMMITTEES = (
     ("admin", "اللجنة الإدارية"),
     ("guidance", "لجنة التوجيه والإرشاد"),
     ("achievement", "لجنة التحصيل الدراسي"),
-    ("excellence", "لجنة التميز والجودة"),
-    ("fund", "لجنة الصندوق المدرسي"),
+    ("excellence", "لجنة التميز"),
+    ("fund", "فريق عمل الصندوق المدرسي"),
     ("budget", "لجنة الميزانية التشغيلية"),
-    ("safety", "لجنة الأمن والسلامة المدرسية"),
+    ("safety", "فريق عمل الأمن والسلامة المدرسية"),
     ("activity", "لجنة النشاط الطلابي"),
     ("discipline", "لجنة الانضباط المدرسي"),
     ("special", "لجنة التربية الخاصة"),
@@ -41,6 +41,8 @@ STAFF_KEYWORD_MAP = {
     "safety": ["أمن", "سلامة"],
     "treasurer": ["صندوق", "أمين الصندوق"],
     "special_ed": ["تربية خاصة"],
+    "admin_assistant": ["مساعد إداري", "مساعد ادارى", "أداري", "اداري"],
+    "health": ["موجه صحي", "الصحي", "صحي"],
 }
 
 _BANK_CACHE: dict | None = None
@@ -190,15 +192,92 @@ def _student_name(connection, national_id: str) -> str:
     return str(row[0] or "").strip() if row else ""
 
 
+def _staff_role(connection, national_id: str) -> str:
+    row = connection.execute(
+        "SELECT role FROM noor_staff WHERE national_id = ?",
+        (_token(national_id),),
+    ).fetchone()
+    return str(row[0] or "").strip() if row else ""
+
+
+def _counselor_ids(connection) -> list[str]:
+    """كل الموجهين الطلابيين من السجل (مرجع المدرسة: اثنان)."""
+    rows = connection.execute(
+        """
+        SELECT national_id FROM noor_staff
+        WHERE role LIKE '%موجه%طلاب%'
+          AND national_id IS NOT NULL AND trim(national_id) != ''
+          AND COALESCE(is_deleted, 0) = 0
+          AND COALESCE(active, 1) = 1
+        ORDER BY name
+        """
+    ).fetchall()
+    return [str(row[0]).strip() for row in rows if str(row[0] or "").strip()]
+
+
+def _normalize_person_name(value: str) -> str:
+    text = str(value or "").strip()
+    for token in ("بن", "ابن", "آل"):
+        text = text.replace(f" {token} ", " ")
+    return " ".join(text.split())
+
+
+def _excluded_names(connection, exclude: set[str]) -> set[str]:
+    names: set[str] = set()
+    for ident in exclude:
+        if not ident:
+            continue
+        row = connection.execute(
+            "SELECT name FROM noor_staff WHERE national_id = ?",
+            (ident,),
+        ).fetchone()
+        if row and row[0]:
+            names.add(_normalize_person_name(row[0]))
+    return names
+
+
+def _other_wakil(connection, exclude: set[str]) -> str:
+    """أول وكيل مختلف هويةً واسماً عن المستثنين (يتفادى تكرار سجل نفس الشخص)."""
+    blocked_names = _excluded_names(connection, exclude)
+    rows = connection.execute(
+        """
+        SELECT national_id, role, name FROM noor_staff
+        WHERE role LIKE '%وكيل%'
+          AND national_id IS NOT NULL AND trim(national_id) != ''
+          AND COALESCE(is_deleted, 0) = 0
+          AND COALESCE(active, 1) = 1
+        ORDER BY
+          CASE
+            WHEN role LIKE '%طلاب%' THEN 0
+            WHEN role LIKE '%مدرسي%' THEN 1
+            WHEN role = 'وكيل' THEN 2
+            ELSE 3
+          END,
+          name
+        """
+    ).fetchall()
+    for identity, _role, name in rows:
+        ident = str(identity or "").strip()
+        if not ident or ident in exclude:
+            continue
+        if _normalize_person_name(name) in blocked_names:
+            continue
+        return ident
+    return ""
+
+
 def _leadership_ids(connection) -> dict:
+    """مقاعد القيادة من leadership_seat مع احتياطي أدوار من noor_staff فقط (بلا أسماء مخترعة)."""
     seats = {
         "manager": "",
         "education": "",
         "students": "",
         "school": "",
         "counselor": "",
+        "counselor_2": "",
         "activity": "",
     }
+    school_seat_raw = ""
     try:
         rows = connection.execute(
             "SELECT role, national_id, sort_order FROM leadership_seat ORDER BY role, sort_order"
@@ -215,12 +294,16 @@ def _leadership_ids(connection) -> dict:
             seats["education"] = ident
         elif role == "student_agents" and not seats["students"]:
             seats["students"] = ident
-        elif role == "school_agents" and not seats["school"]:
-            seats["school"] = ident
+        elif role in ("school_agents", "school_affairs_agent") and not school_seat_raw:
+            school_seat_raw = ident
         elif role == "counselors" and not seats["counselor"]:
             seats["counselor"] = ident
         elif role == "activity_leader" and not seats["activity"]:
             seats["activity"] = ident
+
+    # وكيل الشؤون المدرسية: مقعد القيادة إن كان وكيلاً، وإلا وكيل بوصف مدرسي، وإلا الوكيل الآخر غير التعليمي
+    if school_seat_raw and "وكيل" in _staff_role(connection, school_seat_raw):
+        seats["school"] = school_seat_raw
     if not seats["school"]:
         fallback = connection.execute(
             """
@@ -233,6 +316,37 @@ def _leadership_ids(connection) -> dict:
         ).fetchone()
         if fallback:
             seats["school"] = str(fallback[0]).strip()
+    if not seats["school"]:
+        seats["school"] = _other_wakil(connection, {seats["manager"], seats["education"]})
+
+    if not seats["students"]:
+        students = connection.execute(
+            """
+            SELECT national_id FROM noor_staff
+            WHERE role LIKE '%وكيل%' AND role LIKE '%طلاب%'
+              AND national_id IS NOT NULL AND trim(national_id) != ''
+              AND COALESCE(is_deleted, 0) = 0
+            LIMIT 1
+            """
+        ).fetchone()
+        if students:
+            seats["students"] = str(students[0]).strip()
+    if not seats["students"]:
+        seats["students"] = _other_wakil(
+            connection, {seats["manager"], seats["education"], seats["school"]}
+        ) or seats["school"]
+
+    counselors = _counselor_ids(connection)
+    if seats["counselor"] and seats["counselor"] in counselors:
+        counselors = [seats["counselor"]] + [c for c in counselors if c != seats["counselor"]]
+    if counselors:
+        seats["counselor"] = counselors[0]
+    if len(counselors) > 1:
+        seats["counselor_2"] = counselors[1]
+
+    if not seats["activity"]:
+        seats["activity"] = _find_staff_by_keywords(connection, ["رائد النشاط", "رائد نشاط"])
+
     return seats
 
 
