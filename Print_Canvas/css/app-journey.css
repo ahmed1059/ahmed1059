@@ -3366,10 +3366,28 @@ body.app-journey.print-official-core .aj-env-students-table th {
   padding: 10px 12px 14px;
 }
 
-.aj-committee-board .aj-group-title {
+.aj-committee-board-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   margin: 0 0 10px;
   padding-bottom: 6px;
   border-bottom: 2px solid #0b5e56;
+}
+
+.aj-committee-board-head .aj-group-title {
+  margin: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
+  flex: 1 1 auto;
+}
+
+.aj-committee-board-head .aj-detail-btn {
+  flex: 0 0 auto;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .aj-committee-board .aj-formation-table {
@@ -3463,6 +3481,33 @@ body.is-print-preview .aj-committee-print-title {
   color: #0b5e56;
   font-size: 16px;
   font-weight: 700;
+}
+
+body.is-print-preview .aj-committee-decree {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 1.75;
+  text-align: justify;
+  color: #1a1a1a;
+}
+
+body.is-print-preview .aj-committee-decree p {
+  margin: 0 0 8px;
+}
+
+body.is-print-preview .aj-committee-decree-meta {
+  margin: 0 0 10px;
+  font-weight: 700;
+  color: #0b5e56;
+}
+
+body.is-print-preview .aj-committee-decree-tasks {
+  margin: 6px 0 10px;
+  padding-inline-start: 22px;
+}
+
+body.is-print-preview .aj-committee-decree-tasks li {
+  margin: 0 0 4px;
 }
 
 body.is-print-preview .aj-committee-print-sig {

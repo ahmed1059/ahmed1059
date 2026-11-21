@@ -92,6 +92,9 @@
     if (title.indexOf("منسوب") >= 0) {
       return "staff";
     }
+    if (title.indexOf("قرار") >= 0 && (title.indexOf("تشكيل") >= 0 || title.indexOf("لجنة") >= 0)) {
+      return "committee_decree";
+    }
     if (title.indexOf("لجان") >= 0) {
       return "committees";
     }
@@ -114,6 +117,8 @@
         program = safePart(String(opts.title || "").replace(/^بطاقة\s*برنامج\s*/, ""));
       }
       parts = ["بطاقة_برنامج", program, date];
+    } else if (kind === "committee_decree") {
+      parts = ["قرار_تشكيل", safePart(opts.committeeName || opts.title), "1448"];
     } else if (kind === "committees") {
       parts = ["تشكيل_اللجان", date];
     } else {
