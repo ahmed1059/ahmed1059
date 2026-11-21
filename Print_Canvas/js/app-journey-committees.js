@@ -154,7 +154,8 @@
     row.className = "aj-committee-add-row";
     row.setAttribute("data-committee", committee.id || "");
     var select = document.createElement("select");
-    select.className = "aj-soft-note";
+    select.className = "aj-soft-note aj-committee-add-person";
+    select.setAttribute("aria-label", "اختر منسوباً");
     var empty = document.createElement("option");
     empty.value = "";
     empty.textContent = "اختر منسوباً";
@@ -169,7 +170,8 @@
       select.appendChild(option);
     });
     var seat = document.createElement("select");
-    seat.className = "aj-soft-note";
+    seat.className = "aj-soft-note aj-committee-add-seat";
+    seat.setAttribute("aria-label", "الدور");
     [["member", "عضو"], ["chair", "رئيس"], ["exofficio", "بحكم المنصب"]].forEach(function (pair) {
       var option = document.createElement("option");
       option.value = pair[0];
@@ -193,9 +195,12 @@
     });
     var cell = document.createElement("td");
     cell.colSpan = 4;
-    cell.appendChild(select);
-    cell.appendChild(seat);
-    cell.appendChild(add);
+    var bar = document.createElement("div");
+    bar.className = "aj-committee-add-bar";
+    bar.appendChild(select);
+    bar.appendChild(seat);
+    bar.appendChild(add);
+    cell.appendChild(bar);
     row.appendChild(cell);
     return row;
   }
@@ -438,45 +443,77 @@
     if (!core || typeof core.sheet !== "function" || !window.AJPrint) {
       return;
     }
-    var sections = [];
+    var ids = [];
     (body.committees || []).forEach(function (committee) {
-      var members = committee.members || [];
-      var rows = members.map(function (member) {
-        return "<tr>"
-          + "<td style=\"padding:1.5mm;border:1px solid #9db8b2;font-size:12px;\">"
-          + escapePrint(SEAT_LABEL[member.seat] || member.seat || "")
-          + "</td>"
-          + "<td style=\"padding:1.5mm;border:1px solid #9db8b2;font-size:12px;\">"
-          + escapePrint(member.name || "")
-          + "</td></tr>";
-      }).join("");
-      if (!rows) {
-        rows = "<tr><td colspan=\"2\" style=\"padding:1.5mm;border:1px solid #9db8b2;font-size:12px;\">لا أعضاء</td></tr>";
+      (committee.members || []).forEach(function (member) {
+        if (member && member.national_id && ids.indexOf(member.national_id) < 0) {
+          ids.push(member.national_id);
+        }
+      });
+    });
+    var headers = authHeaders();
+    delete headers["Content-Type"];
+    var signsPromise = ids.length
+      ? fetch("/api/session/signatures?ids=" + encodeURIComponent(ids.join(",")), {
+        headers: headers,
+        cache: "no-store"
+      }).then(function (response) {
+        return response.ok ? response.json() : { signatures: {} };
+      }).catch(function () {
+        return { signatures: {} };
+      })
+      : Promise.resolve({ signatures: {} });
+
+    signsPromise.then(function (payload) {
+      var signs = (payload && payload.signatures) || {};
+      var sections = [];
+      (body.committees || []).forEach(function (committee) {
+        var members = committee.members || [];
+        // الوثيقة الرسمية: لا تُطبع اللجان الفارغة بعبارة «لا أعضاء»
+        if (!members.length) {
+          return;
+        }
+        var rows = members.map(function (member) {
+          var sigSrc = signs[member.national_id] || "";
+          var sigHtml = sigSrc
+            ? "<img class=\"sig-image aj-committee-print-sig\" src=\"" + escapePrint(sigSrc) + "\" alt=\"\">"
+            : "<span class=\"aj-committee-print-sig-line\" aria-hidden=\"true\"></span>";
+          return "<tr>"
+            + "<td>" + escapePrint(SEAT_LABEL[member.seat] || member.seat || "") + "</td>"
+            + "<td>" + escapePrint(member.name || "") + "</td>"
+            + "<td class=\"aj-committee-print-sign\">" + sigHtml + "</td>"
+            + "</tr>";
+        }).join("");
+        sections.push(
+          "<section class=\"aj-committee-print-block\">"
+          + "<h2 class=\"aj-committee-print-title\">" + escapePrint(committee.title || "") + "</h2>"
+          + "<table class=\"aj-committee-print-table\">"
+          + "<thead><tr><th>الدور</th><th>الاسم</th><th>التوقيع</th></tr></thead>"
+          + "<tbody>" + rows + "</tbody></table></section>"
+        );
+      });
+      if (!sections.length) {
+        sections.push("<p class=\"aj-committee-print-empty\">لا عضوية محفوظة في التشكيل بعد.</p>");
       }
-      sections.push(
-        "<h2 class=\"tpl-h2\" style=\"margin:3mm 0 1.5mm;font-size:14px;color:#0b5e56;\">"
-        + escapePrint(committee.title || "")
-        + "</h2>"
-        + "<table style=\"width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 3mm;\">"
-        + "<thead><tr>"
-        + "<th style=\"width:30%;padding:1.5mm;border:1px solid #0b5e56;font-size:12px;\">الدور</th>"
-        + "<th style=\"width:70%;padding:1.5mm;border:1px solid #0b5e56;font-size:12px;\">الاسم</th>"
-        + "</tr></thead><tbody>" + rows + "</tbody></table>"
-      );
+      var columns = (body.approvals || []).filter(function (item) {
+        return item && item.name;
+      }).map(function (item) {
+        return {
+          role: "اعتماد",
+          roleTitle: "اعتماد",
+          name: item.name,
+          signature: signs[item.national_id] || ""
+        };
+      });
+      var html = core.sheet({
+        title: "تشكيل اللجان",
+        kind: "committees",
+        bodyHtml: sections.join(""),
+        signoff: columns.length > 0,
+        columns: columns
+      });
+      window.AJPrint.show(html, { pdfTitle: "تشكيل اللجان", arm: { multiPage: true } });
     });
-    var columns = (body.approvals || []).filter(function (item) {
-      return item && item.name;
-    }).map(function (item) {
-      return { role: "اعتماد", roleTitle: "اعتماد", name: item.name, signature: "" };
-    });
-    var html = core.sheet({
-      title: "تشكيل اللجان",
-      kind: "committees",
-      bodyHtml: sections.join(""),
-      signoff: columns.length > 0,
-      columns: columns
-    });
-    window.AJPrint.show(html, { pdfTitle: "تشكيل اللجان", arm: { multiPage: true } });
   }
 
   window.AjCommittees = {

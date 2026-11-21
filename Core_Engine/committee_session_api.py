@@ -269,13 +269,104 @@ def _reserved_chair(cid: str, seats: dict) -> str:
     return ""
 
 
+def _set_seat(connection, committee_id: str, national_id: str, seat: str, sort_order: int | None = None) -> bool:
+    """يضبط مقعد شخص في لجنة؛ يعيد True إن تغيّر شيء."""
+    ident = _token(national_id)
+    role = _token(seat) or "member"
+    if not ident:
+        return False
+    current = connection.execute(
+        "SELECT seat, sort_order FROM committee_seat WHERE committee_id = ? AND national_id = ?",
+        (committee_id, ident),
+    ).fetchone()
+    if current:
+        changed = False
+        if current[0] != role:
+            connection.execute(
+                "UPDATE committee_seat SET seat = ? WHERE committee_id = ? AND national_id = ?",
+                (role, committee_id, ident),
+            )
+            changed = True
+        if sort_order is not None and int(current[1]) != int(sort_order):
+            connection.execute(
+                "UPDATE committee_seat SET sort_order = ? WHERE committee_id = ? AND national_id = ?",
+                (int(sort_order), committee_id, ident),
+            )
+            changed = True
+        return changed
+    order = (
+        int(sort_order)
+        if sort_order is not None
+        else connection.execute(
+            "SELECT COALESCE(MAX(sort_order), -1) + 1 FROM committee_seat WHERE committee_id = ?",
+            (committee_id,),
+        ).fetchone()[0]
+    )
+    connection.execute(
+        "INSERT INTO committee_seat (committee_id, national_id, seat, sort_order) VALUES (?, ?, ?, ?)",
+        (committee_id, ident, role, order),
+    )
+    return True
+
+
+def _apply_reserved_roles(connection) -> bool:
+    """قرار 216: رئيس الإدارية = المدير، رئيس الإرشاد = الموجه، رئيس النشاط = رائد النشاط."""
+    rows = _seat_rows(connection)
+    if not rows:
+        return False
+    lead = _leadership_ids(connection)
+    changed = False
+    for cid, ident in (
+        ("admin", lead.get("manager")),
+        ("guidance", lead.get("counselor")),
+        ("activity", lead.get("activity")),
+    ):
+        chair_id = _token(ident)
+        if not chair_id:
+            continue
+        # إن وُجد رئيس آخر غير المحجوز، يُحوَّل إلى عضو
+        others = connection.execute(
+            "SELECT national_id FROM committee_seat WHERE committee_id = ? AND seat = 'chair' AND national_id != ?",
+            (cid, chair_id),
+        ).fetchall()
+        for (other_id,) in others:
+            connection.execute(
+                "UPDATE committee_seat SET seat = 'member' WHERE committee_id = ? AND national_id = ?",
+                (cid, other_id),
+            )
+            changed = True
+        if _set_seat(connection, cid, chair_id, "chair", 0):
+            changed = True
+    # الإدارية: الوكيلان بحكم المنصب (لا يُمسّ إن كان أحدهما هو الرئيس)
+    admin_chair = _token(lead.get("manager"))
+    for ident, seat in (
+        (lead.get("education"), "exofficio"),
+        (lead.get("students"), "exofficio"),
+    ):
+        person = _token(ident)
+        if not person or person == admin_chair:
+            continue
+        current = connection.execute(
+            "SELECT seat FROM committee_seat WHERE committee_id = 'admin' AND national_id = ?",
+            (person,),
+        ).fetchone()
+        if current and current[0] == "chair":
+            continue
+        if _set_seat(connection, "admin", person, seat):
+            changed = True
+    return changed
+
+
 @router.get("/api/session/committees")
 def get_committees(x_session_token: str = Header(default="")):
     user = _require_user(x_session_token)
     connection = connect()
     try:
         _ensure(connection)
-        connection.commit()
+        if _apply_reserved_roles(connection):
+            connection.commit()
+        else:
+            connection.commit()
         return _payload(connection, user)
     finally:
         connection.close()
@@ -308,10 +399,8 @@ def draw_committees(x_session_token: str = Header(default="")):
         connection.execute("DELETE FROM committee_approval")
         inserts = []
         for cid in ids:
-            chair = _reserved_chair(cid, lead)
-            members = list(buckets[cid])
-            if chair and chair in members:
-                members = [item for item in members if item != chair]
+            chair = _token(_reserved_chair(cid, lead))
+            members = [item for item in buckets[cid] if item != chair]
             order = 0
             if chair:
                 inserts.append((cid, chair, "chair", order))
@@ -322,8 +411,8 @@ def draw_committees(x_session_token: str = Header(default="")):
                 order += 1
             if cid == "admin":
                 for ident, seat in (
-                    (lead.get("education"), "exofficio"),
-                    (lead.get("students"), "exofficio"),
+                    (_token(lead.get("education")), "exofficio"),
+                    (_token(lead.get("students")), "exofficio"),
                 ):
                     if ident and ident != chair:
                         inserts.append((cid, ident, seat, order))
@@ -337,6 +426,7 @@ def draw_committees(x_session_token: str = Header(default="")):
             "INSERT OR REPLACE INTO committee_seat (committee_id, national_id, seat, sort_order) VALUES (?, ?, ?, ?)",
             inserts,
         )
+        _apply_reserved_roles(connection)
         rows = _seat_rows(connection)
         stamp = _stamp_of(rows)
         connection.execute("DELETE FROM committee_meta")
@@ -427,6 +517,11 @@ def add_committee_seat(body: SeatBody, x_session_token: str = Header(default="")
             "SELECT sort_order FROM committee_seat WHERE committee_id = ? AND national_id = ?",
             (committee_id, national_id),
         ).fetchone()
+        if seat == "chair":
+            connection.execute(
+                "UPDATE committee_seat SET seat = 'member' WHERE committee_id = ? AND seat = 'chair' AND national_id != ?",
+                (committee_id, national_id),
+            )
         if current:
             connection.execute(
                 "UPDATE committee_seat SET seat = ? WHERE committee_id = ? AND national_id = ?",
@@ -441,6 +536,7 @@ def add_committee_seat(body: SeatBody, x_session_token: str = Header(default="")
                 "INSERT INTO committee_seat (committee_id, national_id, seat, sort_order) VALUES (?, ?, ?, ?)",
                 (committee_id, national_id, seat, order),
             )
+        _apply_reserved_roles(connection)
         _refresh_stamp(connection, user)
         connection.commit()
         return _payload(connection, user)
