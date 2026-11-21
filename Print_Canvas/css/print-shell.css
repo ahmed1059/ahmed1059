@@ -311,6 +311,7 @@ img.sig-image {
   table-layout: fixed !important;
   margin: 0 0 2mm !important;
   background: #ffffff !important;
+  border: 1px solid #0b5e56 !important;
 }
 
 .aj-committee-print-table thead {

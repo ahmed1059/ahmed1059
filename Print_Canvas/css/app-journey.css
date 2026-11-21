@@ -3440,6 +3440,7 @@ body.is-print-preview .aj-committee-print-table {
   border-collapse: collapse;
   table-layout: fixed;
   margin: 0 0 12px;
+  border: 1px solid #0b5e56;
 }
 
 body.is-print-preview .aj-committee-print-table th,
