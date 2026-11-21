@@ -3496,6 +3496,23 @@ body.app-journey.print-official-core .aj-env-students-table th {
   white-space: nowrap;
 }
 
+.aj-committee-add-bar .aj-add-show-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  color: #5c675f;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.aj-committee-add-bar .aj-add-show-all input {
+  margin: 0;
+  accent-color: #0b5e56;
+}
+
 .aj-formation-table {
   width: 100%;
   border-collapse: collapse;

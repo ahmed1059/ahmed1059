@@ -1166,7 +1166,7 @@
           { roleTitle: "الزائر المقيّم", name: record.visitor_name || "", signature: signs[record.visitor_id] || "" },
           { roleTitle: "مدير المدرسة", name: managerName || "مدير المدرسة", signature: signs[managerId] || "" }
         ],
-        multiPage: false
+        multiPage: true
       });
     });
   }

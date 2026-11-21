@@ -490,6 +490,7 @@ def _quota_block(connection, cid: str, committee: dict, members: list[dict]) -> 
     filled = len(members)
     needed: dict[tuple[str, str], int] = defaultdict(int)
     labels: dict[tuple[str, str], str] = {}
+    role_categories: dict[tuple[str, str], str] = {}
     optional_keys: set[tuple[str, str]] = set()
 
     for entry in quotas.get("fixed") or []:
@@ -499,6 +500,7 @@ def _quota_block(connection, cid: str, committee: dict, members: list[dict]) -> 
         key = (seat, "staff")
         needed[key] += 1
         labels[key] = _token(entry.get("label")) or seat
+        role_categories[key] = "staff"
         if entry.get("optional"):
             optional_keys.add(key)
 
@@ -512,10 +514,14 @@ def _quota_block(connection, cid: str, committee: dict, members: list[dict]) -> 
             continue
         if kind in ("teacher", "admin"):
             key = (seat, "staff")
+            # احتفظ بفئة الدور الأساسية للواجهة — لا تُستنتج من النص الوصفي.
+            role_categories[key] = kind
         elif kind == "student_or_parent":
             key = (seat, "student_or_parent")
+            role_categories[key] = kind
         else:
             key = (seat, kind)
+            role_categories[key] = kind
         needed[key] += count
         labels[key] = _token(entry.get("label")) or seat
 
@@ -536,10 +542,12 @@ def _quota_block(connection, cid: str, committee: dict, members: list[dict]) -> 
             continue
         if key in optional_keys and have.get(key, 0) == 0:
             continue
+        category = role_categories.get(key) or key[1]
         missing.append(
             {
                 "seat": key[0],
                 "kind": key[1],
+                "role_category": category,
                 "label": labels.get(key) or key[0],
                 "count": gap,
             }
