@@ -92,20 +92,36 @@
       return;
     }
     host.innerHTML = "";
-    var table = document.createElement("table");
-    table.className = "aj-formation-table";
-    table.innerHTML = "<thead><tr><th>اللجنة</th><th>الدور</th><th>الاسم</th><th>التوقيع</th><th></th></tr></thead>";
-    var tbody = document.createElement("tbody");
+    host.className = "aj-committee-boards";
     (body.committees || []).forEach(function (committee) {
-      (committee.members || []).forEach(function (member) {
+      var board = document.createElement("section");
+      board.className = "aj-committee-board";
+      board.setAttribute("data-committee", committee.id || "");
+      var title = document.createElement("h2");
+      title.className = "aj-group-title";
+      title.textContent = committee.title || "";
+      board.appendChild(title);
+      var scroller = document.createElement("div");
+      scroller.className = "aj-table-scroll";
+      var table = document.createElement("table");
+      table.className = "aj-formation-table";
+      table.innerHTML = "<thead><tr><th>الدور</th><th>الاسم</th><th>التوقيع</th><th></th></tr></thead>";
+      var tbody = document.createElement("tbody");
+      var members = committee.members || [];
+      if (!members.length) {
+        var empty = document.createElement("tr");
+        empty.className = "aj-committee-empty";
+        empty.innerHTML = "<td colspan=\"4\">لا أعضاء في هذه اللجنة بعد.</td>";
+        tbody.appendChild(empty);
+      }
+      members.forEach(function (member) {
         var row = document.createElement("tr");
         row.setAttribute("data-nid", member.national_id || "");
         row.setAttribute("data-committee", committee.id);
         var seat = SEAT_LABEL[member.seat] || member.seat || "";
-        row.innerHTML = "<td></td><td></td><td></td><td class=\"aj-formation-sign\"></td><td></td>";
-        row.children[0].textContent = committee.title || "";
-        row.children[1].textContent = seat;
-        row.children[2].textContent = member.name || "";
+        row.innerHTML = "<td></td><td></td><td class=\"aj-formation-sign\"></td><td></td>";
+        row.children[0].textContent = seat;
+        row.children[1].textContent = member.name || "";
         if (body.is_principal) {
           var remove = document.createElement("button");
           remove.type = "button";
@@ -118,24 +134,25 @@
               seat: member.seat
             });
           });
-          row.children[4].appendChild(remove);
+          row.children[3].appendChild(remove);
         }
         tbody.appendChild(row);
       });
       if (body.is_principal) {
         tbody.appendChild(addRow(committee));
       }
+      table.appendChild(tbody);
+      scroller.appendChild(table);
+      board.appendChild(scroller);
+      host.appendChild(board);
     });
-    table.appendChild(tbody);
-    var scroller = document.createElement("div");
-    scroller.className = "aj-table-scroll";
-    scroller.appendChild(table);
-    host.appendChild(scroller);
     paintSignatures(body);
   }
 
   function addRow(committee) {
     var row = document.createElement("tr");
+    row.className = "aj-committee-add-row";
+    row.setAttribute("data-committee", committee.id || "");
     var select = document.createElement("select");
     select.className = "aj-soft-note";
     var empty = document.createElement("option");
@@ -175,7 +192,7 @@
       });
     });
     var cell = document.createElement("td");
-    cell.colSpan = 5;
+    cell.colSpan = 4;
     cell.appendChild(select);
     cell.appendChild(seat);
     cell.appendChild(add);
@@ -408,20 +425,44 @@
     });
   }
 
+  function escapePrint(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
   function printFormation(body) {
     var core = window.PrintMasterCore;
     if (!core || typeof core.sheet !== "function" || !window.AJPrint) {
       return;
     }
-    var rows = [];
+    var sections = [];
     (body.committees || []).forEach(function (committee) {
-      (committee.members || []).forEach(function (member) {
-        rows.push([
-          committee.title || "",
-          SEAT_LABEL[member.seat] || member.seat || "",
-          member.name || ""
-        ]);
-      });
+      var members = committee.members || [];
+      var rows = members.map(function (member) {
+        return "<tr>"
+          + "<td style=\"padding:1.5mm;border:1px solid #9db8b2;font-size:12px;\">"
+          + escapePrint(SEAT_LABEL[member.seat] || member.seat || "")
+          + "</td>"
+          + "<td style=\"padding:1.5mm;border:1px solid #9db8b2;font-size:12px;\">"
+          + escapePrint(member.name || "")
+          + "</td></tr>";
+      }).join("");
+      if (!rows) {
+        rows = "<tr><td colspan=\"2\" style=\"padding:1.5mm;border:1px solid #9db8b2;font-size:12px;\">لا أعضاء</td></tr>";
+      }
+      sections.push(
+        "<h2 class=\"tpl-h2\" style=\"margin:3mm 0 1.5mm;font-size:14px;color:#0b5e56;\">"
+        + escapePrint(committee.title || "")
+        + "</h2>"
+        + "<table style=\"width:100%;border-collapse:collapse;table-layout:fixed;margin:0 0 3mm;\">"
+        + "<thead><tr>"
+        + "<th style=\"width:30%;padding:1.5mm;border:1px solid #0b5e56;font-size:12px;\">الدور</th>"
+        + "<th style=\"width:70%;padding:1.5mm;border:1px solid #0b5e56;font-size:12px;\">الاسم</th>"
+        + "</tr></thead><tbody>" + rows + "</tbody></table>"
+      );
     });
     var columns = (body.approvals || []).filter(function (item) {
       return item && item.name;
@@ -431,9 +472,7 @@
     var html = core.sheet({
       title: "تشكيل اللجان",
       kind: "committees",
-      bodyHtml: window.PrintTemplates && typeof window.PrintTemplates.dataTableHtml === "function"
-        ? window.PrintTemplates.dataTableHtml(["اللجنة", "الدور", "الاسم"], rows, { serial: false })
-        : "",
+      bodyHtml: sections.join(""),
       signoff: columns.length > 0,
       columns: columns
     });
