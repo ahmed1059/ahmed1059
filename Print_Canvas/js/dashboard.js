@@ -3213,12 +3213,27 @@ function printRegister(item) {
     sealRepeatingLetterhead(sheet);
     sheet.hidden = false;
     document.body.classList.add("printing-register");
-    window.addEventListener("afterprint", function cleanup() {
+    function cleanupRegister() {
         document.body.classList.remove("printing-register");
         sheet.hidden = true;
-        window.removeEventListener("afterprint", cleanup);
+    }
+    if (!window.PrintEngine || typeof window.PrintEngine.gate !== "function") {
+        console.error("PrintEngine غير محمّل.");
+        cleanupRegister();
+        return;
+    }
+    var printedRegister = window.PrintEngine.gate(sheet.outerHTML, {
+        multiPage: true,
+        orientation: item.orientation === "portrait" ? "portrait" : "landscape",
+        docTitle: item.title || "سجل"
     });
-    window.print();
+    if (printedRegister && typeof printedRegister.finally === "function") {
+        printedRegister.finally(cleanupRegister);
+    } else if (printedRegister && typeof printedRegister.then === "function") {
+        printedRegister.then(cleanupRegister, cleanupRegister);
+    } else {
+        cleanupRegister();
+    }
 }
 
 function registerTone(registerId) {
@@ -3725,12 +3740,27 @@ function presentCommitteeSheet(sheet) {
     sealRepeatingLetterhead(sheet);
     sheet.hidden = false;
     document.body.classList.add("printing-committee");
-    window.addEventListener("afterprint", function cleanup() {
+    function cleanupCommittee() {
         document.body.classList.remove("printing-committee");
         sheet.hidden = true;
-        window.removeEventListener("afterprint", cleanup);
+    }
+    if (!window.PrintEngine || typeof window.PrintEngine.gate !== "function") {
+        console.error("PrintEngine غير محمّل.");
+        cleanupCommittee();
+        return;
+    }
+    var printedCommittee = window.PrintEngine.gate(sheet.outerHTML, {
+        multiPage: true,
+        orientation: "portrait",
+        docTitle: "محضر لجنة"
     });
-    window.print();
+    if (printedCommittee && typeof printedCommittee.finally === "function") {
+        printedCommittee.finally(cleanupCommittee);
+    } else if (printedCommittee && typeof printedCommittee.then === "function") {
+        printedCommittee.then(cleanupCommittee, cleanupCommittee);
+    } else {
+        cleanupCommittee();
+    }
 }
 
 var committeesPortal = document.getElementById("committees-portal");

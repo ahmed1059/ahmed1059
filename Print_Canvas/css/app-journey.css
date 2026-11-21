@@ -3366,6 +3366,76 @@ body.app-journey.print-official-core .aj-env-students-table th {
   padding: 10px 12px 14px;
 }
 
+.aj-governance-card.is-incomplete {
+  border-color: #c9a227;
+}
+
+.aj-governance-card.is-complete {
+  border-color: #0b5e56;
+}
+
+.aj-governance-title-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+}
+
+.aj-quota-badge {
+  display: inline-block;
+  min-width: 2.5rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #e8f2ef;
+  color: #0b5e56;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.aj-governance-card.is-incomplete .aj-quota-badge {
+  background: #fff6e5;
+  color: #8a6a12;
+}
+
+.aj-quota-status {
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #f4f8f6;
+  color: #5c675f;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.aj-governance-card.is-incomplete .aj-quota-status {
+  background: #fff8ec;
+  color: #6b5614;
+}
+
+.aj-governance-card.is-complete .aj-quota-status {
+  background: #eaf6f2;
+  color: #0b5e56;
+}
+
+.aj-office-chip {
+  display: inline-block;
+  margin-inline-start: 4px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: #e8f2ef;
+  color: #0b5e56;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.aj-add-hint {
+  flex: 1 1 100%;
+  color: #5c675f;
+  font-size: 12px;
+}
+
 .aj-committee-board-head {
   display: flex;
   flex-wrap: wrap;

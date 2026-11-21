@@ -579,8 +579,25 @@
                             root.OfficialFrameCore.hideHost();
                         }
                     }
-                    window.addEventListener("afterprint", restore, { once: true });
-                    window.print();
+                    var frameHost = document.getElementById("official-frame-host");
+                    var hostHtml = frameHost ? frameHost.innerHTML : html;
+                    if (!root.PrintEngine || typeof root.PrintEngine.gate !== "function") {
+                        console.error("PrintEngine غير محمّل.");
+                        restore();
+                        return;
+                    }
+                    var printed = root.PrintEngine.gate(hostHtml, {
+                        multiPage: false,
+                        orientation: "portrait",
+                        docTitle: document.title || "بطاقة برنامج"
+                    });
+                    if (printed && typeof printed.finally === "function") {
+                        printed.finally(restore);
+                    } else if (printed && typeof printed.then === "function") {
+                        printed.then(restore, restore);
+                    } else {
+                        restore();
+                    }
                 }, 120);
             }
             return html;
@@ -831,8 +848,32 @@
                     root.OfficialFrameCore.hideHost();
                 }
             }
-            window.addEventListener("afterprint", restore, { once: true });
-            window.print();
+            var frameHost = document.getElementById("official-frame-host");
+            var hostHtml = frameHost ? frameHost.innerHTML : html;
+            var arm = armOpts || {};
+            if (!root.PrintEngine || typeof root.PrintEngine.gate !== "function") {
+                console.error("PrintEngine غير محمّل.");
+                restore();
+                return;
+            }
+            var printed = root.PrintEngine.gate(hostHtml, {
+                multiPage: !!(arm.multiPage || arm.list),
+                list: !!arm.list,
+                orientation: arm.orientation === "landscape" ? "landscape" : "portrait",
+                docTitle: document.title || "وثيقة رسمية",
+                arm: {
+                    orientation: arm.orientation === "landscape" ? "landscape" : "portrait",
+                    multiPage: !!(arm.multiPage || arm.list),
+                    list: !!arm.list
+                }
+            });
+            if (printed && typeof printed.finally === "function") {
+                printed.finally(restore);
+            } else if (printed && typeof printed.then === "function") {
+                printed.then(restore, restore);
+            } else {
+                restore();
+            }
         }, 120);
         return html;
     }

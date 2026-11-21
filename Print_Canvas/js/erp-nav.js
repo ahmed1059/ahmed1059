@@ -3687,8 +3687,27 @@
                         document.body.classList.remove("print-official-core", "print-council");
                     }
                 }
-                window.addEventListener("afterprint", restore, { once: true });
-                window.print();
+                var host = councilPrintHost();
+                var html = host ? host.innerHTML : "";
+                if (!window.PrintEngine || typeof window.PrintEngine.open !== "function") {
+                    console.error("PrintEngine غير محمّل.");
+                    restore();
+                    return;
+                }
+                var printed = window.PrintEngine.open("raw-html", {
+                    html: html,
+                    autoPrint: true,
+                    multiPage: true,
+                    orientation: "portrait",
+                    docTitle: "محضر مجلس"
+                });
+                if (printed && typeof printed.finally === "function") {
+                    printed.finally(restore);
+                } else if (printed && typeof printed.then === "function") {
+                    printed.then(restore, restore);
+                } else {
+                    restore();
+                }
             }, 120);
         }
 
@@ -6543,9 +6562,24 @@
                 document.body.classList.remove("print-mode", "print-improvement");
                 host.innerHTML = "";
             }
-            window.addEventListener("afterprint", restore, { once: true });
             window.setTimeout(function () {
-                window.print();
+                if (!window.PrintEngine || typeof window.PrintEngine.gate !== "function") {
+                    console.error("PrintEngine غير محمّل.");
+                    restore();
+                    return;
+                }
+                var printed = window.PrintEngine.gate(host.innerHTML, {
+                    multiPage: true,
+                    orientation: "portrait",
+                    docTitle: "خطة التحسين"
+                });
+                if (printed && typeof printed.finally === "function") {
+                    printed.finally(restore);
+                } else if (printed && typeof printed.then === "function") {
+                    printed.then(restore, restore);
+                } else {
+                    restore();
+                }
             }, 80);
         }
         form.querySelector("#improvement-print-btn").addEventListener("click", function () {
@@ -8941,7 +8975,7 @@
                     }
                     pageStyle.textContent = "@page{size:A4 landscape;margin:0;}";
                 }
-                window.addEventListener("afterprint", function () {
+                function restoreSoft() {
                     document.body.classList.remove(
                         "print-mode",
                         "print-soft-witness",
@@ -8952,9 +8986,9 @@
                     if (armed) {
                         armed.remove();
                     }
-                    var pageStyle = document.getElementById("soft-witness-page-style");
-                    if (pageStyle && pageStyle.parentNode) {
-                        pageStyle.parentNode.removeChild(pageStyle);
+                    var softStyle = document.getElementById("soft-witness-page-style");
+                    if (softStyle && softStyle.parentNode) {
+                        softStyle.parentNode.removeChild(softStyle);
                     }
                     if (previewOnly) {
                         if (bar) {
@@ -8965,9 +8999,25 @@
                     } else {
                         restore();
                     }
-                }, { once: true });
+                }
                 window.setTimeout(function () {
-                    window.print();
+                    if (!window.PrintEngine || typeof window.PrintEngine.gate !== "function") {
+                        console.error("PrintEngine غير محمّل.");
+                        restoreSoft();
+                        return;
+                    }
+                    var printed = window.PrintEngine.gate(host.innerHTML, {
+                        multiPage: false,
+                        orientation: "landscape",
+                        docTitle: "شاهد المتابعة"
+                    });
+                    if (printed && typeof printed.finally === "function") {
+                        printed.finally(restoreSoft);
+                    } else if (printed && typeof printed.then === "function") {
+                        printed.then(restoreSoft, restoreSoft);
+                    } else {
+                        restoreSoft();
+                    }
                 }, 200);
             });
         }
@@ -9053,9 +9103,26 @@
                 }
                 core.hideHost();
             }
-            window.addEventListener("afterprint", restoreCore, { once: true });
             window.setTimeout(function () {
-                window.print();
+                if (!window.PrintEngine || typeof window.PrintEngine.open !== "function") {
+                    console.error("PrintEngine غير محمّل.");
+                    restoreCore();
+                    return;
+                }
+                var printed = window.PrintEngine.open("raw-html", {
+                    html: frameHost.innerHTML,
+                    autoPrint: true,
+                    multiPage: sheets.length > 1,
+                    orientation: "portrait",
+                    docTitle: "بطاقة شاهد"
+                });
+                if (printed && typeof printed.finally === "function") {
+                    printed.finally(restoreCore);
+                } else if (printed && typeof printed.then === "function") {
+                    printed.then(restoreCore, restoreCore);
+                } else {
+                    restoreCore();
+                }
             }, 80);
             return;
         }
@@ -9080,9 +9147,24 @@
             document.body.classList.remove("print-mode", "print-improvement");
             host.innerHTML = "";
         }
-        window.addEventListener("afterprint", restore, { once: true });
         window.setTimeout(function () {
-            window.print();
+            if (!window.PrintEngine || typeof window.PrintEngine.gate !== "function") {
+                console.error("PrintEngine غير محمّل.");
+                restore();
+                return;
+            }
+            var printed = window.PrintEngine.gate(host.innerHTML, {
+                multiPage: true,
+                orientation: "portrait",
+                docTitle: "بطاقة شاهد"
+            });
+            if (printed && typeof printed.finally === "function") {
+                printed.finally(restore);
+            } else if (printed && typeof printed.then === "function") {
+                printed.then(restore, restore);
+            } else {
+                restore();
+            }
         }, 80);
     }
 

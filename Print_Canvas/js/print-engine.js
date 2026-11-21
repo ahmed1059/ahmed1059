@@ -1,4 +1,4 @@
-/* PrintEngine — مرحلة صفر (قرار 301)
+/* PrintEngine — مرحلة صفر (قرار 301) · phase2
  * بوابة طباعة وحيدة: PrintEngine.open(templateType, payload)
  * التنفيذ عبر Sandboxed Hidden Iframe + print-shell.css فقط.
  * التركيب يبقى PrintMasterCore / OfficialFrameCore.
@@ -6,9 +6,9 @@
 (function (root) {
   "use strict";
 
-  var VERSION = "301-phase0";
+  var VERSION = "301-phase2";
   var FRAME_ID = "pe-print-frame";
-  var SHELL_HREF = "/css/print-shell.css?v=pe2";
+  var SHELL_HREF = "/css/print-shell.css?v=pe3";
   var lastPayload = null;
   var lastHtml = "";
   var lastArm = {};
@@ -297,6 +297,24 @@
     return { ok: false, error: "قالب غير مدعوم في مرحلة صفر: " + type };
   }
 
+  function gate(html, opts) {
+    opts = opts || {};
+    return open("raw-html", {
+      html: String(html || ""),
+      autoPrint: opts.autoPrint !== false,
+      multiPage: opts.multiPage !== false,
+      list: !!opts.list,
+      orientation: opts.orientation || "portrait",
+      docTitle: opts.docTitle || opts.pdfTitle || "",
+      pdfTitle: opts.pdfTitle || opts.docTitle || "",
+      arm: opts.arm || {
+        orientation: opts.orientation === "landscape" ? "landscape" : "portrait",
+        multiPage: opts.multiPage !== false,
+        list: !!opts.list
+      }
+    });
+  }
+
   function bindHotkey() {
     if (document.documentElement.getAttribute("data-pe-hotkey") === "1") {
       return;
@@ -350,6 +368,7 @@
   root.PrintEngine = {
     version: VERSION,
     open: open,
+    gate: gate,
     printHtml: printHtml,
     printFromStage: printFromStage,
     preview: preview,
