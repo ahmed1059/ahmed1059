@@ -99,7 +99,10 @@ class VisitBody(BaseModel):
     section_no: str = ""
     subject: str = ""
     period_no: str = ""
+    week: str = ""
+    unit: str = ""
     lesson: str = ""
+    skill: str = ""
     teacher_rank: str = ""
     visit_date: str = ""
     visit_date_hijri: str = ""
@@ -183,6 +186,12 @@ def ensure_classroom_visits(connection) -> None:
         connection.execute(
             "ALTER TABLE classroom_visits ADD COLUMN strengths TEXT NOT NULL DEFAULT ''"
         )
+    for column in ("week", "unit", "skill"):
+        columns = {row[1] for row in connection.execute("PRAGMA table_info(classroom_visits)")}
+        if column not in columns:
+            connection.execute(
+                f"ALTER TABLE classroom_visits ADD COLUMN {column} TEXT NOT NULL DEFAULT ''"
+            )
 
 
 def _band(total: float) -> str:
@@ -302,6 +311,9 @@ def _row_out(row) -> dict:
         "teacher_rank": row[23] or "" if len(row) > 23 else "",
         "visit_intro": row[24] or "" if len(row) > 24 else "",
         "strengths": row[25] or "" if len(row) > 25 else "",
+        "week": row[26] or "" if len(row) > 26 else "",
+        "unit": row[27] or "" if len(row) > 27 else "",
+        "skill": row[28] or "" if len(row) > 28 else "",
     }
 
 
@@ -310,7 +322,8 @@ _SELECT = """
            visit_type, indicator, grade, section_no, subject, period_no, lesson,
            visit_date, visit_date_hijri, recommendations, criteria_json,
            improvement, follow_hijri, follow_gregorian, total, band, source,
-           COALESCE(teacher_rank, ''), COALESCE(visit_intro, ''), COALESCE(strengths, '')
+           COALESCE(teacher_rank, ''), COALESCE(visit_intro, ''), COALESCE(strengths, ''),
+           COALESCE(week, ''), COALESCE(unit, ''), COALESCE(skill, '')
     FROM classroom_visits
 """
 
@@ -342,7 +355,10 @@ def _prepare(connection, body: VisitBody, user: dict) -> dict:
         "subject": str(body.subject or "").strip()[:80] or teacher["specialty"],
         "teacher_rank": _clean_choice(body.teacher_rank, RANKS),
         "period_no": str(body.period_no or "").strip()[:8],
-        "lesson": str(body.lesson or "").strip()[:160],
+        "week": str(body.week or "").strip()[:8],
+        "unit": str(body.unit or "").strip()[:160],
+        "lesson": str(body.lesson or "").strip()[:200],
+        "skill": str(body.skill or "").strip()[:200],
         "visit_date": str(body.visit_date or "").strip()[:10],
         "visit_date_hijri": str(body.visit_date_hijri or "").strip()[:80],
         "recommendations": str(body.recommendations or "").strip()[:2000],
@@ -393,8 +409,9 @@ def create_visit(body: VisitBody, x_session_token: str = Header(default="")):
                 visit_type, indicator, grade, section_no, subject, period_no, lesson,
                 visit_date, visit_date_hijri, recommendations, improvement,
                 follow_hijri, follow_gregorian, criteria_json, total, band, source,
-                teacher_rank, visit_intro, strengths, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'manual', ?, ?, ?, ?, ?)
+                teacher_rank, visit_intro, strengths, week, unit, skill,
+                created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'manual', ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 prepared["teacher_id"], prepared["teacher_name"], prepared["visitor_id"],
@@ -406,7 +423,9 @@ def create_visit(body: VisitBody, x_session_token: str = Header(default="")):
                 prepared["follow_hijri"], prepared["follow_gregorian"],
                 json.dumps(prepared["criteria"], ensure_ascii=False),
                 prepared["total"], prepared["band"], prepared["teacher_rank"],
-                prepared["visit_intro"], prepared["strengths"], moment, moment,
+                prepared["visit_intro"], prepared["strengths"],
+                prepared["week"], prepared["unit"], prepared["skill"],
+                moment, moment,
             ),
         )
         connection.commit()
@@ -438,7 +457,8 @@ def update_visit(visit_id: int, body: VisitBody, x_session_token: str = Header(d
                 visit_date = ?, visit_date_hijri = ?, recommendations = ?,
                 improvement = ?, follow_hijri = ?, follow_gregorian = ?,
                 criteria_json = ?, total = ?, band = ?, teacher_rank = ?,
-                visit_intro = ?, strengths = ?, updated_at = ?
+                visit_intro = ?, strengths = ?, week = ?, unit = ?, skill = ?,
+                updated_at = ?
             WHERE id = ?
             """,
             (
@@ -451,7 +471,9 @@ def update_visit(visit_id: int, body: VisitBody, x_session_token: str = Header(d
                 prepared["follow_hijri"], prepared["follow_gregorian"],
                 json.dumps(prepared["criteria"], ensure_ascii=False),
                 prepared["total"], prepared["band"], prepared["teacher_rank"],
-                prepared["visit_intro"], prepared["strengths"], moment, visit_id,
+                prepared["visit_intro"], prepared["strengths"],
+                prepared["week"], prepared["unit"], prepared["skill"],
+                moment, visit_id,
             ),
         )
         connection.commit()

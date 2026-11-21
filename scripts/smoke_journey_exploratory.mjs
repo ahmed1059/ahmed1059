@@ -194,6 +194,10 @@ function auditPrintGuardStatic() {
   const engineJs = path.join(ROOT, "Print_Canvas", "js", "print-engine.js");
   const journeyJs = path.join(ROOT, "Print_Canvas", "js", "app-journey.js");
   const journeyHtml = path.join(ROOT, "Print_Canvas", "app-journey.html");
+  const visitsJs = path.join(ROOT, "Print_Canvas", "js", "app-journey-visits.js");
+  const curriculumPath = path.join(ROOT, "Print_Canvas", "data", "curriculum-map.json");
+  const phrasesPath = path.join(ROOT, "Print_Canvas", "data", "pedagogical-phrases.json");
+  const calendarPath = path.join(ROOT, "Print_Canvas", "data", "calendar_1448.json");
 
   if (!fs.existsSync(shellCss)) fails.push("missing-print-shell.css");
   if (!fs.existsSync(engineJs)) fails.push("missing-print-engine.js");
@@ -215,6 +219,67 @@ function auditPrintGuardStatic() {
   }
   if (!/\.print\s*\(/.test(engineSource)) {
     fails.push("print-engine-missing-iframe-print");
+  }
+
+  const visitsSource = fs.existsSync(visitsJs) ? fs.readFileSync(visitsJs, "utf8") : "";
+  if (!/PrintEngine\.open\s*\(\s*["']master-sheet["']/.test(visitsSource)) {
+    fails.push("visits-missing-PrintEngine.open-master-sheet");
+  }
+  if (!/المعلم المُزار/.test(visitsSource) || !/الزائر المقيّم/.test(visitsSource) || !/مدير المدرسة/.test(visitsSource)) {
+    fails.push("visits-missing-three-official-signatures");
+  }
+  if (!/curriculum-map\.json/.test(visitsSource) || !/suggestFollowUp/.test(visitsSource)) {
+    fails.push("visits-missing-curriculum-or-followup");
+  }
+  if (!/isoAddDays\(dateNode\.value,\s*18\)/.test(visitsSource)) {
+    fails.push("visits-followup-not-14-21-days");
+  }
+  if (/window\.print\s*\(/.test(visitsSource)) {
+    fails.push("visits-has-window.print");
+  }
+
+  if (!fs.existsSync(curriculumPath)) {
+    fails.push("missing-curriculum-map.json");
+  } else {
+    try {
+      const map = JSON.parse(fs.readFileSync(curriculumPath, "utf8"));
+      const subjects = Object.keys((map && map.subjects) || {});
+      if (subjects.length < 7) fails.push("curriculum-subjects-lt-7");
+      for (const subject of subjects) {
+        const grades = Object.keys(map.subjects[subject] || {});
+        if (grades.length !== 3) fails.push("curriculum-grades-" + subject);
+        for (const grade of grades) {
+          if (Object.keys(map.subjects[subject][grade] || {}).length !== 18) {
+            fails.push("curriculum-weeks-" + subject + "-" + grade);
+          }
+        }
+      }
+    } catch (error) {
+      fails.push("curriculum-map-invalid-json");
+    }
+  }
+
+  if (!fs.existsSync(phrasesPath)) {
+    fails.push("missing-pedagogical-phrases.json");
+  } else {
+    try {
+      const phrases = JSON.parse(fs.readFileSync(phrasesPath, "utf8"));
+      const version = String((phrases.metadata && phrases.metadata.version) || "");
+      if (!/^2\./.test(version)) fails.push("phrases-version-not-2x");
+      const blob = JSON.stringify(phrases);
+      if (blob.includes("من غير نشاط منفصل طويل")) fails.push("phrases-legacy-generic-present");
+      if (!blob.includes("{{skill}}") || !blob.includes("{{lesson}}")) fails.push("phrases-missing-tokens");
+      const subjectKeys = Object.keys(phrases.subjects || {});
+      if (!subjectKeys.includes("رياضيات") || !subjectKeys.includes("العلوم")) {
+        fails.push("phrases-missing-specialty-subjects");
+      }
+    } catch (error) {
+      fails.push("phrases-invalid-json");
+    }
+  }
+
+  if (!fs.existsSync(calendarPath)) {
+    fails.push("missing-calendar_1448.json");
   }
 
   const journeyCss = path.join(ROOT, "Print_Canvas", "css", "app-journey.css");
@@ -419,6 +484,222 @@ async function openVisitPlanPrint(page, report) {
   return fails;
 }
 
+async function probePhase1ClassroomVisit(page, report) {
+  const fails = [];
+  report.lastPrintContext = "classroom-visit-phase1";
+  // أغلق معاينة الطباعة وبوابة اللجان المؤقتة حتى يُفتح نموذج الزيارة للفحص
+  await page.evaluate(() => {
+    document.body.classList.remove("is-print-preview", "aj-modal-open", "aj-committee-lock");
+    const stage = document.getElementById("aj-print-stage");
+    if (stage) stage.hidden = true;
+    const close = document.getElementById("aj-print-preview-close");
+    if (close) close.click();
+    const sigModal = document.getElementById("signature-modal");
+    if (sigModal) sigModal.hidden = true;
+    if (window.AjCommittees) {
+      window.AjCommittees.gateRequired = false;
+    }
+  }).catch(() => {});
+  await gotoView(page, "view-visits");
+  await page.waitForFunction(() => {
+    const view = document.getElementById("view-visits");
+    const form = document.getElementById("aj-visit-form");
+    const teacher = document.getElementById("aj-visit-teacher");
+    return !!(
+      view &&
+      !view.hidden &&
+      view.classList.contains("is-active") &&
+      form &&
+      teacher &&
+      teacher.options &&
+      teacher.options.length > 1
+    );
+  }, null, { timeout: 25000 });
+
+  const probe = await page.evaluate(async () => {
+    function wait(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+    const out = {
+      ok: false,
+      error: "",
+      curriculum: {},
+      phrases: {},
+      follow: {},
+      print: {}
+    };
+    try {
+      const teacher = document.getElementById("aj-visit-teacher");
+      const visitor = document.getElementById("aj-visit-visitor");
+      const subject = document.getElementById("aj-visit-subject");
+      const grade = document.getElementById("aj-visit-grade");
+      const type = document.getElementById("aj-visit-type");
+      const date = document.getElementById("aj-visit-date");
+      if (!teacher || !teacher.options || teacher.options.length < 2) {
+        out.error = "no-teachers";
+        return out;
+      }
+      // اختر معلماً تخصصه رياضيات إن وُجد
+      let mathIdx = -1;
+      for (let i = 0; i < teacher.options.length; i += 1) {
+        if (/رياض/.test(teacher.options[i].textContent || "")) {
+          mathIdx = i;
+          break;
+        }
+      }
+      teacher.selectedIndex = mathIdx > 0 ? mathIdx : 1;
+      teacher.dispatchEvent(new Event("change", { bubbles: true }));
+      await wait(200);
+      if (visitor && visitor.options.length > 1 && !visitor.value) {
+        visitor.selectedIndex = 1;
+        visitor.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      if (type) {
+        // زيارة استطلاعية — الطبقة التخصصية يجب أن تبقى فعّالة
+        let surveyIdx = -1;
+        for (let i = 0; i < type.options.length; i += 1) {
+          if (/استطلاع/.test(type.options[i].textContent || "")) {
+            surveyIdx = i;
+            break;
+          }
+        }
+        if (surveyIdx >= 0) {
+          type.selectedIndex = surveyIdx;
+          type.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      }
+      if (grade && grade.options.length > 1) {
+        grade.value = "الأول المتوسط";
+        grade.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      if (subject) {
+        let mathSub = -1;
+        for (let i = 0; i < subject.options.length; i += 1) {
+          if (/رياض/.test(subject.options[i].textContent || "")) {
+            mathSub = i;
+            break;
+          }
+        }
+        if (mathSub >= 0) {
+          subject.selectedIndex = mathSub;
+          subject.dispatchEvent(new Event("change", { bubbles: true }));
+        }
+      }
+      if (date) {
+        date.value = "2026-09-13"; // أسبوع 3 تقريباً من 2026-08-30
+        date.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      await wait(400);
+
+      const week = document.getElementById("aj-visit-week");
+      const unit = document.getElementById("aj-visit-unit");
+      const lesson = document.getElementById("aj-visit-lesson");
+      const skill = document.getElementById("aj-visit-skill");
+      out.curriculum = {
+        week: week ? week.value : "",
+        unit: unit ? unit.value : "",
+        lesson: lesson ? lesson.value : "",
+        skill: skill ? skill.value : "",
+        subject: subject ? subject.value : "",
+        grade: grade ? grade.value : "",
+        type: type ? type.value : ""
+      };
+
+      // تخطيط=none + استراتيجيات=met + بنود ناقصة → مجموع < 60 لمتابعة 14–21 يوماً
+      const rows = Array.from(document.querySelectorAll("[data-visit-row]"));
+      rows.forEach((row) => {
+        const id = row.getAttribute("data-visit-row");
+        const level = row.querySelector("[data-visit-level]");
+        if (!level) return;
+        if (id === "planning" || id === "warmup" || id === "assessment") level.value = "none";
+        else if (id === "strategies") level.value = "met";
+        else level.value = "partial";
+        level.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+      await wait(400);
+
+      const strengths = document.getElementById("aj-visit-strengths");
+      const notes = document.getElementById("aj-visit-notes");
+      const plan = document.getElementById("aj-visit-plan");
+      const followG = document.getElementById("aj-visit-follow-g");
+      const band = document.getElementById("aj-visit-band");
+      out.phrases = {
+        strengths: strengths ? strengths.value : "",
+        feedback: notes ? notes.value : "",
+        improvement: plan ? plan.value : "",
+        band: band ? band.textContent : "",
+        hasGoalContradiction: strengths ? /وافق الهدف|ناسب الهدف/.test(strengths.value) : false,
+        hasContentStrategy: strengths ? /محتوى/.test(strengths.value) : false,
+        improvementNumbers: plan
+          ? (plan.value.match(/^\d+\./gm) || []).map((x) => x.replace(".", ""))
+          : [],
+        specialtyHint: (() => {
+          const choice = document.querySelector("[data-visit-row='strategies'] [data-visit-choice]");
+          const blob = choice ? choice.innerText || "" : "";
+          return /{{lesson}}|حل|معادلة|قوى|جبر|مسألة/.test(blob + (lesson ? lesson.value : ""));
+        })()
+      };
+      out.follow = {
+        value: followG ? followG.value : "",
+        band: band ? band.textContent : ""
+      };
+
+      const printBtn = document.getElementById("aj-visit-print");
+      if (printBtn) {
+        printBtn.click();
+        await wait(700);
+      }
+      const stage = document.getElementById("aj-print-stage-page");
+      const text = stage ? String(stage.innerText || "") : "";
+      out.print = {
+        len: text.length,
+        hasTitle: /تقرير زيارة صفية/.test(text),
+        hasTeacherSig: /المعلم المُزار/.test(text),
+        hasVisitorSig: /الزائر المقيّم/.test(text),
+        hasManagerSig: /مدير المدرسة/.test(text),
+        sample: text.replace(/\s+/g, " ").trim().slice(0, 220)
+      };
+      out.ok = true;
+    } catch (error) {
+      out.error = String(error && error.message ? error.message : error);
+    }
+    return out;
+  });
+
+  report.phase1 = probe;
+  if (!probe || !probe.ok) {
+    fails.push("phase1-probe:" + ((probe && probe.error) || "failed"));
+    return fails;
+  }
+  if (!probe.curriculum.week) fails.push("phase1-week-empty");
+  if (!probe.curriculum.unit) fails.push("phase1-unit-empty");
+  if (!probe.curriculum.lesson) fails.push("phase1-lesson-empty");
+  if (!probe.curriculum.skill) fails.push("phase1-skill-empty");
+  if (probe.phrases.hasGoalContradiction) fails.push("phase1-strength-goal-contradiction");
+  if (!Array.isArray(probe.phrases.improvementNumbers) || probe.phrases.improvementNumbers.length < 2) {
+    fails.push("phase1-improvement-numbering");
+  }
+  if (probe.follow.value) {
+    const visit = new Date("2026-09-13T12:00:00");
+    const follow = new Date(probe.follow.value + "T12:00:00");
+    const days = Math.round((follow - visit) / 86400000);
+    if (days < 14 || days > 21) fails.push("phase1-followup-days=" + days);
+  } else if (/بحاجة/.test(String(probe.follow.band || ""))) {
+    fails.push("phase1-followup-empty");
+  }
+  if (!probe.print.hasTitle) fails.push("phase1-print-missing-title");
+  if (!probe.print.hasTeacherSig || !probe.print.hasVisitorSig || !probe.print.hasManagerSig) {
+    fails.push("phase1-print-missing-signatures");
+  }
+
+  const closeBtn = page.locator("#aj-print-preview-close");
+  if (await closeBtn.count()) {
+    await closeBtn.click().catch(() => {});
+    await page.waitForTimeout(150);
+  }
+  return fails;
+}
+
 async function runViewport(browser, size, report) {
   const consoleErrors = [];
   const netFailures = [];
@@ -493,6 +774,15 @@ async function runViewport(browser, size, report) {
     printFails = ["visit-print-exception:" + (error && error.message ? error.message : error)];
   }
 
+  let phase1Fails = [];
+  if (size.width >= 1200) {
+    try {
+      phase1Fails = await probePhase1ClassroomVisit(page, report);
+    } catch (error) {
+      phase1Fails = ["phase1-exception:" + (error && error.message ? error.message : error)];
+    }
+  }
+
   const shot = path.join(OUT_DIR, "viewport-" + size.width + ".png");
   await page.screenshot({ path: shot, fullPage: false });
 
@@ -500,7 +790,7 @@ async function runViewport(browser, size, report) {
   return {
     viewport: label,
     viewFails,
-    printFails,
+    printFails: printFails.concat(phase1Fails),
     consoleErrors,
     netFailures,
     screenshot: shot
@@ -519,6 +809,7 @@ async function main() {
     printEngineProbe: null,
     lastPrintContext: "",
     visitPrintSample: "",
+    phase1: null,
     results: [],
     ok: false
   };
@@ -595,6 +886,7 @@ async function main() {
     consoleErrors: allConsole.slice(0, 20),
     netFailures: allNet.slice(0, 20),
     visitPrintSample: report.visitPrintSample,
+    phase1: report.phase1,
     report: outFile
   };
   console.log(JSON.stringify(summary, null, 2));
