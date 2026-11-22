@@ -32,9 +32,79 @@
     ranks: RANKS,
     staff: [],
     visitors: [],
+    peopleById: {},
     managerId: "",
     editing: 0
   };
+
+  /** اسم صريح من السجل أو مقاعد الزوار — بلا عبارة دور جامدة. */
+  function personNameById(nationalId) {
+    var id = String(nationalId || "").trim();
+    if (!id) {
+      return "";
+    }
+    var fromMap = state.peopleById[id];
+    if (fromMap && fromMap.name) {
+      return String(fromMap.name);
+    }
+    var visitor = (state.visitors || []).filter(function (item) {
+      return String(item.value) === id;
+    })[0];
+    if (visitor && visitor.name) {
+      return String(visitor.name);
+    }
+    var teacher = (state.staff || []).filter(function (item) {
+      return String(item.id) === id;
+    })[0];
+    return teacher && teacher.name ? String(teacher.name) : "";
+  }
+
+  /**
+   * مصفوفة التوقيعات حسب صفة الزائر (Dynamic Signoff Matrix).
+   * المدير زائر → خانتان 50/50؛ غير ذلك → ثلاث خانات.
+   */
+  function buildVisitSignatures(record, signs, managerId, managerName) {
+    var signsMap = signs || {};
+    var principalId = String(managerId || "").trim();
+    var principalName = String(managerName || "").trim() || personNameById(principalId);
+    var visitorId = String(record.visitor_id || "").trim();
+    var teacherId = String(record.teacher_id || "").trim();
+    var teacherName = personNameById(teacherId) || String(record.teacher_name || "").trim();
+    var visitorName = personNameById(visitorId) || String(record.visitor_name || "").trim();
+    var visitorIsPrincipal = !!(principalId && visitorId && visitorId === principalId);
+    var teacherCol = {
+      roleTitle: "المعلم المُزار",
+      name: teacherName,
+      id: teacherId,
+      signature: signsMap[teacherId] || ""
+    };
+    if (visitorIsPrincipal) {
+      return [
+        teacherCol,
+        {
+          roleTitle: "الزائر المقيّم ومدير المدرسة",
+          name: principalName,
+          id: principalId,
+          signature: signsMap[principalId] || signsMap[visitorId] || ""
+        }
+      ];
+    }
+    return [
+      teacherCol,
+      {
+        roleTitle: "الزائر المقيّم",
+        name: visitorName,
+        id: visitorId,
+        signature: signsMap[visitorId] || ""
+      },
+      {
+        roleTitle: "اعتماد مدير المدرسة",
+        name: principalName,
+        id: principalId,
+        signature: signsMap[principalId] || ""
+      }
+    ];
+  }
 
   function currentUser() {
     try {
@@ -1048,37 +1118,55 @@
       toast("نواة الطباعة غير محمّلة.", "error");
       return;
     }
-    var ids = [record.visitor_id, record.teacher_id, state.managerId].filter(Boolean);
     Promise.all([
       loadPhraseBank(),
       loadCurriculumMap(),
-      fetch("/api/session/signatures?ids=" + encodeURIComponent(ids.join(",")), {
+      fetch("/api/session/leadership", { headers: authHeaders(), cache: "no-store" })
+        .then(function (response) {
+          return response.ok ? response.json() : {};
+        }).catch(function () {
+          return {};
+        }),
+      fetch("/api/noor/staff", { headers: authHeaders(), cache: "no-store" })
+        .then(function (response) {
+          return response.ok ? response.json() : { people: [] };
+        }).catch(function () {
+          return { people: [] };
+        })
+    ]).then(function (parts) {
+      var leadership = parts[2] || {};
+      var people = (parts[3] && parts[3].people) || [];
+      if (people.length) {
+        var map = {};
+        people.forEach(function (person) {
+          if (!person) {
+            return;
+          }
+          map[String(person.id || person.national_id || "")] = person;
+        });
+        state.peopleById = map;
+      }
+      var managerId = String(state.managerId || leadership.manager || "").trim();
+      var managerName = personNameById(managerId);
+      var ids = [record.visitor_id, record.teacher_id, managerId].filter(Boolean);
+      return fetch("/api/session/signatures?ids=" + encodeURIComponent(ids.join(",")), {
         headers: authHeaders(),
         cache: "no-store"
       }).then(function (response) {
         return response.ok ? response.json() : { signatures: {} };
       }).catch(function () {
         return { signatures: {} };
-      }),
-      fetch("/api/session/leadership", { headers: authHeaders(), cache: "no-store" })
-        .then(function (response) {
-          return response.ok ? response.json() : {};
-        }).catch(function () {
-          return {};
-        })
-    ]).then(function (parts) {
-      var signs = (parts[2] && parts[2].signatures) || {};
-      var leadership = parts[3] || {};
-      var managerId = state.managerId || leadership.manager || "";
-      var managerName = "";
-      state.staff.forEach(function (person) {
-        if (String(person.id) === String(managerId)) {
-          managerName = person.name || "";
-        }
+      }).then(function (sigBody) {
+        return {
+          signs: (sigBody && sigBody.signatures) || {},
+          managerId: managerId,
+          managerName: managerName
+        };
       });
-      if (!managerName && leadership.manager_name) {
-        managerName = leadership.manager_name;
-      }
+    }).then(function (pack) {
+      var signs = pack.signs || {};
+      var managerId = pack.managerId || "";
+      var managerName = pack.managerName || "";
       var printCtx = {
         subject: record.subject || "",
         lesson: record.lesson || "الدرس",
@@ -1154,6 +1242,27 @@
       if (follow) {
         sections.push("<p class=\"tpl-p\"><strong>موعد المتابعة:</strong> " + escapeHtml(follow) + "</p>");
       }
+      var visitorLabel = personNameById(record.visitor_id) || record.visitor_name || "";
+      var visitorRole = "";
+      (state.visitors || []).forEach(function (item) {
+        if (String(item.value) === String(record.visitor_id || "")) {
+          visitorRole = item.role || "";
+          if (!visitorLabel) {
+            visitorLabel = item.name || "";
+          }
+        }
+      });
+      if (!visitorRole && String(record.visitor_id || "") === String(managerId)) {
+        visitorRole = "مدير المدرسة";
+      }
+      metaGrid = metaGrid.map(function (pair) {
+        if (pair[0] === "الزائر") {
+          return ["الزائر", [visitorRole, visitorLabel].filter(Boolean).join(" · ")];
+        }
+        return pair;
+      }).filter(function (pair) {
+        return String(pair[1] || "").trim();
+      });
       window.PrintEngine.open("master-sheet", {
         docTitle: "تقرير زيارة صفية",
         orientation: "landscape",
@@ -1161,11 +1270,7 @@
         fileName: "تقرير زيارة - " + (record.teacher_name || ""),
         metaGrid: metaGrid,
         sectionsHtml: sections.join(""),
-        signatures: [
-          { roleTitle: "المعلم المُزار", name: record.teacher_name || "", signature: signs[record.teacher_id] || "" },
-          { roleTitle: "الزائر المقيّم", name: record.visitor_name || "", signature: signs[record.visitor_id] || "" },
-          { roleTitle: "مدير المدرسة", name: managerName || "مدير المدرسة", signature: signs[managerId] || "" }
-        ],
+        signatures: buildVisitSignatures(record, signs, managerId, managerName),
         multiPage: true
       });
     });
@@ -1437,6 +1542,7 @@
       people.forEach(function (person) {
         byId[String(person.id || person.national_id)] = person;
       });
+      state.peopleById = byId;
       var seats = parts[2] || {};
       state.managerId = String(seats.manager || "");
       var visitorIds = [seats.manager].concat(seats.education_agents || [], seats.student_agents || []).filter(Boolean);
