@@ -4324,9 +4324,66 @@
     printStagePageEl.style.removeProperty("display");
     printStagePageEl.style.removeProperty("visibility");
     printStageEl.scrollTop = 0;
-    document.body.classList.add("is-print-preview");
-    document.body.classList.remove("print-official-core", "print-official-list", "print-official-multi", "print-official-landscape");
+    document.body.classList.add("is-print-preview", "print-master");
+    document.body.classList.remove(
+      "print-official-core",
+      "print-official-list",
+      "print-official-multi",
+      "print-official-landscape",
+      "print-master-landscape"
+    );
+    if (officialPreviewArm && officialPreviewArm.orientation === "landscape") {
+      document.body.classList.add("print-master-landscape", "print-official-landscape");
+    }
+    if (officialPreviewArm && (officialPreviewArm.multiPage || officialPreviewArm.list)) {
+      document.body.classList.add("print-official-multi");
+    }
+    if (officialPreviewArm && officialPreviewArm.list) {
+      document.body.classList.add("print-official-list");
+    }
+    var orientGroup = document.getElementById("aj-print-orient-group");
+    if (orientGroup) {
+      var isVisitDoc = !!(printStagePageEl.querySelector(".aj-visit-print-doc, .aj-visit-print"));
+      orientGroup.hidden = !isVisitDoc;
+      if (isVisitDoc && typeof window.syncVisitPrintOrientButtons === "function") {
+        window.syncVisitPrintOrientButtons(
+          officialPreviewArm && officialPreviewArm.orientation === "portrait" ? "portrait" : "landscape"
+        );
+      }
+    }
   }
+
+  function syncVisitPrintOrientButtons(orientation) {
+    var land = document.getElementById("aj-print-orient-landscape");
+    var port = document.getElementById("aj-print-orient-portrait");
+    var active = orientation === "portrait" ? "portrait" : "landscape";
+    if (land) {
+      land.classList.toggle("is-orient-active", active === "landscape");
+    }
+    if (port) {
+      port.classList.toggle("is-orient-active", active === "portrait");
+    }
+  }
+  window.syncVisitPrintOrientButtons = syncVisitPrintOrientButtons;
+
+  function bindVisitOrientButtons() {
+    ["aj-print-orient-landscape", "aj-print-orient-portrait"].forEach(function (id) {
+      var btn = document.getElementById(id);
+      if (!btn || btn.getAttribute("data-bound") === "1") {
+        return;
+      }
+      btn.setAttribute("data-bound", "1");
+      btn.addEventListener("click", function () {
+        var orient = btn.getAttribute("data-orient") === "portrait" ? "portrait" : "landscape";
+        if (window.AjVisitsPrint && typeof window.AjVisitsPrint.setOrientation === "function") {
+          window.AjVisitsPrint.setOrientation(orient);
+          return;
+        }
+        showToast("إعادة التوجيه متاحة لتقارير الزيارة الصفية.", "error");
+      });
+    });
+  }
+  bindVisitOrientButtons();
 
   if (printStageGoBtn) {
     printStageGoBtn.addEventListener("click", printOfficialPreview);

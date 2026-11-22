@@ -74,12 +74,81 @@
 
 .pm-body {
   box-sizing: border-box;
-  /* هامش داخلي يمنع التصاق النص الطويل بحد الإطار الأخضر في المعاينة والطباعة */
-  padding-inline: 8mm;
+  padding-inline: 6mm;
 }
 
 .doc-signoff-block[data-cols="2"] .signoff-grid {
   grid-template-columns: 1fr 1fr !important;
+}
+
+.aj-visit-print {
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.aj-visit-print .aj-visit-meta,
+.aj-visit-print .aj-visit-criteria {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin: 0 0 1.5mm;
+}
+
+.aj-visit-print .aj-visit-meta-cell,
+.aj-visit-print .aj-visit-criteria th,
+.aj-visit-print .aj-visit-criteria td {
+  border: 1px solid #9db8b2;
+  padding: 0.55mm 1mm;
+  font-size: 11px;
+  line-height: 1.35;
+  vertical-align: top;
+}
+
+.aj-visit-print .aj-visit-criteria th {
+  border-color: #0b5e56;
+  background: #f3faf8;
+  font-weight: 700;
+  color: #0b5e56;
+}
+
+.aj-visit-print .aj-visit-crit-label { width: 22%; }
+.aj-visit-print .aj-visit-crit-level { width: 14%; }
+.aj-visit-print .aj-visit-crit-phrase { width: 54%; }
+.aj-visit-print .aj-visit-crit-points { width: 10%; text-align: center; }
+
+.aj-visit-print .aj-visit-p {
+  margin: 0 0 1.2mm;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.aj-visit-print .aj-visit-plan {
+  white-space: pre-line;
+}
+
+.pm-document.aj-visit-print-doc .pm-title {
+  margin: 0 0 1.5mm;
+  font-size: 14pt;
+  line-height: 1.25;
+}
+
+.pm-document.aj-visit-print-doc .pm-signoff {
+  margin-top: 2.5mm;
+}
+
+.pm-document.aj-visit-print-doc .doc-signoff-block .signoff-col {
+  min-height: 72px !important;
+  padding: 5px 4px !important;
+}
+
+.pm-document.aj-visit-print-doc .doc-signoff-block .sig-placeholder {
+  height: 40px !important;
+  margin: 2px 0 !important;
+}
+
+.pm-document.aj-visit-print-doc .doc-signoff-block .signoff-col.is-blank .sig-placeholder,
+.pm-document.aj-visit-print-doc .doc-signoff-block .sig-blank {
+  visibility: hidden;
 }
 
 .pm-signoff {

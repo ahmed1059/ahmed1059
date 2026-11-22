@@ -104,22 +104,35 @@
             + " alt=\"\" onerror=\"" + handler + "\">";
     }
 
-    /** شريط الاعتماد — عدد الأعمدة ديناميكي (2 أو 3) حسب مصفوفة التوقيعات. */
+    /** شريط الاعتماد — يحافظ على الخانات الفارغة المعلّمة (keepEmpty) لهيكل ثلاثي ثابت. */
     function signoff(opts) {
         opts = opts || {};
         var id = resolveIdentity(opts);
         var source = (opts.columns || []).filter(function (person) {
-            return person && (String(person.id || "").trim() || String(person.name || "").trim());
+            if (!person) {
+                return false;
+            }
+            if (person.keepEmpty || person.blank) {
+                return true;
+            }
+            return !!(String(person.id || "").trim()
+                || String(person.name || "").trim()
+                || String(person.roleTitle || person.role || "").trim());
         });
         var people = source.length ? source : DEFAULT_SIGNOFF;
         var colCount = people.length >= 2 && people.length <= 3 ? people.length : 3;
         var columns = people.map(function (person) {
             var sigPath = person.signature || person.signaturePath || "";
             var fallbackPath = person.signatureFallback || person.fallbackSignature || "";
-            var sigHtml = (sigPath || fallbackPath)
-                ? signatureImage(sigPath, fallbackPath)
-                : "<span class=\"sig-line\" aria-hidden=\"true\"></span>";
-            return "<div class=\"signoff-col\">"
+            var sigHtml;
+            if (person.blank) {
+                sigHtml = "<span class=\"sig-blank\" aria-hidden=\"true\"></span>";
+            } else if (sigPath || fallbackPath) {
+                sigHtml = signatureImage(sigPath, fallbackPath);
+            } else {
+                sigHtml = "<span class=\"sig-line\" aria-hidden=\"true\"></span>";
+            }
+            return "<div class=\"signoff-col" + (person.blank ? " is-blank" : "") + "\">"
                 + "<span class=\"role-title\">" + escapeHtml(person.roleTitle || ("اعتماد: " + (person.role || ""))) + "</span>"
                 + "<div class=\"sig-placeholder\">" + sigHtml + "</div>"
                 + "<span class=\"person-name\">" + escapeHtml(person.name || "") + "</span>"

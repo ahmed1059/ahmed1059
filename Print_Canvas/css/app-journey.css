@@ -1904,6 +1904,19 @@ body.aj-modal-open {
   z-index: 3;
 }
 
+.aj-print-orient-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-inline: 4px;
+}
+
+.aj-print-orient-group .aj-detail-btn.is-orient-active {
+  background: #0b5e56;
+  color: #ffffff;
+  border-color: #0b5e56;
+}
+
 #aj-print-preview-go {
   order: -1;
   font-weight: 800;
