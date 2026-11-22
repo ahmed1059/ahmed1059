@@ -223,12 +223,57 @@
 
   function firstMissing(committee) {
     var missing = (committee.quota && committee.quota.missing) || [];
-    return missing.length ? missing[0] : { seat: "member", kind: "staff", label: "عضو" };
+    return missing.length
+      ? missing[0]
+      : { seat: "member", kind: "staff", role_category: "staff", label: "عضو" };
+  }
+
+  /** فئة الدور الأساسية من النصاب — لا تُستنتج من النص الوصفي الطويل. */
+  function needRoleCategory(need) {
+    var raw = String((need && (need.role_category || need.kind)) || "staff").trim();
+    if (raw === "teacher" || raw === "admin" || raw === "student"
+        || raw === "parent" || raw === "student_or_parent" || raw === "staff") {
+      return raw;
+    }
+    return "staff";
+  }
+
+  function personStaffCategory(person) {
+    var role = String((person && person.role) || "");
+    return role.indexOf("معلم") >= 0 ? "teacher" : "admin";
+  }
+
+  function fillStaffOptions(select, category, showAll) {
+    while (select.options.length > 1) {
+      select.remove(1);
+    }
+    var emptyLabel = showAll || category === "staff"
+      ? "اختر منسوباً"
+      : (category === "admin" ? "اختر إدارياً" : "اختر معلماً");
+    select.options[0].textContent = emptyLabel;
+    (window.AjCommittees.staff || []).forEach(function (person) {
+      if (!person || person.active === false) {
+        return;
+      }
+      var personCat = personStaffCategory(person);
+      if (!showAll) {
+        if (category === "teacher" && personCat !== "teacher") {
+          return;
+        }
+        if (category === "admin" && personCat !== "admin") {
+          return;
+        }
+      }
+      var option = document.createElement("option");
+      option.value = person.id || person.national_id || "";
+      option.textContent = person.name || option.value;
+      select.appendChild(option);
+    });
   }
 
   function addRow(committee, body) {
     var need = firstMissing(committee);
-    var kind = String(need.kind || "staff");
+    var kind = needRoleCategory(need);
     var row = document.createElement("tr");
     row.className = "aj-committee-add-row";
     row.setAttribute("data-committee", committee.id || "");
@@ -325,26 +370,23 @@
       select.setAttribute("aria-label", "اختر منسوباً");
       var empty = document.createElement("option");
       empty.value = "";
-      empty.textContent = kind === "admin" ? "اختر إدارياً" : "اختر منسوباً";
+      empty.textContent = "اختر منسوباً";
       select.appendChild(empty);
-      var preferTeacher = kind === "teacher" || /معلم/.test(String(need.label || ""));
-      var preferAdmin = kind === "admin" || /إداري|محضر/.test(String(need.label || ""));
-      (window.AjCommittees.staff || []).forEach(function (person) {
-        if (!person || person.active === false) {
-          return;
-        }
-        var role = String(person.role || "");
-        if (preferTeacher && role.indexOf("معلم") < 0) {
-          return;
-        }
-        if (preferAdmin && role.indexOf("معلم") >= 0) {
-          return;
-        }
-        var option = document.createElement("option");
-        option.value = person.id;
-        option.textContent = person.name;
-        select.appendChild(option);
-      });
+
+      var showAllWrap = document.createElement("label");
+      showAllWrap.className = "aj-add-show-all";
+      var showAll = document.createElement("input");
+      showAll.type = "checkbox";
+      showAll.setAttribute("aria-label", "إظهار جميع المنسوبين");
+      showAllWrap.appendChild(showAll);
+      showAllWrap.appendChild(document.createTextNode(" إظهار جميع المنسوبين"));
+
+      function refreshStaffList() {
+        fillStaffOptions(select, kind, !!showAll.checked);
+      }
+      showAll.addEventListener("change", refreshStaffList);
+      refreshStaffList();
+
       add.addEventListener("click", function () {
         if (!select.value) {
           toast("اختر منسوباً من السجل.", "error");
@@ -359,6 +401,7 @@
       });
       bar.appendChild(hint);
       bar.appendChild(select);
+      bar.appendChild(showAllWrap);
       bar.appendChild(seat);
       bar.appendChild(add);
     }
