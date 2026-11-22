@@ -60,8 +60,9 @@
   }
 
   /**
-   * مصفوفة التوقيعات حسب صفة الزائر (Dynamic Signoff Matrix).
-   * المدير زائر → خانتان 50/50؛ غير ذلك → ثلاث خانات.
+   * مصفوفة توقيعات ثلاثية ثابتة دائماً.
+   * الزائر == المدير → الخانة الوسطى فارغة؛ المدير يظهر يساراً فقط بلا تكرار.
+   * الزائر ≠ المدير → معلم | زائر | اعتماد المدير (اسم صريح من القيادة).
    */
   function buildVisitSignatures(record, signs, managerId, managerName) {
     var signsMap = signs || {};
@@ -72,38 +73,51 @@
     var teacherName = personNameById(teacherId) || String(record.teacher_name || "").trim();
     var visitorName = personNameById(visitorId) || String(record.visitor_name || "").trim();
     var visitorIsPrincipal = !!(principalId && visitorId && visitorId === principalId);
-    var teacherCol = {
-      roleTitle: "المعلم المُزار",
-      name: teacherName,
-      id: teacherId,
-      signature: signsMap[teacherId] || ""
-    };
-    if (visitorIsPrincipal) {
-      return [
-        teacherCol,
-        {
-          roleTitle: "الزائر المقيّم ومدير المدرسة",
-          name: principalName,
-          id: principalId,
-          signature: signsMap[principalId] || signsMap[visitorId] || ""
-        }
-      ];
-    }
     return [
-      teacherCol,
       {
-        roleTitle: "الزائر المقيّم",
-        name: visitorName,
-        id: visitorId,
-        signature: signsMap[visitorId] || ""
+        roleTitle: "المعلم المُزار",
+        name: teacherName,
+        id: teacherId,
+        signature: signsMap[teacherId] || ""
       },
+      visitorIsPrincipal
+        ? {
+            roleTitle: "الزائر المقيّم",
+            name: "",
+            id: "",
+            signature: "",
+            keepEmpty: true,
+            blank: true
+          }
+        : {
+            roleTitle: "الزائر المقيّم",
+            name: visitorName,
+            id: visitorId,
+            signature: signsMap[visitorId] || ""
+          },
       {
-        roleTitle: "اعتماد مدير المدرسة",
+        roleTitle: "مدير المدرسة",
         name: principalName,
         id: principalId,
         signature: signsMap[principalId] || ""
       }
     ];
+  }
+
+  var visitPrintOrientation = "landscape";
+
+  function visitMetaCell(label, value) {
+    return "<td class=\"aj-visit-meta-cell\"><strong>" + escapeHtml(label) + ":</strong> "
+      + escapeHtml(value) + "</td>";
+  }
+
+  function visitCriteriaRow(row, printCtx) {
+    return "<tr>"
+      + "<td class=\"aj-visit-crit-label\">" + escapeHtml(row.label) + "</td>"
+      + "<td class=\"aj-visit-crit-level\">" + escapeHtml(levelName(row.level)) + "</td>"
+      + "<td class=\"aj-visit-crit-phrase\">" + escapeHtml(fillTokens(row.phrase || "", printCtx)) + "</td>"
+      + "<td class=\"aj-visit-crit-points\">" + escapeHtml(row.points) + "</td>"
+      + "</tr>";
   }
 
   function currentUser() {
@@ -1194,54 +1208,6 @@
           return (index + 1) + ". " + cleaned;
         }).join("\n");
       }
-      var rows = (record.criteria || []).map(function (row) {
-        return "<tr><td style=\"width:24%;padding:1mm 1.5mm;border:1px solid #9db8b2;font-size:11px;\">" + escapeHtml(row.label) + "</td>"
-          + "<td style=\"width:14%;padding:1mm;border:1px solid #9db8b2;font-size:11px;\">" + escapeHtml(levelName(row.level)) + "</td>"
-          + "<td style=\"width:52%;padding:1mm;border:1px solid #9db8b2;font-size:11px;\">" + escapeHtml(fillTokens(row.phrase || "", printCtx)) + "</td>"
-          + "<td style=\"width:10%;padding:1mm;border:1px solid #9db8b2;font-size:11px;text-align:center;\">" + escapeHtml(row.points) + "</td></tr>";
-      }).join("");
-      var metaGrid = [
-        ["المعلم", record.teacher_name],
-        ["المسمى الوظيفي", record.teacher_rank || rankMatch(record.teacher_id)],
-        ["المادة", subjectOf(record.subject)],
-        ["الصف", [record.grade, record.section_no ? "فصل " + record.section_no : ""].filter(Boolean).join(" · ")],
-        ["الحصة", record.period_no],
-        ["الوحدة", record.unit],
-        ["الدرس", record.lesson],
-        ["المهارة", record.skill],
-        ["نوع الزيارة", record.visit_type],
-        ["المؤشر", record.indicator],
-        ["التاريخ", dateLine(record.visit_date_hijri, record.visit_date)],
-        ["الزائر", [record.visitor_role, record.visitor_name].filter(Boolean).join(" · ")]
-      ].filter(function (pair) {
-        return String(pair[1] || "").trim();
-      });
-      var sections = [];
-      sections.push("<table style=\"width:100%;border-collapse:collapse;table-layout:fixed;margin:0 auto;\"><thead><tr>"
-        + "<th style=\"width:24%;padding:1mm;border:1px solid #0b5e56;font-size:11px;\">البند</th>"
-        + "<th style=\"width:14%;padding:1mm;border:1px solid #0b5e56;font-size:11px;\">المستوى</th>"
-        + "<th style=\"width:52%;padding:1mm;border:1px solid #0b5e56;font-size:11px;\">العبارة</th>"
-        + "<th style=\"width:10%;padding:1mm;border:1px solid #0b5e56;font-size:11px;\">الدرجة</th>"
-        + "</tr></thead><tbody>" + rows + "</tbody></table>");
-      if (record.band) {
-        sections.push("<p class=\"tpl-p\"><strong>المجموع:</strong> " + escapeHtml(record.total) + " — " + escapeHtml(record.band) + "</p>");
-      }
-      if (record.visit_intro) {
-        sections.push("<p class=\"tpl-p\">" + escapeHtml(record.visit_intro) + "</p>");
-      }
-      if (record.strengths) {
-        sections.push("<p class=\"tpl-p\"><strong>أبرز جوانب التميز:</strong> " + escapeHtml(record.strengths) + "</p>");
-      }
-      if (record.recommendations) {
-        sections.push("<p class=\"tpl-p\"><strong>التغذية الراجعة المقدمة:</strong> " + escapeHtml(record.recommendations) + "</p>");
-      }
-      if (record.improvement) {
-        sections.push("<p class=\"tpl-p\" style=\"white-space:pre-line;\"><strong>خطة التحسين:</strong>\n" + escapeHtml(record.improvement) + "</p>");
-      }
-      var follow = dateLine(record.follow_hijri, record.follow_gregorian);
-      if (follow) {
-        sections.push("<p class=\"tpl-p\"><strong>موعد المتابعة:</strong> " + escapeHtml(follow) + "</p>");
-      }
       var visitorLabel = personNameById(record.visitor_id) || record.visitor_name || "";
       var visitorRole = "";
       (state.visitors || []).forEach(function (item) {
@@ -1255,26 +1221,102 @@
       if (!visitorRole && String(record.visitor_id || "") === String(managerId)) {
         visitorRole = "مدير المدرسة";
       }
-      metaGrid = metaGrid.map(function (pair) {
-        if (pair[0] === "الزائر") {
-          return ["الزائر", [visitorRole, visitorLabel].filter(Boolean).join(" · ")];
-        }
-        return pair;
-      }).filter(function (pair) {
+      if (String(record.visitor_id || "") === String(managerId)) {
+        visitorLabel = personNameById(managerId) || visitorLabel;
+      }
+      var teacherLabel = personNameById(record.teacher_id) || record.teacher_name || "";
+      var metaPairs = [
+        ["المعلم", teacherLabel],
+        ["المسمى الوظيفي", record.teacher_rank || rankMatch(record.teacher_id)],
+        ["المادة", subjectOf(record.subject)],
+        ["الصف", [record.grade, record.section_no ? "فصل " + record.section_no : ""].filter(Boolean).join(" · ")],
+        ["الحصة", record.period_no],
+        ["الوحدة", record.unit],
+        ["الدرس", record.lesson],
+        ["المهارة", record.skill],
+        ["نوع الزيارة", record.visit_type],
+        ["المؤشر", record.indicator],
+        ["التاريخ", dateLine(record.visit_date_hijri, record.visit_date)],
+        ["الزائر", [visitorRole, visitorLabel].filter(Boolean).join(" · ")]
+      ].filter(function (pair) {
         return String(pair[1] || "").trim();
       });
+      var metaCells = metaPairs.map(function (pair) {
+        return visitMetaCell(pair[0], pair[1]);
+      });
+      var metaRows = [];
+      var mi;
+      for (mi = 0; mi < metaCells.length; mi += 2) {
+        metaRows.push("<tr>" + metaCells[mi] + (metaCells[mi + 1] || "<td class=\"aj-visit-meta-cell\"></td>") + "</tr>");
+      }
+      var rows = (record.criteria || []).map(function (row) {
+        return visitCriteriaRow(row, printCtx);
+      }).join("");
+      var bodyBits = [];
+      bodyBits.push("<div class=\"aj-visit-print\">");
+      bodyBits.push("<table class=\"aj-visit-meta\">" + metaRows.join("") + "</table>");
+      bodyBits.push("<table class=\"aj-visit-criteria\"><thead><tr>"
+        + "<th class=\"aj-visit-crit-label\">البند</th>"
+        + "<th class=\"aj-visit-crit-level\">المستوى</th>"
+        + "<th class=\"aj-visit-crit-phrase\">العبارة</th>"
+        + "<th class=\"aj-visit-crit-points\">الدرجة</th>"
+        + "</tr></thead><tbody>" + rows + "</tbody></table>");
+      if (record.band) {
+        bodyBits.push("<p class=\"aj-visit-p\"><strong>المجموع:</strong> " + escapeHtml(record.total) + " — " + escapeHtml(record.band) + "</p>");
+      }
+      if (record.visit_intro) {
+        bodyBits.push("<p class=\"aj-visit-p\">" + escapeHtml(record.visit_intro) + "</p>");
+      }
+      if (record.strengths) {
+        bodyBits.push("<p class=\"aj-visit-p\"><strong>أبرز جوانب التميز:</strong> " + escapeHtml(record.strengths) + "</p>");
+      }
+      if (record.recommendations) {
+        bodyBits.push("<p class=\"aj-visit-p\"><strong>التغذية الراجعة المقدمة:</strong> " + escapeHtml(record.recommendations) + "</p>");
+      }
+      if (record.improvement) {
+        bodyBits.push("<p class=\"aj-visit-p aj-visit-plan\"><strong>خطة التحسين:</strong>\n" + escapeHtml(record.improvement) + "</p>");
+      }
+      var follow = dateLine(record.follow_hijri, record.follow_gregorian);
+      if (follow) {
+        bodyBits.push("<p class=\"aj-visit-p\"><strong>موعد المتابعة:</strong> " + escapeHtml(follow) + "</p>");
+      }
+      bodyBits.push("</div>");
+      state._lastPrintRecord = record;
+      state._lastPrintManagerId = managerId;
+      state._lastPrintManagerName = managerName;
+      state._lastPrintSigns = signs;
+      var orient = visitPrintOrientation === "portrait" ? "portrait" : "landscape";
       window.PrintEngine.open("master-sheet", {
         docTitle: "تقرير زيارة صفية",
-        orientation: "landscape",
+        orientation: orient,
         kind: "document",
-        fileName: "تقرير زيارة - " + (record.teacher_name || ""),
-        metaGrid: metaGrid,
-        sectionsHtml: sections.join(""),
+        fileName: "تقرير زيارة - " + (teacherLabel || record.teacher_name || ""),
+        bodyHtml: bodyBits.join(""),
+        frameClass: "aj-visit-print-doc",
         signatures: buildVisitSignatures(record, signs, managerId, managerName),
         multiPage: true
       });
+      if (typeof window.syncVisitPrintOrientButtons === "function") {
+        window.syncVisitPrintOrientButtons(orient);
+      }
     });
   }
+
+  function reprintVisitWithOrientation(orientation) {
+    visitPrintOrientation = orientation === "portrait" ? "portrait" : "landscape";
+    if (state._lastPrintRecord) {
+      printRecord(state._lastPrintRecord);
+      return;
+    }
+    toast("لا تقرير زيارة في المعاينة لإعادة التوجيه.", "error");
+  }
+
+  window.AjVisitsPrint = {
+    setOrientation: reprintVisitWithOrientation,
+    getOrientation: function () {
+      return visitPrintOrientation;
+    }
+  };
 
   function printCurrent() {
     var body = payloadFromForm();
