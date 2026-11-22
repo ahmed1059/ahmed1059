@@ -160,6 +160,34 @@ header img:not(.tpl-evidence-tile img):not(.sig-image) {
   grid-template-columns: 1fr 1fr !important;
 }
 
+.doc-signoff-block .pm-signoff-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+  border: 1px solid #005a53 !important;
+  border-top: none !important;
+  background: #ffffff !important;
+}
+
+.doc-signoff-block .pm-signoff-table td.signoff-col {
+  width: 33.33% !important;
+  padding: 8px 6px !important;
+  border-left: 1px solid #005a53 !important;
+  vertical-align: top !important;
+  text-align: center !important;
+  min-height: 85px !important;
+}
+
+.doc-signoff-block .pm-signoff-table td.signoff-col:last-child {
+  border-left: none !important;
+}
+
+.doc-signoff-block .pm-signoff-table td.signoff-col.is-blank .role-title,
+.doc-signoff-block .pm-signoff-table td.signoff-col.is-blank .person-name,
+.doc-signoff-block .pm-signoff-table td.signoff-col.is-blank .sig-placeholder {
+  visibility: hidden !important;
+}
+
 .doc-signoff-block .signoff-col {
   padding: 8px 6px !important;
   border-left: 1px solid #005a53 !important;
@@ -170,8 +198,33 @@ header img:not(.tpl-evidence-tile img):not(.sig-image) {
   min-height: 85px !important;
 }
 
+.doc-signoff-block .pm-signoff-table td.signoff-col {
+  display: table-cell !important;
+}
+
 .doc-signoff-block .signoff-col:last-child {
   border-left: none !important;
+}
+
+.doc-bottom-bar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 8px !important;
+  border-top: 1px solid #005a53 !important;
+  margin-top: 4px !important;
+  padding: 4px 6px !important;
+  font-size: 0.72rem !important;
+  color: #005a53 !important;
+  font-weight: bold !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.doc-bottom-bar .doc-bottom-school,
+.doc-bottom-bar .doc-bottom-page {
+  flex: 0 1 auto !important;
+  white-space: nowrap !important;
 }
 
 .doc-signoff-block .role-title {
@@ -296,16 +349,20 @@ img.sig-image {
   padding-inline: 6mm;
 }
 
-/* تقرير الزيارة الصفية — ضغط لصفحة A4 واحدة قدر الإمكان */
+/* تقرير الزيارة الصفية — ضغط لصفحة A4 طولية واحدة قدر الإمكان */
+.pm-body:has(.aj-visit-print) {
+  padding-inline: 5mm;
+}
+
 .aj-visit-print {
-  font-size: 11px;
+  font-size: 11pt;
   line-height: 1.35;
 }
 
 .aj-visit-print .aj-visit-meta,
 .aj-visit-print .aj-visit-criteria {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse !important;
   table-layout: fixed;
   margin: 0 0 1.5mm;
 }
@@ -313,18 +370,21 @@ img.sig-image {
 .aj-visit-print .aj-visit-meta-cell,
 .aj-visit-print .aj-visit-criteria th,
 .aj-visit-print .aj-visit-criteria td {
-  border: 1px solid #9db8b2;
-  padding: 0.55mm 1mm;
-  font-size: 11px;
-  line-height: 1.35;
+  border: 1px solid #94a3b8 !important;
+  padding: 4px 6px !important;
+  font-size: 10.5pt !important;
+  line-height: 1.35 !important;
   vertical-align: top;
+  color: #1a1a1a !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }
 
 .aj-visit-print .aj-visit-criteria th {
-  border-color: #0b5e56;
-  background: #f3faf8;
+  border-color: #0b5e56 !important;
+  background: #f3faf8 !important;
   font-weight: 700;
-  color: #0b5e56;
+  color: #0b5e56 !important;
 }
 
 .aj-visit-print .aj-visit-crit-label { width: 22%; }
@@ -334,7 +394,7 @@ img.sig-image {
 
 .aj-visit-print .aj-visit-p {
   margin: 0 0 1.2mm;
-  font-size: 11px;
+  font-size: 11pt;
   line-height: 1.35;
 }
 
@@ -348,11 +408,15 @@ img.sig-image {
   line-height: 1.25;
 }
 
-.pm-document.aj-visit-print-doc .pm-signoff {
+.pm-document.aj-visit-print-doc .pm-signoff,
+.pm-document.aj-visit-print-doc .pm-end {
   margin-top: 2.5mm;
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
 }
 
-.pm-document.aj-visit-print-doc .doc-signoff-block .signoff-col {
+.pm-document.aj-visit-print-doc .doc-signoff-block .signoff-col,
+.pm-document.aj-visit-print-doc .pm-signoff-table td.signoff-col {
   min-height: 72px !important;
   padding: 5px 4px !important;
 }
@@ -360,11 +424,6 @@ img.sig-image {
 .pm-document.aj-visit-print-doc .doc-signoff-block .sig-placeholder {
   height: 40px !important;
   margin: 2px 0 !important;
-}
-
-.pm-document.aj-visit-print-doc .doc-signoff-block .signoff-col.is-blank .sig-placeholder,
-.pm-document.aj-visit-print-doc .doc-signoff-block .sig-blank {
-  visibility: hidden;
 }
 
 .aj-committee-decree {
@@ -603,8 +662,49 @@ img.sig-image {
     page-break-inside: avoid;
   }
 
+  body.print-shell {
+    counter-reset: page;
+  }
+
   body.print-shell .pm-page-num::after {
     content: counter(page);
+  }
+
+  body.print-shell .pm-pages-num::after {
+    content: counter(pages);
+  }
+
+  body.print-shell .aj-visit-print .aj-visit-meta,
+  body.print-shell .aj-visit-print .aj-visit-criteria {
+    border-collapse: collapse !important;
+  }
+
+  body.print-shell .aj-visit-print .aj-visit-meta-cell,
+  body.print-shell .aj-visit-print .aj-visit-criteria th,
+  body.print-shell .aj-visit-print .aj-visit-criteria td {
+    border: 1px solid #94a3b8 !important;
+    padding: 4px 6px !important;
+    font-size: 10.5pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body.print-shell .doc-bottom-bar {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  body.print-shell .pm-signoff-table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+  }
+
+  body.print-shell .pm-signoff-table td.signoff-col {
+    width: 33.33% !important;
+    border: 1px solid #005a53 !important;
   }
 
   body.print-shell .pm-head .doc-official-header {

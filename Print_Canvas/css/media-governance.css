@@ -111,6 +111,34 @@ header img:not(.tpl-evidence-tile img):not(.sig-image) {
     grid-template-columns: 1fr 1fr !important;
 }
 
+.doc-signoff-block .pm-signoff-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    border: 1px solid #005a53 !important;
+    border-top: none !important;
+    background: #ffffff !important;
+}
+
+.doc-signoff-block .pm-signoff-table td.signoff-col {
+    width: 33.33% !important;
+    padding: 8px 6px !important;
+    border-left: 1px solid #005a53 !important;
+    vertical-align: top !important;
+    text-align: center !important;
+    display: table-cell !important;
+}
+
+.doc-signoff-block .pm-signoff-table td.signoff-col:last-child {
+    border-left: none !important;
+}
+
+.doc-signoff-block .pm-signoff-table td.signoff-col.is-blank .role-title,
+.doc-signoff-block .pm-signoff-table td.signoff-col.is-blank .person-name,
+.doc-signoff-block .pm-signoff-table td.signoff-col.is-blank .sig-placeholder {
+    visibility: hidden !important;
+}
+
 .doc-signoff-block .signoff-col {
     padding: 8px 6px !important;
     border-left: 1px solid #005a53 !important;

@@ -82,8 +82,8 @@
       },
       visitorIsPrincipal
         ? {
-            roleTitle: "الزائر المقيّم",
-            name: "",
+            roleTitle: "",
+            name: "\u00a0",
             id: "",
             signature: "",
             keepEmpty: true,
@@ -97,14 +97,15 @@
           },
       {
         roleTitle: "مدير المدرسة",
-        name: principalName,
+        name: principalName || "\u00a0",
         id: principalId,
         signature: signsMap[principalId] || ""
       }
     ];
   }
 
-  var visitPrintOrientation = "landscape";
+  /* الافتراضي الصارم: طولي؛ العرضي فقط بضغط زر «عرضي» */
+  var visitPrintOrientation = "portrait";
 
   function visitMetaCell(label, value) {
     return "<td class=\"aj-visit-meta-cell\"><strong>" + escapeHtml(label) + ":</strong> "

@@ -1,6 +1,6 @@
 @page {
-    size: A4 landscape;
-    margin: 16mm;
+    size: A4 portrait;
+    margin: 10mm;
 }
 
 /* بطاقة الإطار الرسمي — صفحة مسمّاة بلا هامش صفحة (الـ 15mm داخل الإطار فقط) */
