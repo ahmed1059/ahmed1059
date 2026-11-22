@@ -104,14 +104,16 @@
             + " alt=\"\" onerror=\"" + handler + "\">";
     }
 
-    /** شريط الاعتماد الثلاثي المحصّن. */
+    /** شريط الاعتماد — عدد الأعمدة ديناميكي (2 أو 3) حسب مصفوفة التوقيعات. */
     function signoff(opts) {
         opts = opts || {};
         var id = resolveIdentity(opts);
         var source = (opts.columns || []).filter(function (person) {
             return person && (String(person.id || "").trim() || String(person.name || "").trim());
         });
-        var columns = (source.length ? source : DEFAULT_SIGNOFF).map(function (person) {
+        var people = source.length ? source : DEFAULT_SIGNOFF;
+        var colCount = people.length >= 2 && people.length <= 3 ? people.length : 3;
+        var columns = people.map(function (person) {
             var sigPath = person.signature || person.signaturePath || "";
             var fallbackPath = person.signatureFallback || person.fallbackSignature || "";
             var sigHtml = (sigPath || fallbackPath)
@@ -126,7 +128,7 @@
         var pageLabel = opts.page && opts.total
             ? ("الصفحة " + opts.page + " من " + opts.total)
             : (opts.pageLabel || "الصفحة 1 من 1");
-        return "<footer class=\"doc-signoff-block\">"
+        return "<footer class=\"doc-signoff-block\" data-cols=\"" + colCount + "\">"
             + "<div class=\"signoff-title-bar\">" + escapeHtml(opts.signTitle || DEFAULTS.signTitle) + "</div>"
             + "<div class=\"signoff-grid\">" + columns + "</div>"
             + "<div class=\"doc-bottom-bar\">"

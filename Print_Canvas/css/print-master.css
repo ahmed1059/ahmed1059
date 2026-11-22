@@ -74,6 +74,12 @@
 
 .pm-body {
   box-sizing: border-box;
+  /* هامش داخلي يمنع التصاق النص الطويل بحد الإطار الأخضر في المعاينة والطباعة */
+  padding-inline: 8mm;
+}
+
+.doc-signoff-block[data-cols="2"] .signoff-grid {
+  grid-template-columns: 1fr 1fr !important;
 }
 
 .pm-signoff {

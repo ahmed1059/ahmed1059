@@ -156,6 +156,10 @@ header img:not(.tpl-evidence-tile img):not(.sig-image) {
   background: #ffffff !important;
 }
 
+.doc-signoff-block[data-cols="2"] .signoff-grid {
+  grid-template-columns: 1fr 1fr !important;
+}
+
 .doc-signoff-block .signoff-col {
   padding: 8px 6px !important;
   border-left: 1px solid #005a53 !important;
@@ -289,6 +293,8 @@ img.sig-image {
 
 .pm-body {
   box-sizing: border-box;
+  /* هامش داخلي يمنع التصاق النص الطويل بحد الإطار الأخضر */
+  padding-inline: 8mm;
 }
 
 .aj-committee-decree {
