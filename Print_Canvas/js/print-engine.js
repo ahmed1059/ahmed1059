@@ -55,16 +55,17 @@
 
   function pageStyle(arm) {
     arm = arm || {};
+    /* الافتراضي طولي؛ العرضي فقط عند arm.orientation === "landscape" صراحةً */
     var landscape = arm.orientation === "landscape";
     var multi = !!(arm.multiPage || arm.list);
-    var margin = multi ? "15mm" : "0";
+    var margin = multi ? "10mm" : "0";
     var size = landscape ? "A4 landscape" : "A4 portrait";
     var named = landscape ? "print-master-a4-landscape" : "print-master-a4";
     return [
       "@page{size:" + size + " !important;margin:" + margin + " !important;}",
       "@page " + named + "{size:" + size + ";margin:" + margin + ";}",
-      "html,body{margin:0!important;padding:0!important;}",
-      ":root{--pm-header-height:40mm;--pm-footer-height:20mm;--pm-content-margin:15mm;}"
+      "html,body{margin:0!important;padding:0!important;counter-reset:page;}",
+      ":root{--pm-header-height:40mm;--pm-footer-height:20mm;--pm-content-margin:10mm;}"
     ].join("");
   }
 

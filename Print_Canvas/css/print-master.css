@@ -74,22 +74,63 @@
 
 .pm-body {
   box-sizing: border-box;
-  padding-inline: 6mm;
+  padding-inline: 5mm;
 }
 
 .doc-signoff-block[data-cols="2"] .signoff-grid {
   grid-template-columns: 1fr 1fr !important;
 }
 
+.doc-signoff-block .pm-signoff-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+  border: 1px solid #005a53 !important;
+  border-top: none !important;
+  background: #ffffff !important;
+}
+
+.doc-signoff-block .pm-signoff-table td.signoff-col {
+  width: 33.33% !important;
+  padding: 8px 6px !important;
+  border-left: 1px solid #005a53 !important;
+  vertical-align: top !important;
+  text-align: center !important;
+  display: table-cell !important;
+}
+
+.doc-signoff-block .pm-signoff-table td.signoff-col:last-child {
+  border-left: none !important;
+}
+
+.doc-signoff-block .pm-signoff-table td.signoff-col.is-blank .role-title,
+.doc-signoff-block .pm-signoff-table td.signoff-col.is-blank .person-name,
+.doc-signoff-block .pm-signoff-table td.signoff-col.is-blank .sig-placeholder {
+  visibility: hidden !important;
+}
+
+.doc-bottom-bar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.pm-body:has(.aj-visit-print) {
+  padding-inline: 5mm;
+}
+
 .aj-visit-print {
-  font-size: 11px;
+  font-size: 11pt;
   line-height: 1.35;
 }
 
 .aj-visit-print .aj-visit-meta,
 .aj-visit-print .aj-visit-criteria {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse !important;
   table-layout: fixed;
   margin: 0 0 1.5mm;
 }
@@ -97,18 +138,20 @@
 .aj-visit-print .aj-visit-meta-cell,
 .aj-visit-print .aj-visit-criteria th,
 .aj-visit-print .aj-visit-criteria td {
-  border: 1px solid #9db8b2;
-  padding: 0.55mm 1mm;
-  font-size: 11px;
-  line-height: 1.35;
+  border: 1px solid #94a3b8 !important;
+  padding: 4px 6px !important;
+  font-size: 10.5pt !important;
+  line-height: 1.35 !important;
   vertical-align: top;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }
 
 .aj-visit-print .aj-visit-criteria th {
-  border-color: #0b5e56;
-  background: #f3faf8;
+  border-color: #0b5e56 !important;
+  background: #f3faf8 !important;
   font-weight: 700;
-  color: #0b5e56;
+  color: #0b5e56 !important;
 }
 
 .aj-visit-print .aj-visit-crit-label { width: 22%; }
@@ -118,7 +161,7 @@
 
 .aj-visit-print .aj-visit-p {
   margin: 0 0 1.2mm;
-  font-size: 11px;
+  font-size: 11pt;
   line-height: 1.35;
 }
 
@@ -132,11 +175,15 @@
   line-height: 1.25;
 }
 
-.pm-document.aj-visit-print-doc .pm-signoff {
+.pm-document.aj-visit-print-doc .pm-signoff,
+.pm-document.aj-visit-print-doc .pm-end {
   margin-top: 2.5mm;
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
 }
 
-.pm-document.aj-visit-print-doc .doc-signoff-block .signoff-col {
+.pm-document.aj-visit-print-doc .doc-signoff-block .signoff-col,
+.pm-document.aj-visit-print-doc .pm-signoff-table td.signoff-col {
   min-height: 72px !important;
   padding: 5px 4px !important;
 }
@@ -144,11 +191,6 @@
 .pm-document.aj-visit-print-doc .doc-signoff-block .sig-placeholder {
   height: 40px !important;
   margin: 2px 0 !important;
-}
-
-.pm-document.aj-visit-print-doc .doc-signoff-block .signoff-col.is-blank .sig-placeholder,
-.pm-document.aj-visit-print-doc .doc-signoff-block .sig-blank {
-  visibility: hidden;
 }
 
 .pm-signoff {
@@ -326,8 +368,16 @@
     page-break-inside: avoid;
   }
 
+  body.app-journey.print-master {
+    counter-reset: page;
+  }
+
   body.app-journey.print-master .pm-page-num::after {
     content: counter(page);
+  }
+
+  body.app-journey.print-master .pm-pages-num::after {
+    content: counter(pages);
   }
 
   body.app-journey.print-master .pm-head {

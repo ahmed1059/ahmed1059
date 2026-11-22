@@ -104,7 +104,10 @@
             + " alt=\"\" onerror=\"" + handler + "\">";
     }
 
-    /** شريط الاعتماد — يحافظ على الخانات الفارغة المعلّمة (keepEmpty) لهيكل ثلاثي ثابت. */
+    /**
+     * شريط الاعتماد — جدول HTML بثلاثة أعمدة ثابتة (لا grid يحذف خلية فارغة).
+     * الخلية الوسطى تبقى دائماً إن وُسمت keepEmpty/blank ولو بلا محتوى.
+     */
     function signoff(opts) {
         opts = opts || {};
         var id = resolveIdentity(opts);
@@ -119,34 +122,41 @@
                 || String(person.name || "").trim()
                 || String(person.roleTitle || person.role || "").trim());
         });
-        var people = source.length ? source : DEFAULT_SIGNOFF;
-        var colCount = people.length >= 2 && people.length <= 3 ? people.length : 3;
-        var columns = people.map(function (person) {
+        var people = source.length ? source.slice() : DEFAULT_SIGNOFF.slice();
+        while (people.length < 3) {
+            people.push({ roleTitle: "", name: "\u00a0", keepEmpty: true, blank: true });
+        }
+        if (people.length > 3) {
+            people = people.slice(0, 3);
+        }
+        var cells = people.map(function (person) {
             var sigPath = person.signature || person.signaturePath || "";
             var fallbackPath = person.signatureFallback || person.fallbackSignature || "";
             var sigHtml;
             if (person.blank) {
-                sigHtml = "<span class=\"sig-blank\" aria-hidden=\"true\"></span>";
+                sigHtml = "&nbsp;";
             } else if (sigPath || fallbackPath) {
                 sigHtml = signatureImage(sigPath, fallbackPath);
             } else {
                 sigHtml = "<span class=\"sig-line\" aria-hidden=\"true\"></span>";
             }
-            return "<div class=\"signoff-col" + (person.blank ? " is-blank" : "") + "\">"
-                + "<span class=\"role-title\">" + escapeHtml(person.roleTitle || ("اعتماد: " + (person.role || ""))) + "</span>"
+            var role = person.blank ? "&nbsp;" : escapeHtml(person.roleTitle || ("اعتماد: " + (person.role || "")) || "\u00a0");
+            var name = person.blank ? "&nbsp;" : escapeHtml(person.name || "\u00a0");
+            return "<td class=\"signoff-col" + (person.blank ? " is-blank" : "") + "\">"
+                + "<span class=\"role-title\">" + role + "</span>"
                 + "<div class=\"sig-placeholder\">" + sigHtml + "</div>"
-                + "<span class=\"person-name\">" + escapeHtml(person.name || "") + "</span>"
-                + "</div>";
+                + "<span class=\"person-name\">" + name + "</span>"
+                + "</td>";
         }).join("");
         var pageLabel = opts.page && opts.total
             ? ("الصفحة " + opts.page + " من " + opts.total)
             : (opts.pageLabel || "الصفحة 1 من 1");
-        return "<footer class=\"doc-signoff-block\" data-cols=\"" + colCount + "\">"
+        return "<footer class=\"doc-signoff-block\" data-cols=\"3\">"
             + "<div class=\"signoff-title-bar\">" + escapeHtml(opts.signTitle || DEFAULTS.signTitle) + "</div>"
-            + "<div class=\"signoff-grid\">" + columns + "</div>"
+            + "<table class=\"pm-signoff-table\" role=\"presentation\"><tbody><tr>" + cells + "</tr></tbody></table>"
             + "<div class=\"doc-bottom-bar\">"
-            + "<span>وثيقة رسمية — " + escapeHtml(id.school) + "</span>"
-            + "<span>" + escapeHtml(pageLabel) + "</span>"
+            + "<span class=\"doc-bottom-school\">وثيقة رسمية — " + escapeHtml(id.school) + "</span>"
+            + "<span class=\"doc-bottom-page\">" + escapeHtml(pageLabel) + "</span>"
             + "</div></footer>";
     }
 

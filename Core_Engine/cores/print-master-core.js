@@ -217,7 +217,7 @@
       + "</table>"
       + "<div class=\"pm-foot\" style=\"" + footStyle + "\">"
       + "<span class=\"pm-foot-date\">" + escapeHtml(printDateLine()) + "</span>"
-      + "<span class=\"pm-foot-page\">الصفحة <span class=\"pm-page-num\"></span></span>"
+      + "<span class=\"pm-foot-page\">الصفحة <span class=\"pm-page-num\"></span> من <span class=\"pm-pages-num\"></span></span>"
       + "</div></article>";
   }
 
