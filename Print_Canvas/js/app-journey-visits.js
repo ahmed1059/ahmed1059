@@ -59,10 +59,25 @@
     return teacher && teacher.name ? String(teacher.name) : "";
   }
 
+  /** عنوان الوثيقة الرسمي حسب نوع الزيارة (لائحة التقويم + الدليل التنظيمي). */
+  function visitDocTitle(visitType) {
+    var type = String(visitType || "").trim();
+    if (type === "استطلاعية") {
+      return "محضر زيارة صفية استطلاعية (تشخيصية)";
+    }
+    if (type === "متابعة") {
+      return "بطاقة متابعة تنفيذ خطة التحسين (زيارة متابعة)";
+    }
+    if (type === "تبادلية") {
+      return "بطاقة تبادل زيارات صفية بين المعلمين (تطوير مهني)";
+    }
+    return "بطاقة تقويم الأداء الوظيفي (زيارة صفية تقويمية)";
+  }
+
   /**
    * مصفوفة توقيعات ثلاثية ثابتة دائماً.
-   * الزائر == المدير → الخانة الوسطى فارغة؛ المدير يظهر يساراً فقط بلا تكرار.
-   * الزائر ≠ المدير → معلم | زائر | اعتماد المدير (اسم صريح من القيادة).
+   * الزائر == المدير → الوسط فارغ؛ المدير يساراً فقط.
+   * تبادلية → الوسط «المعلم الزائر» واليسار «اعتماد مدير المدرسة».
    */
   function buildVisitSignatures(record, signs, managerId, managerName) {
     var signsMap = signs || {};
@@ -73,6 +88,9 @@
     var teacherName = personNameById(teacherId) || String(record.teacher_name || "").trim();
     var visitorName = personNameById(visitorId) || String(record.visitor_name || "").trim();
     var visitorIsPrincipal = !!(principalId && visitorId && visitorId === principalId);
+    var peerVisit = String(record.visit_type || "").trim() === "تبادلية";
+    var midTitle = peerVisit ? "المعلم الزائر" : "الزائر المقيّم";
+    var leftTitle = peerVisit ? "اعتماد مدير المدرسة" : "مدير المدرسة";
     return [
       {
         roleTitle: "المعلم المُزار",
@@ -90,13 +108,13 @@
             blank: true
           }
         : {
-            roleTitle: "الزائر المقيّم",
+            roleTitle: midTitle,
             name: visitorName,
             id: visitorId,
             signature: signsMap[visitorId] || ""
           },
       {
-        roleTitle: "مدير المدرسة",
+        roleTitle: leftTitle,
         name: principalName || "\u00a0",
         id: principalId,
         signature: signsMap[principalId] || ""
@@ -1287,15 +1305,20 @@
       state._lastPrintManagerName = managerName;
       state._lastPrintSigns = signs;
       var orient = visitPrintOrientation === "portrait" ? "portrait" : "landscape";
+      var docTitle = visitDocTitle(record.visit_type);
       window.PrintEngine.open("master-sheet", {
-        docTitle: "تقرير زيارة صفية",
+        docTitle: docTitle,
         orientation: orient,
         kind: "document",
-        fileName: "تقرير زيارة - " + (teacherLabel || record.teacher_name || ""),
+        fileName: docTitle + " - " + (teacherLabel || record.teacher_name || ""),
         bodyHtml: bodyBits.join(""),
         frameClass: "aj-visit-print-doc",
         signatures: buildVisitSignatures(record, signs, managerId, managerName),
-        multiPage: true
+        multiPage: true,
+        footerHeight: 10,
+        omitSignoffBottom: true,
+        unifiedFooter: true,
+        pageFootLabel: "الصفحة 1 من 1"
       });
       if (typeof window.syncVisitPrintOrientButtons === "function") {
         window.syncVisitPrintOrientButtons(orient);

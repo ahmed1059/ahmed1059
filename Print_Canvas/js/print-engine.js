@@ -8,7 +8,7 @@
 
   var VERSION = "301-phase2";
   var FRAME_ID = "pe-print-frame";
-  var SHELL_HREF = "/css/print-shell.css?v=pe3";
+  var SHELL_HREF = "/css/print-shell.css?v=pe5";
   var lastPayload = null;
   var lastHtml = "";
   var lastArm = {};
@@ -61,11 +61,15 @@
     var margin = multi ? "10mm" : "0";
     var size = landscape ? "A4 landscape" : "A4 portrait";
     var named = landscape ? "print-master-a4-landscape" : "print-master-a4";
+    var footMm = Number(arm.footerHeight);
+    if (!isFinite(footMm) || footMm <= 0) {
+      footMm = 20;
+    }
     return [
       "@page{size:" + size + " !important;margin:" + margin + " !important;}",
       "@page " + named + "{size:" + size + ";margin:" + margin + ";}",
       "html,body{margin:0!important;padding:0!important;counter-reset:page;}",
-      ":root{--pm-header-height:40mm;--pm-footer-height:20mm;--pm-content-margin:10mm;}"
+      ":root{--pm-header-height:40mm;--pm-footer-height:" + footMm + "mm;--pm-content-margin:10mm;}"
     ].join("");
   }
 
@@ -239,7 +243,8 @@
     var arm = {
       orientation: sheetOpts.orientation === "landscape" ? "landscape" : "portrait",
       multiPage: !!payload.multiPage,
-      list: !!payload.list
+      list: !!payload.list,
+      footerHeight: payload.footerHeight != null ? Number(payload.footerHeight) : 20
     };
     lastPayload = { templateType: "master-sheet", payload: payload };
     var shown = preview(html, {
