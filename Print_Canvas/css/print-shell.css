@@ -160,6 +160,10 @@ header img:not(.tpl-evidence-tile img):not(.sig-image) {
   grid-template-columns: 1fr 1fr !important;
 }
 
+.doc-signoff-block[data-cols="2"] .pm-signoff-table td.signoff-col {
+  width: 50% !important;
+}
+
 .doc-signoff-block .pm-signoff-table {
   width: 100% !important;
   border-collapse: collapse !important;

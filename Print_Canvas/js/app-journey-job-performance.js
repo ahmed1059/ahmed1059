@@ -1578,9 +1578,7 @@
     if (!id) {
       return Promise.resolve();
     }
-    if (window.AjJobPerformanceDashboard && typeof window.AjJobPerformanceDashboard.setTab === "function") {
-      window.AjJobPerformanceDashboard.setTab("card");
-    }
+    // لا نستدعي setTab هنا لتجنب حلقة مع openStaffCard؛ الإخفاء يتم من لوحة المتابعة.
     var teacherEl = document.getElementById("aj-jp-teacher");
     if (!teacherEl) {
       return Promise.resolve();

@@ -123,11 +123,15 @@
                 || String(person.roleTitle || person.role || "").trim());
         });
         var people = source.length ? source.slice() : DEFAULT_SIGNOFF.slice();
-        while (people.length < 3) {
+        var maxCols = Number(opts.maxColumns || opts.cols || 0);
+        if (!(maxCols >= 1 && maxCols <= 3)) {
+            maxCols = 3;
+        }
+        while (people.length < maxCols) {
             people.push({ roleTitle: "", name: "\u00a0", keepEmpty: true, blank: true });
         }
-        if (people.length > 3) {
-            people = people.slice(0, 3);
+        if (people.length > maxCols) {
+            people = people.slice(0, maxCols);
         }
         var cells = people.map(function (person) {
             var sigPath = person.signature || person.signaturePath || "";
@@ -157,7 +161,7 @@
                 + "<span class=\"doc-bottom-school\">وثيقة رسمية — " + escapeHtml(id.school) + "</span>"
                 + "<span class=\"doc-bottom-page\">" + escapeHtml(pageLabel) + "</span>"
                 + "</div>");
-        return "<footer class=\"doc-signoff-block\" data-cols=\"3\">"
+        return "<footer class=\"doc-signoff-block\" data-cols=\"" + maxCols + "\">"
             + "<div class=\"signoff-title-bar\">" + escapeHtml(opts.signTitle || DEFAULTS.signTitle) + "</div>"
             + "<table class=\"pm-signoff-table\" role=\"presentation\"><tbody><tr>" + cells + "</tr></tbody></table>"
             + bottom
