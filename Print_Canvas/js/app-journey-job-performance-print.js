@@ -76,16 +76,21 @@
       "<th>عنصر التقييم</th>" +
       "<th class=\"aj-jp-print-num\">الوزن %</th>" +
       "<th class=\"aj-jp-print-num\">التقدير</th>" +
-      "<th class=\"aj-jp-print-num\">الموزون</th>" +
+      "<th class=\"aj-jp-print-num\">الموزون %</th>" +
       "<th>ملاحظة</th>" +
       "</tr></thead>";
     var body = (elements || [])
       .map(function (item, index) {
         var rating = ratings[item.id];
         var hasRating = rating != null && rating !== "";
-        var weighted = hasRating
-          ? (Number(rating) * Number(item.weight || 0)).toFixed(2)
-          : "—";
+        var weighted = "—";
+        if (hasRating) {
+          var n = Number(rating);
+          var w = Number(item.weight || 0);
+          if (n >= 1 && n <= 5) {
+            weighted = (Math.round((n / 5) * w * 100) / 100).toFixed(2);
+          }
+        }
         var note = ratings["note_" + item.id] || "";
         var section = item.section_label || item.section || "";
         var label = item.label || item.id;
@@ -146,7 +151,7 @@
       "<p><strong>جاهزية البنود:</strong> " +
       escapeHtml(readiness == null || readiness === "" ? "—" : Number(readiness).toFixed(1) + " %") +
       "</p>" +
-      "<p class=\"aj-jp-print-ssot\">التقييم الذاتي مرجع بصري فقط ولا يدخل في المجموع الرسمي. المرجع الاعتمادي النهائي: النظام التقني الرسمي لوزارة التعليم.</p>" +
+      "<p class=\"aj-jp-print-ssot\">عمود الموزون = (التقدير ÷ 5) × الوزن، ومجموعه يطابق النتيجة من 100%. التقييم الذاتي مرجع بصري فقط ولا يدخل في المجموع الرسمي. المرجع الاعتمادي النهائي: النظام التقني الرسمي لوزارة التعليم.</p>" +
       "</div>"
     );
   }
@@ -263,7 +268,7 @@
     );
   }
 
-  function buildBodyHtml(ctx) {
+  function buildBodyParts(ctx) {
     ctx = ctx || {};
     var record = ctx.record || {};
     var person = ctx.person || {};
@@ -277,9 +282,9 @@
         ? "لائحة الموارد البشرية العامة"
         : "دليل إدارة الأداء الوظيفي لشاغلي الوظائف التعليمية");
     var cycleLabel = ctx.cycleLabel || "";
-    var bits = [];
-    bits.push("<div class=\"aj-jp-print\">");
-    bits.push(
+    var main = [];
+    main.push("<div class=\"aj-jp-print\">");
+    main.push(
       metaTable([
         ["اسم المنسوب", person.name || record.staff_name || ""],
         ["الصفة / المسمى", person.role || ""],
@@ -293,15 +298,25 @@
         ["الرقم الإحصائي", SCHOOL_STAT]
       ])
     );
-    bits.push("<h2 class=\"aj-jp-print-section-title\">عناصر التقييم والأوزان</h2>");
-    bits.push(scoresTable(elements, ratings));
-    bits.push(resultBox(record, phase));
-    bits.push("</div>");
-    bits.push(gapAppendix(record.gap_plans, elements));
+    main.push("<h2 class=\"aj-jp-print-section-title\">عناصر التقييم والأوزان</h2>");
+    main.push(scoresTable(elements, ratings));
+    main.push(resultBox(record, phase));
+    main.push("</div>");
+    var appendices = [];
+    appendices.push(gapAppendix(record.gap_plans, elements));
     if (phase === "final") {
-      bits.push(idpAppendix(record.idp));
+      appendices.push(idpAppendix(record.idp));
     }
-    return bits.join("");
+    return {
+      mainHtml: main.join(""),
+      appendixHtml: appendices.join(""),
+      hasAppendix: /aj-jp-print-appendix/.test(appendices.join(""))
+    };
+  }
+
+  function buildBodyHtml(ctx) {
+    var parts = buildBodyParts(ctx);
+    return parts.mainHtml + parts.appendixHtml;
   }
 
   function defaultSignatures(ctx) {
@@ -347,6 +362,16 @@
     if (!ctx.record || !ctx.record.id) {
       return { ok: false, error: "لا سجل تقويم مفتوح للطباعة." };
     }
+    var evaluatorId = String(ctx.evaluatorId || "").trim();
+    var staffId = String(
+      (ctx.person && ctx.person.id) || (ctx.record && ctx.record.staff_id) || ""
+    ).trim();
+    if (evaluatorId && staffId && evaluatorId === staffId) {
+      return {
+        ok: false,
+        error: "لا يجوز اعتماد/طباعة تقويم رسمي للمنسوب لنفسه."
+      };
+    }
     if (!root.PrintEngine || typeof root.PrintEngine.open !== "function") {
       return { ok: false, error: "محرك الطباعة الموحد غير محمّل." };
     }
@@ -354,11 +379,25 @@
     var title = docTitle(phase);
     var staffName =
       (ctx.person && ctx.person.name) || ctx.record.staff_name || "";
-    var bodyHtml = buildBodyHtml(ctx);
-    var hasAppendix =
-      /aj-jp-print-appendix/.test(bodyHtml);
+    var elementCount = (ctx.record.weights_snapshot || ctx.elements || []).length;
+    var parts = buildBodyParts(ctx);
+    var hasAppendix = !!parts.hasAppendix;
+    var frameClass =
+      "aj-jp-print-doc" + (elementCount >= 15 ? " aj-jp-print-dense" : "");
 
     function launch(signatures) {
+      var signHtml = "";
+      if (root.OfficialFrameCore && typeof root.OfficialFrameCore.signoff === "function") {
+        signHtml =
+          "<div class=\"aj-jp-print-signoff-keep\">" +
+          root.OfficialFrameCore.signoff({
+            school: SCHOOL_NAME,
+            columns: signatures,
+            omitBottomBar: true,
+            pageLabel: " "
+          }) +
+          "</div>";
+      }
       return root.PrintEngine.open("master-sheet", {
         docTitle: title,
         title: title,
@@ -368,16 +407,16 @@
           (staffName || "منسوب") +
           "_" +
           (phase === "final" ? "ختامي" : "نصف_سنوي"),
-        bodyHtml: bodyHtml,
-        frameClass: "aj-jp-print-doc",
-        signatures: signatures,
-        signoff: true,
+        bodyHtml: parts.mainHtml + signHtml + parts.appendixHtml,
+        frameClass: frameClass,
+        signatures: [],
+        signoff: false,
         orientation: "portrait",
-        multiPage: true,
-        footerHeight: 18,
+        multiPage: hasAppendix,
+        footerHeight: hasAppendix ? 12 : 10,
         omitSignoffBottom: true,
         unifiedFooter: true,
-        pageFootLabel: hasAppendix ? "وثيقة متعددة الصفحات" : "الصفحة 1 من 1",
+        pageFootLabel: " ",
         strictIdentity: true,
         school: SCHOOL_NAME
       });
@@ -403,6 +442,7 @@
 
   root.AjJobPerformancePrint = {
     buildBodyHtml: buildBodyHtml,
+    buildBodyParts: buildBodyParts,
     openPrint: openPrint,
     docTitle: docTitle,
     phaseLabel: phaseLabel,

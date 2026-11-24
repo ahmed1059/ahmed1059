@@ -409,32 +409,32 @@ img.sig-image {
   white-space: pre-line;
 }
 
-/* تقويم الأداء الوظيفي — بطاقة + ملاحق */
+/* تقويم الأداء الوظيفي — بطاقة مضغوطة + ملاحق */
 .aj-jp-print {
-  font-size: 10pt;
-  line-height: 1.35;
+  font-size: 9pt;
+  line-height: 1.25;
 }
 
 .aj-jp-print-meta {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  margin: 0 0 2.5mm;
+  margin: 0 0 1.4mm;
 }
 
 .aj-jp-print-meta-cell {
   width: 50%;
-  padding: 1.2mm 1.6mm;
+  padding: 0.7mm 1.1mm;
   border: 1px solid #9db8b2;
   vertical-align: top;
-  font-size: 9.5pt;
+  font-size: 8.4pt;
 }
 
 .aj-jp-print-section-title,
 .aj-jp-print-appendix-title {
-  margin: 2mm 0 1.5mm;
+  margin: 1.2mm 0 1mm;
   color: #0b5e56;
-  font-size: 12pt;
+  font-size: 10.5pt;
   font-weight: 700;
 }
 
@@ -442,14 +442,14 @@ img.sig-image {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  margin: 0 0 2.5mm;
-  font-size: 9pt;
+  margin: 0 0 1.4mm;
+  font-size: 8pt;
 }
 
 .aj-jp-print-scores th,
 .aj-jp-print-scores td {
   border: 1px solid #9db8b2;
-  padding: 1mm 1.2mm;
+  padding: 0.55mm 0.8mm;
   vertical-align: top;
   word-break: break-word;
 }
@@ -466,30 +466,34 @@ img.sig-image {
   white-space: nowrap;
 }
 
-.aj-jp-print-serial { width: 7%; }
-.aj-jp-print-num { width: 10%; }
+.aj-jp-print-serial { width: 6%; }
+.aj-jp-print-num { width: 9%; }
 
 .aj-jp-print-section-tag {
-  margin-top: 0.6mm;
+  margin-top: 0.3mm;
   color: #5c675f;
-  font-size: 8pt;
+  font-size: 7pt;
 }
 
 .aj-jp-print-result {
   border: 1px solid #0b5e56;
-  padding: 2mm 2.5mm;
-  margin: 0 0 2mm;
+  padding: 1.2mm 1.8mm;
+  margin: 0;
   background: #f7fbf9;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  break-after: avoid-page;
+  page-break-after: avoid;
 }
 
 .aj-jp-print-result p {
-  margin: 0 0 1mm;
+  margin: 0 0 0.5mm;
 }
 
 .aj-jp-print-ssot,
 .aj-jp-print-note {
   color: #5c675f;
-  font-size: 8.5pt;
+  font-size: 7.5pt;
 }
 
 .aj-jp-print-break {
@@ -516,14 +520,63 @@ img.sig-image {
 }
 
 .pm-document.aj-jp-print-doc .pm-title {
-  margin: 0 0 2mm;
-  font-size: 13pt;
-  line-height: 1.25;
+  margin: 0 0 1.2mm;
+  font-size: 12pt;
+  line-height: 1.2;
 }
 
-.pm-document.aj-jp-print-doc .pm-signoff {
-  break-inside: avoid;
-  page-break-inside: avoid;
+.pm-document.aj-jp-print-doc .pm-body {
+  font-size: 9pt;
+}
+
+.aj-jp-print-signoff-keep {
+  margin-top: 1.2mm;
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
+  break-before: avoid-page;
+  page-break-before: avoid;
+}
+
+.aj-jp-print-signoff-keep .doc-signoff-block {
+  margin-top: 0 !important;
+}
+
+.pm-document.aj-jp-print-doc .pm-end,
+.pm-document.aj-jp-print-doc .pm-signoff,
+.pm-document.aj-jp-print-doc .aj-jp-print-signoff-keep {
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
+  margin-top: 1.5mm !important;
+}
+
+.pm-document.aj-jp-print-doc .pm-signoff .doc-signoff-block .sig-placeholder {
+  min-height: 14mm !important;
+  height: 14mm !important;
+}
+
+.pm-document.aj-jp-print-doc .pm-foot,
+.pm-document.aj-jp-print-doc .pm-foot-slot,
+.pm-document.aj-jp-print-doc .pm-clearance {
+  height: 8mm !important;
+  min-height: 8mm !important;
+}
+
+.pm-document.aj-jp-print-dense .aj-jp-print-scores {
+  font-size: 7.2pt;
+}
+
+.pm-document.aj-jp-print-dense .aj-jp-print-scores th,
+.pm-document.aj-jp-print-dense .aj-jp-print-scores td {
+  padding: 0.35mm 0.55mm;
+}
+
+.pm-document.aj-jp-print-dense .aj-jp-print-meta-cell {
+  font-size: 7.6pt;
+  padding: 0.45mm 0.8mm;
+}
+
+.pm-document.aj-jp-print-dense .pm-title {
+  font-size: 11pt;
 }
 
 .pm-document.aj-visit-print-doc .pm-title {
