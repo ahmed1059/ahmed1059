@@ -43,10 +43,43 @@
     if (role.indexOf("نشاط") >= 0) {
       return "teacher_activity";
     }
+    if (
+      role.indexOf("مساعد إداري") >= 0 ||
+      role.indexOf("مساعد اداري") >= 0 ||
+      role.indexOf("مسجل معلومات") >= 0 ||
+      role.indexOf("مسجل") >= 0 ||
+      role.indexOf("حارس") >= 0 ||
+      role.indexOf("مراسل") >= 0 ||
+      role.indexOf("كاتب") >= 0 ||
+      role.indexOf("مستخدم") >= 0 ||
+      role.indexOf("إداري") >= 0 ||
+      role.indexOf("اداري") >= 0
+    ) {
+      return "admin_staff";
+    }
     if (role.indexOf("معلم") === 0) {
       return "teacher";
     }
     return "teacher";
+  }
+
+  function paintRegulatoryBadge() {
+    var badge = document.getElementById("aj-jp-framework-badge");
+    if (!badge) {
+      return;
+    }
+    var framework =
+      (state.template && state.template.regulatory_framework) ||
+      (selectedRoleCode() === "admin_staff" ? "لائحة الموارد البشرية العامة" : "");
+    if (framework) {
+      badge.hidden = false;
+      badge.textContent = "الإطار النظامي: " + framework;
+      badge.classList.toggle("is-hr-general", framework.indexOf("الموارد البشرية") >= 0);
+    } else {
+      badge.hidden = true;
+      badge.textContent = "";
+      badge.classList.remove("is-hr-general");
+    }
   }
 
   function selectedPerson() {
@@ -358,6 +391,7 @@
     if (countEl) {
       countEl.textContent = "(" + n + " = 100%)";
     }
+    paintRegulatoryBadge();
   }
 
   function setPhaseButtons() {
@@ -397,6 +431,7 @@
     var maps = scoreMaps();
     var phase = state.phase;
     var selfPhase = phase === "mid" ? "self_mid" : "self_final";
+    var lastSection = "";
     host.innerHTML = elements()
       .map(function (item) {
         var rating = maps[phase][item.id];
@@ -439,7 +474,17 @@
             );
           })
           .join("");
+        var sectionHtml = "";
+        var sectionKey = String(item.section || "");
+        if (sectionKey && sectionKey !== lastSection) {
+          lastSection = sectionKey;
+          sectionHtml =
+            "<h3 class=\"aj-jp-section-title\">" +
+            escapeHtml(item.section_label || item.section) +
+            "</h3>";
+        }
         return (
+          sectionHtml +
           "<article class=\"aj-jp-card" +
           gapClass +
           "\" data-element=\"" +
@@ -518,6 +563,7 @@
         );
       })
       .join("");
+    paintRegulatoryBadge();
     paintCalc();
     paintEvidenceSummary();
     paintGapPanel();
