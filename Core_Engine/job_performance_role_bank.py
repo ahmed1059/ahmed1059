@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 
+from .job_performance_admin_bank import template_admin_staff
 from .job_performance_seed import BAND_LABELS, TEACHER_ELEMENTS
 
 SOURCE = "دليل إدارة الأداء الوظيفي لشاغلي الوظائف التعليمية — الإصدار الثاني"
@@ -544,6 +545,7 @@ ROLE_TEMPLATE_BUILDERS = {
     "counselor": template_counselor,
     "vice_principal": template_vice_principal,
     "principal": template_principal,
+    "admin_staff": template_admin_staff,
 }
 
 # توافق مع رموز قديمة في المخطط السابق.
@@ -551,6 +553,9 @@ ROLE_ALIASES = {
     "health_guide": "teacher_health",
     "lab": "lab_tech",
     "deputy": "vice_principal",
+    "admin": "admin_staff",
+    "admin_hr_general": "admin_staff",
+    "hr_admin": "admin_staff",
 }
 
 

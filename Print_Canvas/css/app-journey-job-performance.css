@@ -31,6 +31,31 @@
   background: #fff;
 }
 
+#view-job-performance .aj-jp-framework-badge {
+  margin: 0 0 0.85rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #0b5e56;
+  background: #e8f5f2;
+  color: #0b5e56;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+#view-job-performance .aj-jp-framework-badge.is-hr-general {
+  border-color: #5c4a1f;
+  background: #f7f1df;
+  color: #5c4a1f;
+}
+
+#view-job-performance .aj-jp-section-title {
+  margin: 0.35rem 0 0.15rem;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0b5e56;
+  grid-column: 1 / -1;
+}
+
 #view-job-performance .aj-jp-meta-line {
   margin: 0 0 8px;
   font-size: 14px;

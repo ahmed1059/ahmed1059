@@ -551,6 +551,8 @@ def _template_row(connection, role_code: str) -> dict:
         "band_labels": payload.get("band_labels") or {},
         "source_note": row[3] or "",
         "version": int(row[4] or 1),
+        "regulatory_framework": payload.get("regulatory_framework") or "",
+        "score_model": payload.get("score_model") or {},
         "excellence_ruler": {
             "level": 5,
             "label": "مثالي",
@@ -575,15 +577,18 @@ def _staff_name(connection, staff_id: str) -> str:
 def _snapshot_from_template(template: dict) -> list[dict]:
     out = []
     for item in template.get("elements") or []:
-        out.append(
-            {
-                "id": item.get("id"),
-                "label": item.get("label"),
-                "weight": item.get("weight"),
-                "description": item.get("description"),
-                "levels": item.get("levels") or {},
-            }
-        )
+        entry = {
+            "id": item.get("id"),
+            "label": item.get("label"),
+            "weight": item.get("weight"),
+            "description": item.get("description"),
+            "levels": item.get("levels") or {},
+        }
+        if item.get("section"):
+            entry["section"] = item.get("section")
+        if item.get("section_label"):
+            entry["section_label"] = item.get("section_label")
+        out.append(entry)
     return out
 
 
@@ -725,7 +730,11 @@ def job_performance_meta(x_session_token: str = Header(default="")):
         "self_assessment_counted": False,
         "ministry_ssot": True,
         "excluded_roles": ["kindergarten"],
-        "deferred_roles": ["admin_hr_general"],
+        "deferred_roles": [],
+        "regulatory_frameworks": {
+            "educational": "دليل إدارة الأداء الوظيفي لشاغلي الوظائف التعليمية",
+            "admin_staff": "لائحة الموارد البشرية العامة",
+        },
     }
 
 
