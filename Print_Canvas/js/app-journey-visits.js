@@ -131,10 +131,11 @@
   }
 
   function visitCriteriaRow(row, printCtx) {
+    var phrase = compressLessonMentions(fillTokens(row.phrase || "", printCtx), printCtx);
     return "<tr>"
       + "<td class=\"aj-visit-crit-label\">" + escapeHtml(row.label) + "</td>"
       + "<td class=\"aj-visit-crit-level\">" + escapeHtml(levelName(row.level)) + "</td>"
-      + "<td class=\"aj-visit-crit-phrase\">" + escapeHtml(fillTokens(row.phrase || "", printCtx)) + "</td>"
+      + "<td class=\"aj-visit-crit-phrase\">" + escapeHtml(phrase) + "</td>"
       + "<td class=\"aj-visit-crit-points\">" + escapeHtml(row.points) + "</td>"
       + "</tr>";
   }
@@ -285,14 +286,114 @@
     };
   }
 
+  /** مرجع قصير للدرس داخل القوالب — العنوان الطويل يبقى في جدول البيانات فقط. */
+  function lessonRef(ctx) {
+    var lesson = String((ctx && ctx.lesson) || "").trim() || "الدرس";
+    if (lesson.length > 18) {
+      return "الدرس";
+    }
+    return lesson;
+  }
+
+  /** لـ + الـ → لل (ولاحقاتها بـ/كـ) بعد تعبئة القوالب. */
+  function polishArabicParticles(text) {
+    return String(text || "")
+      .replace(/لـ\s*ال/g, "لل")
+      .replace(/بـ\s*ال/g, "بال")
+      .replace(/كـ\s*ال/g, "كال")
+      .replace(/لـ(?=\S)/g, "ل")
+      .replace(/بـ(?=\S)/g, "ب")
+      .replace(/كـ(?=\S)/g, "ك");
+  }
+
+  /** مدرسة بنين: فرض صيغة المذكر في وصف المعلم داخل نصوص الزيارة. */
+  function boysSchoolTeacherWording(text) {
+    return String(text == null ? "" : text)
+      .replace(/المعلمة/g, "المعلم")
+      .replace(/معلمة/g, "معلم")
+      .replace(/حرصت\s+المعلم/g, "حرص المعلم")
+      .replace(/قامت\s+المعلم/g, "قام المعلم")
+      .replace(/أظهرت\s+المعلم/g, "أظهر المعلم")
+      .replace(/أثنت\s+على\s+المعلم/g, "أثنى على المعلم")
+      .replace(/نقدر عالياً أداء المعلم/g, "نقدر عالياً أداء المعلم");
+  }
+
+  /** إزالة تكرار العنوان الطويل المحفوظ سابقاً داخل النص الحر والعبارات. */
+  function compressLessonMentions(text, ctx) {
+    var lesson = String((ctx && ctx.lesson) || "").trim();
+    var out = String(text == null ? "" : text);
+    if (lesson.length > 18) {
+      out = out.split(lesson).join("الدرس");
+    }
+    return boysSchoolTeacherWording(polishArabicParticles(out));
+  }
+
   function fillTokens(text, ctx) {
-    var lesson = (ctx && ctx.lesson) || "الدرس";
+    var lesson = lessonRef(ctx);
     var subject = subjectOf((ctx && ctx.subject) || "") || "المادة";
     var skill = (ctx && ctx.skill) || "المهارة المستهدفة";
-    return String(text || "")
-      .replace(/\{\{\s*lesson\s*\}\}/g, lesson)
-      .replace(/\{\{\s*subject\s*\}\}/g, subject)
-      .replace(/\{\{\s*skill\s*\}\}/g, skill);
+    return boysSchoolTeacherWording(polishArabicParticles(
+      String(text || "")
+        .replace(/\{\{\s*lesson\s*\}\}/g, lesson)
+        .replace(/\{\{\s*subject\s*\}\}/g, subject)
+        .replace(/\{\{\s*skill\s*\}\}/g, skill)
+    ));
+  }
+
+  function bandOfTotal(total, any) {
+    if (!any) {
+      return "";
+    }
+    if (total >= 90) {
+      return "ممتاز";
+    }
+    if (total >= 75) {
+      return "متقدم";
+    }
+    if (total >= 60) {
+      return "متمكن";
+    }
+    return "بحاجة إلى دعم";
+  }
+
+  function scoreFromRows(rows) {
+    var weightById = {};
+    (state.criteria || []).forEach(function (spec) {
+      if (spec && spec.id) {
+        weightById[String(spec.id)] = Number(spec.weight || 0);
+      }
+    });
+    var total = 0;
+    var any = false;
+    (rows || []).forEach(function (row) {
+      if (!row || !row.level) {
+        return;
+      }
+      any = true;
+      var weight = row.weight != null ? Number(row.weight) : (weightById[String(row.id || "")] || 0);
+      if (!weight && row.points != null && (RATIO[row.level] || 0) > 0) {
+        weight = Number(row.points) / (RATIO[row.level] || 1);
+      }
+      total += pointsOf(weight, row.level);
+    });
+    total = Math.round(total * 100) / 100;
+    return { total: total, band: bandOfTotal(total, any), any: any };
+  }
+
+  function adviceConflictsBand(text, band) {
+    var body = String(text || "");
+    var label = String(band || "");
+    if (!body || !label) {
+      return false;
+    }
+    if (/ممتاز|متقدم/.test(label)
+      && /تحتاج خطة قصيرة|تُكتب خطة الحصة التالية|تُعد أسئلة قصيرة|تُحدد استراتيجية مشاركة|يُراجع محتوى|نكتفي بمثال|لم تظهر/.test(body)) {
+      return true;
+    }
+    if (/بحاجة/.test(label) && /أثمن ما تحقق|الممارسات متحققة|يُستمر على هذه الممارسات/.test(body)) {
+      return true;
+    }
+    return false;
   }
 
   function mapFill(list, ctx) {
@@ -438,7 +539,7 @@
       node.textContent = any ? String(total) : "";
     }
     if (band) {
-      band.textContent = !any ? "" : total >= 90 ? "ممتاز" : total >= 75 ? "متقدم" : total >= 60 ? "متمكن" : "بحاجة إلى دعم";
+      band.textContent = bandOfTotal(total, any);
     }
     suggestFollowUp(false);
   }
@@ -840,18 +941,27 @@
     });
   }
 
-  function pickIntro(ctx) {
+  function pickIntro(ctx, band) {
     var survey = /استطلاع/.test(String((ctx && ctx.visitType) || ""));
     var list = survey
       ? ((phraseBank && phraseBank.intros_survey) || []).concat((phraseBank && phraseBank.intros) || [])
       : ((phraseBank && phraseBank.intros) || []);
-    return list[0] || "";
+    if (!list.length) {
+      return "";
+    }
+    if (/بحاجة/.test(String(band || ""))) {
+      return list[Math.min(3, list.length - 1)] || list[0];
+    }
+    if (/ممتاز|متقدم/.test(String(band || ""))) {
+      return list[0];
+    }
+    return list[Math.min(1, list.length - 1)] || list[0];
   }
 
   function textFromLevels(rows, ctx) {
     ctx = ctx || visitContext();
-    var ranked = rows.filter(function (row) {
-      return row.level;
+    var ranked = (rows || []).filter(function (row) {
+      return row && row.level;
     }).slice().sort(function (a, b) {
       return (RATIO[a.level] || 0) - (RATIO[b.level] || 0);
     });
@@ -860,8 +970,10 @@
       byId[row.id] = row;
     });
     var planningNone = byId.planning && byId.planning.level === "none";
+    var score = scoreFromRows(ranked);
     var strengths = [];
-    var feedback = [];
+    var deficitFeedback = [];
+    var sustainFeedback = [];
     var improvement = [];
     var picks = { strength: [], feedback: [] };
     var usedFeedback = [];
@@ -881,26 +993,26 @@
 
     ranked.forEach(function (row) {
       var pack = linePack(row.id, row.level, ctx);
+      var ratio = RATIO[row.level] || 0;
       pack.strength.forEach(function (sentence) {
         if (acceptableStrength(row, sentence) && picks.strength.indexOf(sentence) < 0) {
           picks.strength.push(sentence);
         }
       });
-      // التغذية الراجعة للبنود الناقصة فقط (أقل من الدرجة الكاملة)
-      if (row.level && row.level !== "high") {
-        pack.feedback.forEach(function (sentence) {
-          if (sentence && picks.feedback.indexOf(sentence) < 0) {
-            picks.feedback.push(sentence);
-          }
-        });
+      pack.feedback.forEach(function (sentence) {
+        if (sentence && picks.feedback.indexOf(sentence) < 0) {
+          picks.feedback.push(sentence);
+        }
+      });
+      if (ratio < 1) {
         var tip = pack.feedback[0] || "";
-        if (tip && usedFeedback.indexOf(tip) < 0 && feedback.length < 5) {
-          feedback.push(tip);
+        if (tip && usedFeedback.indexOf(tip) < 0 && deficitFeedback.length < 5) {
+          deficitFeedback.push(tip);
           usedFeedback.push(tip);
         }
         var need = pack.need[0] || "";
         if (need && improvement.length < 4) {
-          var clash = feedback.some(function (line) {
+          var clash = deficitFeedback.some(function (line) {
             return normalizeOverlap(line, need);
           }) || improvement.some(function (line) {
             return normalizeOverlap(line, need);
@@ -909,11 +1021,16 @@
             improvement.push(need);
           }
         }
+      } else if (row.level === "high") {
+        var sustain = pack.feedback[0] || "";
+        if (sustain && usedFeedback.indexOf(sustain) < 0 && sustainFeedback.length < 3) {
+          sustainFeedback.push(sustain);
+          usedFeedback.push(sustain);
+        }
       }
       if (row.level === "high" || row.level === "met") {
         var strength = pack.strength[0] || "";
         if (acceptableStrength(row, strength) && strengths.indexOf(strength) < 0 && strengths.length < 3) {
-          // إن كانت strategies met مع تخطيط صفر، استبدل بعبارة محتوى الدرس
           if (planningNone && row.id === "strategies") {
             strength = fillTokens("اختيار الاستراتيجية ناسب محتوى {{lesson}} المعروض دون ادعاء وضوح هدف مكتوب.", ctx);
           }
@@ -924,19 +1041,39 @@
       }
     });
 
-    // لا تُملأ التغذية الراجعة من بنود مكتملة حتى لو بقيت قصيرة
-    var intro = pickIntro(ctx);
-    if (!strengths.length && !feedback.length && !improvement.length && !intro) {
+    var recommendations = "";
+    var planLines = improvement.slice();
+    if (/ممتاز/.test(score.band)) {
+      recommendations = sustainFeedback.slice(0, 3).join(" ")
+        || "أثمن ما تحقق مع المعلم في هذه الحصة. يُستمر على هذه الممارسات ويُوثَّق شاهد منها في ملف المعلم.";
+      planLines = [];
+    } else if (/متقدم/.test(score.band)) {
+      recommendations = (deficitFeedback.slice(0, 2).concat(sustainFeedback.slice(0, 1))).filter(Boolean).join(" ")
+        || sustainFeedback.slice(0, 2).join(" ")
+        || deficitFeedback.slice(0, 3).join(" ");
+      planLines = improvement.slice(0, 2);
+    } else if (/متمكن/.test(score.band)) {
+      recommendations = deficitFeedback.slice(0, 4).join(" ");
+      planLines = improvement.slice(0, 3);
+    } else {
+      recommendations = deficitFeedback.slice(0, 5).join(" ");
+      planLines = improvement.slice(0, 4);
+    }
+
+    var intro = pickIntro(ctx, score.band);
+    if (!strengths.length && !recommendations && !planLines.length && !intro) {
       return null;
     }
-    var numbered = improvement.slice(0, 4).map(function (step, index) {
+    var numbered = planLines.map(function (step, index) {
       return (index + 1) + ". " + step;
     });
     return {
       intro: intro,
       strengths: strengths.join(" "),
-      recommendations: feedback.slice(0, 5).join(" "),
+      recommendations: recommendations,
       improvement: numbered.join("\n"),
+      band: score.band,
+      total: score.total,
       picks: picks
     };
   }
@@ -951,7 +1088,16 @@
       || text.indexOf("الاستمرار على الممارسات") === 0
       || text.indexOf("الممارسات متحققة") === 0
       || text.indexOf("لا توجد فجوة") === 0
-      || text.indexOf("تُثبَّت هذه الممارسات") === 0;
+      || text.indexOf("تُثبَّت هذه الممارسات") === 0
+      || text.indexOf("أثمن ما تحقق") === 0
+      || text.indexOf("أقدر حضوركم مع الطلاب") === 0
+      || text.indexOf("تشرفت بزيارتكم اليوم") === 0
+      || text.indexOf("سعدت بحضور حصتكم") === 0
+      || text.indexOf("كانت زيارتي لكم اليوم") === 0
+      || text.indexOf("يسعدني أن أشارككم") === 0
+      || text.indexOf("أثمن لكم وقتكم") === 0
+      || /^\d+\.\s*تُكتب خطة/.test(text)
+      || /^\d+\.\s*تُعد أسئلة/.test(text);
   }
 
   function adviceText() {
@@ -979,26 +1125,30 @@
     var strengths = document.getElementById("aj-visit-strengths");
     var notes = document.getElementById("aj-visit-notes");
     var plan = document.getElementById("aj-visit-plan");
+    var band = document.getElementById("aj-visit-band");
+    var bandLabel = band ? String(band.textContent || "") : (text && text.band) || "";
     if (!text || !notes || !plan) {
       return;
     }
     fillPick("aj-visit-strength-pick", text.picks.strength);
     fillPick("aj-visit-feedback-pick", text.picks.feedback);
-    if (intro && (force || intro.dataset.auto === "1" || !intro.value)) {
-      if (!intro.value) {
-        intro.value = text.intro;
-      }
-      intro.dataset.auto = intro.value === text.intro ? "1" : "";
+    if (intro && (force || intro.dataset.auto === "1" || !intro.value
+      || adviceConflictsBand(intro.value, bandLabel))) {
+      intro.value = text.intro || "";
+      intro.dataset.auto = "1";
     }
-    if (strengths && (force || !strengths.value.trim() || strengths.dataset.auto === "1")) {
+    if (strengths && (force || !strengths.value.trim() || strengths.dataset.auto === "1"
+      || adviceConflictsBand(strengths.value, bandLabel))) {
       strengths.value = text.strengths;
       strengths.dataset.auto = "1";
     }
-    if (force || !notes.value.trim() || notes.dataset.auto === "1") {
+    if (force || !notes.value.trim() || notes.dataset.auto === "1"
+      || adviceConflictsBand(notes.value, bandLabel)) {
       notes.value = text.recommendations;
       notes.dataset.auto = "1";
     }
-    if (force || !plan.value.trim() || plan.dataset.auto === "1") {
+    if (force || !plan.value.trim() || plan.dataset.auto === "1"
+      || adviceConflictsBand(plan.value, bandLabel)) {
       plan.value = text.improvement;
       plan.dataset.auto = "1";
     }
@@ -1207,25 +1357,41 @@
         visitType: record.visit_type || ""
       };
       var spoken = textFromLevels(record.criteria || [], printCtx);
-      var recAuto = isAutoText(record.recommendations);
-      var planAuto = isAutoText(record.improvement);
-      if (spoken && recAuto) {
-        record.visit_intro = record.visit_intro || spoken.intro;
-        record.strengths = record.strengths || spoken.strengths;
-        record.recommendations = spoken.recommendations;
-        record.improvement = spoken.improvement;
-      } else if (spoken && planAuto) {
-        record.improvement = spoken.improvement;
+      var bandLabel = record.band || (spoken && spoken.band) || "";
+      if (spoken) {
+        if (!record.band && spoken.band) {
+          record.band = spoken.band;
+        }
+        if ((record.total == null || record.total === "") && spoken.total != null) {
+          record.total = spoken.total;
+        }
+        if (!record.visit_intro || isAutoText(record.visit_intro) || adviceConflictsBand(record.visit_intro, bandLabel)) {
+          record.visit_intro = spoken.intro || record.visit_intro || "";
+        }
+        if (!record.strengths || isAutoText(record.strengths) || adviceConflictsBand(record.strengths, bandLabel)) {
+          record.strengths = spoken.strengths || record.strengths || "";
+        }
+        if (!record.recommendations || isAutoText(record.recommendations)
+          || adviceConflictsBand(record.recommendations, bandLabel)) {
+          record.recommendations = spoken.recommendations;
+        }
+        if (!record.improvement || isAutoText(record.improvement)
+          || adviceConflictsBand(record.improvement, bandLabel)) {
+          record.improvement = spoken.improvement;
+        }
       }
+      record.visit_intro = compressLessonMentions(record.visit_intro, printCtx);
+      record.strengths = compressLessonMentions(record.strengths, printCtx);
+      record.recommendations = compressLessonMentions(record.recommendations, printCtx);
       if (record.improvement) {
         var planBits = String(record.improvement).split(/\n+/).filter(Boolean);
         if (planBits.length === 1) {
           planBits = String(record.improvement).split(/\s*(?=\d+\.\s)/).filter(Boolean);
         }
         record.improvement = planBits.map(function (step, index) {
-          var cleaned = String(step).replace(/^\d+\.\s*/, "").trim();
-          return (index + 1) + ". " + cleaned;
-        }).join("\n");
+          var cleaned = compressLessonMentions(String(step).replace(/^\d+\.\s*/, "").trim(), printCtx);
+          return cleaned ? (index + 1) + ". " + cleaned : "";
+        }).filter(Boolean).join("\n");
       }
       var visitorLabel = personNameById(record.visitor_id) || record.visitor_name || "";
       var visitorRole = "";
@@ -1395,7 +1561,7 @@
       follow_gregorian: body.follow_gregorian,
       criteria: criteria,
       total: any ? Math.round(total * 100) / 100 : "",
-      band: !any ? "" : total >= 90 ? "ممتاز" : total >= 75 ? "متقدم" : total >= 60 ? "متمكن" : "بحاجة إلى دعم"
+      band: bandOfTotal(total, any)
     });
   }
 
