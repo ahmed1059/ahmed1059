@@ -425,6 +425,10 @@ from .job_performance_api import router as job_performance_router
 
 app.include_router(job_performance_router)
 
+from .accreditation_session_api import router as accreditation_session_router
+
+app.include_router(accreditation_session_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):

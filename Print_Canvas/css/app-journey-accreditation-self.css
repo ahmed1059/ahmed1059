@@ -1,0 +1,190 @@
+/* التقويم الذاتي المدرسي (SSOT) — الوحدة 2-أ */
+#view-accreditation-self .aj-ac-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+#view-accreditation-self .aj-ac-card {
+  background: #fff;
+  border: 1px solid #c9d7d3;
+  border-radius: 10px;
+  padding: 14px 16px;
+  min-width: 0;
+}
+
+#view-accreditation-self .aj-ac-card span {
+  display: block;
+  font-size: 13px;
+  color: #5c675f;
+  margin-bottom: 6px;
+}
+
+#view-accreditation-self .aj-ac-card strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: #0b5e56;
+  line-height: 1.2;
+}
+
+#view-accreditation-self .aj-ac-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  align-items: end;
+  margin: 0 0 16px;
+}
+
+#view-accreditation-self .aj-ac-filters .aj-jp-field {
+  min-width: 180px;
+}
+
+#view-accreditation-self .aj-ac-list {
+  display: grid;
+  gap: 14px;
+}
+
+#view-accreditation-self .aj-ac-item {
+  background: #fff;
+  border: 1px solid #c9d7d3;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+#view-accreditation-self .aj-ac-item-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: baseline;
+  margin: 0 0 8px;
+}
+
+#view-accreditation-self .aj-ac-code {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0b5e56;
+  margin: 0;
+}
+
+#view-accreditation-self .aj-ac-domain {
+  font-size: 13px;
+  color: #5c675f;
+}
+
+#view-accreditation-self .aj-ac-statement {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #1a1a1a;
+  line-height: 1.55;
+}
+
+#view-accreditation-self .aj-ac-external {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #5c675f;
+}
+
+#view-accreditation-self .aj-ac-levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+#view-accreditation-self .aj-ac-level-btn {
+  font-family: Tajawal, "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0b5e56;
+  background: #fff;
+  border: 1px solid #9bb8b3;
+  border-radius: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
+#view-accreditation-self .aj-ac-level-btn.is-on {
+  background: #0b5e56;
+  color: #fff;
+  border-color: #0b5e56;
+}
+
+#view-accreditation-self .aj-ac-note-label {
+  display: block;
+  font-size: 13px;
+  color: #5c675f;
+  margin: 0 0 4px;
+}
+
+#view-accreditation-self .aj-ac-note {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 64px;
+  margin: 0 0 10px;
+  font-family: Tajawal, "Segoe UI", sans-serif;
+  font-size: 14px;
+  padding: 8px 10px;
+  border: 1px solid #9bb8b3;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+#view-accreditation-self .aj-ac-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 0 0 8px;
+}
+
+#view-accreditation-self .aj-ac-evidence {
+  margin-top: 8px;
+  border-top: 1px solid #e2ebe8;
+  padding-top: 8px;
+}
+
+#view-accreditation-self .aj-ac-evidence summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0b5e56;
+}
+
+#view-accreditation-self .aj-ac-evidence ul {
+  margin: 8px 0 0;
+  padding: 0 18px 0 0;
+  list-style: disc;
+}
+
+#view-accreditation-self .aj-ac-evidence li {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: #1a1a1a;
+  line-height: 1.45;
+}
+
+#view-accreditation-self .aj-ac-evidence-empty {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #5c675f;
+}
+
+#view-accreditation-self .aj-ac-count {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #5c675f;
+}
+
+@media (max-width: 960px) {
+  #view-accreditation-self .aj-ac-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  #view-accreditation-self .aj-ac-cards {
+    grid-template-columns: 1fr;
+  }
+}

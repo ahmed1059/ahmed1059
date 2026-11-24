@@ -92,6 +92,7 @@
     "view-staff",
     "view-school",
     "view-external-eval",
+    "view-accreditation-self",
     "view-leadership",
     "view-committees",
     "view-deliverables",
@@ -144,6 +145,7 @@
     "view-staff": "سجل المنسوبين",
     "view-school": "بيانات المدرسة",
     "view-external-eval": "التقويم الذاتي والاعتماد الخارجي (ETEC)",
+    "view-accreditation-self": "التقويم الذاتي المدرسي (SSOT)",
     "view-leadership": "التشكيل القيادي",
     "view-committees": "تشكيل اللجان والمجالس",
     "view-deliverables": "تسليمات المعلمين ومتابعة الأداء",
@@ -217,6 +219,7 @@
     "view-job-performance": "measurement",
     "view-nafes": "measurement",
     "view-external-eval": "measurement",
+    "view-accreditation-self": "measurement",
     "view-soft-follow": "measurement"
   };
   var stageButtons = document.querySelectorAll("[data-aj-stage]");
@@ -2378,6 +2381,7 @@
     markCurrent('a[href="#view-nafes"]', viewId === "view-nafes");
     markCurrent('a[href="#view-soft-follow"]', viewId === "view-soft-follow");
     markCurrent('a[href="#view-external-eval"]', viewId === "view-external-eval");
+    markCurrent('a[href="#view-accreditation-self"]', viewId === "view-accreditation-self");
     markCurrent('a[href="#view-tasks"]', viewId === "view-tasks" || viewId === "view-task-details");
     markCurrent(
       'a[href="#view-planning"]',
@@ -2923,6 +2927,12 @@
     if (viewId === "view-external-eval") {
       if (window.AjExternalEval && typeof window.AjExternalEval.load === "function") {
         window.AjExternalEval.load();
+      }
+      return;
+    }
+    if (viewId === "view-accreditation-self") {
+      if (window.AjAccreditationSelf && typeof window.AjAccreditationSelf.load === "function") {
+        window.AjAccreditationSelf.load();
       }
       return;
     }
