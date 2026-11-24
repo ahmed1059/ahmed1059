@@ -18,6 +18,37 @@
   background: #ffffff;
   color: #1a1a1a;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 297mm;
+}
+
+/* عمود مرن يملأ ورقة A4 ويدفع التوقيعات للتذييل في القوالب القصيرة */
+.pm-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-height: calc(297mm - 30mm - var(--pm-footer-height, 20mm)) !important;
+}
+
+.pm-stack > .pm-body {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
+.pm-stack > .pm-end {
+  margin-top: auto !important;
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
+}
+
+.pm-stack > .pm-body:not(:has(.aj-jp-print-appendix)) > .aj-jp-print-signoff-keep {
+  margin-top: auto !important;
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
 }
 
 .pm-document.pm-landscape {
@@ -309,7 +340,11 @@
 .pm-document.aj-jp-print-doc .aj-jp-print-signoff-keep {
   break-inside: avoid !important;
   page-break-inside: avoid !important;
-  margin-top: 1.5mm !important;
+}
+
+.pm-document.aj-jp-print-doc .pm-stack > .pm-end,
+.pm-document.aj-jp-print-doc .pm-stack > .pm-body:not(:has(.aj-jp-print-appendix)) > .aj-jp-print-signoff-keep {
+  margin-top: auto !important;
 }
 
 .pm-document.aj-jp-print-doc .pm-signoff .doc-signoff-block .sig-placeholder {
@@ -417,11 +452,21 @@
     box-shadow: 0 12px 28px rgba(8, 40, 36, 0.12);
     outline: 2px solid #005a53;
     outline-offset: -2px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .aj-print-stage-page .pm-document .pm-stack {
+    min-height: calc(297mm - var(--pm-footer-height, 20mm));
   }
 
   .aj-print-stage-page .pm-document.pm-landscape {
     width: 297mm;
     min-height: 210mm;
+  }
+
+  .aj-print-stage-page .pm-document.pm-landscape .pm-stack {
+    min-height: calc(210mm - var(--pm-footer-height, 20mm));
   }
 }
 
