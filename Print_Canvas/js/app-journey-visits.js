@@ -130,7 +130,69 @@
       + escapeHtml(value) + "</td>";
   }
 
-  /** عبارة الجدول من مستوى البند الحالي — لا تُنسخ عبارة مستوى أعلى إلى مستوى أدنى. */
+  function normalizePhraseText(text, ctx) {
+    return compressLessonMentions(String(text || "").trim(), ctx || {});
+  }
+
+  /** يوحّد مقارنة العبارات رغم اختلاف عنوان الدرس وصياغة المهارة. */
+  function phraseFingerprint(text, ctx) {
+    ctx = ctx || {};
+    var out = normalizePhraseText(text, ctx);
+    var skill = String(ctx.skill || "").trim();
+    var lesson = String(ctx.lesson || "").trim();
+    if (lesson) {
+      out = out.split(lesson).join("الدرس");
+    }
+    if (skill) {
+      out = out.split("مهارة " + skill).join("المهارة");
+      out = out.split(skill).join("المهارة");
+    }
+    out = out
+      .replace(/بما يخدم\s*المهارة/g, "بما يخدم المهارة")
+      .replace(/مهارة\s+المهارة/g, "المهارة")
+      .replace(/[^\u0600-\u06FFa-zA-Z0-9]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    return out;
+  }
+
+  function phraseEquals(a, b, ctx) {
+    var left = phraseFingerprint(a, ctx);
+    var right = phraseFingerprint(b, ctx);
+    if (!left || !right) {
+      return false;
+    }
+    return left === right || normalizeOverlap(left, right);
+  }
+
+  /** هل العبارة من بنك المستويات (أي مستوى) أو القاموس القديم؟ */
+  function phraseFromBank(id, text, ctx) {
+    ctx = ctx || visitContext();
+    var filled = String(text || "").trim();
+    if (!filled || !id) {
+      return true;
+    }
+    if (knownPhrase(id, filled, ctx)) {
+      return true;
+    }
+    var levels = ["high", "met", "partial", "none"];
+    var i;
+    for (i = 0; i < levels.length; i += 1) {
+      var pack = linePack(id, levels[i], ctx);
+      if ((pack.observe || []).some(function (observe) {
+        return phraseEquals(observe, filled, ctx);
+      })) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * عبارة الجدول من المستوى الحالي دائماً للسجلات القديمة:
+   * إن كانت المحفوظة من البنك (ولو كانت عبارة high) تُستبدل بعبارة المستوى الفعلي.
+   * النص الحر اليدوي غير البنكي يبقى كما هو.
+   */
   function phraseForLevel(row, ctx) {
     ctx = ctx || visitContext();
     var id = row && row.id ? String(row.id) : "";
@@ -139,11 +201,11 @@
     if (id && level) {
       var pack = linePack(id, level, ctx);
       var tier = (pack.observe && pack.observe[0]) || "";
-      if (tier && (!stored || knownPhrase(id, stored, ctx))) {
-        return compressLessonMentions(tier, ctx);
+      if (tier && (!stored || phraseFromBank(id, stored, ctx))) {
+        return normalizePhraseText(tier, ctx);
       }
     }
-    return compressLessonMentions(fillTokens(stored, ctx), ctx);
+    return normalizePhraseText(fillTokens(stored, ctx), ctx);
   }
 
   function visitCriteriaRow(row, printCtx) {
@@ -515,7 +577,9 @@
     var book = state.phrases[id] || {};
     if (Object.keys(book).some(function (key) {
       var legacy = book[key];
-      return fillTokens(legacy, ctx) === filled || legacy === filled || legacy === asTemplate;
+      return phraseEquals(fillTokens(legacy, ctx), filled, ctx)
+        || phraseEquals(legacy, filled, ctx)
+        || legacy === asTemplate;
     })) {
       return true;
     }
@@ -528,7 +592,9 @@
       return Object.keys((pack && pack.lines) || {}).some(function (level) {
         var observes = ((pack.lines[level] || {}).observe || []);
         return observes.some(function (raw) {
-          return fillTokens(raw, ctx) === filled || raw === filled || raw === asTemplate;
+          return phraseEquals(fillTokens(raw, ctx), filled, ctx)
+            || phraseEquals(raw, filled, ctx)
+            || raw === asTemplate;
         });
       });
     });
@@ -1404,13 +1470,9 @@
         if (!record.visit_intro || isAutoText(record.visit_intro) || adviceConflictsBand(record.visit_intro, bandLabel)) {
           record.visit_intro = spoken.intro || record.visit_intro || "";
         }
-        if (!record.strengths || isAutoText(record.strengths) || adviceConflictsBand(record.strengths, bandLabel)) {
-          record.strengths = spoken.strengths || record.strengths || "";
-        }
-        if (!record.recommendations || isAutoText(record.recommendations)
-          || adviceConflictsBand(record.recommendations, bandLabel)) {
-          record.recommendations = spoken.recommendations;
-        }
+        /* التميز والتغذية دائماً من مستويات البنود الحالية عند الطباعة (حتى للسجلات القديمة). */
+        record.strengths = spoken.strengths || "";
+        record.recommendations = spoken.recommendations || "";
         if (!record.improvement || isAutoText(record.improvement)
           || adviceConflictsBand(record.improvement, bandLabel)) {
           record.improvement = spoken.improvement;
