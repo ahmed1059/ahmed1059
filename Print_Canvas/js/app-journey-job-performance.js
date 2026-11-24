@@ -1194,11 +1194,62 @@
         saveIdp();
         return;
       }
+      if (t.closest("#aj-jp-print-official")) {
+        printOfficial();
+        return;
+      }
       var gapSave = t.closest("[data-aj-jp-save-gap]");
       if (gapSave) {
         saveGap(gapSave.getAttribute("data-aj-jp-save-gap"));
       }
     });
+  }
+
+  function printOfficial() {
+    if (!state.record || !state.record.id) {
+      status("افتح سجلاً أولاً باختيار المنسوب والدورة.", true);
+      return;
+    }
+    if (!window.AjJobPerformancePrint || typeof window.AjJobPerformancePrint.openPrint !== "function") {
+      status("وحدة الطباعة الرسمية غير محمّلة.", true);
+      return;
+    }
+    var user = sessionUser() || {};
+    var person = selectedPerson() || {};
+    var recordId = state.record.id;
+    var cycleEl = document.getElementById("aj-jp-cycle");
+    var cycleLabel = "";
+    if (cycleEl && cycleEl.selectedIndex >= 0) {
+      cycleLabel = cycleEl.options[cycleEl.selectedIndex].text || "";
+    }
+    status("جارٍ تجهيز الطباعة الرسمية…");
+    fetchJson(API + "/records/" + recordId, { headers: authHeaders(), cache: "no-store" })
+      .then(function (record) {
+        state.record = record;
+        var roleCode = record.assignment_role || selectedRoleCode();
+        return window.AjJobPerformancePrint.openPrint({
+          record: record,
+          person: person,
+          phase: state.phase,
+          roleTitle: (state.roleCodes && state.roleCodes[roleCode]) || roleCode,
+          regulatoryFramework:
+            (state.template && state.template.regulatory_framework) ||
+            (roleCode === "admin_staff" ? "لائحة الموارد البشرية العامة" : ""),
+          cycleLabel: cycleLabel,
+          evaluatorName: user.name || user.full_name || "",
+          elements: record.weights_snapshot || elements()
+        });
+      })
+      .then(function (pack) {
+        if (pack && pack.ok === false) {
+          status(pack.error || "تعذر فتح معاينة الطباعة.", true);
+          return;
+        }
+        status("معاينة الطباعة الرسمية جاهزة.");
+      })
+      .catch(function (error) {
+        status((error && error.message) || "تعذر فتح الطباعة الرسمية.", true);
+      });
   }
 
   function load() {
@@ -1249,6 +1300,7 @@
   }
 
   window.AjJobPerformance = {
-    load: load
+    load: load,
+    printOfficial: printOfficial
   };
 })();

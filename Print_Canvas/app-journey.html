@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="css/app-journey.css?v=aj194">
   <link rel="stylesheet" href="css/app-journey-job-performance.css?v=aj2">
   <link rel="stylesheet" href="css/responsive.css?v=r292">
-  <link rel="stylesheet" href="css/print-master.css?v=c307">
+  <link rel="stylesheet" href="css/print-master.css?v=c308">
   <!-- print-shell.css يُحمَّل داخل iframe الطباعة فقط؛ الملف موجود لحارس الجودة -->
 </head>
 <body class="app-journey aj-mode-admin">
@@ -422,6 +422,7 @@
         <div class="aj-jp-actions">
           <button type="button" class="aj-detail-btn" id="aj-jp-save-scores">حفظ تقديرات المقوّم</button>
           <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-jp-save-self">حفظ التقييم الذاتي</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-jp-print-official">طباعة رسمية (A4)</button>
         </div>
 
         <section class="aj-jp-panel" id="aj-jp-gap-panel" aria-label="خطة تحسين فجوة الأداء">
@@ -1797,7 +1798,7 @@
 
   <script src="js/official-frame-core.js?v=aj164"></script>
   <script src="/cores/print-master-core.js?v=c305"></script>
-  <script src="js/print-engine.js?v=pe7"></script>
+  <script src="js/print-engine.js?v=pe8"></script>
   <script src="/cores/identity-core.js?v=c275"></script>
   <script src="/cores/signature-core.js?v=c270"></script>
   <script src="/cores/planning-core.js?v=c302"></script>
@@ -1824,6 +1825,7 @@
   <script src="js/app-journey-evaluation.js?v=c284"></script>
   <script src="js/app-journey-visits.js?v=aj198"></script>
   <script src="js/app-journey-visit-plan.js?v=aj3"></script>
-  <script src="js/app-journey-job-performance.js?v=aj3"></script>
+  <script src="js/app-journey-job-performance-print.js?v=aj1"></script>
+  <script src="js/app-journey-job-performance.js?v=aj4"></script>
 </body>
 </html>

@@ -409,6 +409,123 @@ img.sig-image {
   white-space: pre-line;
 }
 
+/* تقويم الأداء الوظيفي — بطاقة + ملاحق */
+.aj-jp-print {
+  font-size: 10pt;
+  line-height: 1.35;
+}
+
+.aj-jp-print-meta {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin: 0 0 2.5mm;
+}
+
+.aj-jp-print-meta-cell {
+  width: 50%;
+  padding: 1.2mm 1.6mm;
+  border: 1px solid #9db8b2;
+  vertical-align: top;
+  font-size: 9.5pt;
+}
+
+.aj-jp-print-section-title,
+.aj-jp-print-appendix-title {
+  margin: 2mm 0 1.5mm;
+  color: #0b5e56;
+  font-size: 12pt;
+  font-weight: 700;
+}
+
+.aj-jp-print-scores {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin: 0 0 2.5mm;
+  font-size: 9pt;
+}
+
+.aj-jp-print-scores th,
+.aj-jp-print-scores td {
+  border: 1px solid #9db8b2;
+  padding: 1mm 1.2mm;
+  vertical-align: top;
+  word-break: break-word;
+}
+
+.aj-jp-print-scores th {
+  background: #e8f3f0;
+  color: #0b5e56;
+  font-weight: 700;
+}
+
+.aj-jp-print-serial,
+.aj-jp-print-num {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.aj-jp-print-serial { width: 7%; }
+.aj-jp-print-num { width: 10%; }
+
+.aj-jp-print-section-tag {
+  margin-top: 0.6mm;
+  color: #5c675f;
+  font-size: 8pt;
+}
+
+.aj-jp-print-result {
+  border: 1px solid #0b5e56;
+  padding: 2mm 2.5mm;
+  margin: 0 0 2mm;
+  background: #f7fbf9;
+}
+
+.aj-jp-print-result p {
+  margin: 0 0 1mm;
+}
+
+.aj-jp-print-ssot,
+.aj-jp-print-note {
+  color: #5c675f;
+  font-size: 8.5pt;
+}
+
+.aj-jp-print-break {
+  page-break-before: always;
+  break-before: page;
+}
+
+.aj-jp-print-appendix h3 {
+  margin: 2mm 0 1mm;
+  color: #0b5e56;
+  font-size: 10.5pt;
+}
+
+.aj-jp-print-gap-item,
+.aj-jp-print-idp-item {
+  border: 1px solid #d5e0da;
+  padding: 1.5mm 2mm;
+  margin: 0 0 2mm;
+}
+
+.aj-jp-print-gap-item p,
+.aj-jp-print-idp-item p {
+  margin: 0 0 1mm;
+}
+
+.pm-document.aj-jp-print-doc .pm-title {
+  margin: 0 0 2mm;
+  font-size: 13pt;
+  line-height: 1.25;
+}
+
+.pm-document.aj-jp-print-doc .pm-signoff {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
 .pm-document.aj-visit-print-doc .pm-title {
   margin: 0 0 1.2mm;
   font-size: 13pt;
