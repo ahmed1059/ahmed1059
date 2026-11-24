@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/media-governance.css?v=aj147">
   <link rel="stylesheet" href="css/app-journey.css?v=aj194">
   <link rel="stylesheet" href="css/app-journey-job-performance.css?v=aj5">
+  <link rel="stylesheet" href="css/app-journey-job-performance-dashboard.css?v=aj1">
   <link rel="stylesheet" href="css/responsive.css?v=r292">
   <link rel="stylesheet" href="css/print-master.css?v=c309">
   <!-- print-shell.css يُحمَّل داخل iframe الطباعة فقط؛ الملف موجود لحارس الجودة -->
@@ -371,11 +372,76 @@
         <p class="aj-lede">دورة مرتبطة بالعام الدراسي: شاغلو الوظائف التعليمية وفق دليل إدارة الأداء، والإداريون وفق لائحة الموارد البشرية العامة. القالب يُحمَّل تلقائياً من إسناد المنسوب. التقييم الذاتي مرجع بصري غير محتسب. المرجع الاعتمادي النهائي: النظام التقني الرسمي لوزارة التعليم.</p>
         <p class="aj-status" id="aj-jp-status" role="status" aria-live="polite"></p>
 
-        <div class="aj-jp-toolbar">
+        <div class="aj-jp-tabs" role="tablist" aria-label="تبويبات تقويم الأداء">
+          <button type="button" class="aj-jp-tab is-active" id="aj-jp-tab-card" data-aj-jp-tab="card" role="tab" aria-selected="true">بطاقة المنسوب</button>
+          <button type="button" class="aj-jp-tab" id="aj-jp-tab-dashboard" data-aj-jp-tab="dashboard" role="tab" aria-selected="false">لوحة المتابعة التنفيذية والتقارير (39 منسوباً)</button>
+        </div>
+
+        <div class="aj-jp-toolbar aj-jp-toolbar-shared" aria-label="دورة الأداء المشتركة">
           <div class="aj-jp-field">
             <label for="aj-jp-cycle">دورة الأداء</label>
             <select id="aj-jp-cycle"></select>
           </div>
+        </div>
+
+        <section id="aj-jp-dashboard" class="aj-jp-dashboard" hidden aria-label="لوحة المتابعة التنفيذية">
+          <h2 class="aj-group-title">لوحة المتابعة التنفيذية والتقارير</h2>
+          <p class="aj-lede">متابعة حية لإنجاز تقويم الأداء لجميع المنسوبين: نسبة الإنجاز، متوسط المدرسة، وحصر خطط الفجوة للتغذية التدريبية.</p>
+
+          <div class="aj-jp-dash-cards" aria-label="مؤشرات تنفيذية">
+            <div class="aj-jp-dash-card"><span>إجمالي المنسوبين</span><strong id="aj-jp-dash-total">—</strong></div>
+            <div class="aj-jp-dash-card"><span>المنجز</span><strong id="aj-jp-dash-done">—</strong></div>
+            <div class="aj-jp-dash-card"><span>المتبقي</span><strong id="aj-jp-dash-pending">—</strong></div>
+            <div class="aj-jp-dash-card"><span>متوسط الأداء العام للمدرسة</span><strong id="aj-jp-dash-avg">—</strong></div>
+          </div>
+
+          <div class="aj-jp-dash-filters">
+            <div class="aj-jp-field">
+              <label for="aj-jp-dash-status">حالة الرصد</label>
+              <select id="aj-jp-dash-status">
+                <option value="all">الكل</option>
+                <option value="done">منجز</option>
+                <option value="pending">متبقي</option>
+                <option value="gap">لديه خطة فجوة</option>
+              </select>
+            </div>
+            <div class="aj-jp-field">
+              <label for="aj-jp-dash-role">التشكيل / القالب</label>
+              <select id="aj-jp-dash-role">
+                <option value="all">كل التشكيلات</option>
+              </select>
+            </div>
+            <div class="aj-jp-dash-actions">
+              <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-jp-dash-refresh">تحديث اللوحة</button>
+              <button type="button" class="aj-detail-btn" id="aj-jp-dash-print-followup">طباعة كشف المتابعة الإجمالي A4</button>
+              <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-jp-dash-print-training">طباعة مصفوفة الاحتياجات التدريبية A4</button>
+            </div>
+          </div>
+
+          <p class="aj-lede">المعروض في الجدول: <strong id="aj-jp-dash-count">0</strong> منسوباً</p>
+          <div class="aj-jp-dash-table-wrap">
+            <table class="aj-jp-dash-table">
+              <thead>
+                <tr>
+                  <th>م</th>
+                  <th>الاسم</th>
+                  <th>الصفة</th>
+                  <th>القالب</th>
+                  <th>حالة التقييم</th>
+                  <th>النتيجة %</th>
+                  <th>خطة فجوة</th>
+                  <th>البطاقة</th>
+                </tr>
+              </thead>
+              <tbody id="aj-jp-dash-tbody">
+                <tr><td colspan="8"><p class="aj-jp-dash-empty">افتح هذا التبويب لتحميل المتابعة الحية.</p></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <div id="aj-jp-card-workspace">
+        <div class="aj-jp-toolbar">
           <div class="aj-jp-field">
             <label for="aj-jp-teacher">المنسوب</label>
             <select id="aj-jp-teacher"></select>
@@ -444,6 +510,7 @@
         <div class="aj-detail-actions">
           <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-desk">العودة</a>
           <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-station-measurement">محطة القياس</a>
+        </div>
         </div>
       </section>
 
@@ -1829,6 +1896,7 @@
   <script src="js/app-journey-job-performance-notes.js?v=aj3"></script>
   <script src="js/app-journey-job-performance-gap.js?v=aj1"></script>
   <script src="js/app-journey-job-performance-print.js?v=aj2"></script>
-  <script src="js/app-journey-job-performance.js?v=aj8"></script>
+  <script src="js/app-journey-job-performance-dashboard.js?v=aj1"></script>
+  <script src="js/app-journey-job-performance.js?v=aj9"></script>
 </body>
 </html>
