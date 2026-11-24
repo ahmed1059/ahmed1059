@@ -130,8 +130,24 @@
       + escapeHtml(value) + "</td>";
   }
 
+  /** عبارة الجدول من مستوى البند الحالي — لا تُنسخ عبارة مستوى أعلى إلى مستوى أدنى. */
+  function phraseForLevel(row, ctx) {
+    ctx = ctx || visitContext();
+    var id = row && row.id ? String(row.id) : "";
+    var level = row && row.level ? String(row.level) : "";
+    var stored = String((row && row.phrase) || "").trim();
+    if (id && level) {
+      var pack = linePack(id, level, ctx);
+      var tier = (pack.observe && pack.observe[0]) || "";
+      if (tier && (!stored || knownPhrase(id, stored, ctx))) {
+        return compressLessonMentions(tier, ctx);
+      }
+    }
+    return compressLessonMentions(fillTokens(stored, ctx), ctx);
+  }
+
   function visitCriteriaRow(row, printCtx) {
-    var phrase = compressLessonMentions(fillTokens(row.phrase || "", printCtx), printCtx);
+    var phrase = phraseForLevel(row, printCtx);
     return "<tr>"
       + "<td class=\"aj-visit-crit-label\">" + escapeHtml(row.label) + "</td>"
       + "<td class=\"aj-visit-crit-level\">" + escapeHtml(levelName(row.level)) + "</td>"
@@ -331,12 +347,18 @@
   function fillTokens(text, ctx) {
     var lesson = lessonRef(ctx);
     var subject = subjectOf((ctx && ctx.subject) || "") || "المادة";
-    var skill = (ctx && ctx.skill) || "المهارة المستهدفة";
+    var skill = String((ctx && ctx.skill) || "").trim() || "المهارة المستهدفة";
+    var skillJoin = (/^الم?هارة/.test(skill) || skill.indexOf("مهارة") === 0)
+      ? skill
+      : ("مهارة " + skill);
     return boysSchoolTeacherWording(polishArabicParticles(
       String(text || "")
         .replace(/\{\{\s*lesson\s*\}\}/g, lesson)
         .replace(/\{\{\s*subject\s*\}\}/g, subject)
+        /* بما يخدم مهارة {{skill}} + skill=المهارة المستهدفة → بلا تكرار «مهارة المهارة» */
+        .replace(/مهارة\s*\{\{\s*skill\s*\}\}/g, skillJoin)
         .replace(/\{\{\s*skill\s*\}\}/g, skill)
+        .replace(/مهارة\s+المهارة/g, "المهارة")
     ));
   }
 
@@ -390,7 +412,8 @@
       && /تحتاج خطة قصيرة|تُكتب خطة الحصة التالية|تُعد أسئلة قصيرة|تُحدد استراتيجية مشاركة|يُراجع محتوى|نكتفي بمثال|لم تظهر/.test(body)) {
       return true;
     }
-    if (/بحاجة/.test(label) && /أثمن ما تحقق|الممارسات متحققة|يُستمر على هذه الممارسات/.test(body)) {
+    if (/بحاجة/.test(label)
+      && (/أثمن ما تحقق|الممارسات متحققة|يُستمر على هذه الممارسات|تثبيتاً لما أحسنتموه/.test(body))) {
       return true;
     }
     return false;
@@ -904,13 +927,27 @@
   function suggestFollowUp(force) {
     var dateNode = document.getElementById("aj-visit-date");
     var followG = document.getElementById("aj-visit-follow-g");
+    var followH = document.getElementById("aj-visit-follow-h");
     var band = document.getElementById("aj-visit-band");
     if (!dateNode || !followG || !dateNode.value) {
       return;
     }
-    var needsSupport = band && /بحاجة/.test(String(band.textContent || ""));
     var totalNode = document.getElementById("aj-visit-total");
     var total = totalNode ? Number(totalNode.textContent || "") : NaN;
+    var excellent = (band && /ممتاز/.test(String(band.textContent || "")))
+      || (isFinite(total) && total >= 90);
+    /* ممتاز: لا موعد متابعة علاجية */
+    if (excellent) {
+      if (force || followG.dataset.auto === "1" || !followG.value) {
+        followG.value = "";
+        followG.dataset.auto = "1";
+        if (followH) {
+          followH.value = "";
+        }
+      }
+      return;
+    }
+    var needsSupport = band && /بحاجة/.test(String(band.textContent || ""));
     if (!needsSupport && !(isFinite(total) && total < 60)) {
       return;
     }
@@ -946,11 +983,11 @@
     var list = survey
       ? ((phraseBank && phraseBank.intros_survey) || []).concat((phraseBank && phraseBank.intros) || [])
       : ((phraseBank && phraseBank.intros) || []);
+    if (/بحاجة/.test(String(band || ""))) {
+      return "أقدّر جهودكم المبذولة مع الطلاب، وفيما يلي أبرز الملاحظات الإشرافية التي تُسهم في تعزيز نواتج التعلم في الحصص القادمة:";
+    }
     if (!list.length) {
       return "";
-    }
-    if (/بحاجة/.test(String(band || ""))) {
-      return list[Math.min(3, list.length - 1)] || list[0];
     }
     if (/ممتاز|متقدم/.test(String(band || ""))) {
       return list[0];
@@ -994,11 +1031,6 @@
     ranked.forEach(function (row) {
       var pack = linePack(row.id, row.level, ctx);
       var ratio = RATIO[row.level] || 0;
-      pack.strength.forEach(function (sentence) {
-        if (acceptableStrength(row, sentence) && picks.strength.indexOf(sentence) < 0) {
-          picks.strength.push(sentence);
-        }
-      });
       pack.feedback.forEach(function (sentence) {
         if (sentence && picks.feedback.indexOf(sentence) < 0) {
           picks.feedback.push(sentence);
@@ -1022,13 +1054,16 @@
           }
         }
       } else if (row.level === "high") {
+        pack.strength.forEach(function (sentence) {
+          if (acceptableStrength(row, sentence) && picks.strength.indexOf(sentence) < 0) {
+            picks.strength.push(sentence);
+          }
+        });
         var sustain = pack.feedback[0] || "";
         if (sustain && usedFeedback.indexOf(sustain) < 0 && sustainFeedback.length < 3) {
           sustainFeedback.push(sustain);
           usedFeedback.push(sustain);
         }
-      }
-      if (row.level === "high" || row.level === "met") {
         var strength = pack.strength[0] || "";
         if (acceptableStrength(row, strength) && strengths.indexOf(strength) < 0 && strengths.length < 3) {
           if (planningNone && row.id === "strategies") {
@@ -1091,6 +1126,7 @@
       || text.indexOf("تُثبَّت هذه الممارسات") === 0
       || text.indexOf("أثمن ما تحقق") === 0
       || text.indexOf("أقدر حضوركم مع الطلاب") === 0
+      || text.indexOf("أقدّر جهودكم المبذولة مع الطلاب") === 0
       || text.indexOf("تشرفت بزيارتكم اليوم") === 0
       || text.indexOf("سعدت بحضور حصتكم") === 0
       || text.indexOf("كانت زيارتي لكم اليوم") === 0
@@ -1461,9 +1497,15 @@
       if (record.improvement) {
         bodyBits.push("<p class=\"aj-visit-p aj-visit-plan\"><strong>خطة التحسين:</strong>\n" + escapeHtml(record.improvement) + "</p>");
       }
-      var follow = dateLine(record.follow_hijri, record.follow_gregorian);
-      if (follow) {
-        bodyBits.push("<p class=\"aj-visit-p\"><strong>موعد المتابعة:</strong> " + escapeHtml(follow) + "</p>");
+      var excellentPrint = /ممتاز/.test(String(record.band || ""))
+        || (Number(record.total) >= 90);
+      if (excellentPrint) {
+        bodyBits.push("<p class=\"aj-visit-p\"><strong>حالة الاعتماد:</strong> مستوفٍ لمعايير التميز — لا يتطلب زيارة متابعة علاجية.</p>");
+      } else {
+        var follow = dateLine(record.follow_hijri, record.follow_gregorian);
+        if (follow) {
+          bodyBits.push("<p class=\"aj-visit-p\"><strong>موعد المتابعة:</strong> " + escapeHtml(follow) + "</p>");
+        }
       }
       bodyBits.push("</div>");
       state._lastPrintRecord = record;
@@ -1528,7 +1570,9 @@
         total += points;
       }
       return {
+        id: spec.id,
         label: spec.label,
+        weight: spec.weight,
         level: row.level,
         phrase: row.phrase,
         points: row.level ? points : ""
