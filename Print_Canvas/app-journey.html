@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/ds-components.css?v=ds1">
   <link rel="stylesheet" href="css/media-governance.css?v=aj147">
   <link rel="stylesheet" href="css/app-journey.css?v=aj194">
+  <link rel="stylesheet" href="css/app-journey-job-performance.css?v=aj1">
   <link rel="stylesheet" href="css/responsive.css?v=r292">
   <link rel="stylesheet" href="css/print-master.css?v=c307">
   <!-- print-shell.css يُحمَّل داخل iframe الطباعة فقط؛ الملف موجود لحارس الجودة -->
@@ -126,6 +127,7 @@
           <div class="aj-stage-panel" id="aj-panel-measurement" role="region" aria-label="القياس والاعتماد المدرسي">
             <a class="aj-task-btn" id="aj-task-ssot" href="#view-performance">مؤشرات الأداء (SSOT)</a>
             <a class="aj-task-btn" id="aj-task-nafes" href="#view-nafes">ملف التدريب والقياس (نافس)</a>
+            <a class="aj-task-btn" href="#view-job-performance">تقويم الأداء الوظيفي</a>
             <a class="aj-task-btn" href="#view-external-eval">التقويم الذاتي والاعتماد الخارجي (ETEC)</a>
           </div>
         </li>
@@ -359,8 +361,77 @@
         <ol class="aj-journey-steps" aria-label="رحلة القياس">
           <li><a class="aj-task-btn" href="#view-performance">مؤشرات الأداء (SSOT)</a></li>
           <li><a class="aj-task-btn" href="#view-nafes">ملف التدريب والقياس (نافس)</a></li>
+          <li><a class="aj-task-btn" href="#view-job-performance">تقويم الأداء الوظيفي</a></li>
           <li><a class="aj-task-btn" href="#view-external-eval">التقويم الذاتي والاعتماد الخارجي (ETEC)</a></li>
         </ol>
+      </section>
+
+      <section id="view-job-performance" class="aj-view wash-board" hidden>
+        <h1>تقويم الأداء الوظيفي — نموذج المعلم</h1>
+        <p class="aj-lede">دورة مرتبطة بالعام الدراسي وفق دليل إدارة الأداء الوظيفي. التقييم الذاتي مرجع بصري غير محتسب. المرجع الاعتمادي النهائي: النظام التقني الرسمي لوزارة التعليم.</p>
+        <p class="aj-status" id="aj-jp-status" role="status" aria-live="polite"></p>
+
+        <div class="aj-jp-toolbar">
+          <div class="aj-jp-field">
+            <label for="aj-jp-cycle">دورة الأداء</label>
+            <select id="aj-jp-cycle"></select>
+          </div>
+          <div class="aj-jp-field">
+            <label for="aj-jp-teacher">المعلم</label>
+            <select id="aj-jp-teacher"></select>
+          </div>
+        </div>
+        <p class="aj-jp-meta-line" id="aj-jp-teacher-meta"></p>
+
+        <div class="aj-jp-readiness" aria-label="مؤشر الجاهزية">
+          <strong>مؤشر الجاهزية:</strong>
+          <span id="aj-jp-ready-text">0 %</span>
+          <div class="aj-jp-readiness-bar" aria-hidden="true"><span id="aj-jp-ready-fill"></span></div>
+        </div>
+
+        <div class="aj-jp-phases" role="group" aria-label="مرحلة التقويم">
+          <button type="button" class="aj-jp-phase-btn is-active" data-aj-jp-phase="mid" aria-pressed="true">المراجعة النصف سنوية</button>
+          <button type="button" class="aj-jp-phase-btn" data-aj-jp-phase="final" aria-pressed="false">التقييم الختامي</button>
+        </div>
+
+        <aside class="aj-jp-calc" aria-live="polite">
+          <h2>حاسبة الاحتساب الحي</h2>
+          <div class="aj-jp-calc-grid">
+            <div><span>المجموع من 100%</span><strong id="aj-jp-calc-percent">—</strong></div>
+            <div><span>المتوسط من 5.00</span><strong id="aj-jp-calc-avg">—</strong></div>
+            <div><span>التقدير اللفظي</span><strong id="aj-jp-calc-band">—</strong></div>
+            <div><span>البنود المقدَّرة</span><strong id="aj-jp-calc-scored">0 / 11</strong></div>
+          </div>
+          <p class="aj-jp-ssot">الاحتساب: تقدير × وزن → نسبة مئوية وتقدير عام رسمي. التقييم الذاتي لا يدخل في المعادلة.</p>
+        </aside>
+
+        <h2 class="aj-group-title">عناصر التقييم (11 = 100%)</h2>
+        <div id="aj-jp-elements" class="aj-jp-elements" aria-label="عناصر تقويم المعلم"></div>
+
+        <div class="aj-jp-actions">
+          <button type="button" class="aj-detail-btn" id="aj-jp-save-scores">حفظ تقديرات المقوّم</button>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-jp-save-self">حفظ التقييم الذاتي</button>
+        </div>
+
+        <section class="aj-jp-panel" id="aj-jp-gap-panel" aria-label="خطة تحسين فجوة الأداء">
+          <h2>خطة تحسين فجوة الأداء (المراجعة النصف سنوية)</h2>
+          <p class="aj-lede">تُفتح تلقائياً للعناصر ذات التقدير 1 أو 2 وفق الدليل.</p>
+          <div id="aj-jp-gap-list" class="aj-jp-gap-list"></div>
+        </section>
+
+        <section class="aj-jp-panel" id="aj-jp-idp-panel" hidden aria-label="خطة التطوير الفردية">
+          <h2>خطة التطوير الفردية IDP (70 / 20 / 10)</h2>
+          <p class="aj-lede">للتقييم الختامي — حتى ثلاثة أهداف تطويرية مرتبة بالأولوية.</p>
+          <div id="aj-jp-idp-goals" class="aj-jp-idp-goals"></div>
+          <div class="aj-jp-actions">
+            <button type="button" class="aj-detail-btn" id="aj-jp-save-idp">حفظ خطة IDP</button>
+          </div>
+        </section>
+
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-desk">العودة</a>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-station-measurement">محطة القياس</a>
+        </div>
       </section>
 
       <section id="view-access-hub" class="aj-view" hidden>
@@ -1742,5 +1813,6 @@
   <script src="js/app-journey-evaluation.js?v=c284"></script>
   <script src="js/app-journey-visits.js?v=aj198"></script>
   <script src="js/app-journey-visit-plan.js?v=aj3"></script>
+  <script src="js/app-journey-job-performance.js?v=aj1"></script>
 </body>
 </html>

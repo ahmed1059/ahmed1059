@@ -82,6 +82,7 @@
     "view-visits",
     "view-visits-plan",
     "view-practice-evidence",
+    "view-job-performance",
     "view-performance",
     "view-tasks",
     "view-task-details",
@@ -133,6 +134,7 @@
     "view-visits": "الزيارات الصفية",
     "view-visits-plan": "الخطة السنوية للزيارات الصفية",
     "view-practice-evidence": "شواهد الممارسات",
+    "view-job-performance": "تقويم الأداء الوظيفي",
     "view-performance": "مؤشرات الأداء (SSOT)",
     "view-tasks": "التنبيهات ومهام اليوم",
     "view-task-details": "تفاصيل المهمة",
@@ -212,6 +214,7 @@
     "view-practice-evidence": "registers",
     "view-station-measurement": "measurement",
     "view-performance": "measurement",
+    "view-job-performance": "measurement",
     "view-nafes": "measurement",
     "view-external-eval": "measurement",
     "view-soft-follow": "measurement"
@@ -2409,6 +2412,7 @@
     );
     markCurrent('a[href="#view-visits"]', viewId === "view-visits");
     markCurrent('a[href="#view-visits-plan"]', viewId === "view-visits-plan");
+    markCurrent('a[href="#view-job-performance"]', viewId === "view-job-performance");
     markCurrent('a[href="#view-evidence"]', viewId === "view-evidence");
     markCurrent('a[href="#view-env-evidence"]', viewId === "view-env-evidence");
     markCurrent('a[href="#view-license-form"]', viewId === "view-license-form");
@@ -2805,6 +2809,17 @@
       }
       if (window.AjVisitPlan && typeof window.AjVisitPlan.load === "function") {
         window.AjVisitPlan.load();
+      }
+      return;
+    }
+    if (viewId === "view-job-performance") {
+      if (!canFillLicenseForm()) {
+        showToast("تقويم الأداء الوظيفي للمدير والوكيل.", "error");
+        window.location.replace("#view-desk");
+        return;
+      }
+      if (window.AjJobPerformance && typeof window.AjJobPerformance.load === "function") {
+        window.AjJobPerformance.load();
       }
       return;
     }

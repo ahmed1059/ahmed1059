@@ -1,0 +1,306 @@
+/* تقويم الأداء الوظيفي — نموذج المعلم (واجهة المرحلة 1) */
+
+#view-job-performance .aj-jp-toolbar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 16px;
+  align-items: end;
+  margin: 12px 0 18px;
+}
+
+#view-job-performance .aj-jp-field label {
+  display: block;
+  font-size: 13px;
+  color: #5c675f;
+  margin-bottom: 4px;
+}
+
+#view-job-performance .aj-jp-field select,
+#view-job-performance .aj-jp-field input,
+#view-job-performance .aj-jp-note,
+#view-job-performance .aj-jp-gap textarea,
+#view-job-performance .aj-jp-idp textarea,
+#view-job-performance .aj-jp-idp input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 10px;
+  border: 1px solid #c5d0c9;
+  border-radius: 6px;
+  background: #fff;
+}
+
+#view-job-performance .aj-jp-meta-line {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #334039;
+}
+
+#view-job-performance .aj-jp-readiness {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: center;
+  padding: 10px 14px;
+  margin: 0 0 16px;
+  background: linear-gradient(120deg, #f3faf7 0%, #eef6f3 55%, #ffffff 100%);
+  border: 1px solid #cfe3db;
+  border-radius: 8px;
+}
+
+#view-job-performance .aj-jp-readiness strong {
+  color: #0b5e56;
+}
+
+#view-job-performance .aj-jp-readiness-bar {
+  flex: 1 1 160px;
+  height: 10px;
+  background: #d9e8e2;
+  border-radius: 999px;
+  overflow: hidden;
+  min-width: 120px;
+}
+
+#view-job-performance .aj-jp-readiness-bar > span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #0b5e56;
+  transition: width 0.2s ease;
+}
+
+#view-job-performance .aj-jp-phases {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+}
+
+#view-job-performance .aj-jp-phase-btn {
+  border: 1px solid #0b5e56;
+  background: #fff;
+  color: #0b5e56;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#view-job-performance .aj-jp-phase-btn.is-active {
+  background: #0b5e56;
+  color: #fff;
+}
+
+#view-job-performance .aj-jp-calc {
+  position: sticky;
+  top: 8px;
+  z-index: 2;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid #0b5e56;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(11, 94, 86, 0.08);
+}
+
+#view-job-performance .aj-jp-calc h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #0b5e56;
+}
+
+#view-job-performance .aj-jp-calc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px 12px;
+}
+
+#view-job-performance .aj-jp-calc-grid span {
+  display: block;
+  font-size: 13px;
+  color: #5c675f;
+}
+
+#view-job-performance .aj-jp-calc-grid strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 18px;
+  color: #0b5e56;
+}
+
+#view-job-performance .aj-jp-ssot {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #5c675f;
+}
+
+#view-job-performance .aj-jp-elements {
+  display: grid;
+  gap: 14px;
+  margin: 0 0 18px;
+}
+
+#view-job-performance .aj-jp-card {
+  background: #fff;
+  border: 1px solid #d5e0da;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+#view-job-performance .aj-jp-card.is-gap {
+  border-color: #c47b4a;
+  box-shadow: inset 3px 0 0 #c47b4a;
+}
+
+#view-job-performance .aj-jp-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+#view-job-performance .aj-jp-card-head h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #0b5e56;
+}
+
+#view-job-performance .aj-jp-weight {
+  font-size: 13px;
+  color: #5c675f;
+  white-space: nowrap;
+}
+
+#view-job-performance .aj-jp-desc {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #334039;
+  line-height: 1.55;
+}
+
+#view-job-performance .aj-jp-scale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+#view-job-performance .aj-jp-scale button {
+  min-width: 36px;
+  height: 36px;
+  border: 1px solid #0b5e56;
+  background: #fff;
+  color: #0b5e56;
+  border-radius: 6px;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#view-job-performance .aj-jp-scale button.is-on {
+  background: #0b5e56;
+  color: #fff;
+}
+
+#view-job-performance .aj-jp-level-hint {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #334039;
+  line-height: 1.5;
+  min-height: 1.5em;
+}
+
+#view-job-performance .aj-jp-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 720px) {
+  #view-job-performance .aj-jp-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+#view-job-performance .aj-jp-self label,
+#view-job-performance .aj-jp-mgr-note label {
+  display: block;
+  font-size: 13px;
+  color: #5c675f;
+  margin-bottom: 4px;
+}
+
+#view-job-performance .aj-jp-self-note {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #7a857e;
+}
+
+#view-job-performance .aj-jp-weighted {
+  margin: 0;
+  font-size: 13px;
+  color: #0b5e56;
+}
+
+#view-job-performance .aj-jp-excel {
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: #f7fbf9;
+  border: 1px dashed #0b5e56;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #234;
+}
+
+#view-job-performance .aj-jp-excel[hidden],
+#view-job-performance .aj-jp-panel[hidden] {
+  display: none !important;
+}
+
+#view-job-performance .aj-jp-panel {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid #cfe3db;
+  border-radius: 8px;
+  background: #fff;
+}
+
+#view-job-performance .aj-jp-panel h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #0b5e56;
+}
+
+#view-job-performance .aj-jp-gap-list,
+#view-job-performance .aj-jp-idp-goals {
+  display: grid;
+  gap: 12px;
+}
+
+#view-job-performance .aj-jp-gap-item,
+#view-job-performance .aj-jp-idp-goal {
+  border: 1px solid #d5e0da;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+#view-job-performance .aj-jp-gap-item h3,
+#view-job-performance .aj-jp-idp-goal h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #0b5e56;
+}
+
+#view-job-performance .aj-jp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
