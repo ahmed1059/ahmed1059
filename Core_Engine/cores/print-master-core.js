@@ -220,10 +220,12 @@
       + "<thead><tr><td><div class=\"pm-head\" style=\"" + headStyle + "\">" + headerHtml + "</div></td></tr></thead>"
       + "<tfoot><tr><td><div class=\"pm-foot-slot\" style=\"" + footStyle + "\" aria-hidden=\"true\"></div></td></tr></tfoot>"
       + "<tbody><tr><td>"
+      + "<div class=\"pm-stack\">"
       + "<div class=\"pm-body\">" + title + (opts.bodyHtml || "") + "</div>"
       + "<div class=\"pm-end\">"
       + sign
       + "<div class=\"pm-clearance\" style=\"" + gapStyle + "\" aria-hidden=\"true\"></div>"
+      + "</div>"
       + "</div>"
       + "</td></tr></tbody>"
       + "</table>"
