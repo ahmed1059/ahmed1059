@@ -393,6 +393,16 @@
   align-items: center;
 }
 
+#view-job-performance .aj-detail-btn-danger {
+  border-color: #a33a2f;
+  color: #a33a2f;
+  background: #fff;
+}
+
+#view-job-performance .aj-detail-btn-danger:hover {
+  background: #fceceb;
+}
+
 #view-job-performance .aj-jp-evidence-summary {
   display: grid;
   gap: 8px;

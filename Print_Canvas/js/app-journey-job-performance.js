@@ -1442,11 +1442,61 @@
         printOfficial();
         return;
       }
+      if (t.closest("#aj-jp-reset-record")) {
+        resetStaffRecord();
+        return;
+      }
       var gapSave = t.closest("[data-aj-jp-save-gap]");
       if (gapSave) {
         saveGap(gapSave.getAttribute("data-aj-jp-save-gap"));
       }
     });
+  }
+
+  function resetStaffRecord() {
+    if (!state.record || !state.record.id) {
+      status("لا يوجد سجل مفتوح للتصفير. اختر المنسوب أولاً.", true);
+      return;
+    }
+    var person = selectedPerson() || {};
+    var name = person.name || state.record.staff_name || state.record.staff_id || "المنسوب";
+    var ok = window.confirm(
+      "تأكيد تصفير سجل التقويم لـ «" +
+        name +
+        "»؟\nسيتم حذف التقديرات وخطط الفجوة وIDP والشواهد المرتبطة بهذا السجل فقط.\nلن يُمس ملف المنسوب في noor_staff ولا القوالب."
+    );
+    if (!ok) {
+      return;
+    }
+    var recordId = state.record.id;
+    status("جارٍ تصفير سجل المنسوب…");
+    fetchJson(API + "/records/" + recordId, {
+      method: "DELETE",
+      headers: authHeaders()
+    })
+      .then(function (pack) {
+        state.record = null;
+        state.evidence = null;
+        state.gapDrafts = {};
+        state.idpDraft = null;
+        state.dirty = false;
+        paintElements();
+        paintCalc();
+        paintEvidenceSummary();
+        paintGapPanel();
+        paintIdpPanel();
+        var deleted = pack && pack.counts ? pack.counts.perf_records : 1;
+        status(
+          "تم تصفير سجل «" + name + "» (" + deleted + "). يمكنك اختيار المنسوب مجدداً لفتح سجل جديد."
+        );
+        var teacherEl = document.getElementById("aj-jp-teacher");
+        if (teacherEl) {
+          teacherEl.value = "";
+        }
+      })
+      .catch(function (error) {
+        status((error && error.message) || "تعذر تصفير السجل.", true);
+      });
   }
 
   function printOfficial() {
