@@ -224,6 +224,7 @@ def ensure_job_performance_tables(connection) -> None:
     seed_teacher_template(connection)
     seed_role_templates(connection)
     seed_default_cycle(connection)
+    ensure_staff_assignment_fixes(connection)
 
 
 def normalize_role_code(role_code: str) -> str:
@@ -304,27 +305,37 @@ def _gather_live_evidence(connection, staff_id: str, specialty: str = "") -> lis
         (staff_id,),
     ).fetchall()
     for row in visits:
+        total = row[3]
+        try:
+            total_num = float(total) if total is not None else 0.0
+        except (TypeError, ValueError):
+            total_num = 0.0
+        # استبعاد المسودات وزيارات الدرجة 0 من شواهد التقويم.
+        if total is None or total_num <= 0:
+            continue
         vid = str(row[0])
-        title = "زيارة صفية" + (f" — {row[1]}" if row[1] else "")
-        bits = [
-            row[2] or "",
-            row[7] or "",
-            row[6] or row[5] or "",
-            (f"الدرجة {row[3]:g}" if row[3] is not None else ""),
-            row[4] or "",
-            row[8] or "",
+        date_bit = row[6] or row[5] or ""
+        band = row[4] or ""
+        lesson = row[8] or ""
+        subject = row[2] or ""
+        line_bits = [
+            f"زيارة صفية ({date_bit})" if date_bit else "زيارة صفية",
+            f"{total_num:g}%" + (f" — {band}" if band else ""),
+            subject,
+            lesson,
         ]
+        line = " · ".join([b for b in line_bits if b])
         items.append(
             {
                 "source_kind": "classroom_visit",
                 "source_id": vid,
-                "title": title,
-                "summary": " · ".join([b for b in bits if b]),
+                "title": line,
+                "summary": "",
                 "meta": {
                     "visit_type": row[1] or "",
-                    "subject": row[2] or "",
-                    "total": row[3],
-                    "band": row[4] or "",
+                    "subject": subject,
+                    "total": total,
+                    "band": band,
                 },
                 "element_ids": list(EVIDENCE_ELEMENT_MAP["classroom_visit"]),
             }
@@ -343,12 +354,13 @@ def _gather_live_evidence(connection, staff_id: str, specialty: str = "") -> lis
         cid = str(row[0] or "")
         seat = str(row[1] or "")
         title = COMMITTEE_TITLES.get(cid, cid or "لجنة مدرسية")
+        seat_label = SEAT_LABELS.get(seat, seat) or "عضو"
         items.append(
             {
                 "source_kind": "committee",
                 "source_id": f"{cid}:{seat}:{staff_id}",
-                "title": f"عضوية لجنة — {title}",
-                "summary": f"{SEAT_LABELS.get(seat, seat)} · {title}",
+                "title": f"{seat_label}: {title}",
+                "summary": "",
                 "meta": {"committee_id": cid, "seat": seat},
                 "element_ids": list(EVIDENCE_ELEMENT_MAP["committee"]),
             }
@@ -380,18 +392,20 @@ def _gather_live_evidence(connection, staff_id: str, specialty: str = "") -> lis
                 f"علوم {row[5] or '—'}",
                 f"رياضيات {row[6] or '—'}",
             ]
+        line = " · ".join(
+            [
+                f"نتائج نافس — {row[1] or 'مرحلة'}",
+                f"مختبرون {row[3] or '—'}/{row[2] or '—'}",
+                " · ".join(focus),
+                (f"أضعف مهارة: {row[7]} ({row[8]})" if row[7] else ""),
+            ]
+        )
         items.append(
             {
                 "source_kind": "nafes",
                 "source_id": nid,
-                "title": f"نتائج نافس — {row[1] or 'مرحلة'}",
-                "summary": " · ".join(
-                    [
-                        f"مختبرون {row[3] or '—'}/{row[2] or '—'}",
-                        " · ".join(focus),
-                        (f"أضعف مهارة: {row[7]} ({row[8]})" if row[7] else ""),
-                    ]
-                ),
+                "title": line,
+                "summary": "",
                 "meta": {
                     "grade": row[1] or "",
                     "school_level": True,
@@ -401,6 +415,41 @@ def _gather_live_evidence(connection, staff_id: str, specialty: str = "") -> lis
             }
         )
     return items
+
+
+# تصحيحات إسناد معتمدة لمدرسة سعد بن الربيع (بيانات حقيقية).
+STAFF_ASSIGNMENT_FIXES = {
+    "1008379958": {"assignment_role": "vice_principal", "role": "وكيل"},  # احمد علي هيازع الشهري
+    "1036307674": {"assignment_role": "admin_staff", "role": "أداري"},  # عبدالمجيد محمد رميزان المرواني
+}
+
+
+def ensure_staff_assignment_fixes(connection) -> None:
+    ensure_assignment_role_column(connection)
+    moment = _stamp()
+    for staff_id, patch in STAFF_ASSIGNMENT_FIXES.items():
+        row = connection.execute(
+            """
+            SELECT role, COALESCE(assignment_role, '')
+            FROM noor_staff
+            WHERE national_id = ? AND COALESCE(is_deleted, 0) = 0
+            """,
+            (staff_id,),
+        ).fetchone()
+        if not row:
+            continue
+        next_role = patch.get("role") or row[0] or ""
+        next_assign = patch.get("assignment_role") or ""
+        if str(row[0] or "") == next_role and str(row[1] or "") == next_assign:
+            continue
+        connection.execute(
+            """
+            UPDATE noor_staff
+            SET role = ?, assignment_role = ?, updated_at = ?
+            WHERE national_id = ?
+            """,
+            (next_role, next_assign, moment, staff_id),
+        )
 
 
 def sync_evidence_links(connection, record_id: int) -> dict:

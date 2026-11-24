@@ -46,6 +46,7 @@
     if (
       role.indexOf("مساعد إداري") >= 0 ||
       role.indexOf("مساعد اداري") >= 0 ||
+      role.indexOf("مساعد أداري") >= 0 ||
       role.indexOf("مسجل معلومات") >= 0 ||
       role.indexOf("مسجل") >= 0 ||
       role.indexOf("حارس") >= 0 ||
@@ -53,7 +54,8 @@
       role.indexOf("كاتب") >= 0 ||
       role.indexOf("مستخدم") >= 0 ||
       role.indexOf("إداري") >= 0 ||
-      role.indexOf("اداري") >= 0
+      role.indexOf("اداري") >= 0 ||
+      role.indexOf("أداري") >= 0
     ) {
       return "admin_staff";
     }
@@ -122,6 +124,21 @@
     }
   }
 
+  function evidenceLine(item) {
+    var title = String((item && item.title) || "").trim();
+    var summary = String((item && item.summary) || "").trim();
+    if (title && summary && summary.indexOf(title) === 0) {
+      return summary;
+    }
+    if (title && summary && title.indexOf(summary) >= 0) {
+      return title;
+    }
+    if (title && summary) {
+      return title + " · " + summary;
+    }
+    return title || summary || (item && item.source_kind) || "";
+  }
+
   function evidenceFor(elementId) {
     var pack = state.evidence || (state.record && state.record.evidence) || null;
     if (!pack || !pack.by_element) {
@@ -154,16 +171,49 @@
       .map(function (item) {
         return (
           "<div class=\"aj-jp-evidence-chip\">" +
-          "<strong>" +
-          escapeHtml(item.title || item.source_kind) +
-          "</strong>" +
-          "<div>" +
-          escapeHtml(item.summary || "") +
-          "</div>" +
+          escapeHtml(evidenceLine(item)) +
           "</div>"
         );
       })
       .join("");
+  }
+
+  function weightedPercent(rating, weight) {
+    var n = Number(rating);
+    var w = Number(weight || 0);
+    if (!(n >= 1 && n <= 5)) {
+      return null;
+    }
+    return Math.round((n / 5) * w * 100) / 100;
+  }
+
+  function noteOptionsHtml(elementId, rating, currentNote) {
+    var bank =
+      window.AjJobPerformanceNotes && typeof window.AjJobPerformanceNotes.optionsFor === "function"
+        ? window.AjJobPerformanceNotes.optionsFor(elementId, rating)
+        : [];
+    var options =
+      "<option value=\"\">— اختر ملاحظة جاهزة أو اكتب حراً —</option>" +
+      bank
+        .map(function (text) {
+          return (
+            "<option value=\"" +
+            escapeHtml(text) +
+            "\"" +
+            (String(currentNote || "") === String(text) ? " selected" : "") +
+            ">" +
+            escapeHtml(text) +
+            "</option>"
+          );
+        })
+        .join("");
+    return (
+      "<select class=\"aj-jp-note-pick\" data-aj-jp-note-pick=\"" +
+      escapeHtml(elementId) +
+      "\" aria-label=\"ملاحظة جاهزة\">" +
+      options +
+      "</select>"
+    );
   }
 
   function sessionUser() {
@@ -437,10 +487,8 @@
         var rating = maps[phase][item.id];
         var selfRating = maps[selfPhase][item.id];
         var note = maps["note_" + phase][item.id] || "";
-        var weighted =
-          rating != null && rating !== ""
-            ? (Number(rating) * Number(item.weight || 0)).toFixed(2)
-            : "—";
+        var weightedVal = weightedPercent(rating, item.weight);
+        var weighted = weightedVal == null ? "—" : weightedVal.toFixed(2) + "%";
         var gapClass = phase === "mid" && (rating === 1 || rating === 2) ? " is-gap" : "";
         var scale = [1, 2, 3, 4, 5]
           .map(function (n) {
@@ -512,11 +560,12 @@
           "<div class=\"aj-jp-row\">" +
           "<div class=\"aj-jp-mgr-note\">" +
           "<label>ملاحظة المقوّم (اختيارية)</label>" +
+          noteOptionsHtml(item.id, rating, note) +
           "<input type=\"text\" maxlength=\"120\" data-aj-jp-note=\"" +
           escapeHtml(item.id) +
           "\" value=\"" +
           escapeHtml(note) +
-          "\" placeholder=\"كلمة أو كلمتان\">" +
+          "\" placeholder=\"أو اكتب ملاحظة حرة (≤120)\">" +
           "</div>" +
           "<div class=\"aj-jp-self\">" +
           "<label>التقييم الذاتي (غير محتسب)</label>" +
@@ -526,7 +575,7 @@
           "<p class=\"aj-jp-self-note\">مرجع بصري وفق الدليل — لا يدخل في الدرجة النهائية.</p>" +
           "</div>" +
           "</div>" +
-          "<p class=\"aj-jp-weighted\">الدرجة الموزونة: <strong data-aj-jp-weighted=\"" +
+          "<p class=\"aj-jp-weighted\">الدرجة الموزونة من 100%: <strong data-aj-jp-weighted=\"" +
           escapeHtml(item.id) +
           "\">" +
           weighted +
@@ -543,20 +592,17 @@
               return "";
             }
             return (
-              "<p class=\"aj-jp-card-evidence-title\">شواهد مرتبطة (مرجع بصري — بلا فرض درجة)</p>" +
+              "<details class=\"aj-jp-card-evidence-box\">" +
+              "<summary class=\"aj-jp-card-evidence-title\">📎 " +
+              ev.length +
+              " شواهد مرتبطة (اضغط للعرض)</summary>" +
               "<ul class=\"aj-jp-card-evidence\">" +
               ev
                 .map(function (row) {
-                  return (
-                    "<li><strong>" +
-                    escapeHtml(row.title || "") +
-                    "</strong><div>" +
-                    escapeHtml(row.summary || "") +
-                    "</div></li>"
-                  );
+                  return "<li>" + escapeHtml(evidenceLine(row)) + "</li>";
                 })
                 .join("") +
-              "</ul>"
+              "</ul></details>"
             );
           })() +
           "</article>"
@@ -1106,6 +1152,16 @@
         setLocalNote(t.getAttribute("data-aj-jp-note"), t.value);
         return;
       }
+      if (t.getAttribute("data-aj-jp-note-pick")) {
+        var picked = t.value || "";
+        var eidPick = t.getAttribute("data-aj-jp-note-pick");
+        setLocalNote(eidPick, picked);
+        var noteInput = root.querySelector('[data-aj-jp-note="' + eidPick + '"]');
+        if (noteInput) {
+          noteInput.value = picked;
+        }
+        return;
+      }
       var gapItem = t.closest("[data-gap]");
       if (gapItem && t.getAttribute("data-gap-field")) {
         var eid = gapItem.getAttribute("data-gap");
@@ -1216,6 +1272,12 @@
     }
     var user = sessionUser() || {};
     var person = selectedPerson() || {};
+    var evaluatorId = String(user.id || user.national_id || "").trim();
+    var staffId = String(person.id || state.record.staff_id || "").trim();
+    if (evaluatorId && staffId && evaluatorId === staffId) {
+      status("لا يجوز اعتماد/طباعة تقويم رسمي للمنسوب لنفسه. اختر منسوبًا آخر أو ادخل بحساب المقوّم المختص.", true);
+      return;
+    }
     var recordId = state.record.id;
     var cycleEl = document.getElementById("aj-jp-cycle");
     var cycleLabel = "";
@@ -1237,6 +1299,7 @@
             (roleCode === "admin_staff" ? "لائحة الموارد البشرية العامة" : ""),
           cycleLabel: cycleLabel,
           evaluatorName: user.name || user.full_name || "",
+          evaluatorId: evaluatorId,
           elements: record.weights_snapshot || elements()
         });
       })
