@@ -11,6 +11,7 @@ from fastapi import APIRouter, Header, HTTPException
 from pydantic import BaseModel, Field
 
 from .database import connect
+from .job_performance_role_bank import ROLE_ALIASES, all_extra_templates
 from .job_performance_seed import (
     ROLE_CODES,
     compute_totals,
@@ -221,7 +222,42 @@ def ensure_job_performance_tables(connection) -> None:
         """
     )
     seed_teacher_template(connection)
+    seed_role_templates(connection)
     seed_default_cycle(connection)
+
+
+def normalize_role_code(role_code: str) -> str:
+    key = str(role_code or "").strip() or "teacher"
+    return ROLE_ALIASES.get(key, key)
+
+
+def seed_role_templates(connection) -> None:
+    moment = _stamp()
+    for payload in all_extra_templates():
+        role_code = payload["role_code"]
+        blob = json.dumps(payload, ensure_ascii=False)
+        existing = connection.execute(
+            "SELECT version FROM perf_role_templates WHERE role_code = ?",
+            (role_code,),
+        ).fetchone()
+        if existing:
+            connection.execute(
+                """
+                UPDATE perf_role_templates
+                SET title = ?, elements_json = ?, source_note = ?, active = 1, updated_at = ?
+                WHERE role_code = ?
+                """,
+                (payload["title"], blob, payload["source"], moment, role_code),
+            )
+        else:
+            connection.execute(
+                """
+                INSERT INTO perf_role_templates (
+                    role_code, title, elements_json, source_note, version, active, updated_at
+                ) VALUES (?, ?, ?, ?, 1, 1, ?)
+                """,
+                (role_code, payload["title"], blob, payload["source"], moment),
+            )
 
 
 COMMITTEE_TITLES = {
@@ -495,13 +531,14 @@ def seed_default_cycle(connection) -> None:
 
 
 def _template_row(connection, role_code: str) -> dict:
+    code = normalize_role_code(role_code)
     row = connection.execute(
         """
         SELECT role_code, title, elements_json, source_note, version, active
         FROM perf_role_templates
         WHERE role_code = ? AND active = 1
         """,
-        (role_code,),
+        (code,),
     ).fetchone()
     if not row:
         raise HTTPException(status_code=404, detail="قالب الدور غير موجود")
@@ -681,6 +718,7 @@ def job_performance_meta(x_session_token: str = Header(default="")):
     _user(x_session_token)
     return {
         "role_codes": ROLE_CODES,
+        "role_aliases": ROLE_ALIASES,
         "phases_manager": list(PHASES_MANAGER),
         "phases_self": list(PHASES_SELF),
         "default_cycle_year": DEFAULT_CYCLE_YEAR,
@@ -857,16 +895,48 @@ def list_records(cycle_id: int = 0, x_session_token: str = Header(default="")):
         connection.close()
 
 
+class AssignmentRoleBody(BaseModel):
+    assignment_role: str = "teacher"
+
+
+@router.put("/api/session/job-performance/staff/{staff_id}/assignment-role")
+def set_assignment_role(
+    staff_id: str, body: AssignmentRoleBody, x_session_token: str = Header(default="")
+):
+    """تحديد/تعديل إسناد قالب التقويم للمنسوب."""
+    _leadership(x_session_token)
+    role_code = normalize_role_code(body.assignment_role)
+    if role_code not in ROLE_CODES:
+        raise HTTPException(status_code=400, detail="رمز الدور غير معتمد")
+    moment = _stamp()
+    connection = connect()
+    try:
+        ensure_job_performance_tables(connection)
+        exists = connection.execute(
+            "SELECT national_id FROM noor_staff WHERE national_id = ? AND COALESCE(is_deleted,0)=0",
+            (staff_id.strip(),),
+        ).fetchone()
+        if not exists:
+            raise HTTPException(status_code=404, detail="المنسوب غير موجود")
+        # تأكيد وجود القالب
+        _template_row(connection, role_code)
+        connection.execute(
+            "UPDATE noor_staff SET assignment_role = ?, updated_at = ? WHERE national_id = ?",
+            (role_code, moment, staff_id.strip()),
+        )
+        connection.commit()
+        return {"staff_id": staff_id.strip(), "assignment_role": role_code}
+    finally:
+        connection.close()
+
+
 @router.post("/api/session/job-performance/records")
 def create_record(body: RecordBody, x_session_token: str = Header(default="")):
     user = _leadership(x_session_token)
     staff_id = body.staff_id.strip()
-    role_code = (body.assignment_role or "teacher").strip() or "teacher"
-    if role_code != "teacher":
-        raise HTTPException(
-            status_code=400,
-            detail="المرحلة 1 تقتصر على نموذج المعلم؛ بقية الأدوار لاحقاً",
-        )
+    role_code = normalize_role_code(body.assignment_role or "teacher")
+    if role_code not in ROLE_CODES:
+        raise HTTPException(status_code=400, detail="رمز الدور غير معتمد")
     if not staff_id:
         raise HTTPException(status_code=400, detail="معرّف المنسوب مطلوب")
     moment = _stamp()

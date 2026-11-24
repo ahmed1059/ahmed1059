@@ -367,8 +367,8 @@
       </section>
 
       <section id="view-job-performance" class="aj-view wash-board" hidden>
-        <h1>تقويم الأداء الوظيفي — نموذج المعلم</h1>
-        <p class="aj-lede">دورة مرتبطة بالعام الدراسي وفق دليل إدارة الأداء الوظيفي. التقييم الذاتي مرجع بصري غير محتسب. المرجع الاعتمادي النهائي: النظام التقني الرسمي لوزارة التعليم.</p>
+        <h1>تقويم الأداء الوظيفي — شاغلو الوظائف التعليمية</h1>
+        <p class="aj-lede">دورة مرتبطة بالعام الدراسي وفق دليل إدارة الأداء الوظيفي. القالب يُحمَّل تلقائياً من إسناد المنسوب. التقييم الذاتي مرجع بصري غير محتسب. المرجع الاعتمادي النهائي: النظام التقني الرسمي لوزارة التعليم.</p>
         <p class="aj-status" id="aj-jp-status" role="status" aria-live="polite"></p>
 
         <div class="aj-jp-toolbar">
@@ -377,8 +377,12 @@
             <select id="aj-jp-cycle"></select>
           </div>
           <div class="aj-jp-field">
-            <label for="aj-jp-teacher">المعلم</label>
+            <label for="aj-jp-teacher">المنسوب</label>
             <select id="aj-jp-teacher"></select>
+          </div>
+          <div class="aj-jp-field">
+            <label for="aj-jp-role">قالب التقويم (الإسناد)</label>
+            <select id="aj-jp-role"></select>
           </div>
         </div>
         <p class="aj-jp-meta-line" id="aj-jp-teacher-meta"></p>
@@ -411,8 +415,8 @@
           <div id="aj-jp-evidence-summary" class="aj-jp-evidence-summary"></div>
         </section>
 
-        <h2 class="aj-group-title">عناصر التقييم (11 = 100%)</h2>
-        <div id="aj-jp-elements" class="aj-jp-elements" aria-label="عناصر تقويم المعلم"></div>
+        <h2 class="aj-group-title">عناصر التقييم <span id="aj-jp-elements-count">(— = 100%)</span></h2>
+        <div id="aj-jp-elements" class="aj-jp-elements" aria-label="عناصر تقويم الأداء"></div>
 
         <div class="aj-jp-actions">
           <button type="button" class="aj-detail-btn" id="aj-jp-save-scores">حفظ تقديرات المقوّم</button>
@@ -1819,6 +1823,6 @@
   <script src="js/app-journey-evaluation.js?v=c284"></script>
   <script src="js/app-journey-visits.js?v=aj198"></script>
   <script src="js/app-journey-visit-plan.js?v=aj3"></script>
-  <script src="js/app-journey-job-performance.js?v=aj2"></script>
+  <script src="js/app-journey-job-performance.js?v=aj3"></script>
 </body>
 </html>
