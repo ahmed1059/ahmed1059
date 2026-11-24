@@ -23,6 +23,7 @@ class StaffWriteBody(BaseModel):
     specialty: str = ""
     mobile: str = ""
     active: bool = True
+    assignment_role: str = ""
 
 
 def _token(x_session_token: str) -> str:
@@ -52,8 +53,12 @@ def save_session_staff(body: StaffWriteBody, x_session_token: str = Header(defau
         raise HTTPException(status_code=400, detail="الاسم ورقم الهوية مطلوبان")
     original = body.original_id.strip() or national_id
     moment = _stamp()
+    assignment_role = body.assignment_role.strip()
     connection = connect()
     try:
+        from .job_performance_api import ensure_assignment_role_column
+
+        ensure_assignment_role_column(connection)
         existing = connection.execute(
             "SELECT national_id FROM noor_staff WHERE national_id = ?",
             (original,),
@@ -68,7 +73,8 @@ def save_session_staff(body: StaffWriteBody, x_session_token: str = Header(defau
             connection.execute(
                 """
                 UPDATE noor_staff
-                SET national_id = ?, name = ?, role = ?, specialty = ?, mobile = ?, active = ?, updated_at = ?, is_deleted = 0
+                SET national_id = ?, name = ?, role = ?, specialty = ?, mobile = ?,
+                    active = ?, assignment_role = ?, updated_at = ?, is_deleted = 0
                 WHERE national_id = ?
                 """,
                 (
@@ -78,6 +84,7 @@ def save_session_staff(body: StaffWriteBody, x_session_token: str = Header(defau
                     body.specialty.strip(),
                     body.mobile.strip(),
                     1 if body.active else 0,
+                    assignment_role,
                     moment,
                     original,
                 ),
@@ -88,7 +95,8 @@ def save_session_staff(body: StaffWriteBody, x_session_token: str = Header(defau
             connection.execute(
                 """
                 UPDATE noor_staff
-                SET name = ?, role = ?, specialty = ?, mobile = ?, active = ?, updated_at = ?, is_deleted = 0
+                SET name = ?, role = ?, specialty = ?, mobile = ?, active = ?,
+                    assignment_role = ?, updated_at = ?, is_deleted = 0
                 WHERE national_id = ?
                 """,
                 (
@@ -97,6 +105,7 @@ def save_session_staff(body: StaffWriteBody, x_session_token: str = Header(defau
                     body.specialty.strip(),
                     body.mobile.strip(),
                     1 if body.active else 0,
+                    assignment_role,
                     moment,
                     national_id,
                 ),
@@ -104,8 +113,9 @@ def save_session_staff(body: StaffWriteBody, x_session_token: str = Header(defau
         else:
             connection.execute(
                 """
-                INSERT INTO noor_staff (national_id, name, mobile, specialty, role, active, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO noor_staff (
+                    national_id, name, mobile, specialty, role, active, assignment_role, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     national_id,
@@ -114,6 +124,7 @@ def save_session_staff(body: StaffWriteBody, x_session_token: str = Header(defau
                     body.specialty.strip(),
                     body.role.strip(),
                     1 if body.active else 0,
+                    assignment_role,
                     moment,
                 ),
             )

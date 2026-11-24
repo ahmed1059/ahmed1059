@@ -991,6 +991,9 @@ def init_db():
         staff_columns = {row[1] for row in connection.execute("PRAGMA table_info(noor_staff)")}
         if staff_columns and "active" not in staff_columns:
             connection.execute("ALTER TABLE noor_staff ADD COLUMN active INTEGER DEFAULT 1")
+        from .job_performance_api import ensure_on_boot
+
+        ensure_on_boot(connection)
         ensure_noor_students_enrichment_columns(connection)
         approval_path = Path(__file__).resolve().parent.parent / "Print_Canvas" / "banks" / "approval_authorities.json"
         if approval_path.is_file():
