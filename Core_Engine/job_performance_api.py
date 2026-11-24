@@ -1346,6 +1346,77 @@ def save_idp(record_id: int, body: IdpBody, x_session_token: str = Header(defaul
         connection.close()
 
 
+def delete_perf_record_tree(connection, record_id: int) -> dict:
+    """يحذف سجل التقويم وملحقاته فقط — بلا مساس بـ noor_staff أو القوالب."""
+    rid = int(record_id)
+    counts: dict[str, int] = {}
+    for table in (
+        "perf_element_scores",
+        "perf_gap_plans",
+        "perf_idp",
+        "perf_evidence_links",
+    ):
+        cur = connection.execute(f"DELETE FROM {table} WHERE record_id = ?", (rid,))
+        counts[table] = int(cur.rowcount or 0)
+    cur = connection.execute("DELETE FROM perf_records WHERE id = ?", (rid,))
+    counts["perf_records"] = int(cur.rowcount or 0)
+    return counts
+
+
+def delete_perf_records_for_staff(connection, staff_id: str) -> dict:
+    """يحذف كل سجلات التقويم لمنسوب معيّن وملحقاتها."""
+    sid = str(staff_id or "").strip()
+    rows = connection.execute(
+        "SELECT id FROM perf_records WHERE staff_id = ?",
+        (sid,),
+    ).fetchall()
+    totals: dict = {
+        "staff_id": sid,
+        "record_ids": [],
+        "perf_records": 0,
+        "perf_element_scores": 0,
+        "perf_gap_plans": 0,
+        "perf_idp": 0,
+        "perf_evidence_links": 0,
+    }
+    for row in rows:
+        rid = int(row[0])
+        part = delete_perf_record_tree(connection, rid)
+        totals["record_ids"].append(rid)
+        for key, value in part.items():
+            totals[key] = int(totals.get(key, 0) or 0) + int(value or 0)
+    return totals
+
+
+@router.delete("/api/session/job-performance/records/{record_id}")
+def delete_job_performance_record(
+    record_id: int,
+    x_session_token: str = Header(default=""),
+):
+    """تصفير سجل تقويم واحد (مسودة/تجريبي) مع ملحقاته."""
+    _leadership(x_session_token)
+    connection = connect()
+    try:
+        ensure_job_performance_tables(connection)
+        row = connection.execute(
+            "SELECT id, staff_id FROM perf_records WHERE id = ?",
+            (record_id,),
+        ).fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="سجل التقويم غير موجود")
+        counts = delete_perf_record_tree(connection, record_id)
+        connection.commit()
+        return {
+            "ok": True,
+            "deleted": True,
+            "record_id": record_id,
+            "staff_id": str(row[1] or ""),
+            "counts": counts,
+        }
+    finally:
+        connection.close()
+
+
 def ensure_on_boot(connection) -> None:
     """يُستدعى من database.py عند تهيئة القاعدة."""
     ensure_job_performance_tables(connection)
