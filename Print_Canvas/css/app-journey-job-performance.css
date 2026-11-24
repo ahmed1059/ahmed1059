@@ -313,14 +313,77 @@
 #view-job-performance .aj-jp-idp-goal {
   border: 1px solid #d5e0da;
   border-radius: 6px;
-  padding: 10px;
+  padding: 12px 14px;
 }
 
 #view-job-performance .aj-jp-gap-item h3,
 #view-job-performance .aj-jp-idp-goal h3 {
-  margin: 0 0 8px;
+  margin: 0 0 12px;
   font-size: 14px;
   color: #0b5e56;
+}
+
+#view-job-performance .aj-jp-gap-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+  margin: 0 0 12px;
+}
+
+#view-job-performance .aj-jp-gap-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+#view-job-performance .aj-jp-gap-field.is-wide {
+  grid-column: 1 / -1;
+}
+
+#view-job-performance .aj-jp-gap-field label {
+  display: block;
+  font-size: 13px;
+  color: #5c675f;
+  margin: 0 0 4px;
+  line-height: 1.35;
+  white-space: normal;
+}
+
+#view-job-performance .aj-jp-gap-field .aj-jp-gap-pick,
+#view-job-performance .aj-jp-gap-field textarea,
+#view-job-performance .aj-jp-gap-field input {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 14px;
+  padding: 8px 10px;
+  border: 1px solid #c5d2cb;
+  border-radius: 6px;
+  background: #fff;
+  color: #1f2a24;
+}
+
+#view-job-performance .aj-jp-gap-field .aj-jp-gap-pick {
+  margin: 0 0 6px;
+}
+
+#view-job-performance .aj-jp-gap-field textarea {
+  min-height: 64px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+#view-job-performance .aj-jp-gap-hint {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #5c675f;
+  line-height: 1.4;
+}
+
+@media (max-width: 720px) {
+  #view-job-performance .aj-jp-gap-fields {
+    grid-template-columns: 1fr;
+  }
 }
 
 #view-job-performance .aj-jp-actions {

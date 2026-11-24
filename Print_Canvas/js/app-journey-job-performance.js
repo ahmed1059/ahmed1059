@@ -616,6 +616,28 @@
     paintIdpPanel();
   }
 
+  function gapSuggestion(elementId, rating) {
+    if (!window.AjJobPerformanceGap || typeof window.AjJobPerformanceGap.buildSuggestion !== "function") {
+      return null;
+    }
+    var maps = scoreMaps();
+    var note = (maps.note_mid && maps.note_mid[elementId]) || "";
+    var element = null;
+    elements().forEach(function (item) {
+      if (item.id === elementId) {
+        element = item;
+      }
+    });
+    return window.AjJobPerformanceGap.buildSuggestion({
+      elementId: elementId,
+      rating: rating,
+      note: note,
+      element: element,
+      elements: elements(),
+      ratingMap: maps.mid
+    });
+  }
+
   function ensureGapDrafts() {
     var maps = scoreMaps();
     elements().forEach(function (item) {
@@ -628,22 +650,60 @@
           ((state.record && state.record.gap_plans) || []).filter(function (row) {
             return row.element_id === item.id;
           })[0] || null;
+        var suggestion = gapSuggestion(item.id, rating) || {};
+        var suggestedStep =
+          (suggestion.action_steps && suggestion.action_steps[0]) || {};
+        var savedStep =
+          (saved && saved.action_steps && saved.action_steps[0]) || null;
+        var hasSaved =
+          !!(saved &&
+            (saved.reasons ||
+              saved.strengths ||
+              saved.improve_areas ||
+              (savedStep && (savedStep.step || savedStep.owner || savedStep.when))));
         state.gapDrafts[item.id] = {
           element_id: item.id,
           current_rating: rating,
-          reasons: (saved && saved.reasons) || "",
-          strengths: (saved && saved.strengths) || "",
-          improve_areas: (saved && saved.improve_areas) || "",
+          reasons: (saved && saved.reasons) || (!hasSaved ? suggestion.reasons || "" : ""),
+          strengths:
+            (saved && saved.strengths) || (!hasSaved ? suggestion.strengths || "" : ""),
+          improve_areas:
+            (saved && saved.improve_areas) ||
+            (!hasSaved ? suggestion.improve_areas || "" : ""),
           requirements: (saved && saved.requirements) || "",
           team: (saved && saved.team) || "",
           partners: (saved && saved.partners) || "",
-          action_steps: (saved && saved.action_steps) || [
-            { step: "", when: "", owner: "", indicator: "", evidence: "" }
+          action_steps: [
+            {
+              step:
+                (savedStep && savedStep.step) ||
+                (!hasSaved ? suggestedStep.step || "" : ""),
+              when:
+                (savedStep && savedStep.when) ||
+                (!hasSaved ? suggestedStep.when || "" : ""),
+              owner:
+                (savedStep && savedStep.owner) ||
+                (!hasSaved ? suggestedStep.owner || "" : ""),
+              indicator:
+                (savedStep && savedStep.indicator) ||
+                (!hasSaved ? suggestedStep.indicator || "" : ""),
+              evidence:
+                (savedStep && savedStep.evidence) ||
+                (!hasSaved ? suggestedStep.evidence || "" : "")
+            }
           ],
-          status: (saved && saved.status) || "open"
+          status: (saved && saved.status) || "open",
+          options: suggestion.options || null,
+          autofilled: !hasSaved
         };
       } else {
         state.gapDrafts[item.id].current_rating = rating;
+        if (!state.gapDrafts[item.id].options) {
+          var again = gapSuggestion(item.id, rating);
+          if (again) {
+            state.gapDrafts[item.id].options = again.options;
+          }
+        }
       }
     });
     Object.keys(state.gapDrafts).forEach(function (eid) {
@@ -652,6 +712,56 @@
         delete state.gapDrafts[eid];
       }
     });
+  }
+
+  function gapPickHtml(elementId, fieldKey, options, currentValue, stepField) {
+    var list = options || [];
+    var attr = stepField
+      ? "data-gap-step-pick=\"" + escapeHtml(stepField) + "\""
+      : "data-gap-pick=\"" + escapeHtml(fieldKey) + "\"";
+    return (
+      "<select class=\"aj-jp-gap-pick\" " +
+      attr +
+      " aria-label=\"اقتراح جاهز\">" +
+      "<option value=\"\">— اختر اقتراحاً جاهزاً أو عدّل النص —</option>" +
+      list
+        .map(function (text) {
+          return (
+            "<option value=\"" +
+            escapeHtml(text) +
+            "\"" +
+            (String(currentValue || "") === String(text) ? " selected" : "") +
+            ">" +
+            escapeHtml(text) +
+            "</option>"
+          );
+        })
+        .join("") +
+      "</select>"
+    );
+  }
+
+  function gapFieldHtml(opts) {
+    opts = opts || {};
+    var wide = opts.wide ? " is-wide" : "";
+    var control = opts.multiline
+      ? "<textarea rows=\"3\" " +
+        opts.attr +
+        ">" +
+        escapeHtml(opts.value || "") +
+        "</textarea>"
+      : "<input " + opts.attr + " value=\"" + escapeHtml(opts.value || "") + "\">";
+    return (
+      "<div class=\"aj-jp-gap-field" +
+      wide +
+      "\">" +
+      "<label>" +
+      escapeHtml(opts.label || "") +
+      "</label>" +
+      gapPickHtml(opts.elementId, opts.fieldKey, opts.options, opts.value, opts.stepField) +
+      control +
+      "</div>"
+    );
   }
 
   function paintGapPanel() {
@@ -676,6 +786,7 @@
         var draft = state.gapDrafts[eid];
         var label = (byId[eid] && byId[eid].label) || eid;
         var step = (draft.action_steps && draft.action_steps[0]) || {};
+        var options = draft.options || {};
         return (
           "<div class=\"aj-jp-gap-item\" data-gap=\"" +
           escapeHtml(eid) +
@@ -685,37 +796,85 @@
           " — درجة التمكن الحالية: " +
           escapeHtml(String(draft.current_rating)) +
           "</h3>" +
-          "<label>أسباب الحصول على هذه الدرجة</label>" +
-          "<textarea rows=\"2\" data-gap-field=\"reasons\">" +
-          escapeHtml(draft.reasons) +
-          "</textarea>" +
-          "<label>نقاط القوة</label>" +
-          "<textarea rows=\"2\" data-gap-field=\"strengths\">" +
-          escapeHtml(draft.strengths) +
-          "</textarea>" +
-          "<label>الجوانب التي تحتاج إلى التحسين</label>" +
-          "<textarea rows=\"2\" data-gap-field=\"improve_areas\">" +
-          escapeHtml(draft.improve_areas) +
-          "</textarea>" +
-          "<label>الخطوة الإجرائية</label>" +
-          "<textarea rows=\"2\" data-gap-step=\"step\">" +
-          escapeHtml(step.step || "") +
-          "</textarea>" +
-          "<div class=\"aj-jp-row\">" +
-          "<div><label>زمن التنفيذ</label><input data-gap-step=\"when\" value=\"" +
-          escapeHtml(step.when || "") +
-          "\"></div>" +
-          "<div><label>المكلف</label><input data-gap-step=\"owner\" value=\"" +
-          escapeHtml(step.owner || "") +
-          "\"></div>" +
-          "</div>" +
-          "<div class=\"aj-jp-row\">" +
-          "<div><label>مؤشر الأداء</label><input data-gap-step=\"indicator\" value=\"" +
-          escapeHtml(step.indicator || "") +
-          "\"></div>" +
-          "<div><label>شواهد الإنجاز</label><input data-gap-step=\"evidence\" value=\"" +
-          escapeHtml(step.evidence || "") +
-          "\"></div>" +
+          "<p class=\"aj-jp-gap-hint\">اقتراحات جاهزة وفق العنصر والتقدير — يمكن تعديل أي حقل أو استبدال الاقتراح.</p>" +
+          "<div class=\"aj-jp-gap-fields\">" +
+          gapFieldHtml({
+            label: "أسباب الحصول على هذه الدرجة",
+            fieldKey: "reasons",
+            elementId: eid,
+            options: options.reasons,
+            value: draft.reasons,
+            attr: "data-gap-field=\"reasons\"",
+            multiline: true,
+            wide: true
+          }) +
+          gapFieldHtml({
+            label: "نقاط القوة",
+            fieldKey: "strengths",
+            elementId: eid,
+            options: options.strengths,
+            value: draft.strengths,
+            attr: "data-gap-field=\"strengths\"",
+            multiline: true
+          }) +
+          gapFieldHtml({
+            label: "الجوانب التي تحتاج إلى التحسين",
+            fieldKey: "improve_areas",
+            elementId: eid,
+            options: options.improve_areas,
+            value: draft.improve_areas,
+            attr: "data-gap-field=\"improve_areas\"",
+            multiline: true
+          }) +
+          gapFieldHtml({
+            label: "الخطوة الإجرائية",
+            fieldKey: "step",
+            stepField: "step",
+            elementId: eid,
+            options: options.step,
+            value: step.step || "",
+            attr: "data-gap-step=\"step\"",
+            multiline: true,
+            wide: true
+          }) +
+          gapFieldHtml({
+            label: "المكلف",
+            fieldKey: "owner",
+            stepField: "owner",
+            elementId: eid,
+            options: options.owner,
+            value: step.owner || "",
+            attr: "data-gap-step=\"owner\""
+          }) +
+          gapFieldHtml({
+            label: "زمن التنفيذ",
+            fieldKey: "when",
+            stepField: "when",
+            elementId: eid,
+            options: options.when,
+            value: step.when || "",
+            attr: "data-gap-step=\"when\""
+          }) +
+          gapFieldHtml({
+            label: "مؤشر الأداء",
+            fieldKey: "indicator",
+            stepField: "indicator",
+            elementId: eid,
+            options: options.indicator,
+            value: step.indicator || "",
+            attr: "data-gap-step=\"indicator\"",
+            multiline: true
+          }) +
+          gapFieldHtml({
+            label: "شواهد الإنجاز",
+            fieldKey: "evidence",
+            stepField: "evidence",
+            elementId: eid,
+            options: options.evidence,
+            value: step.evidence || "",
+            attr: "data-gap-step=\"evidence\"",
+            multiline: true
+          }) +
           "</div>" +
           "<button type=\"button\" class=\"aj-detail-btn\" data-aj-jp-save-gap=\"" +
           escapeHtml(eid) +
@@ -1170,6 +1329,19 @@
         }
         return;
       }
+      if (gapItem && t.getAttribute("data-gap-pick")) {
+        var eidPick = gapItem.getAttribute("data-gap");
+        var fieldPick = t.getAttribute("data-gap-pick");
+        var picked = t.value || "";
+        if (state.gapDrafts[eidPick]) {
+          state.gapDrafts[eidPick][fieldPick] = picked;
+        }
+        var fieldInput = gapItem.querySelector('[data-gap-field="' + fieldPick + '"]');
+        if (fieldInput) {
+          fieldInput.value = picked;
+        }
+        return;
+      }
       if (gapItem && t.getAttribute("data-gap-step")) {
         var gid = gapItem.getAttribute("data-gap");
         if (state.gapDrafts[gid]) {
@@ -1177,6 +1349,22 @@
             state.gapDrafts[gid].action_steps = [{}];
           }
           state.gapDrafts[gid].action_steps[0][t.getAttribute("data-gap-step")] = t.value;
+        }
+        return;
+      }
+      if (gapItem && t.getAttribute("data-gap-step-pick")) {
+        var gidPick = gapItem.getAttribute("data-gap");
+        var stepPick = t.getAttribute("data-gap-step-pick");
+        var stepVal = t.value || "";
+        if (state.gapDrafts[gidPick]) {
+          if (!state.gapDrafts[gidPick].action_steps || !state.gapDrafts[gidPick].action_steps[0]) {
+            state.gapDrafts[gidPick].action_steps = [{}];
+          }
+          state.gapDrafts[gidPick].action_steps[0][stepPick] = stepVal;
+        }
+        var stepInput = gapItem.querySelector('[data-gap-step="' + stepPick + '"]');
+        if (stepInput) {
+          stepInput.value = stepVal;
         }
         return;
       }
