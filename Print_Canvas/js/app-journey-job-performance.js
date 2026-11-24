@@ -13,8 +13,53 @@
     dirty: false,
     gapDrafts: {},
     idpDraft: null,
+    evidence: null,
     bound: false
   };
+
+  function evidenceFor(elementId) {
+    var pack = state.evidence || (state.record && state.record.evidence) || null;
+    if (!pack || !pack.by_element) {
+      return [];
+    }
+    return pack.by_element[elementId] || [];
+  }
+
+  function paintEvidenceSummary() {
+    var host = document.getElementById("aj-jp-evidence-summary");
+    if (!host) {
+      return;
+    }
+    var pack = state.evidence || (state.record && state.record.evidence) || null;
+    if (!pack || !(pack.items || []).length) {
+      host.innerHTML = "<p class=\"aj-jp-evidence-empty\">لا شواهد مربوطة لهذا المعلم حالياً.</p>";
+      return;
+    }
+    var seen = {};
+    var unique = [];
+    (pack.items || []).forEach(function (item) {
+      var key = item.source_kind + ":" + item.source_id;
+      if (seen[key]) {
+        return;
+      }
+      seen[key] = true;
+      unique.push(item);
+    });
+    host.innerHTML = unique
+      .map(function (item) {
+        return (
+          "<div class=\"aj-jp-evidence-chip\">" +
+          "<strong>" +
+          escapeHtml(item.title || item.source_kind) +
+          "</strong>" +
+          "<div>" +
+          escapeHtml(item.summary || "") +
+          "</div>" +
+          "</div>"
+        );
+      })
+      .join("");
+  }
 
   function sessionUser() {
     try {
@@ -361,11 +406,34 @@
           "<div class=\"aj-jp-excel\" data-aj-jp-excel-box=\"" +
           escapeHtml(item.id) +
           "\" hidden></div>" +
+          (function () {
+            var ev = evidenceFor(item.id);
+            if (!ev.length) {
+              return "";
+            }
+            return (
+              "<p class=\"aj-jp-card-evidence-title\">شواهد مرتبطة (مرجع بصري — بلا فرض درجة)</p>" +
+              "<ul class=\"aj-jp-card-evidence\">" +
+              ev
+                .map(function (row) {
+                  return (
+                    "<li><strong>" +
+                    escapeHtml(row.title || "") +
+                    "</strong><div>" +
+                    escapeHtml(row.summary || "") +
+                    "</div></li>"
+                  );
+                })
+                .join("") +
+              "</ul>"
+            );
+          })() +
           "</article>"
         );
       })
       .join("");
     paintCalc();
+    paintEvidenceSummary();
     paintGapPanel();
     paintIdpPanel();
   }
@@ -646,14 +714,32 @@
       });
     }).then(function (record) {
       state.record = record;
+      state.evidence = record.evidence || null;
       state.gapDrafts = {};
       state.idpDraft = null;
       state.dirty = false;
       paintTeacherMeta();
       paintElements();
-      status("السجل جاهز — لقطة الأوزان مجمّدة عند الإنشاء.");
+      status("السجل جاهز — لقطة الأوزان مجمّدة، والشواهد الحية للمرجعية فقط.");
+      if (record.id) {
+        return fetchJson(API + "/records/" + record.id + "/evidence", {
+          headers: authHeaders(),
+          cache: "no-store"
+        }).then(function (pack) {
+          state.evidence = pack;
+          if (state.record) {
+            state.record.evidence = pack;
+          }
+          paintEvidenceSummary();
+          paintElements();
+        }).catch(function () {
+          return null;
+        });
+      }
+      return null;
     }).catch(function (error) {
       state.record = null;
+      state.evidence = null;
       paintElements();
       status(error.message || "تعذر فتح السجل.", true);
     });
