@@ -231,17 +231,20 @@
     paintTable();
   }
 
-  function setTab(tab) {
-    var wantDash = tab === "dashboard";
+  function applyPaneVisibility(wantDash) {
     var dash = document.getElementById("aj-jp-dashboard");
     var card = document.getElementById("aj-jp-card-workspace");
     var tabCard = document.getElementById("aj-jp-tab-card");
     var tabDash = document.getElementById("aj-jp-tab-dashboard");
     if (dash) {
       dash.hidden = !wantDash;
+      dash.classList.toggle("aj-jp-pane-hidden", !wantDash);
+      dash.setAttribute("aria-hidden", wantDash ? "false" : "true");
     }
     if (card) {
       card.hidden = wantDash;
+      card.classList.toggle("aj-jp-pane-hidden", wantDash);
+      card.setAttribute("aria-hidden", wantDash ? "true" : "false");
     }
     if (tabCard) {
       tabCard.classList.toggle("is-active", !wantDash);
@@ -251,32 +254,73 @@
       tabDash.classList.toggle("is-active", wantDash);
       tabDash.setAttribute("aria-selected", wantDash ? "true" : "false");
     }
+  }
+
+  function scrollJobPerfTop() {
+    var view = document.getElementById("view-job-performance");
+    var tabs = document.querySelector("#view-job-performance .aj-jp-tabs");
+    var target = tabs || view;
+    if (target && typeof target.scrollIntoView === "function") {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    try {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      window.scrollTo(0, 0);
+    }
+  }
+
+  function setTab(tab) {
+    var wantDash = tab === "dashboard";
+    applyPaneVisibility(wantDash);
     if (wantDash) {
       refresh();
+    } else {
+      scrollJobPerfTop();
     }
   }
 
   function openStaffCard(staffId) {
-    setTab("card");
+    applyPaneVisibility(false);
+    scrollJobPerfTop();
+    var openPromise;
     if (root.AjJobPerformance && typeof root.AjJobPerformance.openStaff === "function") {
-      return root.AjJobPerformance.openStaff(staffId);
+      openPromise = root.AjJobPerformance.openStaff(staffId);
+    } else {
+      var teacherEl = document.getElementById("aj-jp-teacher");
+      if (teacherEl) {
+        teacherEl.value = String(staffId || "");
+        teacherEl.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      openPromise = Promise.resolve();
     }
-    var teacherEl = document.getElementById("aj-jp-teacher");
-    if (teacherEl) {
-      teacherEl.value = String(staffId || "");
-      teacherEl.dispatchEvent(new Event("change", { bubbles: true }));
-    }
-    return null;
+    return Promise.resolve(openPromise).then(function (result) {
+      scrollJobPerfTop();
+      return result;
+    });
   }
 
   function leadershipSignoffColumns() {
+    var user = sessionUser() || {};
+    var userId = String(user.national_id || user.id || "").trim();
+    var userName = String(user.name || "").trim();
     return [
-      { roleTitle: "وكيل المدرسة", name: "" },
-      { roleTitle: "مدير المدرسة", name: "" }
+      {
+        roleTitle: "وكيل المدرسة",
+        name: userName,
+        id: userId,
+        signature: userId ? "signatures/sig_" + userId + ".png" : "",
+        signatureFallback: "signatures/sig_students.png"
+      },
+      {
+        roleTitle: "مدير المدرسة",
+        name: "",
+        signatureFallback: "signatures/sig_manager.png"
+      }
     ];
   }
 
-  function enrichSignoff(columns) {
+  function enrichSignoff() {
     var base = leadershipSignoffColumns();
     if (!root.AJPrint || typeof root.AJPrint.leadership !== "function") {
       return Promise.resolve(base);
@@ -290,22 +334,31 @@
         var vice = list.filter(function (col) {
           return col && String(col.roleTitle || col.role || "").indexOf("وكيل") >= 0;
         })[0];
-        if (vice) {
+        // الوكيل: الجلسة الحالية أولاً، ثم مقعد القيادة إن خلت الجلسة.
+        if (!base[0].name && vice) {
           base[0].name = vice.name || base[0].name;
+          if (vice.id) {
+            base[0].id = vice.id;
+          }
           if (vice.signature || vice.signaturePath) {
             base[0].signature = vice.signature || vice.signaturePath;
           }
+        } else if (vice && (vice.signature || vice.signaturePath) && !base[0].signature) {
+          base[0].signature = vice.signature || vice.signaturePath;
         }
         if (principal) {
           base[1].name = principal.name || base[1].name;
+          if (principal.id) {
+            base[1].id = principal.id;
+          }
           if (principal.signature || principal.signaturePath) {
             base[1].signature = principal.signature || principal.signaturePath;
           }
         }
-        return base;
+        return base.slice(0, 2);
       })
       .catch(function () {
-        return base;
+        return base.slice(0, 2);
       });
   }
 
@@ -411,7 +464,8 @@
             rows
           ),
         signoff: true,
-        signatures: signCols
+        maxColumns: 2,
+        signatures: (signCols || []).slice(0, 2)
       });
       status("معاينة كشف المتابعة الإجمالي جاهزة.");
     });
@@ -464,7 +518,8 @@
             rows
           ),
         signoff: true,
-        signatures: signCols
+        maxColumns: 2,
+        signatures: (signCols || []).slice(0, 2)
       });
       status("معاينة مصفوفة الاحتياجات التدريبية جاهزة.");
     });
@@ -574,7 +629,9 @@
   function load() {
     bind();
     var dash = document.getElementById("aj-jp-dashboard");
-    if (dash && !dash.hidden) {
+    var wantDash = !!(dash && !dash.hidden && !dash.classList.contains("aj-jp-pane-hidden"));
+    applyPaneVisibility(wantDash);
+    if (wantDash) {
       return refresh();
     }
     return Promise.resolve(null);

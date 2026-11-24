@@ -195,6 +195,7 @@
         school: opts.school,
         admin: opts.admin,
         columns: opts.columns,
+        maxColumns: opts.maxColumns || opts.cols || undefined,
         pageLabel: opts.pageLabel || "اعتماد الصفحة الأخيرة",
         omitBottomBar: !!opts.omitSignoffBottom || !!opts.unifiedFooter
       }) + "</div>";

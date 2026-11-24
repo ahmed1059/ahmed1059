@@ -8,7 +8,7 @@
 
   var VERSION = "301-phase2";
   var FRAME_ID = "pe-print-frame";
-  var SHELL_HREF = "/css/print-shell.css?v=pe9";
+  var SHELL_HREF = "/css/print-shell.css?v=pe10";
   var lastPayload = null;
   var lastHtml = "";
   var lastArm = {};
@@ -220,6 +220,7 @@
       fileName: payload.fileName || payload.docTitle || payload.title || "",
       signoff: payload.signoff !== false,
       columns: payload.signatures || payload.columns || [],
+      maxColumns: payload.maxColumns || payload.cols || undefined,
       strictIdentity: payload.strictIdentity !== false
     });
     if (Array.isArray(payload.metaGrid) && payload.metaGrid.length && !payload.bodyHtml) {

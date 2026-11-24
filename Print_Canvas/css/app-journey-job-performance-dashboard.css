@@ -1,4 +1,12 @@
 /* لوحة المتابعة التنفيذية لتقويم الأداء — ملف مستقل */
+
+/* التبويبان متبادلان: لا تُلغَى [hidden] بقاعدة display:grid */
+#view-job-performance #aj-jp-dashboard[hidden],
+#view-job-performance #aj-jp-card-workspace[hidden],
+#view-job-performance .aj-jp-pane-hidden {
+  display: none !important;
+}
+
 #view-job-performance .aj-jp-tabs {
   display: flex;
   flex-wrap: wrap;
