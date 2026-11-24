@@ -304,3 +304,45 @@
   gap: 8px;
   align-items: center;
 }
+
+#view-job-performance .aj-jp-evidence-summary {
+  display: grid;
+  gap: 8px;
+}
+
+#view-job-performance .aj-jp-evidence-chip,
+#view-job-performance .aj-jp-card-evidence li {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid #d5e0da;
+  border-radius: 6px;
+  background: #f7fbf9;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #334039;
+}
+
+#view-job-performance .aj-jp-evidence-chip strong,
+#view-job-performance .aj-jp-card-evidence strong {
+  color: #0b5e56;
+}
+
+#view-job-performance .aj-jp-card-evidence {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+#view-job-performance .aj-jp-card-evidence-title {
+  margin: 10px 0 4px;
+  font-size: 13px;
+  color: #5c675f;
+}
+
+#view-job-performance .aj-jp-evidence-empty {
+  margin: 0;
+  font-size: 13px;
+  color: #5c675f;
+}

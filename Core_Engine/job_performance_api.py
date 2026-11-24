@@ -203,8 +203,231 @@ def ensure_job_performance_tables(connection) -> None:
         )
         """
     )
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS perf_evidence_links (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            record_id INTEGER NOT NULL,
+            element_id TEXT NOT NULL DEFAULT '',
+            source_kind TEXT NOT NULL,
+            source_id TEXT NOT NULL,
+            title TEXT NOT NULL DEFAULT '',
+            summary TEXT NOT NULL DEFAULT '',
+            meta_json TEXT NOT NULL DEFAULT '{}',
+            created_at TEXT NOT NULL,
+            UNIQUE (record_id, source_kind, source_id, element_id),
+            FOREIGN KEY (record_id) REFERENCES perf_records(id)
+        )
+        """
+    )
     seed_teacher_template(connection)
     seed_default_cycle(connection)
+
+
+COMMITTEE_TITLES = {
+    "admin": "اللجنة الإدارية",
+    "guidance": "لجنة التوجيه والإرشاد",
+    "achievement": "لجنة التحصيل الدراسي",
+    "excellence": "لجنة التميز",
+    "fund": "فريق عمل الصندوق المدرسي",
+    "budget": "لجنة الميزانية التشغيلية",
+    "safety": "فريق عمل الأمن والسلامة المدرسية",
+    "activity": "لجنة النشاط الطلابي",
+    "discipline": "لجنة الانضباط المدرسي",
+    "special": "لجنة التربية الخاصة",
+}
+
+SEAT_LABELS = {
+    "chair": "رئيس",
+    "deputy": "نائب",
+    "secretary": "أمين سر",
+    "member": "عضو",
+    "student": "طالب",
+    "parent": "ولي أمر",
+}
+
+# ربط شاهد → عناصر (مرجع بصري فقط — بلا فرض درجة).
+EVIDENCE_ELEMENT_MAP = {
+    "classroom_visit": ("strategies", "learning_env", "classroom_mgmt", "assessment_variety"),
+    "committee": ("duties", "professional_community"),
+    "nafes": ("learner_outcomes", "results_analysis"),
+}
+
+
+def _gather_live_evidence(connection, staff_id: str, specialty: str = "") -> list[dict]:
+    """يجمع شواهد حية من النظام دون تعديل درجات التقويم."""
+    items: list[dict] = []
+    visits = connection.execute(
+        """
+        SELECT id, visit_type, subject, total, band, visit_date, visit_date_hijri, grade, lesson
+        FROM classroom_visits
+        WHERE teacher_id = ?
+        ORDER BY id DESC
+        LIMIT 20
+        """,
+        (staff_id,),
+    ).fetchall()
+    for row in visits:
+        vid = str(row[0])
+        title = "زيارة صفية" + (f" — {row[1]}" if row[1] else "")
+        bits = [
+            row[2] or "",
+            row[7] or "",
+            row[6] or row[5] or "",
+            (f"الدرجة {row[3]:g}" if row[3] is not None else ""),
+            row[4] or "",
+            row[8] or "",
+        ]
+        items.append(
+            {
+                "source_kind": "classroom_visit",
+                "source_id": vid,
+                "title": title,
+                "summary": " · ".join([b for b in bits if b]),
+                "meta": {
+                    "visit_type": row[1] or "",
+                    "subject": row[2] or "",
+                    "total": row[3],
+                    "band": row[4] or "",
+                },
+                "element_ids": list(EVIDENCE_ELEMENT_MAP["classroom_visit"]),
+            }
+        )
+
+    seats = connection.execute(
+        """
+        SELECT committee_id, seat, COALESCE(display_name, '')
+        FROM committee_seat
+        WHERE national_id = ?
+        ORDER BY committee_id, sort_order
+        """,
+        (staff_id,),
+    ).fetchall()
+    for row in seats:
+        cid = str(row[0] or "")
+        seat = str(row[1] or "")
+        title = COMMITTEE_TITLES.get(cid, cid or "لجنة مدرسية")
+        items.append(
+            {
+                "source_kind": "committee",
+                "source_id": f"{cid}:{seat}:{staff_id}",
+                "title": f"عضوية لجنة — {title}",
+                "summary": f"{SEAT_LABELS.get(seat, seat)} · {title}",
+                "meta": {"committee_id": cid, "seat": seat},
+                "element_ids": list(EVIDENCE_ELEMENT_MAP["committee"]),
+            }
+        )
+
+    # نافس على مستوى المدرسة — يُعرض كسياق نتائج إن وُجدت بطاقات.
+    nafs_rows = connection.execute(
+        """
+        SELECT id, grade, enrolled, tested, reading_score, science_score, math_score,
+               weakest_skill, weakest_score
+        FROM nafs_cards
+        ORDER BY id DESC
+        LIMIT 5
+        """
+    ).fetchall()
+    spec = specialty or ""
+    for row in nafs_rows:
+        nid = str(row[0])
+        focus = []
+        if "رياض" in spec or "math" in spec.lower():
+            focus.append(f"رياضيات {row[6] or '—'}")
+        if "عربي" in spec or "قراء" in spec:
+            focus.append(f"قراءة {row[4] or '—'}")
+        if "علوم" in spec or "أحياء" in spec or "فيزياء" in spec or "كيمياء" in spec:
+            focus.append(f"علوم {row[5] or '—'}")
+        if not focus:
+            focus = [
+                f"قراءة {row[4] or '—'}",
+                f"علوم {row[5] or '—'}",
+                f"رياضيات {row[6] or '—'}",
+            ]
+        items.append(
+            {
+                "source_kind": "nafes",
+                "source_id": nid,
+                "title": f"نتائج نافس — {row[1] or 'مرحلة'}",
+                "summary": " · ".join(
+                    [
+                        f"مختبرون {row[3] or '—'}/{row[2] or '—'}",
+                        " · ".join(focus),
+                        (f"أضعف مهارة: {row[7]} ({row[8]})" if row[7] else ""),
+                    ]
+                ),
+                "meta": {
+                    "grade": row[1] or "",
+                    "school_level": True,
+                    "note": "شاهد مدرسي سياقي — لا يفرض درجة على المعلم",
+                },
+                "element_ids": list(EVIDENCE_ELEMENT_MAP["nafes"]),
+            }
+        )
+    return items
+
+
+def sync_evidence_links(connection, record_id: int) -> dict:
+    """يحدّث perf_evidence_links من المصادر الحية (قراءة/مزامنة عرض فقط)."""
+    row = connection.execute(
+        "SELECT staff_id FROM perf_records WHERE id = ?",
+        (record_id,),
+    ).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="سجل التقويم غير موجود")
+    staff_id = str(row[0])
+    staff = connection.execute(
+        "SELECT specialty FROM noor_staff WHERE national_id = ?",
+        (staff_id,),
+    ).fetchone()
+    specialty = str(staff[0] or "") if staff else ""
+    live = _gather_live_evidence(connection, staff_id, specialty)
+    moment = _stamp()
+    connection.execute(
+        "DELETE FROM perf_evidence_links WHERE record_id = ?",
+        (record_id,),
+    )
+    flat = []
+    by_element: dict[str, list] = {}
+    for item in live:
+        element_ids = item.get("element_ids") or [""]
+        for eid in element_ids:
+            connection.execute(
+                """
+                INSERT INTO perf_evidence_links (
+                    record_id, element_id, source_kind, source_id, title, summary, meta_json, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    record_id,
+                    eid,
+                    item["source_kind"],
+                    item["source_id"],
+                    item["title"],
+                    item["summary"],
+                    json.dumps(item.get("meta") or {}, ensure_ascii=False),
+                    moment,
+                ),
+            )
+            entry = {
+                "element_id": eid,
+                "source_kind": item["source_kind"],
+                "source_id": item["source_id"],
+                "title": item["title"],
+                "summary": item["summary"],
+                "meta": item.get("meta") or {},
+            }
+            flat.append(entry)
+            by_element.setdefault(eid, []).append(entry)
+    return {
+        "record_id": record_id,
+        "staff_id": staff_id,
+        "count": len(flat),
+        "items": flat,
+        "by_element": by_element,
+        "auto_score": False,
+        "note": "شواهد حية للمرجعية البصرية فقط — لا تُفرض درجات تلقائياً.",
+    }
 
 
 def seed_teacher_template(connection) -> None:
@@ -752,7 +975,24 @@ def get_record(record_id: int, x_session_token: str = Header(default="")):
             if idp
             else None
         )
+        evidence = sync_evidence_links(connection, record_id)
+        connection.commit()
+        payload["evidence"] = evidence
         return payload
+    finally:
+        connection.close()
+
+
+@router.get("/api/session/job-performance/records/{record_id}/evidence")
+def get_record_evidence(record_id: int, x_session_token: str = Header(default="")):
+    """لوحة الشواهد الحية — قراءة فقط مع مزامنة روابط العرض."""
+    _user(x_session_token)
+    connection = connect()
+    try:
+        ensure_job_performance_tables(connection)
+        pack = sync_evidence_links(connection, record_id)
+        connection.commit()
+        return pack
     finally:
         connection.close()
 
