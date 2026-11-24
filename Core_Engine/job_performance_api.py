@@ -291,9 +291,15 @@ EVIDENCE_ELEMENT_MAP = {
 }
 
 
-def _gather_live_evidence(connection, staff_id: str, specialty: str = "") -> list[dict]:
+def _gather_live_evidence(
+    connection,
+    staff_id: str,
+    specialty: str = "",
+    assignment_role: str = "",
+) -> list[dict]:
     """يجمع شواهد حية من النظام دون تعديل درجات التقويم."""
     items: list[dict] = []
+    role_code = str(assignment_role or "").strip()
     visits = connection.execute(
         """
         SELECT id, visit_type, subject, total, band, visit_date, visit_date_hijri, grade, lesson
@@ -366,7 +372,10 @@ def _gather_live_evidence(connection, staff_id: str, specialty: str = "") -> lis
             }
         )
 
-    # نافس على مستوى المدرسة — يُعرض كسياق نتائج إن وُجدت بطاقات.
+    # نافس: سياق نتائج للمعلمين/القيادة فقط — لا يُربط بمحضر المختبر/المصادر أو الإداريين.
+    if role_code in ("lab_tech", "admin_staff"):
+        return items
+
     nafs_rows = connection.execute(
         """
         SELECT id, grade, enrolled, tested, reading_score, science_score, math_score,
@@ -462,11 +471,22 @@ def sync_evidence_links(connection, record_id: int) -> dict:
         raise HTTPException(status_code=404, detail="سجل التقويم غير موجود")
     staff_id = str(row[0])
     staff = connection.execute(
-        "SELECT specialty FROM noor_staff WHERE national_id = ?",
+        """
+        SELECT specialty, COALESCE(assignment_role, '')
+        FROM noor_staff WHERE national_id = ?
+        """,
         (staff_id,),
     ).fetchone()
     specialty = str(staff[0] or "") if staff else ""
-    live = _gather_live_evidence(connection, staff_id, specialty)
+    assignment_role = str(staff[1] or "") if staff else ""
+    # إن وُجد إسناد محفوظ على سجل التقويم فهو أدق من استدلال الجدول.
+    rec_role = connection.execute(
+        "SELECT COALESCE(assignment_role, '') FROM perf_records WHERE id = ?",
+        (record_id,),
+    ).fetchone()
+    if rec_role and rec_role[0]:
+        assignment_role = str(rec_role[0])
+    live = _gather_live_evidence(connection, staff_id, specialty, assignment_role)
     moment = _stamp()
     connection.execute(
         "DELETE FROM perf_evidence_links WHERE record_id = ?",

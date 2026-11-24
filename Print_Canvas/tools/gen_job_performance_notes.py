@@ -408,6 +408,14 @@ TEACHER = {
 }
 
 
+def _improve_action(improve: str, prefix: str = "تحسين") -> str:
+    """تجنّب تكرار استكمال/اكتمال/تحسين في عبارة خيار التحسين."""
+    text = (improve or "").strip()
+    if text.startswith(("استكمال ", "اكتمال ", "تحسين ", "رفع ", "ضبط ", "تفعيل ")):
+        return text
+    return f"{prefix} {text}"
+
+
 def matrix(core: str, impact: str, improve: str, excel: str) -> dict[str, list[str]]:
     """Compact charter matrix around a role-specific core phrase."""
     return pack(
@@ -416,13 +424,13 @@ def matrix(core: str, impact: str, improve: str, excel: str) -> dict[str, list[s
                 f"قصور ملحوظ في {core} خلال الفترة",
                 f"تأثر {impact}",
                 f"انتظام التنفيذ المهني غير مكتمل في هذا المجال",
-                f"تحسين {improve}",
+                _improve_action(improve, "تحسين"),
             ],
             [
                 f"إنجاز جزئي في {core} دون اكتمال المتابعة",
                 f"أثر العمل على {impact} محدود أو متقطع",
                 f"يحتاج توجيهاً لاستكمال متطلبات المهمة بوضوح",
-                f"استكمال {improve}",
+                _improve_action(improve, "استكمال"),
             ],
             [
                 f"ينجز {core} بانتظام مقبول وفق المطلوب",
