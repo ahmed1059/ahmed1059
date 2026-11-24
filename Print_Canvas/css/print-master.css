@@ -139,7 +139,8 @@
 .aj-visit-print .aj-visit-criteria th,
 .aj-visit-print .aj-visit-criteria td {
   border: 1px solid #94a3b8 !important;
-  padding: 4px 6px !important;
+  padding-block: 3px !important;
+  padding-inline: 6px !important;
   font-size: 10.5pt !important;
   line-height: 1.35 !important;
   vertical-align: top;
@@ -154,9 +155,9 @@
   color: #0b5e56 !important;
 }
 
-.aj-visit-print .aj-visit-crit-label { width: 22%; }
-.aj-visit-print .aj-visit-crit-level { width: 14%; }
-.aj-visit-print .aj-visit-crit-phrase { width: 54%; }
+.aj-visit-print .aj-visit-crit-label { width: 20%; }
+.aj-visit-print .aj-visit-crit-level { width: 22%; white-space: nowrap; }
+.aj-visit-print .aj-visit-crit-phrase { width: 48%; }
 .aj-visit-print .aj-visit-crit-points { width: 10%; text-align: center; }
 
 .aj-visit-print .aj-visit-p {
@@ -175,11 +176,41 @@
   line-height: 1.25;
 }
 
-.pm-document.aj-visit-print-doc .pm-signoff,
-.pm-document.aj-visit-print-doc .pm-end {
-  margin-top: 2.5mm;
+.pm-document.aj-visit-print-doc .pm-signoff {
+  margin-top: 6px !important;
   break-inside: avoid !important;
   page-break-inside: avoid !important;
+}
+
+.pm-document.aj-visit-print-doc .pm-end {
+  margin-top: 0;
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
+}
+
+.pm-document.aj-visit-print-doc .pm-foot,
+.pm-document.aj-visit-print-doc .pm-foot-slot,
+.pm-document.aj-visit-print-doc .pm-clearance {
+  height: 10mm !important;
+  min-height: 10mm !important;
+}
+
+.pm-document.aj-visit-print-doc .pm-foot-unified {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 4mm !important;
+  font-size: 8.5pt !important;
+  line-height: 1.2 !important;
+  padding: 0 1mm !important;
+  box-sizing: border-box !important;
+}
+
+.pm-document.aj-visit-print-doc .pm-foot-unified .pm-foot-school,
+.pm-document.aj-visit-print-doc .pm-foot-unified .pm-foot-date,
+.pm-document.aj-visit-print-doc .pm-foot-unified .pm-foot-page {
+  flex: 0 1 auto;
+  white-space: nowrap;
 }
 
 .pm-document.aj-visit-print-doc .doc-signoff-block .signoff-col,
@@ -453,5 +484,34 @@
   body.app-journey.print-master .pm-signoff .doc-signoff-block {
     margin-top: 6mm !important;
     margin-bottom: 0 !important;
+  }
+
+  body.app-journey.print-master .pm-document.aj-visit-print-doc .pm-signoff {
+    margin-top: 6px !important;
+  }
+
+  body.app-journey.print-master .pm-document.aj-visit-print-doc .pm-signoff .doc-signoff-block {
+    margin-top: 6px !important;
+    margin-bottom: 0 !important;
+  }
+
+  body.app-journey.print-master .pm-document.aj-visit-print-doc .pm-foot,
+  body.app-journey.print-master .pm-document.aj-visit-print-doc .pm-foot-slot {
+    height: 10mm !important;
+    min-height: 10mm !important;
+  }
+
+  body.app-journey.print-master .pm-document.aj-visit-print-doc .pm-clearance {
+    height: 0 !important;
+    min-height: 0 !important;
+  }
+
+  body.app-journey.print-master .pm-document.aj-visit-print-doc .pm-foot-unified {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 4mm !important;
+    font-size: 8.5pt !important;
+    line-height: 1.2 !important;
   }
 }

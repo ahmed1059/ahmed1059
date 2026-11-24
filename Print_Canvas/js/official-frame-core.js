@@ -151,13 +151,17 @@
         var pageLabel = opts.page && opts.total
             ? ("الصفحة " + opts.page + " من " + opts.total)
             : (opts.pageLabel || "الصفحة 1 من 1");
+        var bottom = opts.omitBottomBar
+            ? ""
+            : ("<div class=\"doc-bottom-bar\">"
+                + "<span class=\"doc-bottom-school\">وثيقة رسمية — " + escapeHtml(id.school) + "</span>"
+                + "<span class=\"doc-bottom-page\">" + escapeHtml(pageLabel) + "</span>"
+                + "</div>");
         return "<footer class=\"doc-signoff-block\" data-cols=\"3\">"
             + "<div class=\"signoff-title-bar\">" + escapeHtml(opts.signTitle || DEFAULTS.signTitle) + "</div>"
             + "<table class=\"pm-signoff-table\" role=\"presentation\"><tbody><tr>" + cells + "</tr></tbody></table>"
-            + "<div class=\"doc-bottom-bar\">"
-            + "<span class=\"doc-bottom-school\">وثيقة رسمية — " + escapeHtml(id.school) + "</span>"
-            + "<span class=\"doc-bottom-page\">" + escapeHtml(pageLabel) + "</span>"
-            + "</div></footer>";
+            + bottom
+            + "</footer>";
     }
 
     /** تذييل خفيف لصفحات المتابعة دون إعادة شريط الاعتماد كاملًا. */

@@ -195,7 +195,8 @@
         school: opts.school,
         admin: opts.admin,
         columns: opts.columns,
-        pageLabel: "اعتماد الصفحة الأخيرة"
+        pageLabel: opts.pageLabel || "اعتماد الصفحة الأخيرة",
+        omitBottomBar: !!opts.omitSignoffBottom || !!opts.unifiedFooter
       }) + "</div>";
     }
     var headStyle = "height:auto;min-height:0;max-height:none;overflow:visible";
@@ -203,6 +204,16 @@
     var gapStyle = "height:" + settings.footerHeight + ";min-height:" + settings.footerHeight;
     var frameClass = opts.frameClass ? (" " + String(opts.frameClass)) : "";
     var storedName = opts.fileName ? safePart(opts.fileName) : fileName(opts);
+    var schoolLabel = opts.school || root.bookletSchoolName || "متوسطة سعد بن الربيع الأنصاري";
+    var footInner;
+    if (opts.unifiedFooter) {
+      footInner = "<span class=\"pm-foot-school\">وثيقة رسمية — " + escapeHtml(schoolLabel) + "</span>"
+        + "<span class=\"pm-foot-date\">" + escapeHtml(printDateLine()) + "</span>"
+        + "<span class=\"pm-foot-page\">" + escapeHtml(opts.pageFootLabel || "الصفحة 1 من 1") + "</span>";
+    } else {
+      footInner = "<span class=\"pm-foot-date\">" + escapeHtml(printDateLine()) + "</span>"
+        + "<span class=\"pm-foot-page\">الصفحة <span class=\"pm-page-num\"></span> من <span class=\"pm-pages-num\"></span></span>";
+    }
     return "<article class=\"pm-document" + (landscape ? " pm-landscape" : "") + frameClass + "\" data-file-name=\"" + escapeHtml(storedName) + "\">"
       + "<table class=\"pm-sheet\">"
       + "<thead><tr><td><div class=\"pm-head\" style=\"" + headStyle + "\">" + headerHtml + "</div></td></tr></thead>"
@@ -215,9 +226,8 @@
       + "</div>"
       + "</td></tr></tbody>"
       + "</table>"
-      + "<div class=\"pm-foot\" style=\"" + footStyle + "\">"
-      + "<span class=\"pm-foot-date\">" + escapeHtml(printDateLine()) + "</span>"
-      + "<span class=\"pm-foot-page\">الصفحة <span class=\"pm-page-num\"></span> من <span class=\"pm-pages-num\"></span></span>"
+      + "<div class=\"pm-foot" + (opts.unifiedFooter ? " pm-foot-unified" : "") + "\" style=\"" + footStyle + "\">"
+      + footInner
       + "</div></article>";
   }
 
