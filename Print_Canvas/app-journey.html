@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="css/app-journey.css?v=aj194">
   <link rel="stylesheet" href="css/app-journey-job-performance.css?v=aj5">
   <link rel="stylesheet" href="css/app-journey-job-performance-dashboard.css?v=aj2">
+  <link rel="stylesheet" href="css/app-journey-accreditation-self.css?v=aj1">
   <link rel="stylesheet" href="css/responsive.css?v=r292">
   <link rel="stylesheet" href="css/print-master.css?v=c311">
   <!-- print-shell.css يُحمَّل داخل iframe الطباعة فقط؛ الملف موجود لحارس الجودة -->
@@ -129,6 +130,7 @@
             <a class="aj-task-btn" id="aj-task-ssot" href="#view-performance">مؤشرات الأداء (SSOT)</a>
             <a class="aj-task-btn" id="aj-task-nafes" href="#view-nafes">ملف التدريب والقياس (نافس)</a>
             <a class="aj-task-btn" href="#view-job-performance">تقويم الأداء الوظيفي</a>
+            <a class="aj-task-btn" href="#view-accreditation-self">التقويم الذاتي المدرسي (SSOT)</a>
             <a class="aj-task-btn" href="#view-external-eval">التقويم الذاتي والاعتماد الخارجي (ETEC)</a>
           </div>
         </li>
@@ -363,6 +365,7 @@
           <li><a class="aj-task-btn" href="#view-performance">مؤشرات الأداء (SSOT)</a></li>
           <li><a class="aj-task-btn" href="#view-nafes">ملف التدريب والقياس (نافس)</a></li>
           <li><a class="aj-task-btn" href="#view-job-performance">تقويم الأداء الوظيفي</a></li>
+          <li><a class="aj-task-btn" href="#view-accreditation-self">التقويم الذاتي المدرسي (SSOT)</a></li>
           <li><a class="aj-task-btn" href="#view-external-eval">التقويم الذاتي والاعتماد الخارجي (ETEC)</a></li>
         </ol>
       </section>
@@ -785,6 +788,46 @@
           <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-home">العودة</a>
         </div>
         <ul id="aj-integrity-report" class="aj-cards" hidden></ul>
+      </section>
+
+      <section id="view-accreditation-self" class="aj-view wash-board" hidden>
+        <h1>التقويم الذاتي المدرسي (SSOT)</h1>
+        <p class="aj-lede">رصد ذاتي لمؤشرات الاعتماد الحية مع ربط الشواهد من مصدر الحقيقة الواحد. المستوى الخارجي مرجعي للاسترشاد فقط ولا يُفرَض كدرجة ذاتية.</p>
+        <p class="aj-status" id="aj-ac-status" role="status" aria-live="polite"></p>
+
+        <div class="aj-ac-cards" aria-label="ملخص الرصد الذاتي">
+          <div class="aj-ac-card"><span>إجمالي المؤشرات</span><strong id="aj-ac-total">—</strong></div>
+          <div class="aj-ac-card"><span>المرصود ذاتياً</span><strong id="aj-ac-rated">—</strong></div>
+          <div class="aj-ac-card"><span>المتبقي</span><strong id="aj-ac-pending">—</strong></div>
+          <div class="aj-ac-card"><span>متوسط مستوى الإتقان</span><strong id="aj-ac-avg">—</strong></div>
+        </div>
+
+        <div class="aj-ac-filters">
+          <div class="aj-jp-field">
+            <label for="aj-ac-domain">المجال</label>
+            <select id="aj-ac-domain">
+              <option value="all">كل المجالات</option>
+            </select>
+          </div>
+          <div class="aj-jp-field">
+            <label for="aj-ac-status-filter">الحالة / المستوى</label>
+            <select id="aj-ac-status-filter">
+              <option value="all">الكل</option>
+              <option value="pending">غير مرصود</option>
+              <option value="priority">1–2 أولوية تحسين</option>
+              <option value="advanced">3–4 متقدم ومتميز</option>
+            </select>
+          </div>
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-ac-refresh">تحديث البنك</button>
+        </div>
+
+        <p class="aj-ac-count">المعروض: <strong id="aj-ac-visible-count">0</strong> مؤشراً</p>
+        <div id="aj-ac-list" class="aj-ac-list" aria-label="بطاقات مؤشرات الاعتماد"></div>
+
+        <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-station-measurement">العودة</a>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-external-eval">مقارنة ETEC الخارجية</a>
+        </div>
       </section>
 
       <section id="view-external-eval" class="aj-view wash-board" hidden>
@@ -1878,7 +1921,7 @@
   <script src="/cores/consistency-core.js?v=c282"></script>
   <script src="/cores/evaluation-core.js?v=c284"></script>
   <script src="/cores/template-engine.js?v=c286"></script>
-  <script src="js/app-journey.js?v=aj192"></script>
+  <script src="js/app-journey.js?v=aj193"></script>
   <script src="js/app-journey-indicator-files.js?v=aj1"></script>
   <script src="js/app-journey-deliverable-file.js?v=c298"></script>
   <script src="js/app-journey-plan-111.js?v=aj175"></script>
@@ -1891,6 +1934,7 @@
   <script src="js/app-journey-import-center.js?v=aj119"></script>
   <script src="js/app-journey-student-registry.js?v=aj145"></script>
   <script src="js/app-journey-evaluation.js?v=c284"></script>
+  <script src="js/app-journey-accreditation-self.js?v=aj1"></script>
   <script src="js/app-journey-visits.js?v=aj198"></script>
   <script src="js/app-journey-visit-plan.js?v=aj3"></script>
   <script src="js/app-journey-job-performance-notes.js?v=aj3"></script>
