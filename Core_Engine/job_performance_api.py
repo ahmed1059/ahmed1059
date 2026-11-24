@@ -1346,6 +1346,332 @@ def save_idp(record_id: int, body: IdpBody, x_session_token: str = Header(defaul
         connection.close()
 
 
+def _infer_assignment_role(role: str, assignment_role: str = "") -> str:
+    saved = str(assignment_role or "").strip()
+    if saved:
+        return normalize_role_code(saved)
+    text = str(role or "")
+    if text.startswith("مدير") or "مدير " in text:
+        return "principal"
+    if "وكيل" in text:
+        return "vice_principal"
+    if "موجه" in text and "طلاب" in text:
+        return "counselor"
+    if "مختبر" in text or "مصادر" in text or "محضر" in text:
+        return "lab_tech"
+    if "صحي" in text:
+        return "teacher_health"
+    if "نشاط" in text:
+        return "teacher_activity"
+    if any(
+        token in text
+        for token in (
+            "مساعد إداري",
+            "مساعد اداري",
+            "مساعد أداري",
+            "مسجل معلومات",
+            "مسجل",
+            "حارس",
+            "مراسل",
+            "كاتب",
+            "مستخدم",
+            "إداري",
+            "اداري",
+            "أداري",
+        )
+    ):
+        return "admin_staff"
+    return "teacher"
+
+
+def _is_roster_staff(staff_id: str, name: str = "") -> bool:
+    """يستبعد الصفوف التجريبية من لوحة المتابعة التنفيذية."""
+    sid = str(staff_id or "").strip()
+    label = str(name or "")
+    if not sid:
+        return False
+    if sid.startswith("1000000") or sid.startswith("1999"):
+        return False
+    if "تجريب" in label:
+        return False
+    return True
+
+
+def build_job_performance_summary(
+    connection,
+    cycle_id: int = 0,
+    phase: str = "mid",
+) -> dict:
+    """تجميع حي لـ noor_staff + perf_records + خطط الفجوة للدورة المختارة."""
+    ensure_job_performance_tables(connection)
+    phase_key = "final" if str(phase or "").strip() == "final" else "mid"
+    score_phase = phase_key
+    percent_col = "final_percent" if phase_key == "final" else "mid_percent"
+    band_col = "final_band_label" if phase_key == "final" else "mid_band_label"
+    ready_col = "readiness_final" if phase_key == "final" else "readiness_mid"
+
+    if not cycle_id:
+        row = connection.execute(
+            "SELECT id FROM perf_cycles ORDER BY id DESC LIMIT 1"
+        ).fetchone()
+        cycle_id = int(row[0]) if row else 0
+
+    cycle = None
+    if cycle_id:
+        crow = connection.execute(
+            """
+            SELECT id, academic_year, label, status
+            FROM perf_cycles WHERE id = ?
+            """,
+            (cycle_id,),
+        ).fetchone()
+        if crow:
+            cycle = {
+                "id": crow[0],
+                "academic_year": crow[1] or "",
+                "label": crow[2] or "",
+                "status": crow[3] or "",
+            }
+
+    staff_rows = connection.execute(
+        """
+        SELECT national_id, name, role, specialty, COALESCE(assignment_role, '')
+        FROM noor_staff
+        WHERE COALESCE(is_deleted, 0) = 0
+        ORDER BY name COLLATE NOCASE
+        """
+    ).fetchall()
+
+    records_by_staff: dict[str, dict] = {}
+    if cycle_id:
+        for row in connection.execute(
+            f"""
+            SELECT id, staff_id, staff_name, assignment_role, weights_snapshot_json,
+                   {percent_col}, {band_col}, {ready_col}
+            FROM perf_records
+            WHERE cycle_id = ?
+            """,
+            (cycle_id,),
+        ).fetchall():
+            records_by_staff[str(row[1])] = {
+                "id": int(row[0]),
+                "staff_id": str(row[1]),
+                "staff_name": row[2] or "",
+                "assignment_role": row[3] or "",
+                "weights_snapshot": json.loads(row[4] or "[]"),
+                "percent": row[5],
+                "band_label": row[6] or "",
+                "readiness": float(row[7] or 0),
+            }
+
+    items: list[dict] = []
+    training_bucket: dict[str, dict] = {}
+    done_percents: list[float] = []
+
+    for srow in staff_rows:
+        staff_id = str(srow[0] or "").strip()
+        name = str(srow[1] or "").strip()
+        if not _is_roster_staff(staff_id, name):
+            continue
+        role = str(srow[2] or "")
+        specialty = str(srow[3] or "")
+        assignment_saved = str(srow[4] or "")
+        record = records_by_staff.get(staff_id)
+        role_code = _infer_assignment_role(
+            role,
+            (record or {}).get("assignment_role") or assignment_saved,
+        )
+        role_label = ROLE_CODES.get(role_code, role_code)
+
+        gaps: list[dict] = []
+        gap_count = 0
+        status = "pending"
+        percent = None
+        band_label = ""
+        readiness = 0.0
+        record_id = None
+        element_labels: dict[str, str] = {}
+
+        if record:
+            record_id = record["id"]
+            percent = record["percent"]
+            band_label = record["band_label"]
+            readiness = float(record["readiness"] or 0)
+            for el in record["weights_snapshot"] or []:
+                eid = str(el.get("id") or "")
+                if eid:
+                    element_labels[eid] = str(el.get("label") or eid)
+            if readiness >= 99.9 and percent is not None:
+                status = "done"
+                done_percents.append(float(percent))
+            elif percent is not None or readiness > 0:
+                status = "in_progress"
+
+            score_rows = connection.execute(
+                """
+                SELECT element_id, rating
+                FROM perf_element_scores
+                WHERE record_id = ? AND phase = ? AND rating IS NOT NULL AND rating <= 2
+                ORDER BY element_id
+                """,
+                (record_id, score_phase),
+            ).fetchall()
+            gap_plan_rows = connection.execute(
+                """
+                SELECT element_id, current_rating, improve_areas, action_steps_json, status
+                FROM perf_gap_plans
+                WHERE record_id = ?
+                ORDER BY element_id
+                """,
+                (record_id,),
+            ).fetchall()
+            plans_by_el = {str(r[0]): r for r in gap_plan_rows}
+            seen: set[str] = set()
+            for erow in score_rows:
+                eid = str(erow[0])
+                seen.add(eid)
+                plan = plans_by_el.get(eid)
+                rating = int(erow[1]) if erow[1] is not None else None
+                steps = []
+                improve = ""
+                if plan:
+                    improve = plan[2] or ""
+                    try:
+                        steps = json.loads(plan[3] or "[]")
+                    except json.JSONDecodeError:
+                        steps = []
+                label = element_labels.get(eid, eid)
+                gaps.append(
+                    {
+                        "element_id": eid,
+                        "element_label": label,
+                        "rating": rating,
+                        "improve_areas": improve,
+                        "action_steps": steps,
+                        "plan_status": (plan[4] if plan else "") or "",
+                    }
+                )
+                bucket = training_bucket.setdefault(
+                    eid,
+                    {
+                        "element_id": eid,
+                        "element_label": label,
+                        "count": 0,
+                        "staff": [],
+                        "sample_actions": [],
+                    },
+                )
+                bucket["count"] += 1
+                bucket["staff"].append({"staff_id": staff_id, "name": name, "rating": rating})
+                for step in steps:
+                    text = ""
+                    if isinstance(step, dict):
+                        text = str(step.get("action") or step.get("text") or "").strip()
+                    else:
+                        text = str(step or "").strip()
+                    if text and text not in bucket["sample_actions"]:
+                        bucket["sample_actions"].append(text)
+            for eid, plan in plans_by_el.items():
+                if eid in seen:
+                    continue
+                rating = int(plan[1]) if plan[1] is not None else None
+                if rating is not None and rating > 2:
+                    continue
+                try:
+                    steps = json.loads(plan[3] or "[]")
+                except json.JSONDecodeError:
+                    steps = []
+                label = element_labels.get(eid, eid)
+                gaps.append(
+                    {
+                        "element_id": eid,
+                        "element_label": label,
+                        "rating": rating,
+                        "improve_areas": plan[2] or "",
+                        "action_steps": steps,
+                        "plan_status": plan[4] or "",
+                    }
+                )
+                bucket = training_bucket.setdefault(
+                    eid,
+                    {
+                        "element_id": eid,
+                        "element_label": label,
+                        "count": 0,
+                        "staff": [],
+                        "sample_actions": [],
+                    },
+                )
+                bucket["count"] += 1
+                bucket["staff"].append({"staff_id": staff_id, "name": name, "rating": rating})
+            gap_count = len(gaps)
+
+        items.append(
+            {
+                "staff_id": staff_id,
+                "name": name,
+                "role": role,
+                "specialty": specialty,
+                "assignment_role": role_code,
+                "assignment_label": role_label,
+                "record_id": record_id,
+                "status": status,
+                "percent": percent,
+                "band_label": band_label,
+                "readiness": readiness,
+                "gap_count": gap_count,
+                "has_gap": gap_count > 0,
+                "gaps": gaps,
+            }
+        )
+
+    total = len(items)
+    done = sum(1 for item in items if item["status"] == "done")
+    pending = total - done
+    with_gap = sum(1 for item in items if item["has_gap"])
+    school_avg = (
+        round(sum(done_percents) / len(done_percents), 2) if done_percents else None
+    )
+    training_needs = sorted(
+        training_bucket.values(),
+        key=lambda row: (-int(row["count"]), str(row["element_label"])),
+    )
+
+    return {
+        "ok": True,
+        "cycle": cycle,
+        "cycle_id": cycle_id,
+        "phase": phase_key,
+        "stats": {
+            "total": total,
+            "done": done,
+            "pending": pending,
+            "with_gap": with_gap,
+            "school_avg_percent": school_avg,
+        },
+        "items": items,
+        "training_needs": training_needs,
+        "role_codes": ROLE_CODES,
+    }
+
+
+@router.get("/api/session/job-performance/summary")
+def job_performance_summary(
+    cycle_id: int = 0,
+    phase: str = "mid",
+    x_session_token: str = Header(default=""),
+):
+    """لوحة المتابعة التنفيذية: حالة الـ 39 منسوباً + احتياجات التدريب من الفجوات."""
+    _leadership(x_session_token)
+    connection = connect()
+    try:
+        payload = build_job_performance_summary(connection, cycle_id=cycle_id, phase=phase)
+        connection.commit()
+        return payload
+    finally:
+        connection.close()
+
+
 def delete_perf_record_tree(connection, record_id: int) -> dict:
     """يحذف سجل التقويم وملحقاته فقط — بلا مساس بـ noor_staff أو القوالب."""
     rid = int(record_id)

@@ -1573,11 +1573,36 @@
       });
   }
 
+  function openStaff(staffId) {
+    var id = String(staffId || "").trim();
+    if (!id) {
+      return Promise.resolve();
+    }
+    if (window.AjJobPerformanceDashboard && typeof window.AjJobPerformanceDashboard.setTab === "function") {
+      window.AjJobPerformanceDashboard.setTab("card");
+    }
+    var teacherEl = document.getElementById("aj-jp-teacher");
+    if (!teacherEl) {
+      return Promise.resolve();
+    }
+    paintStaff();
+    teacherEl.value = id;
+    var person = selectedPerson();
+    if (person) {
+      paintRoleOptions(inferAssignmentRole(person));
+    }
+    paintTeacherMeta();
+    return onStaffChanged();
+  }
+
   function load() {
     bind();
     setPhaseButtons();
+    if (window.AjJobPerformanceDashboard && typeof window.AjJobPerformanceDashboard.load === "function") {
+      window.AjJobPerformanceDashboard.load();
+    }
     status("جارٍ التحميل…");
-    Promise.all([
+    return Promise.all([
       fetchJson(API + "/cycles", { headers: authHeaders(), cache: "no-store" }),
       fetchJson(API + "/meta", { headers: authHeaders(), cache: "no-store" }),
       fetchJson(API + "/templates/teacher", { headers: authHeaders(), cache: "no-store" }),
@@ -1622,6 +1647,7 @@
 
   window.AjJobPerformance = {
     load: load,
-    printOfficial: printOfficial
+    printOfficial: printOfficial,
+    openStaff: openStaff
   };
 })();
