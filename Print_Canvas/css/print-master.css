@@ -139,10 +139,10 @@
 .aj-visit-print .aj-visit-criteria th,
 .aj-visit-print .aj-visit-criteria td {
   border: 1px solid #94a3b8 !important;
-  padding-block: 3px !important;
-  padding-inline: 6px !important;
-  font-size: 10.5pt !important;
-  line-height: 1.35 !important;
+  padding-block: 2px !important;
+  padding-inline: 5px !important;
+  font-size: 10pt !important;
+  line-height: 1.28 !important;
   vertical-align: top;
   -webkit-print-color-adjust: exact !important;
   print-color-adjust: exact !important;
@@ -155,15 +155,20 @@
   color: #0b5e56 !important;
 }
 
-.aj-visit-print .aj-visit-crit-label { width: 20%; }
-.aj-visit-print .aj-visit-crit-level { width: 22%; white-space: nowrap; }
-.aj-visit-print .aj-visit-crit-phrase { width: 48%; }
-.aj-visit-print .aj-visit-crit-points { width: 10%; text-align: center; }
+.aj-visit-print .aj-visit-crit-label { width: 17%; }
+.aj-visit-print .aj-visit-crit-level {
+  width: 26%;
+  min-width: 132px;
+  white-space: nowrap !important;
+  overflow: visible;
+}
+.aj-visit-print .aj-visit-crit-phrase { width: auto; }
+.aj-visit-print .aj-visit-crit-points { width: 8%; text-align: center; }
 
 .aj-visit-print .aj-visit-p {
-  margin: 0 0 1.2mm;
-  font-size: 11pt;
-  line-height: 1.35;
+  margin: 0 0 1mm;
+  font-size: 10pt;
+  line-height: 1.28;
 }
 
 .aj-visit-print .aj-visit-plan {
@@ -171,13 +176,13 @@
 }
 
 .pm-document.aj-visit-print-doc .pm-title {
-  margin: 0 0 1.5mm;
-  font-size: 14pt;
-  line-height: 1.25;
+  margin: 0 0 1.2mm;
+  font-size: 13pt;
+  line-height: 1.2;
 }
 
 .pm-document.aj-visit-print-doc .pm-signoff {
-  margin-top: 6px !important;
+  margin-top: 4px !important;
   break-inside: avoid !important;
   page-break-inside: avoid !important;
 }
@@ -215,13 +220,13 @@
 
 .pm-document.aj-visit-print-doc .doc-signoff-block .signoff-col,
 .pm-document.aj-visit-print-doc .pm-signoff-table td.signoff-col {
-  min-height: 72px !important;
-  padding: 5px 4px !important;
+  min-height: 64px !important;
+  padding: 4px 3px !important;
 }
 
 .pm-document.aj-visit-print-doc .doc-signoff-block .sig-placeholder {
-  height: 40px !important;
-  margin: 2px 0 !important;
+  height: 36px !important;
+  margin: 1px 0 !important;
 }
 
 .pm-signoff {
