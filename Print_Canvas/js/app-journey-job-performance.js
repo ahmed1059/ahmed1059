@@ -7,6 +7,7 @@
   var state = {
     cycles: [],
     staff: [],
+    roleCodes: {},
     template: null,
     record: null,
     phase: "mid",
@@ -14,8 +15,79 @@
     gapDrafts: {},
     idpDraft: null,
     evidence: null,
-    bound: false
+    bound: false,
+    roleSaveTimer: 0
   };
+
+  function inferAssignmentRole(person) {
+    var saved = String((person && person.assignment_role) || "").trim();
+    if (saved) {
+      return saved;
+    }
+    var role = String((person && person.role) || "");
+    if (role.indexOf("مدير") === 0 || role.indexOf("مدير ") >= 0) {
+      return "principal";
+    }
+    if (role.indexOf("وكيل") >= 0) {
+      return "vice_principal";
+    }
+    if (role.indexOf("موجه") >= 0 && role.indexOf("طلاب") >= 0) {
+      return "counselor";
+    }
+    if (role.indexOf("مختبر") >= 0 || role.indexOf("مصادر") >= 0 || role.indexOf("محضر") >= 0) {
+      return "lab_tech";
+    }
+    if (role.indexOf("صحي") >= 0) {
+      return "teacher_health";
+    }
+    if (role.indexOf("نشاط") >= 0) {
+      return "teacher_activity";
+    }
+    if (role.indexOf("معلم") === 0) {
+      return "teacher";
+    }
+    return "teacher";
+  }
+
+  function selectedPerson() {
+    var sel = document.getElementById("aj-jp-teacher");
+    var id = sel ? sel.value : "";
+    return state.staff.filter(function (item) {
+      return String(item.id) === String(id);
+    })[0] || null;
+  }
+
+  function selectedRoleCode() {
+    var sel = document.getElementById("aj-jp-role");
+    return sel && sel.value ? sel.value : "teacher";
+  }
+
+  function paintRoleOptions(selected) {
+    var sel = document.getElementById("aj-jp-role");
+    if (!sel) {
+      return;
+    }
+    var codes = state.roleCodes || {};
+    var keys = Object.keys(codes);
+    if (!keys.length) {
+      keys = ["teacher"];
+      codes = { teacher: "معلم" };
+    }
+    sel.innerHTML = keys
+      .map(function (code) {
+        return (
+          "<option value=\"" +
+          escapeHtml(code) +
+          "\">" +
+          escapeHtml(codes[code] || code) +
+          "</option>"
+        );
+      })
+      .join("");
+    if (selected && codes[selected]) {
+      sel.value = selected;
+    }
+  }
 
   function evidenceFor(elementId) {
     var pack = state.evidence || (state.record && state.record.evidence) || null;
@@ -230,13 +302,18 @@
     }
     var current = sel.value;
     sel.innerHTML =
-      "<option value=\"\">— اختر المعلم —</option>" +
+      "<option value=\"\">— اختر المنسوب —</option>" +
       state.staff
         .map(function (person) {
+          var roleCode = inferAssignmentRole(person);
+          var roleTitle = (state.roleCodes && state.roleCodes[roleCode]) || roleCode;
           var label =
             (person.name || "") +
             (person.specialty ? " — " + person.specialty : "") +
-            (person.assignment_role ? " [" + person.assignment_role + "]" : "");
+            (person.role ? " · " + person.role : "") +
+            " [" +
+            roleTitle +
+            "]";
           return (
             "<option value=\"" +
             escapeHtml(person.id) +
@@ -252,26 +329,35 @@
   }
 
   function paintTeacherMeta() {
-    var sel = document.getElementById("aj-jp-teacher");
     var meta = document.getElementById("aj-jp-teacher-meta");
+    var countEl = document.getElementById("aj-jp-elements-count");
     if (!meta) {
       return;
     }
-    var id = sel ? sel.value : "";
-    var person = state.staff.filter(function (item) {
-      return String(item.id) === String(id);
-    })[0];
+    var person = selectedPerson();
     if (!person) {
       meta.textContent = "";
+      if (countEl) {
+        countEl.textContent = "(— = 100%)";
+      }
       return;
     }
+    var roleCode = selectedRoleCode();
+    var roleTitle = (state.roleCodes && state.roleCodes[roleCode]) || roleCode;
+    var n = elements().length;
     meta.textContent =
       "التخصص: " +
       (person.specialty || "—") +
       " · الصفة: " +
       (person.role || "—") +
-      " · إسناد التقويم: " +
-      (person.assignment_role || "teacher");
+      " · قالب التقويم: " +
+      roleTitle +
+      " (" +
+      roleCode +
+      ")";
+    if (countEl) {
+      countEl.textContent = "(" + n + " = 100%)";
+    }
   }
 
   function setPhaseButtons() {
@@ -677,15 +763,83 @@
     });
   }
 
+  function loadTemplateForRole(roleCode) {
+    return fetchJson(API + "/templates/" + encodeURIComponent(roleCode || "teacher"), {
+      headers: authHeaders(),
+      cache: "no-store"
+    }).then(function (tpl) {
+      state.template = tpl;
+      return tpl;
+    });
+  }
+
+  function persistAssignmentRole(staffId, roleCode) {
+    return fetchJson(API + "/staff/" + encodeURIComponent(staffId) + "/assignment-role", {
+      method: "PUT",
+      headers: Object.assign({ "Content-Type": "application/json" }, authHeaders()),
+      body: JSON.stringify({ assignment_role: roleCode })
+    }).then(function (pack) {
+      state.staff.forEach(function (person) {
+        if (String(person.id) === String(staffId)) {
+          person.assignment_role = pack.assignment_role || roleCode;
+        }
+      });
+      return pack;
+    });
+  }
+
+  function onStaffChanged() {
+    var person = selectedPerson();
+    var roleCode = inferAssignmentRole(person || {});
+    paintRoleOptions(roleCode);
+    paintTeacherMeta();
+    return loadTemplateForRole(roleCode).then(function () {
+      paintTeacherMeta();
+      return loadRecord();
+    });
+  }
+
+  function onRoleChanged() {
+    var person = selectedPerson();
+    var roleCode = selectedRoleCode();
+    if (!person) {
+      return loadTemplateForRole(roleCode).then(function () {
+        paintTeacherMeta();
+        paintElements();
+      });
+    }
+    status("جارٍ تحديث إسناد القالب…");
+    return persistAssignmentRole(person.id, roleCode)
+      .then(function () {
+        return loadTemplateForRole(roleCode);
+      })
+      .then(function () {
+        paintStaff();
+        var sel = document.getElementById("aj-jp-teacher");
+        if (sel) {
+          sel.value = person.id;
+        }
+        paintRoleOptions(roleCode);
+        paintTeacherMeta();
+        // سجل جديد بالقالب الحالي إن لم يوجد؛ الموجود يحتفظ بلقطة أوزانه التاريخية.
+        return loadRecord();
+      })
+      .catch(function (error) {
+        status(error.message || "تعذر تحديث الإسناد.", true);
+      });
+  }
+
   function loadRecord() {
     var cycleEl = document.getElementById("aj-jp-cycle");
     var teacherEl = document.getElementById("aj-jp-teacher");
     var cycleId = cycleEl ? Number(cycleEl.value) : 0;
     var staffId = teacherEl ? teacherEl.value : "";
+    var roleCode = selectedRoleCode();
     if (!cycleId || !staffId) {
       state.record = null;
       state.gapDrafts = {};
       state.idpDraft = null;
+      state.evidence = null;
       paintElements();
       return Promise.resolve();
     }
@@ -709,7 +863,7 @@
         body: JSON.stringify({
           cycle_id: cycleId,
           staff_id: staffId,
-          assignment_role: "teacher"
+          assignment_role: roleCode
         })
       });
     }).then(function (record) {
@@ -718,9 +872,23 @@
       state.gapDrafts = {};
       state.idpDraft = null;
       state.dirty = false;
+      if (record.assignment_role) {
+        paintRoleOptions(record.assignment_role);
+      }
       paintTeacherMeta();
       paintElements();
-      status("السجل جاهز — لقطة الأوزان مجمّدة، والشواهد الحية للمرجعية فقط.");
+      var snapNote = "";
+      if (record.assignment_role && roleCode && record.assignment_role !== roleCode) {
+        snapNote = " · تنبيه: السجل الحالي مجمّد على قالب " + record.assignment_role + " (لا تُستبدل اللقطة التاريخية).";
+      }
+      status(
+        "السجل جاهز — القالب: " +
+          ((state.roleCodes && state.roleCodes[record.assignment_role]) || record.assignment_role || roleCode) +
+          " · عناصر " +
+          ((record.weights_snapshot || []).length || elements().length) +
+          " · شواهد للمرجعية فقط." +
+          snapNote
+      );
       if (record.id) {
         return fetchJson(API + "/records/" + record.id + "/evidence", {
           headers: authHeaders(),
@@ -876,9 +1044,16 @@
       if (!t) {
         return;
       }
-      if (t.id === "aj-jp-cycle" || t.id === "aj-jp-teacher") {
-        paintTeacherMeta();
+      if (t.id === "aj-jp-cycle") {
         loadRecord();
+        return;
+      }
+      if (t.id === "aj-jp-teacher") {
+        onStaffChanged();
+        return;
+      }
+      if (t.id === "aj-jp-role") {
+        onRoleChanged();
         return;
       }
       if (t.getAttribute("data-aj-jp-note")) {
@@ -986,16 +1161,18 @@
     status("جارٍ التحميل…");
     Promise.all([
       fetchJson(API + "/cycles", { headers: authHeaders(), cache: "no-store" }),
+      fetchJson(API + "/meta", { headers: authHeaders(), cache: "no-store" }),
       fetchJson(API + "/templates/teacher", { headers: authHeaders(), cache: "no-store" }),
       fetchJson("/api/noor/staff", { headers: authHeaders(), cache: "no-store" })
     ])
       .then(function (parts) {
         state.cycles = parts[0].items || [];
-        state.template = parts[1];
-        var people = parts[2].people || parts[2].items || [];
+        state.roleCodes = parts[1].role_codes || {};
+        state.template = parts[2];
+        var people = parts[3].people || parts[3].items || [];
         state.staff = people
           .filter(function (person) {
-            return String(person.role || "").indexOf("معلم") === 0 && person.active !== false;
+            return person.active !== false;
           })
           .map(function (person) {
             return {
@@ -1008,14 +1185,15 @@
           });
         paintCycles();
         paintStaff();
+        paintRoleOptions("teacher");
         paintTeacherMeta();
         if (!state.record) {
           paintElements();
         }
-        status("اختر الدورة والمعلم لفتح سجل التقويم.");
+        status("اختر الدورة والمنسوب؛ يُحمَّل القالب تلقائياً من الإسناد.");
         var teacherEl = document.getElementById("aj-jp-teacher");
         if (teacherEl && teacherEl.value) {
-          return loadRecord();
+          return onStaffChanged();
         }
         return null;
       })
