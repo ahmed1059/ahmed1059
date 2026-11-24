@@ -421,6 +421,10 @@ from .visit_plan_api import router as visit_plan_router
 
 app.include_router(visit_plan_router)
 
+from .job_performance_api import router as job_performance_router
+
+app.include_router(job_performance_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):
@@ -960,8 +964,18 @@ def noor_staff(x_session_token: str = Header(default="")):
     _auth_user(x_session_token)
     connection = connect()
     try:
+        from .job_performance_api import ensure_assignment_role_column
+
+        ensure_assignment_role_column(connection)
+        connection.commit()
         rows = connection.execute(
-            "SELECT national_id, name, role, specialty, mobile, COALESCE(active, 1) FROM noor_staff WHERE COALESCE(is_deleted, 0) = 0 ORDER BY name"
+            """
+            SELECT national_id, name, role, specialty, mobile, COALESCE(active, 1),
+                   COALESCE(assignment_role, '')
+            FROM noor_staff
+            WHERE COALESCE(is_deleted, 0) = 0
+            ORDER BY name
+            """
         ).fetchall()
     finally:
         connection.close()
@@ -974,6 +988,7 @@ def noor_staff(x_session_token: str = Header(default="")):
                 "specialty": row[3] or "",
                 "mobile": row[4] or "",
                 "active": bool(row[5]),
+                "assignment_role": row[6] or "",
             }
             for row in rows
             if row[1]
@@ -991,6 +1006,7 @@ class NoorStaffEdit(BaseModel):
     specialty: str = ""
     mobile: str = ""
     active: bool = True
+    assignment_role: str = ""
 
 
 @app.post("/api/noor/staff")
@@ -1003,8 +1019,12 @@ def save_noor_staff(body: NoorStaffEdit, x_session_token: str = Header(default="
         raise HTTPException(status_code=400, detail="الاسم ورقم الهوية مطلوبان")
     original = body.original_id.strip() or national_id
     moment = stamp()
+    assignment_role = body.assignment_role.strip()
     connection = connect()
     try:
+        from .job_performance_api import ensure_assignment_role_column
+
+        ensure_assignment_role_column(connection)
         existing = connection.execute(
             "SELECT national_id FROM noor_staff WHERE national_id = ?",
             (original,),
@@ -1019,10 +1039,21 @@ def save_noor_staff(body: NoorStaffEdit, x_session_token: str = Header(default="
             connection.execute(
                 """
                 UPDATE noor_staff
-                SET national_id = ?, name = ?, role = ?, specialty = ?, mobile = ?, active = ?, updated_at = ?, is_deleted = 0
+                SET national_id = ?, name = ?, role = ?, specialty = ?, mobile = ?,
+                    active = ?, assignment_role = ?, updated_at = ?, is_deleted = 0
                 WHERE national_id = ?
                 """,
-                (national_id, name, body.role.strip(), body.specialty.strip(), body.mobile.strip(), 1 if body.active else 0, moment, original),
+                (
+                    national_id,
+                    name,
+                    body.role.strip(),
+                    body.specialty.strip(),
+                    body.mobile.strip(),
+                    1 if body.active else 0,
+                    assignment_role,
+                    moment,
+                    original,
+                ),
             )
         elif body.original_id.strip():
             raise HTTPException(status_code=404, detail="رقم الهوية غير موجود في السجل")
@@ -1030,18 +1061,38 @@ def save_noor_staff(body: NoorStaffEdit, x_session_token: str = Header(default="
             connection.execute(
                 """
                 UPDATE noor_staff
-                SET name = ?, role = ?, specialty = ?, mobile = ?, active = ?, updated_at = ?, is_deleted = 0
+                SET name = ?, role = ?, specialty = ?, mobile = ?, active = ?,
+                    assignment_role = ?, updated_at = ?, is_deleted = 0
                 WHERE national_id = ?
                 """,
-                (name, body.role.strip(), body.specialty.strip(), body.mobile.strip(), 1 if body.active else 0, moment, national_id),
+                (
+                    name,
+                    body.role.strip(),
+                    body.specialty.strip(),
+                    body.mobile.strip(),
+                    1 if body.active else 0,
+                    assignment_role,
+                    moment,
+                    national_id,
+                ),
             )
         else:
             connection.execute(
                 """
-                INSERT INTO noor_staff (national_id, name, mobile, specialty, role, active, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO noor_staff (
+                    national_id, name, mobile, specialty, role, active, assignment_role, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
-                (national_id, name, body.mobile.strip(), body.specialty.strip(), body.role.strip(), 1 if body.active else 0, moment),
+                (
+                    national_id,
+                    name,
+                    body.mobile.strip(),
+                    body.specialty.strip(),
+                    body.role.strip(),
+                    1 if body.active else 0,
+                    assignment_role,
+                    moment,
+                ),
             )
         connection.commit()
     finally:
