@@ -1463,7 +1463,15 @@
     var evaluatorId = String(user.id || user.national_id || "").trim();
     var staffId = String(person.id || state.record.staff_id || "").trim();
     if (evaluatorId && staffId && evaluatorId === staffId) {
-      status("لا يجوز اعتماد/طباعة تقويم رسمي للمنسوب لنفسه. اختر منسوبًا آخر أو ادخل بحساب المقوّم المختص.", true);
+      status(
+        "تنبيه: مُنعت الطباعة الرسمية لتطابق هوية المقوّم مع المنسوب المُقوَّم. اختر منسوبًا آخر أو ادخل بحساب المقوّم المختص.",
+        true
+      );
+      return;
+    }
+    var scores = collectPhaseScores(state.phase);
+    if (!scores.length) {
+      status("لا توجد تقديرات حية للطباعة. أدخل تقديرات المقوّم أولاً.", true);
       return;
     }
     var recordId = state.record.id;
@@ -1472,15 +1480,27 @@
     if (cycleEl && cycleEl.selectedIndex >= 0) {
       cycleLabel = cycleEl.options[cycleEl.selectedIndex].text || "";
     }
-    status("جارٍ تجهيز الطباعة الرسمية…");
-    fetchJson(API + "/records/" + recordId, { headers: authHeaders(), cache: "no-store" })
+    var phase = state.phase;
+    status("جارٍ حفظ التقديرات الحالية ثم تجهيز الطباعة الرسمية…");
+    fetchJson(API + "/records/" + recordId + "/scores", {
+      method: "PUT",
+      headers: Object.assign({ "Content-Type": "application/json" }, authHeaders()),
+      body: JSON.stringify({ phase: phase, scores: scores })
+    })
+      .then(function () {
+        return fetchJson(API + "/records/" + recordId, {
+          headers: authHeaders(),
+          cache: "no-store"
+        });
+      })
       .then(function (record) {
         state.record = record;
+        state.dirty = false;
         var roleCode = record.assignment_role || selectedRoleCode();
         return window.AjJobPerformancePrint.openPrint({
           record: record,
           person: person,
-          phase: state.phase,
+          phase: phase,
           roleTitle: (state.roleCodes && state.roleCodes[roleCode]) || roleCode,
           regulatoryFramework:
             (state.template && state.template.regulatory_framework) ||
@@ -1496,10 +1516,10 @@
           status(pack.error || "تعذر فتح معاينة الطباعة.", true);
           return;
         }
-        status("معاينة الطباعة الرسمية جاهزة.");
+        status("حُفظت التقديرات · معاينة الطباعة الرسمية جاهزة.");
       })
       .catch(function (error) {
-        status((error && error.message) || "تعذر فتح الطباعة الرسمية.", true);
+        status((error && error.message) || "تعذر حفظ التقديرات أو فتح الطباعة الرسمية.", true);
       });
   }
 
