@@ -130,7 +130,7 @@
     "view-calendar-hub": "التقويم المعتمد والمناسبات",
     "view-system-care": "النسخ الاحتياطي والتدقيق وفحص النظام",
     "view-term-schedule": "التوزيع الزمني على الفصلين",
-    "view-nafes": "ملف التدريب والقياس (نافس)",
+    "view-nafes": "نواتج التعلم ونافس",
     "view-license-form": "تعبئة الرخص المهنية",
     "view-visits": "الزيارات الصفية",
     "view-visits-plan": "الخطة السنوية للزيارات الصفية",
@@ -2858,7 +2858,11 @@
       return;
     }
     if (viewId === "view-nafes") {
-      loadNafesMetrics();
+      if (window.AjNafsAnalytics && typeof window.AjNafsAnalytics.load === "function") {
+        window.AjNafsAnalytics.load();
+      } else {
+        loadNafesMetrics();
+      }
       return;
     }
     if (viewId === "view-term-schedule") {

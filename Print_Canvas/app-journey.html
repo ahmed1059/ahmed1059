@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/app-journey-job-performance.css?v=aj5">
   <link rel="stylesheet" href="css/app-journey-job-performance-dashboard.css?v=aj2">
   <link rel="stylesheet" href="css/app-journey-accreditation-self.css?v=aj4">
+  <link rel="stylesheet" href="css/app-journey-nafs-analytics.css?v=aj1">
   <link rel="stylesheet" href="css/responsive.css?v=r292">
   <link rel="stylesheet" href="css/print-master.css?v=c311">
   <!-- print-shell.css يُحمَّل داخل iframe الطباعة فقط؛ الملف موجود لحارس الجودة -->
@@ -128,7 +129,7 @@
           <button type="button" class="aj-stage-toggle" data-aj-stage="measurement" data-aj-station-hub="#view-station-measurement" aria-expanded="false" aria-controls="aj-panel-measurement">القياس والاعتماد المدرسي</button>
           <div class="aj-stage-panel" id="aj-panel-measurement" role="region" aria-label="القياس والاعتماد المدرسي">
             <a class="aj-task-btn" id="aj-task-ssot" href="#view-performance">مؤشرات الأداء (SSOT)</a>
-            <a class="aj-task-btn" id="aj-task-nafes" href="#view-nafes">ملف التدريب والقياس (نافس)</a>
+            <a class="aj-task-btn" id="aj-task-nafes" href="#view-nafes">نواتج التعلم ونافس</a>
             <a class="aj-task-btn" href="#view-job-performance">تقويم الأداء الوظيفي</a>
             <a class="aj-task-btn" href="#view-accreditation-self">التقويم الذاتي المدرسي (SSOT)</a>
             <a class="aj-task-btn" href="#view-external-eval">التقويم الذاتي والاعتماد الخارجي (ETEC)</a>
@@ -363,7 +364,7 @@
         <p class="aj-lede">المؤشرات ثم نافس ثم الاعتماد الخارجي. التنبيهات تبقى في مكتبي.</p>
         <ol class="aj-journey-steps" aria-label="رحلة القياس">
           <li><a class="aj-task-btn" href="#view-performance">مؤشرات الأداء (SSOT)</a></li>
-          <li><a class="aj-task-btn" href="#view-nafes">ملف التدريب والقياس (نافس)</a></li>
+          <li><a class="aj-task-btn" href="#view-nafes">نواتج التعلم ونافس</a></li>
           <li><a class="aj-task-btn" href="#view-job-performance">تقويم الأداء الوظيفي</a></li>
           <li><a class="aj-task-btn" href="#view-accreditation-self">التقويم الذاتي المدرسي (SSOT)</a></li>
           <li><a class="aj-task-btn" href="#view-external-eval">التقويم الذاتي والاعتماد الخارجي (ETEC)</a></li>
@@ -562,15 +563,36 @@
         </div>
       </section>
 
-      <section id="view-nafes" class="aj-view" hidden>
-        <h1>ملف التدريب والقياس (نافس)</h1>
-        <p class="aj-lede">مؤشرات نافس من مصدر الحقيقة الواحد دون خلط مع لوحة المؤشرات العامة.</p>
+      <section id="view-nafes" class="aj-view wash-board" hidden>
+        <h1>نواتج التعلم ونافس</h1>
+        <p class="aj-lede">لوحة تحليل نتائج الاختبار التشخيصي وربطها بمؤشرات الاعتماد وخطط المعالجة المدرسية (SSOT).</p>
         <p class="aj-loading" id="aj-nafes-loading" hidden>جارٍ التحميل...</p>
         <p class="aj-status" id="aj-nafes-status" role="status" aria-live="polite"></p>
-        <ul class="aj-cards" id="aj-nafes-cards" aria-label="مؤشرات نافس"></ul>
+
+        <div class="aj-nafs-toolbar">
+          <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-nafs-refresh">تحديث التحليل</button>
+          <button type="button" class="aj-detail-btn" id="aj-nafs-print-plan">طباعة خطة المعالجة ورفع نواتج التعلم (نافس) A4</button>
+        </div>
+
+        <div id="aj-nafs-summary" class="aj-nafs-summary" aria-label="ملخص نافس"></div>
+
+        <h2 class="aj-group-title">مجالات نافس الثلاثة</h2>
+        <div id="aj-nafs-domains" class="aj-nafs-domains" aria-label="مجالات نافس"></div>
+        <ul class="aj-cards" id="aj-nafes-cards" hidden aria-hidden="true"></ul>
+
+        <h2 class="aj-group-title">مؤشرات الاعتماد (نواتج التعلم)</h2>
+        <div id="aj-nafs-indicators" class="aj-nafs-list" aria-label="مؤشرات الاعتماد"></div>
+
+        <h2 class="aj-group-title">إجراءات التحسين المخزّنة</h2>
+        <div id="aj-nafs-actions" class="aj-nafs-list" aria-label="إجراءات التحسين"></div>
+
+        <h2 class="aj-group-title">توزيع حصص نافس</h2>
+        <div id="aj-nafs-timetable" class="aj-nafs-list" aria-label="حصص نافس"></div>
+
         <div class="aj-detail-actions">
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-station-measurement">العودة</a>
           <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-performance">مؤشرات الأداء (SSOT)</a>
-          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-station-measurement">العودة لرحلة القياس</a>
+          <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-accreditation-self">التقويم الذاتي المدرسي</a>
         </div>
       </section>
 
@@ -1923,7 +1945,7 @@
   <script src="/cores/consistency-core.js?v=c282"></script>
   <script src="/cores/evaluation-core.js?v=c284"></script>
   <script src="/cores/template-engine.js?v=c286"></script>
-  <script src="js/app-journey.js?v=aj193"></script>
+  <script src="js/app-journey.js?v=aj194"></script>
   <script src="js/app-journey-indicator-files.js?v=aj1"></script>
   <script src="js/app-journey-deliverable-file.js?v=c298"></script>
   <script src="js/app-journey-plan-111.js?v=aj175"></script>
@@ -1937,6 +1959,7 @@
   <script src="js/app-journey-student-registry.js?v=aj145"></script>
   <script src="js/app-journey-evaluation.js?v=c284"></script>
   <script src="js/app-journey-accreditation-self.js?v=aj4"></script>
+  <script src="js/app-journey-nafs-analytics.js?v=aj1"></script>
   <script src="js/app-journey-visits.js?v=aj198"></script>
   <script src="js/app-journey-visit-plan.js?v=aj4"></script>
   <script src="js/app-journey-job-performance-notes.js?v=aj4"></script>
