@@ -16,6 +16,12 @@
       .replace(/>/g, "&gt;");
   }
 
+  function toEasternDigits(value) {
+    return String(value == null ? "" : value).replace(/[0-9]/g, function (digit) {
+      return "٠١٢٣٤٥٦٧٨٩".charAt(Number(digit));
+    });
+  }
+
   function printDateLine() {
     var now = new Date();
     var hijri = "";
@@ -206,16 +212,21 @@
     var frameClass = opts.frameClass ? (" " + String(opts.frameClass)) : "";
     var storedName = opts.fileName ? safePart(opts.fileName) : fileName(opts);
     var schoolLabel = opts.school || root.bookletSchoolName || "متوسطة سعد بن الربيع الأنصاري";
+    var pageTotal = Number(opts.pageTotal || opts.totalPages || 0);
+    var pageTotalLabel = pageTotal > 0 ? toEasternDigits(pageTotal) : "";
     var footInner;
     if (opts.unifiedFooter) {
       footInner = "<span class=\"pm-foot-school\">وثيقة رسمية — " + escapeHtml(schoolLabel) + "</span>"
         + "<span class=\"pm-foot-date\">" + escapeHtml(printDateLine()) + "</span>"
-        + "<span class=\"pm-foot-page\">" + escapeHtml(opts.pageFootLabel || "الصفحة 1 من 1") + "</span>";
+        + "<span class=\"pm-foot-page\">" + escapeHtml(opts.pageFootLabel || (pageTotalLabel ? ("الصفحة ١ من " + pageTotalLabel) : "الصفحة ١ من ١")) + "</span>";
+    } else if (pageTotalLabel) {
+      footInner = "<span class=\"pm-foot-date\">" + escapeHtml(printDateLine()) + "</span>"
+        + "<span class=\"pm-foot-page\">الصفحة <span class=\"pm-page-num\"></span> من <span class=\"pm-pages-num\" data-total=\"" + escapeHtml(pageTotalLabel) + "\"></span></span>";
     } else {
       footInner = "<span class=\"pm-foot-date\">" + escapeHtml(printDateLine()) + "</span>"
         + "<span class=\"pm-foot-page\">الصفحة <span class=\"pm-page-num\"></span> من <span class=\"pm-pages-num\"></span></span>";
     }
-    return "<article class=\"pm-document" + (landscape ? " pm-landscape" : "") + frameClass + "\" data-file-name=\"" + escapeHtml(storedName) + "\">"
+    return "<article class=\"pm-document" + (landscape ? " pm-landscape" : "") + frameClass + "\" data-file-name=\"" + escapeHtml(storedName) + "\"" + (pageTotalLabel ? (" data-page-total=\"" + escapeHtml(pageTotalLabel) + "\"") : "") + ">"
       + "<table class=\"pm-sheet\">"
       + "<thead><tr><td><div class=\"pm-head\" style=\"" + headStyle + "\">" + headerHtml + "</div></td></tr></thead>"
       + "<tfoot><tr><td><div class=\"pm-foot-slot\" style=\"" + footStyle + "\" aria-hidden=\"true\"></div></td></tr></tfoot>"

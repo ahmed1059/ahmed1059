@@ -269,3 +269,71 @@
   font-size: 12.5px;
   color: #5c675f;
 }
+
+/* محرّك الرياضيات العربية: كسور عمودية وأسس */
+#view-nafes .frac,
+.aj-nafs-print-page .frac,
+.pm-body .frac {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0 0.15em;
+  line-height: 1.05;
+}
+
+#view-nafes .frac .num,
+#view-nafes .frac .den,
+.aj-nafs-print-page .frac .num,
+.aj-nafs-print-page .frac .den,
+.pm-body .frac .num,
+.pm-body .frac .den {
+  display: block;
+  padding: 0 0.2em;
+  font-size: 0.92em;
+}
+
+#view-nafes .frac .num,
+.aj-nafs-print-page .frac .num,
+.pm-body .frac .num {
+  border-bottom: 1px solid currentColor;
+}
+
+#view-nafes .aj-nafs-stem sup,
+#view-nafes .aj-nafs-choices sup,
+#view-nafes .aj-nafs-why sup,
+.aj-nafs-print-page sup,
+.pm-body .aj-nafs-print-page sup {
+  font-size: 0.72em;
+  line-height: 0;
+  vertical-align: super;
+}
+
+.aj-nafs-init-cell {
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.aj-nafs-initiatives-line .aj-nafs-init-cell {
+  white-space: nowrap;
+}
+
+.aj-nafs-page-foot {
+  margin-top: 8mm;
+  padding-top: 2mm;
+  border-top: 0.3mm solid #c9d7d3;
+  text-align: left;
+  font-size: 9pt;
+  color: #0b5e56;
+}
+
+body.app-journey.print-master .pm-head .header-logo-left {
+  overflow: visible !important;
+}
+
+body.app-journey.print-master .pm-head .header-logo-left img[src*="vision"] {
+  max-height: 52px !important;
+  max-width: 140px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}

@@ -1,6 +1,9 @@
 # بنك أسئلة نافس المصحّح — 86 سؤالاً (30 رياضيات · 29 علوم · 27 لغة عربية).
 from __future__ import annotations
 
+# polish-2: خلط مواضع الإجابة + إصلاح سؤال الرياضيات 6 + أرقام هندية في الجذوع الرياضية.
+BANK_REVISION = "polish-2"
+
 SCHEMA_SQL = """
 CREATE TABLE IF NOT EXISTS nafs_question_bank (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -20,7 +23,25 @@ CREATE TABLE IF NOT EXISTS nafs_question_bank (
     active INTEGER NOT NULL DEFAULT 1
 );
 CREATE INDEX IF NOT EXISTS ix_nafs_q_domain ON nafs_question_bank(domain, sort_order);
+CREATE TABLE IF NOT EXISTS nafs_question_bank_meta (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL DEFAULT ''
+);
 """
+
+
+def _rotate_choices(a, b, c, d, correct, offset):
+    """خلط مواضع الخيارات مع الحفاظ على الإجابة الصحيحة."""
+    letters = ["A", "B", "C", "D"]
+    choices = [a, b, c, d]
+    correct = str(correct or "A").upper()
+    if correct not in letters:
+        correct = "A"
+    idx = letters.index(correct)
+    shift = int(offset) % 4
+    rotated = choices[shift:] + choices[:shift]
+    new_idx = (idx - shift) % 4
+    return rotated[0], rotated[1], rotated[2], rotated[3], letters[new_idx]
 
 PASSAGES = {
     "p1": (
@@ -80,7 +101,7 @@ def build_math_questions() -> list[dict]:
         ("الجبر", "حل المعادلة: 2س = 18", "9", "16", "20", "36", "A", "نقسم الطرفين على 2: س = 9."),
         ("الجبر", "إذا كان 4(س − 1) = 12 فإن س =", "4", "3", "2", "5", "A", "4س − 4 = 12 ثم 4س = 16 فس = 4."),
         ("الجبر", "ما ناتج (−3) × (−4)؟", "12", "−12", "7", "−7", "A", "حاصل ضرب عددين سالبين موجب."),
-        ("الأعداد", "قيمة |−9| تساوي:", "9", "−9", "0", "1", "A", "القيمة المطلقة للمقدار السالب موجبة."),
+        ("الأعداد", "قيمة | -٨ | تساوي:", "٨", "−٨", "٠", "١", "A", "القيمة المطلقة للمقدار السالب موجبة."),
         ("الأعداد", "حوّل الكسر 3/4 إلى نسبة مئوية:", "75٪", "34٪", "43٪", "7.5٪", "A", "3÷4 = 0.75 = 75٪."),
         ("الأعداد", "أي الأعداد أكبر؟", "0.8", "0.08", "0.008", "0.088", "A", "0.8 أكبر من بقية الخيارات."),
         ("الأعداد", "ناتج 15٪ من 200 يساوي:", "30", "15", "45", "20", "A", "0.15 × 200 = 30."),
@@ -108,6 +129,7 @@ def build_math_questions() -> list[dict]:
     ]
     for i, row in enumerate(bank, start=1):
         skill, stem, a, b, c, d, correct, why = row
+        a, b, c, d, correct = _rotate_choices(a, b, c, d, correct, i % 4)
         rows.append(_q("math", skill, stem, a, b, c, d, correct, why, sort_order=i))
     assert len(rows) == 30
     return rows
@@ -148,6 +170,7 @@ def build_science_questions() -> list[dict]:
     ]
     for i, row in enumerate(bank, start=1):
         skill, stem, a, b, c, d, correct, why = row
+        a, b, c, d, correct = _rotate_choices(a, b, c, d, correct, (i + 1) % 4)
         rows.append(_q("science", skill, stem, a, b, c, d, correct, why, sort_order=i))
     assert len(rows) == 29
     return rows
@@ -187,6 +210,7 @@ def build_reading_questions() -> list[dict]:
     ]
     for i, row in enumerate(items, start=1):
         pid, skill, stem, a, b, c, d, correct, why = row
+        a, b, c, d, correct = _rotate_choices(a, b, c, d, correct, (i + 2) % 4)
         rows.append(
             _q("reading", skill, stem, a, b, c, d, correct, why, passage_id=pid, sort_order=i)
         )
@@ -200,18 +224,49 @@ def all_questions() -> list[dict]:
     return rows
 
 
+def _meta_get(connection, key: str) -> str:
+    row = connection.execute(
+        "SELECT value FROM nafs_question_bank_meta WHERE key = ? LIMIT 1",
+        (key,),
+    ).fetchone()
+    return str(row[0]) if row and row[0] is not None else ""
+
+
+def _meta_set(connection, key: str, value: str) -> None:
+    connection.execute(
+        """
+        INSERT INTO nafs_question_bank_meta(key, value) VALUES(?, ?)
+        ON CONFLICT(key) DO UPDATE SET value = excluded.value
+        """,
+        (key, value),
+    )
+
+
+def _bank_is_stale(connection, count: int) -> bool:
+    if count < 86:
+        return True
+    if _meta_get(connection, "revision") != BANK_REVISION:
+        return True
+    stem6 = connection.execute(
+        "SELECT stem FROM nafs_question_bank WHERE domain = 'math' AND sort_order = 6 LIMIT 1"
+    ).fetchone()
+    text = (stem6[0] if stem6 else "") or ""
+    if "| -٨ |" not in text and "| −٨ |" not in text:
+        return True
+    distinct = connection.execute(
+        "SELECT COUNT(DISTINCT UPPER(correct)) FROM nafs_question_bank WHERE COALESCE(active,1)=1"
+    ).fetchone()[0]
+    return int(distinct or 0) < 3
+
+
 def ensure_nafs_question_bank(connection, force_reseed: bool = False) -> dict:
     connection.executescript(SCHEMA_SQL)
     count = connection.execute(
         "SELECT COUNT(*) FROM nafs_question_bank WHERE COALESCE(active,1)=1"
     ).fetchone()[0]
-    if count >= 86 and not force_reseed:
-        return {"ok": True, "stored": count, "seeded": False}
-    if force_reseed:
-        connection.execute("DELETE FROM nafs_question_bank")
-    elif count:
-        # استكمال إن نقص العدد
-        connection.execute("DELETE FROM nafs_question_bank")
+    if count >= 86 and not force_reseed and not _bank_is_stale(connection, count):
+        return {"ok": True, "stored": count, "seeded": False, "revision": BANK_REVISION}
+    connection.execute("DELETE FROM nafs_question_bank")
     rows = all_questions()
     connection.executemany(
         """
@@ -239,4 +294,5 @@ def ensure_nafs_question_bank(connection, force_reseed: bool = False) -> dict:
             for r in rows
         ],
     )
-    return {"ok": True, "stored": len(rows), "seeded": True}
+    _meta_set(connection, "revision", BANK_REVISION)
+    return {"ok": True, "stored": len(rows), "seeded": True, "revision": BANK_REVISION}

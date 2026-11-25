@@ -40,6 +40,74 @@
       .replace(/"/g, "&quot;");
   }
 
+  var EASTERN_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+  var CHOICE_AR = { A: "أ", B: "ب", C: "ج", D: "د" };
+
+  function toEasternDigits(text) {
+    return String(text == null ? "" : text)
+      .replace(/[0-9]/g, function (digit) {
+        return EASTERN_DIGITS.charAt(Number(digit));
+      })
+      .replace(/%/g, "٪");
+  }
+
+  function choiceLetterAr(letter) {
+    var key = String(letter || "").toUpperCase();
+    return CHOICE_AR[key] || key;
+  }
+
+  function renderArabicMath(raw) {
+    var source = String(raw == null ? "" : raw);
+    if (!source) {
+      return "";
+    }
+    var tokens = [];
+    function keep(html) {
+      tokens.push(html);
+      return "\uE000" + (tokens.length - 1) + "\uE001";
+    }
+    var text = source;
+    // كسور اعتيادية: بسط/مقام → عمودي
+    text = text.replace(
+      /(^|[^\w⁰¹²³⁴⁵⁶⁷⁸⁹])(\d+)\s*\/\s*(\d+)(?!\w)/g,
+      function (_m, lead, num, den) {
+        return (
+          lead +
+          keep(
+            '<span class="frac"><span class="num">' +
+              toEasternDigits(num) +
+              '</span><span class="den">' +
+              toEasternDigits(den) +
+              "</span></span>"
+          )
+        );
+      }
+    );
+    // أسس بصيغة ^
+    text = text.replace(/([0-9٠-٩أ-يA-Za-zسصقع])\^(\d+)/g, function (_m, base, exp) {
+      return keep(toEasternDigits(base) + "<sup>" + toEasternDigits(exp) + "</sup>");
+    });
+    // أسس يونيكود شائعة
+    text = text.replace(/([0-9٠-٩أ-يA-Za-zس])([²³⁴⁵⁶⁷⁸⁹⁰¹])/g, function (_m, base, exp) {
+      var map = { "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9", "⁰": "0" };
+      return keep(toEasternDigits(base) + "<sup>" + toEasternDigits(map[exp] || exp) + "</sup>");
+    });
+    text = text.replace(/\uE000\d+\uE001|[^\uE000]+/g, function (part) {
+      if (part.charAt(0) === "\uE000") {
+        return part;
+      }
+      return toEasternDigits(escapeHtml(part));
+    });
+    text = text.replace(/\uE000(\d+)\uE001/g, function (_m, idx) {
+      return tokens[Number(idx)] || "";
+    });
+    return text;
+  }
+
+  function pageLabelAr(page, total) {
+    return "الصفحة " + toEasternDigits(page) + " من " + toEasternDigits(total);
+  }
+
   function status(msg, isError) {
     var el = document.getElementById("aj-nafes-status");
     if (!el) {
@@ -81,9 +149,9 @@
     }
     var num = Number(value);
     if (isNaN(num)) {
-      return String(value);
+      return toEasternDigits(value);
     }
-    return num.toFixed(1);
+    return toEasternDigits(num.toFixed(1));
   }
 
   function fmtGap(value) {
@@ -92,9 +160,9 @@
     }
     var num = Number(value);
     if (isNaN(num)) {
-      return String(value);
+      return toEasternDigits(value);
     }
-    return (num > 0 ? "+" : "") + num.toFixed(1);
+    return toEasternDigits((num > 0 ? "+" : "") + num.toFixed(1));
   }
 
   function etecBand(avg) {
@@ -103,15 +171,15 @@
       return "—";
     }
     if (n < 25) {
-      return "1 · التهيئة";
+      return "١ · التهيئة";
     }
     if (n < 50) {
-      return "2 · الانطلاق";
+      return "٢ · الانطلاق";
     }
     if (n < 75) {
-      return "3 · التقدم";
+      return "٣ · التقدم";
     }
-    return "4 · التميز";
+    return "٤ · التميز";
   }
 
   function domainMap(pack) {
@@ -230,14 +298,14 @@
       escapeHtml(meta.grade || "—") +
       "</strong></article>" +
       "<article class=\"aj-nafs-card\"><span>المقيدون / المختبرون</span><strong>" +
-      escapeHtml(String(meta.enrolled || "—")) +
+      toEasternDigits(String(meta.enrolled != null ? meta.enrolled : "—")) +
       " / " +
-      escapeHtml(String(meta.tested || "—")) +
+      toEasternDigits(String(meta.tested != null ? meta.tested : "—")) +
       "</strong></article>" +
       "<article class=\"aj-nafs-card\"><span>متوسط الإتقان</span><strong>" +
       escapeHtml(
         meta.average_mastery_pct != null
-          ? Number(meta.average_mastery_pct).toFixed(1) + "٪"
+          ? toEasternDigits(Number(meta.average_mastery_pct).toFixed(1)) + "٪"
           : "—"
       ) +
       "</strong></article>" +
@@ -409,7 +477,7 @@
         .join("") +
       "</div>" +
       "<p class=\"aj-nafs-whatif-result\">المتوسط العام الجديد: <strong id=\"aj-nafs-wi-avg\">" +
-      escapeHtml(avg.toFixed(1)) +
+      escapeHtml(toEasternDigits(avg.toFixed(1))) +
       "٪</strong> · التصنيف المتوقع (ETEC): <strong id=\"aj-nafs-wi-band\">" +
       escapeHtml(etecBand(avg)) +
       "</strong></p>" +
@@ -430,7 +498,7 @@
     var avgEl = document.getElementById("aj-nafs-wi-avg");
     var bandEl = document.getElementById("aj-nafs-wi-band");
     if (avgEl) {
-      avgEl.textContent = avg.toFixed(1) + "٪";
+      avgEl.textContent = toEasternDigits(avg.toFixed(1)) + "٪";
     }
     if (bandEl) {
       bandEl.textContent = etecBand(avg);
@@ -454,10 +522,10 @@
     host.innerHTML =
       "<div class=\"aj-nafs-bank-filters\" role=\"group\" aria-label=\"تصفية بنك الأسئلة\">" +
       [
-        ["all", "الكل (" + (counts.total || 0) + ")"],
-        ["math", "رياضيات (" + (counts.math || 0) + ")"],
-        ["reading", "قراءة (" + (counts.reading || 0) + ")"],
-        ["science", "علوم (" + (counts.science || 0) + ")"]
+        ["all", "الكل (" + toEasternDigits(counts.total || 0) + ")"],
+        ["math", "رياضيات (" + toEasternDigits(counts.math || 0) + ")"],
+        ["reading", "قراءة (" + toEasternDigits(counts.reading || 0) + ")"],
+        ["science", "علوم (" + toEasternDigits(counts.science || 0) + ")"]
       ]
         .map(function (pair) {
           return (
@@ -479,7 +547,7 @@
           return (
             "<article class=\"aj-nafs-q\">" +
             "<header><strong>س" +
-            escapeHtml(String(index + 1)) +
+            toEasternDigits(String(index + 1)) +
             "</strong> · " +
             escapeHtml(domainLabelAr(row.domain)) +
             " · " +
@@ -493,7 +561,7 @@
                 "</blockquote>"
               : "") +
             "<p class=\"aj-nafs-stem\">" +
-            escapeHtml(row.stem || "") +
+            renderArabicMath(row.stem || "") +
             "</p>" +
             "<ul class=\"aj-nafs-choices\">" +
             ["A", "B", "C", "D"]
@@ -503,9 +571,9 @@
                   "<li class=\"" +
                   (on ? "is-correct" : "") +
                   "\"><span>" +
-                  letter +
+                  choiceLetterAr(letter) +
                   "</span> " +
-                  escapeHtml(choices[letter] || "") +
+                  renderArabicMath(choices[letter] || "") +
                   (on ? " ✓" : "") +
                   "</li>"
                 );
@@ -513,7 +581,7 @@
               .join("") +
             "</ul>" +
             "<p class=\"aj-nafs-why\"><strong>التعليل:</strong> " +
-            escapeHtml(row.rationale || "") +
+            renderArabicMath(row.rationale || "") +
             "</p>" +
             "</article>"
           );
@@ -785,6 +853,23 @@
     return "<div class=\"aj-nafs-page-break\" style=\"page-break-before:always;break-before:page;height:0;\"></div>";
   }
 
+  function pageFoot(page, total) {
+    return (
+      "<div class=\"aj-nafs-page-foot\">" + escapeHtml(pageLabelAr(page, total)) + "</div>"
+    );
+  }
+
+  function wrapPrintPage(pageNum, total, innerHtml) {
+    return (
+      "<section class=\"aj-nafs-print-page\" data-page=\"" +
+      pageNum +
+      "\">" +
+      innerHtml +
+      pageFoot(pageNum, total) +
+      "</section>"
+    );
+  }
+
   function buildRecordHtml(dossier, signNote) {
     var analytics = dossier.analytics || {};
     var domains = analytics.domains || [];
@@ -795,6 +880,10 @@
     var teachers = dossier.nafs_teachers || [];
     var challenges = dossier.challenges || [];
     var samples = dossier.sample_questions || [];
+    var totalPages = 7;
+    var initiativesLine = (dossier.initiatives || ["قارئ الحصيف", "تحدي الأرقام", "قدوة", "رفق"]).join(
+      " - "
+    );
     var weeks = Number(dossier.weeks || 18);
     var weekRows = [];
     var i;
@@ -810,10 +899,14 @@
               ? "محاكاة " + mockName
               : "تكثيف ما قبل نافذة " + (dossier.exam_window || "");
       weekRows.push([
-        escapeHtml(String(i)),
+        toEasternDigits(String(i)),
         escapeHtml(focus),
-        escapeHtml((dossier.initiatives || []).join(" · ")),
-        escapeHtml(i % 4 === 0 ? "Mock " + Math.min(4, Math.ceil(i / 4)) : "متابعة صفية")
+        "<span class=\"aj-nafs-init-cell\">" + escapeHtml(initiativesLine) + "</span>",
+        escapeHtml(
+          i % 4 === 0
+            ? "Mock " + toEasternDigits(Math.min(4, Math.ceil(i / 4)))
+            : "متابعة صفية"
+        )
       ]);
     }
     var whatIfBlock = "";
@@ -828,154 +921,169 @@
         "٪ · علوم " +
         escapeHtml(fmtScore(sc.science)) +
         "٪ · متوسط " +
-        escapeHtml(avg.toFixed(1)) +
+        escapeHtml(toEasternDigits(avg.toFixed(1))) +
         "٪ · تصنيف " +
         escapeHtml(etecBand(avg)) +
         ".</p>";
     }
 
-    var page1 =
-      "<section class=\"aj-nafs-print-page\">" +
+    var page1 = wrapPrintPage(
+      1,
+      totalPages,
       "<h2 style=\"color:#0b5e56;font-size:18px;margin:0 0 6px;\">سجل نافس المدرسي المتكامل</h2>" +
-      "<p class=\"tpl-p\">" +
-      escapeHtml(school.name || SCHOOL_NAME) +
-      " (" +
-      escapeHtml(school.code || "40341") +
-      ") — " +
-      escapeHtml(meta.grade || "الثالث المتوسط") +
-      " · مقيدون " +
-      escapeHtml(String(meta.enrolled || "—")) +
-      " / مختبرون " +
-      escapeHtml(String(meta.tested || "—")) +
-      " · متوسط الإتقان " +
-      escapeHtml(
-        meta.average_mastery_pct != null ? Number(meta.average_mastery_pct).toFixed(1) + "٪" : "—"
-      ) +
-      ".</p>" +
-      whatIfBlock +
-      "<h3 style=\"color:#0b5e56;font-size:14px;\">مقارنة الأداء الحي والمستهدف</h3>" +
-      barChartSvg(domains) +
-      "<h3 style=\"color:#0b5e56;font-size:14px;\">رادار الأولوية المهارية وتوزيع المسارات</h3>" +
-      radarSvg(skills, dossier.tracks) +
-      "<h3 style=\"color:#0b5e56;font-size:14px;\">مؤشرات الاعتماد</h3>" +
-      "<ul>" +
-      (analytics.indicators || [])
-        .map(function (row) {
-          return (
-            "<li><strong>" +
-            escapeHtml(row.code) +
-            "</strong> — " +
-            escapeHtml(row.domain_label) +
-            ": " +
-            escapeHtml(row.statement || "") +
-            "</li>"
-          );
-        })
-        .join("") +
-      "</ul></section>";
+        "<p class=\"tpl-p\">" +
+        escapeHtml(school.name || SCHOOL_NAME) +
+        " (" +
+        toEasternDigits(school.code || "40341") +
+        ") — " +
+        escapeHtml(meta.grade || "الثالث المتوسط") +
+        " · مقيدون " +
+        toEasternDigits(String(meta.enrolled != null ? meta.enrolled : "—")) +
+        " / مختبرون " +
+        toEasternDigits(String(meta.tested != null ? meta.tested : "—")) +
+        " · متوسط الإتقان " +
+        (meta.average_mastery_pct != null
+          ? toEasternDigits(Number(meta.average_mastery_pct).toFixed(1)) + "٪"
+          : "—") +
+        ".</p>" +
+        whatIfBlock +
+        "<h3 style=\"color:#0b5e56;font-size:14px;\">مقارنة الأداء الحي والمستهدف</h3>" +
+        barChartSvg(domains) +
+        "<h3 style=\"color:#0b5e56;font-size:14px;\">رادار الأولوية المهارية وتوزيع المسارات</h3>" +
+        radarSvg(skills, dossier.tracks) +
+        "<h3 style=\"color:#0b5e56;font-size:14px;\">مؤشرات الاعتماد</h3>" +
+        "<ul>" +
+        (analytics.indicators || [])
+          .map(function (row) {
+            return (
+              "<li><strong>" +
+              toEasternDigits(row.code) +
+              "</strong> — " +
+              escapeHtml(row.domain_label) +
+              ": " +
+              escapeHtml(row.statement || "") +
+              "</li>"
+            );
+          })
+          .join("") +
+        "</ul>"
+    );
 
     var page2 =
       pageBreak() +
-      "<section class=\"aj-nafs-print-page\">" +
-      "<h2 style=\"color:#0b5e56;font-size:16px;\">القرار الإداري وتشكيل لجنة التحصيل / فريق نافس</h2>" +
-      "<p class=\"tpl-p\">يُعتمد تشغيل محطة نافس تحت إشراف وكيل الشؤون التعليمية، بربط مباشر بمؤشرات نواتج التعلم 3-1-1-1 إلى 3-1-1-3، وتنسيق المبادرات الصفية والأسرية.</p>" +
-      "<h3 style=\"color:#0b5e56;font-size:14px;\">لجنة التحصيل الدراسي (SSOT)</h3>" +
-      tableHtml(
-        ["الدور", "الاسم", "الصفة", "التخصص"],
-        committee.map(function (row) {
-          return [
-            escapeHtml(row.seat_label || row.seat || ""),
-            escapeHtml(row.name || ""),
-            escapeHtml(row.role || ""),
-            escapeHtml(row.specialty || "")
-          ];
-        })
-      ) +
-      "<h3 style=\"color:#0b5e56;font-size:14px;\">معلمو المجالات من المنسوبين</h3>" +
-      tableHtml(
-        ["الاسم", "الصفة", "التخصص"],
-        teachers.map(function (row) {
-          return [
-            escapeHtml(row.name || ""),
-            escapeHtml(row.role || ""),
-            escapeHtml(row.specialty || "")
-          ];
-        })
-      ) +
-      "</section>";
+      wrapPrintPage(
+        2,
+        totalPages,
+        "<h2 style=\"color:#0b5e56;font-size:16px;\">القرار الإداري وتشكيل لجنة التحصيل / فريق نافس</h2>" +
+          "<p class=\"tpl-p\">يُعتمد تشغيل محطة نافس تحت إشراف وكيل الشؤون التعليمية، بربط مباشر بمؤشرات نواتج التعلم ٣-١-١-١ إلى ٣-١-١-٣، وتنسيق المبادرات الصفية والأسرية.</p>" +
+          "<h3 style=\"color:#0b5e56;font-size:14px;\">لجنة التحصيل الدراسي (SSOT)</h3>" +
+          tableHtml(
+            ["الدور", "الاسم", "الصفة", "التخصص"],
+            committee.map(function (row) {
+              return [
+                escapeHtml(row.seat_label || row.seat || ""),
+                escapeHtml(row.name || ""),
+                escapeHtml(row.role || ""),
+                escapeHtml(row.specialty || "")
+              ];
+            })
+          ) +
+          "<h3 style=\"color:#0b5e56;font-size:14px;\">معلمو المجالات من المنسوبين</h3>" +
+          tableHtml(
+            ["الاسم", "الصفة", "التخصص"],
+            teachers.map(function (row) {
+              return [
+                escapeHtml(row.name || ""),
+                escapeHtml(row.role || ""),
+                escapeHtml(row.specialty || "")
+              ];
+            })
+          )
+      );
 
     var page3 =
       pageBreak() +
-      "<section class=\"aj-nafs-print-page\">" +
-      "<h2 style=\"color:#0b5e56;font-size:16px;\">الخطة الزمنية الأسبوعية (18 أسبوعاً) حتى " +
-      escapeHtml(dossier.exam_window || "") +
-      "</h2>" +
-      "<p class=\"tpl-p\">المبادرات المدرسية: " +
-      escapeHtml((dossier.initiatives || []).join(" · ")) +
-      " · اختبارات المحاكاة: " +
-      escapeHtml((dossier.mocks || []).join("، ")) +
-      ".</p>" +
-      tableHtml(["الأسبوع", "التركيز التشغيلي", "المبادرات", "القياس"], weekRows) +
-      "</section>";
+      wrapPrintPage(
+        3,
+        totalPages,
+        "<h2 style=\"color:#0b5e56;font-size:16px;\">الخطة الزمنية الأسبوعية (" +
+          toEasternDigits(18) +
+          " أسبوعاً) حتى " +
+          escapeHtml(dossier.exam_window || "") +
+          "</h2>" +
+          "<p class=\"tpl-p aj-nafs-initiatives-line\">المبادرات المدرسية: <span class=\"aj-nafs-init-cell\">" +
+          escapeHtml(initiativesLine) +
+          "</span> · اختبارات المحاكاة: " +
+          escapeHtml((dossier.mocks || []).join("، ")) +
+          ".</p>" +
+          tableHtml(["الأسبوع", "التركيز التشغيلي", "المبادرات", "القياس"], weekRows)
+      );
 
     var page4 =
       pageBreak() +
-      "<section class=\"aj-nafs-print-page\">" +
-      "<h2 style=\"color:#0b5e56;font-size:16px;\">مصفوفة المهارات وعينة الأسئلة وبطاقات QR</h2>" +
-      "<p class=\"tpl-p\">مهارات أساسية: رياضيات " +
-      escapeHtml(String((dossier.skills_matrix || {}).math || 15)) +
-      " · علوم " +
-      escapeHtml(String((dossier.skills_matrix || {}).science || 10)) +
-      " · مستويات الفهم القرائي: " +
-      escapeHtml(((dossier.skills_matrix || {}).reading_levels || []).join("، ")) +
-      " · بنك الأسئلة المصحّح: " +
-      escapeHtml(String(dossier.question_bank_count || 86)) +
-      " سؤالاً.</p>" +
-      tableHtml(
-        ["م", "المجال", "المهارة", "نص السؤال", "الإجابة"],
-        samples.slice(0, 6).map(function (row, idx) {
-          return [
-            escapeHtml(String(idx + 1)),
-            escapeHtml(domainLabelAr(row.domain)),
-            escapeHtml(row.skill || ""),
-            escapeHtml(row.stem || ""),
-            escapeHtml(row.correct || "")
-          ];
-        })
-      ) +
-      "<div style=\"display:flex;gap:12px;justify-content:space-around;margin-top:8px;\">" +
-      challenges
-        .map(function (ch) {
-          return (
-            "<div style=\"text-align:center;width:30%;\">" +
-            (ch.qr_svg || "") +
-            "<div style=\"font-size:11px;color:#0b5e56;margin-top:4px;\">" +
-            escapeHtml(ch.label || "") +
-            "</div></div>"
-          );
-        })
-        .join("") +
-      "</div></section>";
+      wrapPrintPage(
+        4,
+        totalPages,
+        "<h2 style=\"color:#0b5e56;font-size:16px;\">مصفوفة المهارات وعينة الأسئلة وبطاقات QR</h2>" +
+          "<p class=\"tpl-p\">مهارات أساسية: رياضيات " +
+          toEasternDigits(String((dossier.skills_matrix || {}).math || 15)) +
+          " · علوم " +
+          toEasternDigits(String((dossier.skills_matrix || {}).science || 10)) +
+          " · مستويات الفهم القرائي: " +
+          escapeHtml(((dossier.skills_matrix || {}).reading_levels || []).join("، ")) +
+          " · بنك الأسئلة المصحّح: " +
+          toEasternDigits(String(dossier.question_bank_count || 86)) +
+          " سؤالاً.</p>" +
+          tableHtml(
+            ["م", "المجال", "المهارة", "نص السؤال", "الإجابة"],
+            samples.slice(0, 6).map(function (row, idx) {
+              return [
+                toEasternDigits(String(idx + 1)),
+                escapeHtml(domainLabelAr(row.domain)),
+                escapeHtml(row.skill || ""),
+                renderArabicMath(row.stem || ""),
+                escapeHtml(choiceLetterAr(row.correct || ""))
+              ];
+            })
+          ) +
+          "<div style=\"display:flex;gap:12px;justify-content:space-around;margin-top:8px;\">" +
+          challenges
+            .map(function (ch) {
+              return (
+                "<div style=\"text-align:center;width:30%;\">" +
+                (ch.qr_svg || "") +
+                "<div style=\"font-size:11px;color:#0b5e56;margin-top:4px;\">" +
+                escapeHtml(ch.label || "") +
+                "</div></div>"
+              );
+            })
+            .join("") +
+          "</div>"
+      );
 
     var page5 =
       pageBreak() +
-      "<section class=\"aj-nafs-print-page\">" +
-      "<h2 style=\"color:#0b5e56;font-size:16px;\">الشراكة الأسرية وميثاق الالتزام وتحفيز فرسان نافس</h2>" +
-      "<p class=\"tpl-p\">ميثاق أسري: متابعة واجب يومي قصير، وتشجيع القراءة المنزلية، وحضور لقاءات محاكاة نافس، والإبلاغ المبكر عن التعثر.</p>" +
-      tableHtml(
-        ["المستوى", "المعيار", "الحافز"],
-        [
-          ["الذهبي", "90٪ فأكثر", "شهادة تميز + وسام فارس نافس الذهبي"],
-          ["الفضي", "80–89٪", "شهادة تقدير + وسام فضي"],
-          ["فارس التحدي", "+20 نقطة تحسن", "تكريم التحسن الملحوظ"],
-          ["فصل التميز", "أعلى متوسط شعبة", "درع فصل التميز"]
-        ].map(function (row) {
-          return row.map(escapeHtml);
-        })
-      ) +
-      "<div style=\"border:2px dashed #0b5e56;padding:10px;margin-top:10px;text-align:center;\">" +
-      "<strong>بطاقة تكريم قابلة للقص</strong><br>يُكرَّم الطالب/ـة: ........................ في مجال ............ لنيله مستوى ............ في مسار نافس.</div>" +
-      "</section>";
+      wrapPrintPage(
+        5,
+        totalPages,
+        "<h2 style=\"color:#0b5e56;font-size:16px;\">الشراكة الأسرية وميثاق الالتزام وتحفيز فرسان نافس</h2>" +
+          "<p class=\"tpl-p\">ميثاق أسري: متابعة واجب يومي قصير، وتشجيع القراءة المنزلية، وحضور لقاءات محاكاة نافس، والإبلاغ المبكر عن التعثر.</p>" +
+          tableHtml(
+            ["المستوى", "المعيار", "الحافز"],
+            [
+              ["الذهبي", "٩٠٪ فأكثر", "شهادة تميز + وسام فارس نافس الذهبي"],
+              ["الفضي", "٨٠–٨٩٪", "شهادة تقدير + وسام فضي"],
+              ["فارس التحدي", "+٢٠ نقطة تحسن", "تكريم التحسن الملحوظ"],
+              ["فصل التميز", "أعلى متوسط شعبة", "درع فصل التميز"]
+            ].map(function (row) {
+              return row.map(function (cell) {
+                return escapeHtml(toEasternDigits(cell));
+              });
+            })
+          ) +
+          "<div style=\"border:2px dashed #0b5e56;padding:10px;margin-top:10px;text-align:center;\">" +
+          "<strong>بطاقة تكريم قابلة للقص</strong><br>يُكرَّم الطالب: ........................ في مجال ............ لنيله مستوى ............ في مسار نافس.</div>"
+      );
 
     var members = committee
       .map(function (row) {
@@ -984,46 +1092,61 @@
       .filter(Boolean);
     var page6 =
       pageBreak() +
-      "<section class=\"aj-nafs-print-page\">" +
-      "<h2 style=\"color:#0b5e56;font-size:16px;\">سجل محاضر لجنة التحصيل ونافس (4 محاضر)</h2>" +
-      tableHtml(
-        ["المحضر", "التاريخ الإرشادي", "الحضور من SSOT", "محور النقاش"],
-        [
-          ["1", "الأسبوع 2", members.slice(0, 4).join("، "), "إطلاق التشخيص وتحديد فجوة الجبر"],
-          ["2", "الأسبوع 6", members.slice(0, 5).join("، "), "متابعة مبادرات قارئ الحصيف وتحدي الأرقام"],
-          ["3", "الأسبوع 12", members.join("، "), "تحليل Mock 1–2 وتعديل المسارات"],
-          ["4", "الأسبوع 16", members.join("، "), "جاهزية نافذة شوال/ذو القعدة"]
-        ].map(function (row) {
-          return row.map(escapeHtml);
-        })
-      ) +
-      "</section>";
+      wrapPrintPage(
+        6,
+        totalPages,
+        "<h2 style=\"color:#0b5e56;font-size:16px;\">سجل محاضر لجنة التحصيل ونافس (" +
+          toEasternDigits(4) +
+          " محاضر)</h2>" +
+          tableHtml(
+            ["المحضر", "التاريخ الإرشادي", "الحضور من SSOT", "محور النقاش"],
+            [
+              ["١", "الأسبوع ٢", members.slice(0, 4).join("، "), "إطلاق التشخيص وتحديد فجوة الجبر"],
+              [
+                "٢",
+                "الأسبوع ٦",
+                members.slice(0, 5).join("، "),
+                "متابعة مبادرات قارئ الحصيف وتحدي الأرقام"
+              ],
+              ["٣", "الأسبوع ١٢", members.join("، "), "تحليل Mock ١–٢ وتعديل المسارات"],
+              ["٤", "الأسبوع ١٦", members.join("، "), "جاهزية نافذة شوال/ذو القعدة"]
+            ].map(function (row) {
+              return row.map(function (cell) {
+                return escapeHtml(toEasternDigits(cell));
+              });
+            })
+          )
+      );
 
-    var tt = (analytics.timetable || {});
+    var tt = analytics.timetable || {};
     var page7 =
       pageBreak() +
-      "<section class=\"aj-nafs-print-page\">" +
-      "<h2 style=\"color:#0b5e56;font-size:16px;\">أدوات التنفيذ الصفّي والملاحق</h2>" +
-      "<p class=\"tpl-p\"><strong>بطاقة ملاحظة صفية:</strong> سؤال نافس + تعليم متمايز (مسار علاجي / إثرائي) + تغذية راجعة فورية.</p>" +
-      "<p class=\"tpl-p\"><strong>استمارة العيادة العلاجية:</strong> المهارة المستهدفة · عدد الطلاب · الجلسات · القياس البعدي.</p>" +
-      "<p class=\"tpl-p\"><strong>ورقة تظليل مصغّرة (Scantron):</strong> 20 بنداً · خيارات A–D · للاستخدام مع بنك الأسئلة المصحّح.</p>" +
-      tableHtml(
-        ["المحاكاة", "الأسبوع المقترح", "الهدف"],
-        (dossier.mocks || []).map(function (name, idx) {
-          return [
-            escapeHtml(name),
-            escapeHtml(String(11 + idx)),
-            escapeHtml("قياس جاهزية المجال الثلاثي قبل النافذة الوطنية")
-          ];
-        })
-      ) +
-      "<p class=\"tpl-p\">كشف الحصص (nafes_timetable): " +
-      (tt.total
-        ? escapeHtml(String(tt.total)) + " حصة محفوظة"
-        : escapeHtml(tt.message || "لا حصص مستوردة بعد")) +
-      ".</p>" +
-      (signNote || "") +
-      "</section>";
+      wrapPrintPage(
+        7,
+        totalPages,
+        "<h2 style=\"color:#0b5e56;font-size:16px;\">أدوات التنفيذ الصفّي والملاحق</h2>" +
+          "<p class=\"tpl-p\"><strong>بطاقة ملاحظة صفية:</strong> سؤال نافس + تعليم متمايز (مسار علاجي / إثرائي) + تغذية راجعة فورية.</p>" +
+          "<p class=\"tpl-p\"><strong>استمارة العيادة العلاجية:</strong> المهارة المستهدفة · عدد الطلاب · الجلسات · القياس البعدي.</p>" +
+          "<p class=\"tpl-p\"><strong>ورقة تظليل مصغّرة (Scantron):</strong> " +
+          toEasternDigits(20) +
+          " بنداً · خيارات أ–د · للاستخدام مع بنك الأسئلة المصحّح.</p>" +
+          tableHtml(
+            ["المحاكاة", "الأسبوع المقترح", "الهدف"],
+            (dossier.mocks || []).map(function (name, idx) {
+              return [
+                escapeHtml(toEasternDigits(name)),
+                toEasternDigits(String(11 + idx)),
+                escapeHtml("قياس جاهزية المجال الثلاثي قبل النافذة الوطنية")
+              ];
+            })
+          ) +
+          "<p class=\"tpl-p\">كشف الحصص (nafes_timetable): " +
+          (tt.total
+            ? toEasternDigits(String(tt.total)) + " حصة محفوظة"
+            : escapeHtml(tt.message || "لا حصص مستوردة بعد")) +
+          ".</p>" +
+          (signNote || "")
+      );
 
     return page1 + page2 + page3 + page4 + page5 + page6 + page7;
   }
@@ -1042,7 +1165,7 @@
         return enrichSignoff().then(function (signCols) {
           window.PrintEngine.open("master-sheet", {
             docTitle: "سجل نافس المدرسي المتكامل",
-            title: "سجل نافس المدرسي المتكامل (7 صفحات)",
+            title: "سجل نافس المدرسي المتكامل (" + toEasternDigits(7) + " صفحات)",
             kind: "document",
             fileName: "سجل_نافس_المدرسي_المتكامل",
             orientation: "portrait",
@@ -1053,9 +1176,10 @@
             bodyHtml: buildRecordHtml(dossier, ""),
             signoff: true,
             maxColumns: 2,
+            pageTotal: 7,
             signatures: (signCols || []).slice(0, 2)
           });
-          status("معاينة سجل نافس المتكامل (7 صفحات) جاهزة.");
+          status("معاينة سجل نافس المتكامل (" + toEasternDigits(7) + " صفحات) جاهزة.");
         });
       })
       .catch(function (error) {
