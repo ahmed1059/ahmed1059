@@ -249,40 +249,53 @@ def gather_live_evidence(connection, code: str) -> list[dict]:
             )
 
     if code.startswith("1-") or code.startswith("2-") or code.startswith("1-4"):
-        perf = connection.execute(
-            """
-            SELECT COUNT(*),
-                   AVG(CASE WHEN mid_percent IS NOT NULL THEN mid_percent END),
-                   SUM(CASE WHEN readiness_mid >= 99.9 AND mid_percent IS NOT NULL THEN 1 ELSE 0 END)
-            FROM perf_records
-            """
-        ).fetchone()
-        if perf and int(perf[0] or 0) > 0:
-            avg = round(float(perf[1] or 0), 2) if perf[1] is not None else None
+        # يطابق لوحة المتابعة التنفيذية: يستبعد الصفوف التجريبية وغير النشطة في الـ roster.
+        from .job_performance_api import build_job_performance_summary
+
+        summary = build_job_performance_summary(connection, phase="mid")
+        stats = summary.get("stats") or {}
+        total = int(stats.get("total") or 0)
+        done = int(stats.get("done") or 0)
+        avg = stats.get("school_avg_percent")
+        if total > 0 or done > 0:
             items.append(
                 {
                     "source_kind": "job_performance",
                     "source_id": "perf_records",
                     "title": "تقويم الأداء الوظيفي (ملخص المدرسة)",
                     "summary": (
-                        f"سجلات {int(perf[0])} · منجز {int(perf[2] or 0)}"
-                        + (f" · متوسط {avg}%" if avg is not None else "")
+                        f"منسوبون {total} · منجز {done}"
+                        + (
+                            f" · متوسط {float(avg):.2f}%"
+                            if avg is not None
+                            else ""
+                        )
                     ),
                     "date": "",
                 }
             )
-        gaps = connection.execute(
-            """
-            SELECT COUNT(*) FROM perf_gap_plans
-            """
-        ).fetchone()[0]
-        if gaps:
+        active_ids = {
+            int(item["record_id"])
+            for item in (summary.get("items") or [])
+            if item.get("record_id") and item.get("status") == "done"
+        }
+        gap_count = 0
+        if active_ids:
+            placeholders = ",".join("?" for _ in active_ids)
+            gap_count = connection.execute(
+                f"""
+                SELECT COUNT(*) FROM perf_gap_plans
+                WHERE record_id IN ({placeholders})
+                """,
+                tuple(active_ids),
+            ).fetchone()[0]
+        if gap_count:
             items.append(
                 {
                     "source_kind": "job_performance",
                     "source_id": "perf_gap_plans",
                     "title": "خطط تحسين فجوة الأداء",
-                    "summary": f"{int(gaps)} خطة فجوة محفوظة",
+                    "summary": f"{int(gap_count)} خطة فجوة للمنجزين النشطين",
                     "date": "",
                 }
             )

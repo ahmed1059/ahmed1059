@@ -37,6 +37,10 @@
   margin: 0 0 16px;
 }
 
+#view-accreditation-self .aj-ac-filters .aj-detail-btn {
+  align-self: end;
+}
+
 #view-accreditation-self .aj-ac-filters .aj-jp-field {
   min-width: 180px;
 }
