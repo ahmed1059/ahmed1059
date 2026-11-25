@@ -221,7 +221,10 @@
       signoff: payload.signoff !== false,
       columns: payload.signatures || payload.columns || [],
       maxColumns: payload.maxColumns || payload.cols || undefined,
-      strictIdentity: payload.strictIdentity !== false
+      strictIdentity: payload.strictIdentity !== false,
+      pageTotal: payload.pageTotal || payload.totalPages || undefined,
+      unifiedFooter: !!payload.unifiedFooter,
+      pageFootLabel: payload.pageFootLabel || undefined
     });
     if (Array.isArray(payload.metaGrid) && payload.metaGrid.length && !payload.bodyHtml) {
       var cells = payload.metaGrid.filter(function (pair) {

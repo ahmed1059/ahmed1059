@@ -439,8 +439,43 @@
   margin-top: 6mm;
 }
 
+@counter-style pm-eastern-decimal {
+  system: numeric;
+  symbols: "٠" "١" "٢" "٣" "٤" "٥" "٦" "٧" "٨" "٩";
+}
+
 .pm-page-num::after {
   content: "";
+}
+
+.pm-document[data-page-total] .pm-page-num::after {
+  content: "١";
+}
+
+.pm-pages-num[data-total]::after {
+  content: attr(data-total);
+}
+
+.pm-pages-num:not([data-total])::after {
+  content: "";
+}
+
+/* شعار الرؤية: منع قصّ النص داخل الخانة */
+.pm-head .header-logo-left,
+.pm-head .header-logo-right {
+  overflow: visible !important;
+  min-width: 0;
+  max-width: 140px;
+}
+
+.pm-head .header-logo-left img,
+.pm-head .header-logo-right img {
+  max-height: 52px !important;
+  max-width: 140px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  object-position: center !important;
 }
 
 @media screen {
@@ -621,11 +656,20 @@
   }
 
   body.app-journey.print-master .pm-page-num::after {
-    content: counter(page);
+    content: counter(page, pm-eastern-decimal);
   }
 
-  body.app-journey.print-master .pm-pages-num::after {
-    content: counter(pages);
+  body.app-journey.print-master .pm-pages-num[data-total]::after {
+    content: attr(data-total);
+  }
+
+  body.app-journey.print-master .pm-pages-num:not([data-total])::after {
+    content: counter(pages, pm-eastern-decimal);
+  }
+
+  body.app-journey.print-master .pm-head .header-logo-left,
+  body.app-journey.print-master .pm-head .header-logo-right {
+    overflow: visible !important;
   }
 
   body.app-journey.print-master .pm-head {
