@@ -429,6 +429,10 @@ from .accreditation_session_api import router as accreditation_session_router
 
 app.include_router(accreditation_session_router)
 
+from .nafs_session_api import router as nafs_session_router
+
+app.include_router(nafs_session_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):
