@@ -148,3 +148,124 @@
     grid-template-columns: 1fr;
   }
 }
+
+#view-nafes .aj-nafs-panel {
+  background: #fff;
+  border: 1px solid #c9d7d3;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 0 0 14px;
+}
+
+#view-nafes .aj-nafs-whatif-grid {
+  display: grid;
+  gap: 12px;
+}
+
+#view-nafes .aj-nafs-slider {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  color: #5c675f;
+}
+
+#view-nafes .aj-nafs-slider input[type="range"] {
+  width: 100%;
+  accent-color: #0b5e56;
+}
+
+#view-nafes .aj-nafs-whatif-result {
+  margin: 12px 0 8px;
+  font-size: 14px;
+  color: #24312c;
+}
+
+#view-nafes .aj-nafs-check {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: #5c675f;
+}
+
+#view-nafes .aj-nafs-bank-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+#view-nafes .aj-nafs-bank-list {
+  display: grid;
+  gap: 12px;
+  max-height: 520px;
+  overflow: auto;
+}
+
+#view-nafes .aj-nafs-q {
+  border: 1px solid #d7e3df;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fafcfb;
+}
+
+#view-nafes .aj-nafs-q header {
+  font-size: 13px;
+  color: #0b5e56;
+  margin-bottom: 8px;
+}
+
+#view-nafes .aj-nafs-passage {
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  background: #fff;
+  border-right: 3px solid #0b5e56;
+  font-size: 12.5px;
+  color: #24312c;
+}
+
+#view-nafes .aj-nafs-stem {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #24312c;
+  font-weight: 600;
+}
+
+#view-nafes .aj-nafs-choices {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 4px;
+}
+
+#view-nafes .aj-nafs-choices li {
+  font-size: 13px;
+  color: #24312c;
+  display: flex;
+  gap: 8px;
+}
+
+#view-nafes .aj-nafs-choices li span {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e7efed;
+  color: #0b5e56;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+#view-nafes .aj-nafs-choices li.is-correct {
+  color: #0b5e56;
+  font-weight: 700;
+}
+
+#view-nafes .aj-nafs-why {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: #5c675f;
+}

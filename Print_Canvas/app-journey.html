@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="css/app-journey-job-performance.css?v=aj5">
   <link rel="stylesheet" href="css/app-journey-job-performance-dashboard.css?v=aj2">
   <link rel="stylesheet" href="css/app-journey-accreditation-self.css?v=aj4">
-  <link rel="stylesheet" href="css/app-journey-nafs-analytics.css?v=aj1">
+  <link rel="stylesheet" href="css/app-journey-nafs-analytics.css?v=aj2">
   <link rel="stylesheet" href="css/responsive.css?v=r292">
   <link rel="stylesheet" href="css/print-master.css?v=c311">
   <!-- print-shell.css يُحمَّل داخل iframe الطباعة فقط؛ الملف موجود لحارس الجودة -->
@@ -572,6 +572,7 @@
         <div class="aj-nafs-toolbar">
           <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-nafs-refresh">تحديث التحليل</button>
           <button type="button" class="aj-detail-btn" id="aj-nafs-print-plan">طباعة خطة المعالجة ورفع نواتج التعلم (نافس) A4</button>
+          <button type="button" class="aj-detail-btn" id="aj-nafs-print-record">طباعة سجل نافس المدرسي المتكامل (A4)</button>
         </div>
 
         <div id="aj-nafs-summary" class="aj-nafs-summary" aria-label="ملخص نافس"></div>
@@ -579,6 +580,9 @@
         <h2 class="aj-group-title">مجالات نافس الثلاثة</h2>
         <div id="aj-nafs-domains" class="aj-nafs-domains" aria-label="مجالات نافس"></div>
         <ul class="aj-cards" id="aj-nafes-cards" hidden aria-hidden="true"></ul>
+
+        <h2 class="aj-group-title">محاكي رفع الأداء «ماذا لو؟»</h2>
+        <div id="aj-nafs-whatif" class="aj-nafs-panel" aria-label="محاكي ماذا لو"></div>
 
         <h2 class="aj-group-title">مؤشرات الاعتماد (نواتج التعلم)</h2>
         <div id="aj-nafs-indicators" class="aj-nafs-list" aria-label="مؤشرات الاعتماد"></div>
@@ -588,6 +592,9 @@
 
         <h2 class="aj-group-title">توزيع حصص نافس</h2>
         <div id="aj-nafs-timetable" class="aj-nafs-list" aria-label="حصص نافس"></div>
+
+        <h2 class="aj-group-title">بنك أسئلة نافس المصحّح (86 سؤالاً)</h2>
+        <div id="aj-nafs-bank" class="aj-nafs-panel" aria-label="بنك أسئلة نافس"></div>
 
         <div class="aj-detail-actions">
           <a class="aj-detail-btn aj-detail-btn-secondary" href="#view-station-measurement">العودة</a>
@@ -1959,7 +1966,7 @@
   <script src="js/app-journey-student-registry.js?v=aj145"></script>
   <script src="js/app-journey-evaluation.js?v=c284"></script>
   <script src="js/app-journey-accreditation-self.js?v=aj4"></script>
-  <script src="js/app-journey-nafs-analytics.js?v=aj1"></script>
+  <script src="js/app-journey-nafs-analytics.js?v=aj2"></script>
   <script src="js/app-journey-visits.js?v=aj198"></script>
   <script src="js/app-journey-visit-plan.js?v=aj4"></script>
   <script src="js/app-journey-job-performance-notes.js?v=aj4"></script>
