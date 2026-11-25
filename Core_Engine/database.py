@@ -997,6 +997,9 @@ def init_db():
         from .accreditation_session_api import ensure_on_boot as ensure_accreditation_self
 
         ensure_accreditation_self(connection)
+        from .nafs_session_api import ensure_on_boot as ensure_nafs_bank
+
+        ensure_nafs_bank(connection)
         ensure_noor_students_enrichment_columns(connection)
         approval_path = Path(__file__).resolve().parent.parent / "Print_Canvas" / "banks" / "approval_authorities.json"
         if approval_path.is_file():
