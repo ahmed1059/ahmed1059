@@ -482,8 +482,13 @@
     if (!q) {
       return;
     }
-    hub.style.display = "none";
+    if (hub) hub.style.display = "none";
     stage.classList.add("is-open");
+    document.body.classList.add("arena-playing");
+    var fieldHub = document.getElementById("field-hub");
+    var stationShell = document.getElementById("station-shell");
+    if (fieldHub) fieldHub.hidden = true;
+    if (stationShell) stationShell.hidden = true;
     document.getElementById("arena-progress").textContent =
       "سؤال " + toEastern(state.index + 1) + " من " + toEastern(state.run.questions.length);
     document.getElementById("arena-title").textContent = state.run.label || "التحدي";
@@ -828,8 +833,13 @@
             .join("") +
           "</ul>";
         document.getElementById("arena-stage").classList.remove("is-open");
-        document.getElementById("arena-hub").style.display = "";
+        document.body.classList.remove("arena-playing");
+        var hubDone = document.getElementById("arena-hub");
+        if (hubDone) hubDone.style.display = "";
         document.getElementById("duel-rails").hidden = true;
+        if (window.PortalStudentStations && typeof window.PortalStudentStations.back === "function") {
+          window.PortalStudentStations.back();
+        }
         status("تم تحديث نقاطك ولوحات الصدارة.");
         return refresh();
       })
@@ -1009,23 +1019,38 @@
     }
     host.innerHTML = cards
       .map(function (card) {
+        var domain = escapeHtml(card.domain || "math");
+        var title = escapeHtml(card.front || card.title || "قاعدة ذهبية");
         return (
-          "<div class=\"flip-card domain-" +
-          escapeHtml(card.domain || "math") +
+          "<button type=\"button\" class=\"flip-card domain-" +
+          domain +
           (card.mastered ? " is-mastered" : "") +
           "\" data-card=\"" +
           escapeHtml(card.id) +
-          "\" role=\"button\" tabindex=\"0\"><span class=\"flip-inner\"><span class=\"flip-face front\"><span class=\"flip-kicker\">بطاقة ذهبية</span><span class=\"flip-title\">" +
-          escapeHtml(card.front || card.title || "") +
-          "</span><span class=\"flip-hint\">اضغط للتقليب</span></span><span class=\"flip-face back\"><span class=\"flip-body\">" +
-          renderArabicMath(card.back || "") +
-          "</span><button type=\"button\" class=\"flip-master-btn\" data-master=\"" +
-          escapeHtml(card.id) +
+          "\" aria-label=\"تقليب بطاقة " +
+          title +
           "\">" +
+          "<div class=\"flip-inner\">" +
+          "<div class=\"flip-face front\">" +
+          "<div class=\"flip-seal\" aria-hidden=\"true\">✦</div>" +
+          "<div class=\"flip-kicker\">بطاقة ذهبية</div>" +
+          "<div class=\"flip-title\">" +
+          title +
+          "</div>" +
+          "<div class=\"flip-hint\">اضغط للتقليب</div>" +
+          "</div>" +
+          "<div class=\"flip-face back\">" +
+          "<div class=\"flip-body\">" +
+          renderArabicMath(card.back || "") +
+          "</div>" +
+          "<span class=\"flip-master-btn\" data-master=\"" +
+          escapeHtml(card.id) +
+          "\" role=\"button\">" +
           (card.mastered
             ? "مُتقَنة ✓"
             : "أتقنت القاعدة (+" + toEastern(card.xp || 5) + " XP)") +
-          "</button></span></span></div>"
+          "</span>" +
+          "</div></div></button>"
         );
       })
       .join("");
@@ -1290,7 +1315,12 @@
       arenaExit.addEventListener("click", function () {
         stopTimer();
         document.getElementById("arena-stage").classList.remove("is-open");
-        document.getElementById("arena-hub").style.display = "";
+        document.body.classList.remove("arena-playing");
+        var hub = document.getElementById("arena-hub");
+        if (hub) hub.style.display = "";
+        if (window.PortalStudentStations && typeof window.PortalStudentStations.back === "function") {
+          window.PortalStudentStations.back();
+        }
         refresh();
       });
     }
@@ -1327,8 +1357,13 @@
       escapeHtml: escapeHtml,
       renderArabicMath: renderArabicMath,
       refresh: refresh,
-      startMode: startMode
+      startMode: startMode,
+      loadGoldenDeck: loadGoldenDeck,
+      loadTrapAlbum: loadTrapAlbum
     };
+    if (window.PortalStudentStations && typeof window.PortalStudentStations.boot === "function") {
+      window.PortalStudentStations.boot(helpers);
+    }
     if (window.PortalStudentGames && typeof window.PortalStudentGames.boot === "function") {
       window.PortalStudentGames.boot(helpers);
     }

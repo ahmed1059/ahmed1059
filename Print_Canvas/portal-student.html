@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بوابة الطالب — ميدان نافس</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p14">
+  <link rel="stylesheet" href="css/portal-student.css?v=p15">
 </head>
 <body class="portal-student portal-gamer theme-royal">
   <canvas id="portal-particles" aria-hidden="true"></canvas>
@@ -69,58 +69,58 @@
     </nav>
 
     <div id="panel-play" class="portal-main-panel is-active">
-      <section class="portal-card live-radar-card">
-        <h2>الطلاب المتواجدون الآن</h2>
-        <div id="online-list" class="online-list"></div>
-        <div id="duel-inbox" class="duel-inbox"></div>
-      </section>
-
-      <section class="portal-card adaptive-strip">
-        <h2>شريط تطهير الأخطاء ومؤشر الإتقان</h2>
-        <p id="purge-banner" class="purge-banner">جارٍ تحميل سجل الأخطاء…</p>
-        <div id="mastery-bars" class="mastery-bars"></div>
-        <div id="vault-list" class="vault-list"></div>
-        <div class="portal-actions">
-          <button type="button" class="portal-btn" data-mode="purge" id="btn-purge">تحدي تصفية الأخطاء</button>
-          <button type="button" class="portal-btn secondary" id="btn-home-mock">اختبار منزلي ورقي (OMR)</button>
+      <section class="field-hero" id="field-hub" aria-label="ميدان المحطات">
+        <div class="field-hero-copy">
+          <p class="field-kicker">ميدان نافس</p>
+          <h2>اختر محطتك</h2>
+          <p>أيقونات ملوّنة لكل مجال — ادخل المحطة، تعلّم، ثم ارجع للميدان.</p>
         </div>
+        <div class="field-icon-grid" id="field-icon-grid"></div>
       </section>
 
-      <section class="portal-card collapsible-card is-collapsed readalong-card" data-collapse="readalong">
-        <button type="button" class="collapse-launcher" id="btn-collapse-readalong" aria-expanded="false" aria-controls="readalong-body">
-          <span class="collapse-glyph" aria-hidden="true">
-            <svg viewBox="0 0 64 64" class="tile-svg"><defs><linearGradient id="raG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b5e56"/><stop offset="100%" stop-color="#34d399"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#raG)"/><path d="M14 18h26c6 0 10 4 10 10v8c0 6-4 10-10 10H28l-8 8v-8h-6c-4 0-8-4-8-10V26c0-4 4-8 8-8z" fill="#fff" opacity=".95"/><circle cx="26" cy="30" r="3" fill="#0b5e56"/><circle cx="36" cy="30" r="3" fill="#0b5e56"/><circle cx="46" cy="30" r="3" fill="#0b5e56"/></svg>
-          </span>
-          <span class="collapse-copy">
-            <strong>القراءة المتزامنة بالصوت والصور</strong>
-            <small>مؤشر <span class="etec-code" dir="ltr">٣-١-١-١</span> · اضغط للفتح</small>
-          </span>
-          <span class="collapse-chevron" aria-hidden="true">▾</span>
-        </button>
-        <div class="collapse-body" id="readalong-body" hidden>
-          <div id="readalong-list" class="readalong-list"></div>
-          <div id="readalong-stage" class="readalong-stage" hidden></div>
+      <div id="station-shell" class="station-shell" hidden>
+        <div class="station-bar">
+          <button type="button" class="portal-btn station-back" id="btn-back-field">العودة للميدان</button>
+          <div class="station-bar-copy">
+            <h2 id="station-title">المحطة</h2>
+            <p id="station-subtitle"></p>
+          </div>
         </div>
-      </section>
 
-      <div id="arena-hub" class="portal-grid play-grid">
-        <section class="portal-card card-play collapsible-card is-collapsed" data-collapse="modes">
-          <button type="button" class="collapse-launcher" id="btn-collapse-modes" aria-expanded="false" aria-controls="modes-body">
-            <span class="collapse-glyph" aria-hidden="true">
-              <svg viewBox="0 0 64 64" class="tile-svg"><defs><linearGradient id="mdG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0e7490"/><stop offset="100%" stop-color="#67e8f9"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#mdG)"/><path d="M18 40l10-22 8 14 6-10 12 18H18z" fill="#fff"/><circle cx="46" cy="20" r="5" fill="#fbbf24"/></svg>
-            </span>
-            <span class="collapse-copy">
-              <strong>أنماط التحدي</strong>
-              <small>يومي · محاكي · إنقاذ · تصفية · مبارزة · وطني</small>
-            </span>
-            <span class="collapse-chevron" aria-hidden="true">▾</span>
-          </button>
-          <div class="collapse-body" id="modes-body" hidden>
-            <div class="mode-grid" id="mode-grid"></div>
-            <div id="result-box"></div>
+        <section class="portal-card station-panel" data-station="live" hidden>
+          <h2>الطلاب المتواجدون الآن</h2>
+          <div id="online-list" class="online-list"></div>
+          <div id="duel-inbox" class="duel-inbox"></div>
+        </section>
+
+        <section class="portal-card station-panel adaptive-strip" data-station="purge" hidden>
+          <h2>شريط تطهير الأخطاء ومؤشر الإتقان</h2>
+          <p id="purge-banner" class="purge-banner">جارٍ تحميل سجل الأخطاء…</p>
+          <div id="mastery-bars" class="mastery-bars"></div>
+          <div id="vault-list" class="vault-list"></div>
+          <div class="portal-actions">
+            <button type="button" class="portal-btn" data-mode="purge" id="btn-purge">تحدي تصفية الأخطاء</button>
+            <button type="button" class="portal-btn secondary" id="btn-home-mock">اختبار منزلي ورقي (OMR)</button>
           </div>
         </section>
-        <section class="portal-card card-play">
+
+        <section class="portal-card station-panel readalong-card" data-station="readalong" hidden>
+          <h2>القراءة المتزامنة بالصوت والصور</h2>
+          <p class="section-hint">مؤشر <span class="etec-code" dir="ltr">٣-١-١-١</span> · مقاطع قصيرة بالصوت والصورة</p>
+          <div id="readalong-list" class="readalong-list"></div>
+          <div id="readalong-stage" class="readalong-stage" hidden></div>
+        </section>
+
+        <div id="arena-hub" class="station-panel" data-station="modes" hidden>
+          <section class="portal-card card-play">
+            <h2>أنماط التحدي</h2>
+            <p class="section-hint">يومي · محاكي · إنقاذ · تصفية · مبارزة · وطني</p>
+            <div class="mode-grid" id="mode-grid"></div>
+            <div id="result-box"></div>
+          </section>
+        </div>
+
+        <section class="portal-card station-panel card-play" data-station="games" hidden>
           <h2>ألعاب التأسيس السريع</h2>
           <div class="mini-games">
             <button type="button" class="mode-card game-tile" id="btn-words">
@@ -141,12 +141,14 @@
           </div>
           <div id="mini-game-stage" class="mini-game-stage" hidden></div>
         </section>
-        <section class="portal-card card-play">
+
+        <section class="portal-card station-panel card-play" data-station="golden" hidden>
           <h2>الحقيبة الذهبية</h2>
           <p class="section-hint">اقلب البطاقة لترى القاعدة، ثم سجّل إتقانك (+٥ XP).</p>
           <div id="golden-deck" class="golden-deck"></div>
         </section>
-        <section class="portal-card card-play">
+
+        <section class="portal-card station-panel card-play" data-station="traps" hidden>
           <h2>أبواب الأخطاء الشائعة</h2>
           <div class="tabs" role="tablist">
             <button type="button" class="tab is-active" data-trap-door="math">الرياضيات</button>
@@ -249,10 +251,11 @@
   </div>
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe1"></script>
+  <script src="js/portal-student-stations.js?v=st1"></script>
   <script src="js/portal-student-games.js?v=g4"></script>
   <script src="js/portal-student-fx.js?v=fx2"></script>
   <script src="js/portal-student-adaptive.js?v=ad2"></script>
-  <!-- أخيراً: بعد تعريف Games/Adaptive/Fx حتى لا يحدث null.toEastern عند الإقلاع -->
-  <script src="js/portal-student.js?v=p14"></script>
+  <!-- أخيراً: بعد تعريف Games/Adaptive/Fx/Stations حتى لا يحدث null.toEastern عند الإقلاع -->
+  <script src="js/portal-student.js?v=p15"></script>
 </body>
 </html>
