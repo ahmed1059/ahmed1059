@@ -492,18 +492,9 @@
       keyHtml +
       "</div>";
 
-    if (window.PrintEngine && typeof window.PrintEngine.open === "function") {
-      window.PrintEngine.open("raw-html", {
-        html: wrapped,
-        docTitle: "اختبار منزلي بإشراف ولي الأمر + OMR",
-        multiPage: true,
-        orientation: "portrait",
-        arm: { orientation: "portrait", multiPage: true }
-      });
-      return;
-    }
-    var w = window.open("", "_blank");
-    if (w) {
+    function openVisiblePreview() {
+      var w = window.open("", "_blank");
+      if (!w) return false;
       w.document.write(
         "<!DOCTYPE html><html lang=\"ar\" dir=\"rtl\"><head><meta charset=\"utf-8\"><title>اختبار منزلي</title>" +
           "<link rel=\"stylesheet\" href=\"" +
@@ -513,11 +504,29 @@
           "<div style=\"page-break-before:always\"></div>" +
           omrHtml +
           keyHtml +
+          "<script>window.addEventListener('load',function(){try{window.focus();window.print();}catch(e){}});<\/script>" +
           "</body></html>"
       );
       w.document.close();
-      w.print();
+      return true;
     }
+
+    if (window.PrintEngine && typeof window.PrintEngine.open === "function") {
+      var opened = window.PrintEngine.open("raw-html", {
+        html: wrapped,
+        docTitle: "اختبار منزلي بإشراف ولي الأمر + OMR",
+        multiPage: true,
+        orientation: "portrait",
+        arm: { orientation: "portrait", multiPage: true }
+      });
+      if (opened && opened.ok) {
+        return { ok: true, via: opened.via || "print-engine", preview: !!opened.preview };
+      }
+    }
+    if (openVisiblePreview()) {
+      return { ok: true, via: "window-open", preview: true };
+    }
+    return { ok: false, error: "تعذر فتح المعاينة أو حوار الطباعة. اسمح بالنوافذ المنبثقة ثم أعد المحاولة." };
   }
 
   function requestHomeMock() {
@@ -525,8 +534,16 @@
     api
       .fetchJson("/api/portal/home-mock/pack", { headers: api.authHeaders(), cache: "no-store" })
       .then(function (pack) {
-        printHomeMock(pack.pack || {});
-        api.status("ورقة الاختبار وOMR ومفتاح ولي الأمر جاهزة للطباعة.");
+        var result = printHomeMock(pack.pack || {});
+        if (result && result.ok) {
+          api.status(
+            result.preview
+              ? "المعاينة جاهزة — اطبع من النافذة أو حوار الطباعة."
+              : "حوار الطباعة جاهز (كراسة + OMR + مفتاح). إن لم يظهر اسمح بالنوافذ المنبثقة."
+          );
+          return;
+        }
+        api.status((result && result.error) || "تعذر فتح المعاينة أو الطباعة.", true);
       })
       .catch(function (err) {
         api.status(err.message || "تعذر التوليد.", true);
