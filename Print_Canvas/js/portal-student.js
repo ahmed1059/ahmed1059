@@ -18,7 +18,13 @@
     questionStartedAt: 0,
     boardTab: "day",
     duelPoll: null,
-    runStartedAt: 0
+    runStartedAt: 0,
+    mainTab: "arena",
+    trapDoor: "math",
+    trapAlbum: null,
+    golden: null,
+    checked: {},
+    rescueActive: null
   };
 
   function toEastern(text) {
@@ -154,7 +160,8 @@
       ["daily", modes.daily],
       ["mock", modes.mock],
       ["rescue", modes.rescue],
-      ["duel", modes.duel]
+      ["duel", modes.duel],
+      ["national", modes.national]
     ]
       .map(function (pair) {
         var key = pair[0];
@@ -412,7 +419,9 @@
         .join("") +
       "</div>";
     state.questionStartedAt = Date.now();
+    hideTrap();
     paintPowerups();
+    paintNationalMap();
   }
 
   function paintPowerups() {
@@ -449,10 +458,13 @@
         state.run = pack;
         state.index = 0;
         state.answers = {};
+        state.checked = {};
+        state.rescueActive = null;
         state.streak = 0;
         state.secondsLeft = Number(pack.seconds || 600);
         state.runStartedAt = Date.now();
         stopTimer();
+        showMainTab("arena");
         var rails = document.getElementById("duel-rails");
         if (rails) {
           rails.hidden = !pack.duel;
@@ -477,6 +489,88 @@
       });
   }
 
+  function showTrap(trap, q) {
+    var host = document.getElementById("trap-card");
+    if (!host || !trap) {
+      return;
+    }
+    host.hidden = false;
+    host.innerHTML =
+      "<h3>" +
+      escapeHtml(trap.title || "احذر الفخ!") +
+      "</h3><p><strong>تشريح الخطأ الشائع:</strong> " +
+      escapeHtml(trap.common_mistake || "") +
+      "</p><div class=\"rule\">القاعدة الذهبية: " +
+      escapeHtml(trap.golden_rule || "") +
+      (trap.grade_root ? " · الجذر: " + escapeHtml(trap.grade_root) : "") +
+      "</div><div class=\"portal-actions\" style=\"margin-top:10px;\"><button type=\"button\" class=\"portal-btn\" id=\"rescue-btn\">سؤال إنقاذ فوري (نظير رقمي)</button></div>";
+    var btn = document.getElementById("rescue-btn");
+    if (btn) {
+      btn.onclick = function () {
+        startRescue(q);
+      };
+    }
+  }
+
+  function hideTrap() {
+    var host = document.getElementById("trap-card");
+    if (host) {
+      host.hidden = true;
+      host.innerHTML = "";
+    }
+  }
+
+  function startRescue(q) {
+    fetchJson("/api/portal/misconceptions/rescue", {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({
+        run_id: state.run.run_id,
+        domain: (q && q.domain) || "math",
+        skill: (q && q.skill) || ""
+      })
+    })
+      .then(function (pack) {
+        state.rescueActive = pack.question;
+        if (state.run && state.run.questions) {
+          state.run.questions.splice(state.index + 1, 0, pack.question);
+        }
+        hideTrap();
+        status(pack.message || "سؤال إنقاذ جاهز.");
+        state.index += 1;
+        paintQuestion();
+      })
+      .catch(function (error) {
+        status(error.message || "تعذر توليد سؤال الإنقاذ.", true);
+      });
+  }
+
+  function paintNationalMap() {
+    var host = document.getElementById("national-map");
+    if (!host || !state.run || state.run.mode !== "national") {
+      if (host) host.hidden = true;
+      return;
+    }
+    host.hidden = false;
+    var qs = state.run.questions || [];
+    host.innerHTML = qs
+      .map(function (qq, i) {
+        var cls = i === state.index ? " is-current" : "";
+        if (state.checked[qq.id] === false) cls += " is-wrong";
+        else if (state.answers[qq.id]) cls += " is-done";
+        return (
+          "<button type=\"button\" data-jump=\"" +
+          i +
+          "\" class=\"" +
+          cls.trim() +
+          "\">" +
+          toEastern(i + 1) +
+          "</button>"
+        );
+      })
+      .join("");
+  }
+
   function selectChoice(letter) {
     var q = currentQuestion();
     if (!q) {
@@ -485,6 +579,27 @@
     var elapsed = Math.max(0, (Date.now() - state.questionStartedAt) / 1000);
     state.answers[q.id] = { question_id: q.id, choice: letter, elapsed_sec: elapsed };
     paintQuestion();
+    if (!state.run || !state.run.run_id) {
+      return;
+    }
+    fetchJson("/api/portal/challenge/check", {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({ run_id: state.run.run_id, question_id: q.id, choice: letter })
+    })
+      .then(function (pack) {
+        state.checked[q.id] = !!pack.ok;
+        paintNationalMap();
+        if (!pack.ok && pack.trap) {
+          showTrap(pack.trap, q);
+        } else {
+          hideTrap();
+          if (pack.ok && q.rescue) {
+            status("أحسنت — أُغلق الفخ واستُعيد نصف النقاط عند الإنهاء.");
+          }
+        }
+      })
+      .catch(function () {});
   }
 
   function nextQuestion() {
@@ -639,7 +754,131 @@
     });
   }
 
+  function showMainTab(id) {
+    state.mainTab = id;
+    Array.prototype.forEach.call(document.querySelectorAll("[data-main-tab]"), function (btn) {
+      btn.classList.toggle("is-active", btn.getAttribute("data-main-tab") === id);
+    });
+    ["arena", "traps", "golden"].forEach(function (key) {
+      var panel = document.getElementById("panel-" + key);
+      if (!panel) return;
+      var on = key === id;
+      panel.classList.toggle("is-active", on);
+      panel.hidden = !on;
+    });
+    if (id === "traps") loadTrapAlbum();
+    if (id === "golden") loadGoldenDeck();
+  }
+
+  function loadTrapAlbum() {
+    fetchJson("/api/portal/misconceptions/album", { headers: authHeaders(), cache: "no-store" })
+      .then(function (pack) {
+        state.trapAlbum = pack;
+        paintTrapAlbum();
+      })
+      .catch(function (error) {
+        status(error.message || "تعذر تحميل ألبوم الأخطاء.", true);
+      });
+  }
+
+  function paintTrapAlbum() {
+    var pack = state.trapAlbum || { doors: {} };
+    var rows = (pack.doors && pack.doors[state.trapDoor]) || [];
+    var host = document.getElementById("trap-album");
+    host.innerHTML = rows
+      .map(function (row) {
+        return (
+          "<article class=\"trap-tile\"><strong>" +
+          escapeHtml(row.prompt || row.skill || "") +
+          "</strong><div class=\"mistake\">الفخ: " +
+          escapeHtml(row.common_mistake || "") +
+          "</div><div class=\"rule\">القاعدة: " +
+          escapeHtml(row.golden_rule || "") +
+          "</div><small>الجذر " +
+          escapeHtml(row.grade_root || "") +
+          " · " +
+          escapeHtml(((row.etec || {}).code) || "") +
+          "</small></article>"
+        );
+      })
+      .join("");
+  }
+
+  function loadGoldenDeck() {
+    fetchJson("/api/portal/golden-deck", { headers: authHeaders(), cache: "no-store" })
+      .then(function (pack) {
+        state.golden = pack;
+        paintGoldenDeck();
+      })
+      .catch(function (error) {
+        status(error.message || "تعذر تحميل الحقيبة الذهبية.", true);
+      });
+  }
+
+  function paintGoldenDeck() {
+    var cards = (state.golden && state.golden.cards) || [];
+    var host = document.getElementById("golden-deck");
+    host.innerHTML = cards
+      .map(function (card) {
+        return (
+          "<button type=\"button\" class=\"flip-card domain-" +
+          escapeHtml(card.domain || "math") +
+          (card.mastered ? " is-mastered" : "") +
+          "\" data-card=\"" +
+          escapeHtml(card.id) +
+          "\"><span class=\"flip-inner\"><span class=\"flip-face front\">" +
+          escapeHtml(card.front || card.title || "") +
+          "</span><span class=\"flip-face back\">" +
+          escapeHtml(card.back || "") +
+          "<br><br><em>تم الإتقان (+" +
+          toEastern(card.xp || 5) +
+          " XP)</em></span></span></button>"
+        );
+      })
+      .join("");
+  }
+
   function bind() {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-main-tab]"), function (btn) {
+      btn.addEventListener("click", function () {
+        showMainTab(btn.getAttribute("data-main-tab"));
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-trap-door]"), function (btn) {
+      btn.addEventListener("click", function () {
+        state.trapDoor = btn.getAttribute("data-trap-door");
+        Array.prototype.forEach.call(document.querySelectorAll("[data-trap-door]"), function (el) {
+          el.classList.toggle("is-active", el === btn);
+        });
+        paintTrapAlbum();
+      });
+    });
+    document.getElementById("golden-deck").addEventListener("click", function (event) {
+      var card = event.target.closest("[data-card]");
+      if (!card) return;
+      card.classList.toggle("is-flipped");
+      if (card.classList.contains("is-flipped") && !card.classList.contains("is-mastered")) {
+        fetchJson("/api/portal/golden-deck/master", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ card_id: card.getAttribute("data-card") })
+        })
+          .then(function (pack) {
+            if (pack.xp_earned) {
+              card.classList.add("is-mastered");
+              status("أتقنت البطاقة · +" + toEastern(pack.xp_earned) + " XP");
+              return refresh();
+            }
+          })
+          .catch(function () {});
+      }
+    });
+    document.getElementById("national-map").addEventListener("click", function (event) {
+      var btn = event.target.closest("[data-jump]");
+      if (!btn || !state.run) return;
+      state.index = Number(btn.getAttribute("data-jump") || 0);
+      paintQuestion();
+    });
     document.getElementById("mode-grid").addEventListener("click", function (event) {
       var btn = event.target.closest("[data-mode]");
       if (btn) {
