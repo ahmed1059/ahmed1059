@@ -484,6 +484,10 @@ from .nafs_readalong_api import router as nafs_readalong_router
 
 app.include_router(nafs_readalong_router)
 
+from .nafs_remedial_clinics import router as nafs_remedial_clinics_router
+
+app.include_router(nafs_remedial_clinics_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):

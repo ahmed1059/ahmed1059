@@ -4,7 +4,7 @@
 
   var SESSION_KEY = "sessionUser";
   var EASTERN = "٠١٢٣٤٥٦٧٨٩";
-  var state = { token: "", settings: null };
+  var state = { token: "", settings: null, clinicProposals: [] };
 
   function toEastern(t) {
     return String(t == null ? "" : t).replace(/[0-9]/g, function (d) {
@@ -73,6 +73,244 @@
     var raw = toEastern(code == null ? "" : code);
     if (!raw) return "";
     return '<span class="peek-etec" dir="ltr">' + escapeHtml(raw) + "</span>";
+  }
+
+  function paintClinicWorksheet(ws) {
+    var host = document.getElementById("clinics-worksheet");
+    if (!host) return;
+    if (!ws || !(ws.questions || []).length) {
+      host.hidden = true;
+      host.innerHTML = "";
+      return;
+    }
+    host.hidden = false;
+    host.innerHTML =
+      "<h3 style=\"margin:0 0 6px;color:#0b5e56;font-size:16px;\">" +
+      escapeHtml(ws.title || "ورقة علاجية مصغّرة") +
+      "</h3><p style=\"margin:0 0 8px;font-size:13px;color:#5c675f;\">المعلم: " +
+      escapeHtml(ws.teacher_name || "") +
+      " · الجذر " +
+      toEastern(ws.grade_root || "") +
+      " · مؤشر " +
+      formatEtecCode(ws.etec_code_ar || "") +
+      "</p><ol>" +
+      (ws.questions || [])
+        .map(function (q, i) {
+          var choices = q.choices || {};
+          return (
+            "<li><strong>" +
+            toEastern(i + 1) +
+            ".</strong> " +
+            escapeHtml(q.stem || "") +
+            "<br><small>" +
+            ["A", "B", "C", "D"]
+              .map(function (L) {
+                return L + ") " + escapeHtml(choices[L] || "");
+              })
+              .join(" · ") +
+            "</small></li>"
+          );
+        })
+        .join("") +
+      "</ol>";
+  }
+
+  function loadClinicProposals() {
+    var grade = (document.getElementById("clinic-grade") || {}).value || "";
+    var section = (document.getElementById("clinic-section") || {}).value || "";
+    var qs = [];
+    if (grade) qs.push("grade=" + encodeURIComponent(grade.trim()));
+    if (section) qs.push("section=" + encodeURIComponent(section.trim()));
+    var url = "/api/portal/teacher/clinics/proposals" + (qs.length ? "?" + qs.join("&") : "");
+    return fetchJson(url, { headers: headers(), cache: "no-store" }).then(function (pack) {
+      state.clinicProposals = pack.proposals || [];
+      var teachers = document.getElementById("clinics-teachers");
+      var summary = document.getElementById("clinics-summary");
+      var box = document.getElementById("clinics-box");
+      var tmap = pack.teachers || {};
+      if (teachers) {
+        teachers.hidden = false;
+        teachers.innerHTML = Object.keys(tmap)
+          .map(function (k) {
+            var t = tmap[k] || {};
+            return (
+              "<span class=\"peek-chip\">" +
+              escapeHtml(t.subject || k) +
+              ": " +
+              escapeHtml(t.name || "") +
+              "</span>"
+            );
+          })
+          .join("");
+      }
+      if (summary) {
+        summary.hidden = false;
+        summary.innerHTML =
+          "<span class=\"peek-chip is-hot\">مقترحات: " +
+          toEastern(pack.count || 0) +
+          "</span>" +
+          Object.keys(pack.by_root || {})
+            .map(function (root) {
+              return (
+                "<span class=\"peek-chip\">جذر " +
+                toEastern(root) +
+                ": " +
+                toEastern((pack.by_root || {})[root] || 0) +
+                "</span>"
+              );
+            })
+            .join("");
+      }
+      if (!box) return pack;
+      var rows = pack.proposals || [];
+      if (!rows.length) {
+        box.innerHTML = "<p class=\"portal-empty\">لا مقترحات عيادة حالياً — vault نظيف أو لا تعثرات مفتوحة.</p>";
+        return pack;
+      }
+      box.innerHTML = rows
+        .map(function (p, idx) {
+          var etec = (p.etec && (p.etec.code_ar || p.etec.code)) || "";
+          var students = (p.students || [])
+            .map(function (s) {
+              return (
+                escapeHtml(s.name || "") +
+                " (" +
+                toEastern(s.trap_heat || 0) +
+                ")"
+              );
+            })
+            .join(" · ");
+          return (
+            "<article class=\"clinic-card" +
+            (p.already_open ? " is-open" : "") +
+            "\" data-clinic-idx=\"" +
+            idx +
+            "\"><h3>" +
+            escapeHtml(p.subject || "") +
+            " — " +
+            escapeHtml(p.skill || "") +
+            "</h3><div class=\"clinic-meta\">" +
+            "<span class=\"peek-chip\">فصل " +
+            escapeHtml(p.section || "—") +
+            "</span>" +
+            "<span class=\"peek-chip\">جذر " +
+            toEastern(p.grade_root || "٣م") +
+            "</span>" +
+            "<span class=\"peek-chip\">طلاب " +
+            toEastern(p.student_count || 0) +
+            "</span>" +
+            "<span class=\"peek-chip\">مؤشر " +
+            formatEtecCode(etec) +
+            "</span>" +
+            "<span class=\"peek-chip\">" +
+            escapeHtml(p.teacher_name || "") +
+            "</span>" +
+            (p.already_open ? "<span class=\"peek-status is-recovering\">مفتوحة مسبقاً</span>" : "") +
+            "</div><p style=\"margin:0 0 8px;font-size:13px;color:#5c675f;\">" +
+            students +
+            "</p><div class=\"portal-actions\">" +
+            "<button type=\"button\" class=\"portal-btn\" data-approve-clinic=\"" +
+            idx +
+            "\"" +
+            (p.already_open ? " disabled" : "") +
+            ">اعتماد العيادة</button></div></article>"
+          );
+        })
+        .join("");
+      return pack;
+    });
+  }
+
+  function approveClinicAt(idx) {
+    var list = state.clinicProposals || [];
+    var p = list[idx];
+    if (!p) return Promise.reject(new Error("مقترح غير موجود."));
+    return fetchJson("/api/portal/teacher/clinics/approve", {
+      method: "POST",
+      headers: headers(),
+      body: JSON.stringify({
+        clinic_key: p.clinic_key || "",
+        section: p.section || "",
+        domain: p.domain || "math",
+        skill: p.skill || "",
+        grade_root: p.grade_root || "٣م",
+        student_nids: p.student_nids || [],
+        generate_worksheet: true,
+        worksheet_count: 5
+      })
+    }).then(function (result) {
+      paintClinicWorksheet(result.worksheet);
+      status(result.message || "اعتُمدت العيادة.");
+      return loadClinicProposals().then(function () {
+        return result;
+      });
+    });
+  }
+
+  function loadOpenClinics() {
+    return fetchJson("/api/portal/teacher/clinics/open", {
+      headers: headers(),
+      cache: "no-store"
+    }).then(function (pack) {
+      var box = document.getElementById("clinics-box");
+      if (!box) return pack;
+      var items = pack.items || [];
+      if (!items.length) {
+        box.innerHTML = "<p class=\"portal-empty\">لا عيادات مفتوحة حالياً.</p>";
+        return pack;
+      }
+      box.innerHTML =
+        "<table class=\"owner-table\"><thead><tr>" +
+        "<th>الطالب</th><th>المادة</th><th>المهارة</th><th>الجذر</th><th>ETEC</th><th>الحالة</th><th></th>" +
+        "</tr></thead><tbody>" +
+        items
+          .map(function (row) {
+            return (
+              "<tr><td>" +
+              escapeHtml(row.student_name || "") +
+              "<br><small>" +
+              escapeHtml(row.student_nid_masked || "") +
+              "</small></td><td>" +
+              escapeHtml(row.subject || "") +
+              "</td><td>" +
+              escapeHtml(row.skill || "") +
+              "</td><td>" +
+              toEastern(row.grade_root || "") +
+              "</td><td>" +
+              formatEtecCode(row.etec_code_ar || row.etec_code || "") +
+              "</td><td>" +
+              escapeHtml(row.status || "") +
+              "</td><td><button type=\"button\" class=\"portal-btn secondary\" data-purge-pass=\"" +
+              escapeHtml(row.student_nid || "") +
+              "\" data-purge-skill=\"" +
+              escapeHtml(row.skill || "") +
+              "\" data-purge-domain=\"" +
+              escapeHtml(row.domain || "") +
+              "\" data-purge-key=\"" +
+              escapeHtml(row.clinic_key || "") +
+              "\">اجتاز التطهير</button></td></tr>"
+            );
+          })
+          .join("") +
+        "</tbody></table>";
+      return pack;
+    });
+  }
+
+  function passPurge(btn) {
+    return fetchJson("/api/portal/teacher/clinics/purge-pass", {
+      method: "POST",
+      headers: headers(),
+      body: JSON.stringify({
+        student_nid: btn.getAttribute("data-purge-pass") || "",
+        skill: btn.getAttribute("data-purge-skill") || "",
+        domain: btn.getAttribute("data-purge-domain") || "",
+        clinic_key: btn.getAttribute("data-purge-key") || ""
+      })
+    }).then(function (result) {
+      status(result.message || "حُدّث التطهير.");
+      return loadOpenClinics();
+    });
   }
 
   function loadTeacherPeek() {
@@ -649,6 +887,15 @@
               status(e.message, true);
             });
         }
+        if (id === "panel-clinics") {
+          loadClinicProposals()
+            .then(function () {
+              status("مقترحات العيادات محدّثة.");
+            })
+            .catch(function (e) {
+              status(e.message, true);
+            });
+        }
       });
     });
     document.getElementById("btn-save-settings").addEventListener("click", saveSettings);
@@ -662,6 +909,49 @@
           .catch(function (e) {
             status(e.message, true);
           });
+      });
+    }
+    var clinicsBtn = document.getElementById("btn-clinics-refresh");
+    if (clinicsBtn) {
+      clinicsBtn.addEventListener("click", function () {
+        loadClinicProposals()
+          .then(function () {
+            status("مقترحات العيادات محدّثة.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
+      });
+    }
+    var clinicsOpenBtn = document.getElementById("btn-clinics-open");
+    if (clinicsOpenBtn) {
+      clinicsOpenBtn.addEventListener("click", function () {
+        loadOpenClinics()
+          .then(function () {
+            status("العيادات المفتوحة محدّثة.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
+      });
+    }
+    var clinicsBox = document.getElementById("clinics-box");
+    if (clinicsBox) {
+      clinicsBox.addEventListener("click", function (event) {
+        var approve = event.target.closest("[data-approve-clinic]");
+        if (approve) {
+          var idx = Number(approve.getAttribute("data-approve-clinic"));
+          approveClinicAt(idx).catch(function (e) {
+            status(e.message, true);
+          });
+          return;
+        }
+        var purge = event.target.closest("[data-purge-pass]");
+        if (purge) {
+          passPurge(purge).catch(function (e) {
+            status(e.message, true);
+          });
+        }
       });
     }
     document.getElementById("btn-save-identity").addEventListener("click", saveIdentity);

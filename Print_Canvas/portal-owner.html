@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>لوحة مالك المنظومة والدعم السريع</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-owner.css?v=o3">
+  <link rel="stylesheet" href="css/portal-owner.css?v=o4">
 </head>
 <body class="portal-student">
   <div class="portal-shell owner-layout">
@@ -27,6 +27,7 @@
       <button type="button" class="tab" data-owner-panel="panel-identity">هوية المدرسة</button>
       <button type="button" class="tab" data-owner-panel="panel-radar">مرصد الموهوبين</button>
       <button type="button" class="tab" data-owner-panel="panel-peek">معاينة التعثر</button>
+      <button type="button" class="tab" data-owner-panel="panel-clinics">عيادات علاجية</button>
       <button type="button" class="tab" data-owner-panel="panel-rbac">هرم الصلاحيات</button>
       <button type="button" class="tab" data-owner-panel="panel-support">الدعم السريع</button>
       <button type="button" class="tab" data-owner-panel="panel-tools">ورقة علاجية / نبض صباحي</button>
@@ -112,6 +113,25 @@
       <div id="peek-box"></div>
     </section>
 
+    <section class="portal-card owner-panel" id="panel-clinics">
+      <h2>جسر العيادات العلاجية (من مخزن الإتقان)</h2>
+      <p class="portal-empty" style="margin:0 0 10px;">مقترحات مجمّعة حسب الفصل والمادة والجذر — الاعتماد يدوي بضغطة واحدة دون إغراق تلقائي.</p>
+      <div class="owner-form peek-filters">
+        <label>الصف (اختياري)</label>
+        <input id="clinic-grade" placeholder="مثال: ثالث متوسط">
+        <label>الفصل (اختياري)</label>
+        <input id="clinic-section" placeholder="مثال: أ">
+        <div class="portal-actions">
+          <button type="button" class="portal-btn" id="btn-clinics-refresh">تحديث المقترحات</button>
+          <button type="button" class="portal-btn secondary" id="btn-clinics-open">العيادات المفتوحة</button>
+        </div>
+      </div>
+      <div id="clinics-teachers" class="peek-summary" hidden></div>
+      <div id="clinics-summary" class="peek-summary" hidden></div>
+      <div id="clinics-box"></div>
+      <div id="clinics-worksheet" class="clinic-worksheet" hidden></div>
+    </section>
+
     <section class="portal-card owner-panel" id="panel-rbac">
       <h2>الهرم الرباعي للصلاحيات (قابل للتعميم على عدة مدارس)</h2>
       <ul class="portal-list" id="rbac-pyramid"></ul>
@@ -187,6 +207,6 @@
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe12"></script>
   <script src="/cores/print-master-core.js?v=c308"></script>
-  <script src="js/portal-owner.js?v=o3"></script>
+  <script src="js/portal-owner.js?v=o4"></script>
 </body>
 </html>
