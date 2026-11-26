@@ -519,6 +519,13 @@
       return state.bankDomain === "all" || row.domain === state.bankDomain;
     });
     var counts = pack.counts || {};
+    var titleEl = document.getElementById("aj-nafs-bank-title");
+    if (titleEl) {
+      titleEl.textContent =
+        "بنك أسئلة نافس المصحّح (" +
+        toEasternDigits(counts.total || 0) +
+        " سؤالاً)";
+    }
     host.innerHTML =
       "<div class=\"aj-nafs-bank-filters\" role=\"group\" aria-label=\"تصفية بنك الأسئلة\">" +
       [
@@ -1032,7 +1039,7 @@
           " · مستويات الفهم القرائي: " +
           escapeHtml(((dossier.skills_matrix || {}).reading_levels || []).join("، ")) +
           " · بنك الأسئلة المصحّح: " +
-          toEasternDigits(String(dossier.question_bank_count || 86)) +
+          toEasternDigits(String(dossier.question_bank_count || 0)) +
           " سؤالاً.</p>" +
           tableHtml(
             ["م", "المجال", "المهارة", "نص السؤال", "الإجابة"],

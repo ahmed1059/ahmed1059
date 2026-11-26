@@ -532,7 +532,7 @@ def nafs_questions(
     domain: str = "",
     x_session_token: str = Header(default=""),
 ):
-    """بنك أسئلة نافس المصحّح (86) — للتصفح والتحضير للوحدة 3-ج."""
+    """بنك أسئلة نافس المصحّح (١٥٠+) — للتصفح والتحضير وللسجل المطبوع."""
     _user(x_session_token)
     connection = connect()
     try:
