@@ -101,12 +101,18 @@
         )
       );
     });
-    text = text.replace(/([0-9٠-٩أ-يA-Za-zسصقع])\^([0-9٠-٩]+)/g, function (_m, base, exp) {
+    text = text.replace(/([0-9٠-٩أ-يA-Za-zπΩµα])\^([0-9٠-٩]+)/g, function (_m, base, exp) {
       return keep(toEastern(base) + "<sup>" + toEastern(exp) + "</sup>");
     });
-    text = text.replace(/([0-9٠-٩أ-يA-Za-zس])([²³⁴⁵⁶⁷⁸⁹⁰¹])/g, function (_m, base, exp) {
+    text = text.replace(/([0-9٠-٩أ-يA-Za-zπΩµα])([²³⁴⁵⁶⁷⁸⁹⁰¹]+)/g, function (_m, base, exp) {
       var map = { "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9", "⁰": "0" };
-      return keep(toEastern(base) + "<sup>" + toEastern(map[exp] || exp) + "</sup>");
+      var easternExp = String(exp)
+        .split("")
+        .map(function (ch) {
+          return map[ch] || ch;
+        })
+        .join("");
+      return keep(toEastern(base) + "<sup>" + toEastern(easternExp) + "</sup>");
     });
     text = text.replace(/\uE000\d+\uE001|[^\uE000]+/g, function (part) {
       if (part.charAt(0) === "\uE000") {

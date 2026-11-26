@@ -215,7 +215,7 @@ WORD_BANK = [
     {"word": "تقوى", "meaning": "امتثال أوامر الله واجتناب نواهيه", "synonym": "خشية", "antonym": "غفلة", "track": "quran"},
     {"word": "صبر", "meaning": "ثبات على الحق بلا جزع", "synonym": "ثبات", "antonym": "جزع", "track": "quran"},
     {"word": "رزق", "meaning": "ما يسوقه الله من عطاء", "synonym": "عطاء", "antonym": "منع", "track": "quran"},
-    {"word": "شكر", "meaning": "اعتراف بالنعمة وطاعته", "synonym": "حمد", "antonym": "كفران", "track": "quran"},
+    {"word": "شكر", "meaning": "الثناء على المنعم اعترافاً بنعمته", "synonym": "حمد", "antonym": "كفران", "track": "quran"},
     {"word": "أمانة", "meaning": "حفظ الحقوق وأداؤها", "synonym": "عهد", "antonym": "خيانة", "track": "quran"},
     {"word": "عدل", "meaning": "إنصاف بلا ميل", "synonym": "قسط", "antonym": "ظلم", "track": "quran"},
     {"word": "رحمة", "meaning": "رفق وإحسان ولين", "synonym": "رأفة", "antonym": "قسوة", "track": "quran"},
