@@ -14,8 +14,16 @@
     bankDomain: "all",
     includeWhatIfInPrint: false,
     misc: null,
-    unit2: { matrix: null, weekly: null }
+    unit2: { matrix: null, weekly: null },
+    weekGoal: null,
+    etecArchive: null
   };
+
+  function formatEtecLtr(code) {
+    var raw = toEasternDigits(code == null ? "" : code);
+    if (!raw) return "";
+    return '<span class="etec-code" dir="ltr">' + escapeHtml(raw) + "</span>";
+  }
 
   function sessionUser() {
     try {
@@ -600,6 +608,96 @@
       "</div>";
   }
 
+  function paintWeekGoal() {
+    var host = document.getElementById("aj-nafs-week-goal");
+    if (!host) return;
+    var pack = state.weekGoal || (state.unit2 && state.unit2.weekly) || {};
+    var current = pack.current || {};
+    host.innerHTML =
+      "<div style=\"display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));\">" +
+      "<article class=\"aj-nafs-misc-block\" style=\"padding:14px;border:1px solid #fcd34d;border-radius:14px;background:#fffbeb;\">" +
+      "<h3 style=\"margin:0 0 8px;color:#0b5e56;font-size:16px;\">هدف المعلمين — الأسبوع " +
+      toEasternDigits(pack.current_week || current.week || "—") +
+      "</h3>" +
+      "<p style=\"margin:0;line-height:1.7;font-weight:700;\">" +
+      escapeHtml(pack.teacher_goal || current.teacher_goal || "—") +
+      "</p>" +
+      (current.mock_label
+        ? "<p style=\"margin:8px 0 0;color:#9a3412;font-size:13px;\">محاكاة مرحلية: " +
+          escapeHtml(current.mock_label) +
+          "</p>"
+        : "") +
+      "</article>" +
+      "<article class=\"aj-nafs-misc-block\" style=\"padding:14px;border:1px solid #b7e4d8;border-radius:14px;background:#f3faf7;\">" +
+      "<h3 style=\"margin:0 0 8px;color:#0b5e56;font-size:16px;\">هدف الطلاب</h3>" +
+      "<p style=\"margin:0;line-height:1.7;font-weight:700;\">" +
+      escapeHtml(pack.student_goal || current.student_goal || "—") +
+      "</p>" +
+      "<p style=\"margin:8px 0 0;font-size:12px;color:#0b5e56;direction:ltr;unicode-bidi:isolate;\">" +
+      escapeHtml(current.barcode || "") +
+      "</p></article></div>" +
+      "<p class=\"aj-nafs-empty\" style=\"margin:10px 0 0;\">يُبث تلقائياً من محرك الجدولة الثماني — بلا تعديل يدوي أسبوعي.</p>";
+  }
+
+  function paintEtecArchive() {
+    var host = document.getElementById("aj-nafs-etec-archive");
+    if (!host) return;
+    var pack = state.etecArchive;
+    if (!pack) {
+      host.innerHTML = "<p class=\"aj-nafs-empty\">اضغط «أرشفة شواهد ETEC الآن» أو حدّث التحليل لعرض الملخص.</p>";
+      return;
+    }
+    var s = pack.summary || {};
+    var inds = pack.indicators || {};
+    host.innerHTML =
+      "<div class=\"aj-nafs-summary\" style=\"margin-bottom:12px;\">" +
+      "<article class=\"aj-nafs-card\"><span>جولات نافس</span><strong>" +
+      toEasternDigits(s.nafs_runs_total_ar || s.nafs_runs_total || 0) +
+      "</strong></article>" +
+      "<article class=\"aj-nafs-card\"><span>آخر ٧ أيام</span><strong>" +
+      toEasternDigits(s.nafs_runs_week_ar || s.nafs_runs_week || 0) +
+      "</strong></article>" +
+      "<article class=\"aj-nafs-card\"><span>متوسط</span><strong>" +
+      toEasternDigits(s.avg_score_ar || s.avg_score || 0) +
+      "٪</strong></article>" +
+      "<article class=\"aj-nafs-card is-priority\"><span>vault مفتوح</span><strong>" +
+      toEasternDigits(s.vault_open_ar || s.vault_open || 0) +
+      "</strong></article>" +
+      "<article class=\"aj-nafs-card\"><span>عيادات</span><strong>" +
+      toEasternDigits(s.clinics_open_ar || s.clinics_open || 0) +
+      "</strong></article>" +
+      "</div>" +
+      Object.keys(inds)
+        .map(function (code) {
+          var b = inds[code] || {};
+          var metrics = [];
+          if (b.vault_open_ar != null) metrics.push("تعثر " + toEasternDigits(b.vault_open_ar));
+          if (b.vault_recovered_ar != null) metrics.push("مستعاد " + toEasternDigits(b.vault_recovered_ar));
+          if (b.pledges_ar != null) metrics.push("تعهدات " + toEasternDigits(b.pledges_ar));
+          if (b.omr_ack_ar != null) metrics.push("OMR " + toEasternDigits(b.omr_ack_ar));
+          if (b.qodwa_ar != null) metrics.push("قدوة " + toEasternDigits(b.qodwa_ar));
+          if (b.rifq_ar != null) metrics.push("رفق " + toEasternDigits(b.rifq_ar));
+          return (
+            "<article class=\"aj-nafs-misc-block\" style=\"margin:0 0 10px;padding:12px;border:1px solid #d7e8e3;border-radius:14px;background:#fff;\">" +
+            "<h3 style=\"margin:0 0 6px;color:#0b5e56;font-size:15px;\">" +
+            formatEtecLtr(b.code_ar || code) +
+            " — " +
+            escapeHtml(b.label || "") +
+            "</h3>" +
+            "<p style=\"margin:0;font-size:13px;\">" +
+            escapeHtml(metrics.join(" · ") || "لا مقاييس بعد") +
+            "</p>" +
+            "<p style=\"margin:6px 0 0;font-size:12px;color:#5c675f;\">المصادر: " +
+            escapeHtml((b.sources || []).join(" · ")) +
+            "</p></article>"
+          );
+        })
+        .join("") +
+      "<p style=\"margin:8px 0 0;font-size:12px;direction:ltr;unicode-bidi:isolate;color:#0b5e56;font-weight:800;\">" +
+      escapeHtml(pack.barcode_master || "") +
+      "</p>";
+  }
+
   function paintUnit2() {
     var host = document.getElementById("aj-nafs-unit2");
     if (!host) {
@@ -618,7 +716,7 @@
           "<h3 style=\"margin:0 0 8px;color:#0b5e56;font-size:15px;\">" +
           escapeHtml(block.label || key) +
           " · " +
-          escapeHtml(block.etec || "") +
+          formatEtecLtr(block.etec || "") +
           "</h3>" +
           "<ul style=\"margin:0;padding:0 16px 0 0;\">" +
           skills
@@ -647,7 +745,18 @@
       escapeHtml(current.focus || "—") +
       " · شاهد: " +
       escapeHtml(current.evidence || "—") +
-      "</p></div>" +
+      "</p>" +
+      (weekly.teacher_goal
+        ? "<p style=\"margin:8px 0 0;font-size:13px;\"><strong>هدف المعلمين:</strong> " +
+          escapeHtml(weekly.teacher_goal) +
+          "</p>"
+        : "") +
+      (weekly.student_goal
+        ? "<p style=\"margin:4px 0 0;font-size:13px;\"><strong>هدف الطلاب:</strong> " +
+          escapeHtml(weekly.student_goal) +
+          "</p>"
+        : "") +
+      "</div>" +
       "<div style=\"overflow:auto;\"><table class=\"tpl-data-table\" style=\"width:100%;border-collapse:collapse;font-size:13px;\">" +
       "<thead><tr><th>أسبوع</th><th>التركيز</th><th>رياضيات</th><th>علوم</th><th>قراءة</th><th>الشاهد</th></tr></thead><tbody>" +
       weeks
@@ -888,8 +997,95 @@
     paintTimetable(pack);
     paintWhatIf();
     paintBank();
+    paintWeekGoal();
+    paintEtecArchive();
     paintUnit2();
     paintMisc();
+  }
+
+  function loadEtecArchive() {
+    return fetchJson(API + "/etec-archive", { headers: authHeaders(), cache: "no-store" }).then(
+      function (pack) {
+        state.etecArchive = pack;
+        if (pack.week_goal) {
+          state.weekGoal = Object.assign({}, pack.week_goal, {
+            teacher_goal: pack.week_goal.teacher_goal,
+            student_goal: pack.week_goal.student_goal,
+            current: pack.week_goal.current,
+            current_week: pack.week_goal.current_week
+          });
+        }
+        paintWeekGoal();
+        paintEtecArchive();
+        return pack;
+      }
+    );
+  }
+
+  function refreshEtecArchive() {
+    return fetchJson(API + "/etec-archive/refresh", {
+      method: "POST",
+      headers: Object.assign({ "Content-Type": "application/json" }, authHeaders()),
+      body: JSON.stringify({ note: "أرشفة فورية من لوحة نافس" })
+    }).then(function (pack) {
+      state.etecArchive = pack.pack || pack;
+      paintEtecArchive();
+      status(
+        "أُرشف " +
+          toEasternDigits((pack.written || []).length || pack.count || 0) +
+          " ملخص مؤشر في شواهد الاعتماد."
+      );
+      return pack;
+    });
+  }
+
+  function printWeekGoalA4() {
+    if (!window.PrintEngine || typeof window.PrintEngine.open !== "function") {
+      status("محرك الطباعة الموحد غير محمّل.", true);
+      return;
+    }
+    var pack = state.weekGoal || (state.unit2 && state.unit2.weekly) || {};
+    var current = pack.current || {};
+    var body =
+      "<h2 style=\"color:#0b5e56;text-align:center;\">هدف الأسبوع التشغيلي</h2>" +
+      "<p style=\"text-align:center;\">الأسبوع " +
+      toEasternDigits(pack.current_week || current.week || "") +
+      " · " +
+      escapeHtml(SCHOOL_NAME) +
+      " (" +
+      toEasternDigits("40341") +
+      ")</p>" +
+      "<section style=\"margin:14px 0;padding:12px;border:1px solid #fcd34d;border-radius:12px;background:#fffbeb;\">" +
+      "<h3 style=\"color:#0b5e56;margin:0 0 8px;\">هدف المعلمين</h3>" +
+      "<p style=\"margin:0;line-height:1.7;\">" +
+      escapeHtml(pack.teacher_goal || current.teacher_goal || "") +
+      "</p></section>" +
+      "<section style=\"margin:14px 0;padding:12px;border:1px solid #b7e4d8;border-radius:12px;background:#f3faf7;\">" +
+      "<h3 style=\"color:#0b5e56;margin:0 0 8px;\">هدف الطلاب</h3>" +
+      "<p style=\"margin:0;line-height:1.7;\">" +
+      escapeHtml(pack.student_goal || current.student_goal || "") +
+      "</p></section>" +
+      "<p><strong>التركيز:</strong> " +
+      escapeHtml(current.focus || "") +
+      " · <strong>الشاهد:</strong> " +
+      escapeHtml(current.evidence || "") +
+      "</p>" +
+      "<p style=\"direction:ltr;unicode-bidi:isolate;text-align:center;font-weight:800;color:#0b5e56;\">" +
+      escapeHtml(current.barcode || "") +
+      "</p>";
+    window.PrintEngine.open("master-sheet", {
+      docTitle: "هدف الأسبوع التشغيلي",
+      title: "هدف الأسبوع — نافس",
+      kind: "document",
+      orientation: "portrait",
+      school: SCHOOL_NAME,
+      bodyHtml: body,
+      signoff: true,
+      maxColumns: 2,
+      pageTotal: 1,
+      fileName: "هدف_الاسبوع_نافس"
+    });
+    status("معاينة هدف الأسبوع A4 جاهزة.");
   }
 
   function domainAction(domain, pack) {
@@ -1494,6 +1690,12 @@
       }),
       fetchJson(API + "/weekly-plan", { headers: authHeaders(), cache: "no-store" }).catch(function () {
         return { weeks: [], current: {} };
+      }),
+      fetchJson(API + "/week-goal", { headers: authHeaders(), cache: "no-store" }).catch(function () {
+        return null;
+      }),
+      fetchJson(API + "/etec-archive", { headers: authHeaders(), cache: "no-store" }).catch(function () {
+        return null;
       })
     ])
       .then(function (parts) {
@@ -1501,6 +1703,8 @@
         state.questions = parts[1];
         state.misc = parts[2];
         state.unit2 = { matrix: parts[3], weekly: parts[4] };
+        state.weekGoal = parts[5] || parts[4] || null;
+        state.etecArchive = parts[6] || null;
         state.whatIf = { math: null, reading: null, science: null };
         paint();
         var meta = state.pack.meta || {};
@@ -1565,6 +1769,24 @@
       }
       if (t.closest("#aj-nafs-docx-matrix")) {
         downloadDocx("matrix");
+        return;
+      }
+      if (t.closest("#aj-nafs-docx-evidence")) {
+        downloadDocx("evidence");
+        return;
+      }
+      if (t.closest("#aj-nafs-docx-workbook")) {
+        downloadDocx("workbook");
+        return;
+      }
+      if (t.closest("#aj-nafs-print-week-goal")) {
+        printWeekGoalA4();
+        return;
+      }
+      if (t.closest("#aj-nafs-etec-refresh")) {
+        refreshEtecArchive().catch(function (error) {
+          status((error && error.message) || "تعذر أرشفة الشواهد.", true);
+        });
         return;
       }
       var trapBtn = t.closest("[data-aj-nafs-trap-sheet]");

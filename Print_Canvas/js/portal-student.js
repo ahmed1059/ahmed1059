@@ -233,6 +233,29 @@
       })
       .join("");
 
+    var wg = home.week_goal || null;
+    var wgMeta = document.getElementById("week-goal-meta");
+    var wgText = document.getElementById("week-goal-text");
+    var wgBar = document.getElementById("week-goal-barcode");
+    if (wgMeta && wgText) {
+      if (wg && wg.student_goal) {
+        wgMeta.textContent =
+          "الأسبوع " +
+          toEastern(wg.current_week_ar || wg.current_week || "") +
+          (wg.focus ? " · " + wg.focus : "") +
+          (wg.mock_label ? " · " + wg.mock_label : "");
+        wgText.textContent = wg.student_goal;
+        if (wgBar) {
+          wgBar.textContent = wg.barcode || "";
+          wgBar.hidden = !wg.barcode;
+        }
+      } else {
+        wgMeta.textContent = "";
+        wgText.textContent = "هدف الأسبوع يُبث تلقائياً من الخطة التشغيلية الثمانية.";
+        if (wgBar) wgBar.hidden = true;
+      }
+    }
+
     var rem = home.remedial || [];
     var remBox = document.getElementById("remedial-box");
     if (remBox) {

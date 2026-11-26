@@ -1028,6 +1028,9 @@ def init_db():
         from .nafs_counsel_boost import ensure_counsel_boost
 
         ensure_counsel_boost(connection)
+        from .nafs_weekly_etec import ensure_weekly_etec
+
+        ensure_weekly_etec(connection)
         from .nafs_readalong_api import ensure_on_boot as ensure_nafs_readalong
 
         ensure_nafs_readalong(connection)

@@ -496,6 +496,10 @@ from .nafs_counsel_boost import router as nafs_counsel_boost_router
 
 app.include_router(nafs_counsel_boost_router)
 
+from .nafs_weekly_etec import router as nafs_weekly_etec_router
+
+app.include_router(nafs_weekly_etec_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):
