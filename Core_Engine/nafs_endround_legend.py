@@ -202,37 +202,6 @@ def fetch_week_challenge_peers(connection, period_start: str) -> list[dict]:
     return out
 
 
-def fetch_game_peers(connection, game: str) -> list[dict]:
-    """ترتيب أقران ألعاب التأسيس حسب أفضل درجة محفوظة في portal_game_runs."""
-    from .nafs_endround_progress import game_type_clause
-
-    clause, params = game_type_clause(game)
-    rows = connection.execute(
-        f"""
-        SELECT g.student_nid, COALESCE(s.name, ''), MAX(g.score) AS best, COUNT(*) AS runs
-        FROM portal_game_runs g
-        LEFT JOIN noor_students s ON s.national_id = g.student_nid
-        WHERE {clause}
-        GROUP BY g.student_nid
-        ORDER BY best DESC, runs DESC
-        """,
-        params,
-    ).fetchall()
-    out = []
-    for row in rows:
-        name = (row[1] or "").strip()
-        short = name.split()[0] if name else "زميل"
-        out.append(
-            {
-                "national_id": row[0],
-                "name": short,
-                "score": int(row[2] or 0),
-                "runs": int(row[3] or 0),
-            }
-        )
-    return out
-
-
 def count_recent_low_attempts(attempts_desc_or_asc: list[dict], *, threshold_pct: float = 55.0, window: int = 3) -> int:
     """عدد المحاولات الأخيرة تحت العتبة (من نهاية السلسلة التصاعدية)."""
     if not attempts_desc_or_asc:
@@ -264,19 +233,36 @@ def build_endround_context(
     attempts_asc: list[dict] | None = None,
     period_start: str = "",
 ) -> dict[str, Any]:
-    """حزمة المرحلة ٣ لبطاقة الختام."""
+    """
+    حزمة المرحلة ٣ لبطاقة الختام.
+    الترتيب من portal_challenge_runs (نفس منطق لوحة الأسبوع) فقط —
+    امتداد أعمدة التحديات مؤجّل للمرحلة ٤.
+    """
     xp = fetch_xp_total(connection, student_nid)
     legend = legend_from_xp(xp)
 
-    game_peers = fetch_game_peers(connection, game)
-    rank = build_rank_gap(game_peers, student_nid, metric_key="score")
-    rank["source"] = "game_runs"
-    if not rank.get("visible") and period_start:
+    rank: dict[str, Any] = {
+        "visible": False,
+        "reason": "no_period",
+        "source": "challenge_week",
+        "board": "week",
+    }
+    if period_start:
         week_peers = fetch_week_challenge_peers(connection, period_start)
-        week_rank = build_rank_gap(week_peers, student_nid, metric_key="xp")
-        week_rank["source"] = "challenge_week"
-        if week_rank.get("visible"):
-            rank = week_rank
+        rank = build_rank_gap(week_peers, student_nid, metric_key="xp")
+        rank["source"] = "challenge_week"
+        rank["board"] = "week"
+        if week_peers:
+            scores = [float(p.get("avg_score") or 0) for p in week_peers]
+            round_avg = round(sum(scores) / max(1, len(scores)), 1)
+            rank["round_avg_score"] = round_avg
+            rank["round_avg_score_ar"] = _e(round_avg)
+            # إن وُجد الطالب نعرض متوسطه أيضاً من الصف
+            for p in week_peers:
+                if str(p.get("national_id")) == str(student_nid):
+                    rank["your_avg_score"] = float(p.get("avg_score") or 0)
+                    rank["your_avg_score_ar"] = _e(rank["your_avg_score"])
+                    break
 
     low = count_recent_low_attempts(attempts_asc or [])
     hint = path_hint_from_streak(low_streak=low, game=game, accuracy_pct=accuracy_pct)

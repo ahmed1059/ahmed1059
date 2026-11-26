@@ -686,14 +686,14 @@ def progress_pulse(
     limit: int = 7,
     x_portal_token: str = Header(default=""),
 ):
-    """ملخص محاولات الطالب: ألعاب التأسيس أو امتداد challenges من السجلات الحقيقية."""
+    """ملخص محاولات الطالب للعبة الحالية من portal_game_runs (المرحلة ٢)."""
     session = _require_student(x_portal_token)
-    from .nafs_endround_progress import build_progress_pulse, fetch_runs
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs_for_game
 
     connection = connect()
     try:
         ensure_on_boot(connection)
-        rows = fetch_runs(connection, session["student_nid"], game)
+        rows = fetch_runs_for_game(connection, session["student_nid"], game)
         pulse = build_progress_pulse(rows, limit=limit)
         g = (game or "words").strip().lower()
         etec = "3-1-1-2" if g.startswith("mental") else "3-1-1-1"
@@ -714,16 +714,16 @@ def endround_context(
     accuracy: float | None = None,
     x_portal_token: str = Header(default=""),
 ):
-    """حزمة المرحلة ٣: أسطورة نافس + فارق القفزة + إشارة مسار عند التعثر."""
+    """حزمة المرحلة ٣: أسطورة نافس + فارق القفزة من لوحة التحديات الأسبوعية."""
     session = _require_student(x_portal_token)
     from .nafs_endround_legend import build_endround_context
-    from .nafs_endround_progress import build_progress_pulse, fetch_runs
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs_for_game
     from .portal_session_api import _period_start
 
     connection = connect()
     try:
         ensure_on_boot(connection)
-        rows = fetch_runs(connection, session["student_nid"], game)
+        rows = fetch_runs_for_game(connection, session["student_nid"], game)
         pulse = build_progress_pulse(rows, limit=7)
         ctx = build_endround_context(
             connection,
@@ -739,9 +739,9 @@ def endround_context(
 
 
 def _attach_progress_pulse(connection, student_nid: str, game: str, limit: int = 7) -> dict:
-    from .nafs_endround_progress import build_progress_pulse, fetch_runs
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs_for_game
 
-    rows = fetch_runs(connection, student_nid, game)
+    rows = fetch_runs_for_game(connection, student_nid, game)
     return build_progress_pulse(rows, limit=limit)
 
 

@@ -15,12 +15,12 @@ from Core_Engine.nafs_endround_legend import (  # noqa: E402
     legend_from_xp,
     path_hint_from_streak,
 )
-from Core_Engine.nafs_endround_progress import fetch_challenge_runs  # noqa: E402
-
 GAMES_JS = ROOT / "Print_Canvas" / "js" / "portal-student-games.js"
 GAMES_CSS = ROOT / "Print_Canvas" / "css" / "portal-student.css"
 GAMES_API = ROOT / "Core_Engine" / "portal_games_api.py"
 PORTAL_JS = ROOT / "Print_Canvas" / "js" / "portal-student.js"
+LEGEND_PY = ROOT / "Core_Engine" / "nafs_endround_legend.py"
+PROGRESS_PY = ROOT / "Core_Engine" / "nafs_endround_progress.py"
 
 
 def main() -> int:
@@ -66,17 +66,24 @@ def main() -> int:
         errors.append("no hint on strong run")
 
     api = GAMES_API.read_text(encoding="utf-8")
-    for needle in ("endround-context", "endround", "_attach_endround_context", "fetch_runs"):
+    for needle in (
+        "endround-context",
+        "endround",
+        "_attach_endround_context",
+        "fetch_runs_for_game",
+        "_period_start",
+    ):
         if needle not in api:
             errors.append(f"api missing {needle}")
 
-    if "fetch_challenge_runs" not in (ROOT / "Core_Engine" / "nafs_endround_progress.py").read_text(
-        encoding="utf-8"
-    ):
-        errors.append("challenge_runs extension missing")
-
-    # الدالة مستوردة للتأكد من التركيب
-    assert callable(fetch_challenge_runs)
+    legend_src = LEGEND_PY.read_text(encoding="utf-8")
+    if "fetch_week_challenge_peers" not in legend_src:
+        errors.append("rank must use challenge_runs week peers")
+    if "fetch_game_peers" in legend_src:
+        errors.append("phase3 must not rank via game_runs peers")
+    progress_src = PROGRESS_PY.read_text(encoding="utf-8")
+    if "fetch_challenge_runs" in progress_src:
+        errors.append("challenge pulse extension belongs to phase4 — remove from phase3")
 
     js = GAMES_JS.read_text(encoding="utf-8")
     css = GAMES_CSS.read_text(encoding="utf-8")
@@ -86,6 +93,7 @@ def main() -> int:
         "renderPathHint",
         "أسطورة نافس",
         "الفارق للقفزة",
+        "متوسط الجولة",
         "data-end-station",
         "nafs-legend-bar",
     ):
