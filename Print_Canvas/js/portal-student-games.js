@@ -19,17 +19,37 @@
     opponent: ""
   };
   var words = { rounds: [], index: 0, answers: [], combo: 0, best: 0, timer: null, left: 60, started: 0, track: "lang", sessionId: 0 };
-  var mental = { items: [], index: 0, answers: [], level: 1, mode: "solo", timer: null, left: 60, started: 0, sessionId: 0 };
+  var mental = {
+    items: [],
+    index: 0,
+    answers: [],
+    level: 1,
+    mode: "solo",
+    timer: null,
+    left: 60,
+    started: 0,
+    sessionId: 0,
+    tierId: "amateur",
+    tierLabel: "الهواة"
+  };
+  var TIER_BY_LEVEL = {
+    1: { id: "amateur", label: "الهواة" },
+    3: { id: "pro", label: "المحترفين" },
+    5: { id: "elite", label: "النخبة" }
+  };
+  var LEVEL_BY_TIER = { amateur: 1, pro: 3, elite: 5 };
   var foundation = {
     activeKey: "",
     sessionId: 0,
     uiOpen: false,
     label: "",
-    phase: "", // lobby | play
+    phase: "", // lobby | play | celebrate
     pendingKey: "",
     pendingTrack: "lang",
     pendingLevel: 1,
-    pendingMode: "solo"
+    pendingMode: "solo",
+    pendingTier: "amateur",
+    lastReplay: null
   };
   var scratch = { ink: "#111827", erasing: false, drawing: false, expanded: false };
 
@@ -136,12 +156,16 @@
 
   function lobbyBlurb(key, track) {
     if (key === "mental") {
-      return "حساب ذهني فردي أو بطولة فصول. لن يبدأ العدّاد إلا بعد الضغط على «ابدأ اللعبة».";
+      return "اختر مسار التحدي (الهواة · المحترفين · النخبة). لن يبدأ العدّاد إلا بعد «ابدأ اللعبة».";
     }
     if (key === "words" && track === "quran") {
       return "معاني قرآنية مبسّطة. لن يبدأ العدّاد إلا بعد الضغط على «ابدأ اللعبة».";
     }
     return "معنى · مرادف · ضد خلال ٦٠ ثانية. لن يبدأ العدّاد إلا بعد الضغط على «ابدأ اللعبة».";
+  }
+
+  function tierChipClass(tierId) {
+    return foundation.pendingTier === tierId ? "portal-btn" : "portal-btn secondary";
   }
 
   /** شاشة تمهيد قبل السؤال والمؤقت */
@@ -155,6 +179,22 @@
       foundation.pendingKey === "mental"
         ? '<span dir="ltr" class="etec-code">٣-١-١-٢</span>'
         : '<span dir="ltr" class="etec-code">٣-١-١-١</span>';
+    var tierBlock = "";
+    if (foundation.pendingKey === "mental") {
+      tierBlock =
+        '<div class="foundation-tier-row" role="group" aria-label="مسار التحدي">' +
+        '<button type="button" class="' +
+        tierChipClass("amateur") +
+        '" data-lobby-tier="amateur">الهواة</button>' +
+        '<button type="button" class="' +
+        tierChipClass("pro") +
+        '" data-lobby-tier="pro">المحترفين</button>' +
+        '<button type="button" class="' +
+        tierChipClass("elite") +
+        '" data-lobby-tier="elite">النخبة</button>' +
+        '<button type="button" class="portal-btn secondary" data-lobby-mode="tournament">بطولة فصول</button>' +
+        "</div>";
+    }
     host.innerHTML =
       '<div class="foundation-lobby">' +
       "<h3 class=\"foundation-lobby-title\">" +
@@ -165,6 +205,7 @@
       " " +
       etec +
       "</p>" +
+      tierBlock +
       '<div class="portal-actions foundation-lobby-actions">' +
       '<button type="button" class="portal-btn" data-foundation-start="1">ابدأ اللعبة</button>' +
       '<button type="button" class="portal-btn secondary" data-foundation-exit="1">العودة</button>' +
@@ -177,6 +218,7 @@
     foundation.pendingTrack = track || "lang";
     foundation.pendingLevel = 1;
     foundation.pendingMode = "solo";
+    foundation.pendingTier = "amateur";
     foundation.phase = "lobby";
     foundation.activeKey = "";
     foundation.sessionId += 1;
@@ -187,10 +229,125 @@
   function launchFoundationPlay() {
     if (!foundation.uiOpen || foundation.phase !== "lobby") return;
     if (foundation.pendingKey === "mental") {
-      startMental(foundation.pendingLevel || 1, foundation.pendingMode || "solo");
+      var lvl = LEVEL_BY_TIER[foundation.pendingTier] || foundation.pendingLevel || 1;
+      startMental(lvl, foundation.pendingMode || "solo", foundation.pendingTier);
       return;
     }
     startWords(foundation.pendingTrack || "lang");
+  }
+
+  function formatElapsed(sec) {
+    var s = Math.max(0, Math.round(Number(sec) || 0));
+    if (s < 60) return east(s) + " ث";
+    var m = Math.floor(s / 60);
+    var r = s % 60;
+    var rs = r < 10 ? "0" + r : String(r);
+    return east(m) + ":" + east(rs);
+  }
+
+  /** بطاقة ختام الجولة — من بيانات الجولة الحالية فقط (المرحلة ١) */
+  function paintEndRound(pack, meta) {
+    var host = stageHost();
+    if (!host) return;
+    foundation.phase = "celebrate";
+    foundation.lastReplay = meta || null;
+    host.hidden = false;
+    host.setAttribute("data-phase", "celebrate");
+    host.removeAttribute("data-qid");
+    host.removeAttribute("data-active-game");
+
+    var tier = (pack && pack.tier) || {};
+    var coach = (pack && pack.coaching) || {};
+    var score = Number((pack && pack.score) || 0);
+    var total = Number((pack && pack.total) || (meta && meta.total) || 1);
+    var xp = Number((pack && pack.xp_earned) || 0);
+    var combo = Number((pack && pack.combo_best) || (meta && meta.combo) || 0);
+    var elapsed = Number((pack && pack.elapsed_sec) || (meta && meta.elapsed) || 0);
+    var etecAr = (pack && pack.etec_ar) || (meta && meta.etec_ar) || "٣-١-١-١";
+    var title = (meta && meta.title) || "انتهت الجولة";
+    var tierLabel = tier.label || (meta && meta.tierLabel) || "";
+    var accuracy = coach.accuracy_pct || String(Math.round((score / Math.max(1, total)) * 100));
+
+    host.innerHTML =
+      '<article class="end-round-card" aria-live="polite">' +
+      '<header class="end-round-head">' +
+      "<h3>" +
+      esc(title) +
+      "</h3>" +
+      (tierLabel
+        ? '<span class="end-round-tier" data-tier="' +
+          esc(tier.id || "") +
+          '">' +
+          esc(tierLabel) +
+          "</span>"
+        : "") +
+      '<span dir="ltr" class="etec-code end-round-etec">' +
+      esc(etecAr) +
+      "</span>" +
+      "</header>" +
+      '<div class="end-round-metrics">' +
+      '<div class="end-round-metric"><span class="lbl">الدقة</span><strong class="foundation-hud-num" dir="ltr">' +
+      east(accuracy) +
+      "٪</strong></div>" +
+      '<div class="end-round-metric"><span class="lbl">الصحيحة</span><strong class="foundation-hud-num" dir="ltr">' +
+      east(score) +
+      " / " +
+      east(total) +
+      "</strong></div>" +
+      '<div class="end-round-metric"><span class="lbl">الزمن</span><strong class="foundation-hud-num" dir="ltr">' +
+      formatElapsed(elapsed) +
+      "</strong></div>" +
+      (combo
+        ? '<div class="end-round-metric"><span class="lbl">Combo</span><strong class="foundation-hud-num" dir="ltr">×' +
+          east(combo) +
+          "</strong></div>"
+        : "") +
+      '<div class="end-round-metric"><span class="lbl">XP</span><strong class="foundation-hud-num" dir="ltr">+' +
+      east(xp) +
+      "</strong></div>" +
+      "</div>" +
+      '<p class="end-round-message">' +
+      esc(coach.message || "أحسنت على إكمال الجولة.") +
+      "</p>" +
+      '<ul class="end-round-coach">' +
+      "<li><strong>قوتك:</strong> " +
+      esc(coach.strength || "الاستمرار") +
+      "</li>" +
+      "<li><strong>خطوتك التالية:</strong> " +
+      esc(coach.next_step || "أعد الجولة أو جرّب مسارًا أعلى.") +
+      "</li>" +
+      "</ul>" +
+      '<div class="portal-actions end-round-actions">' +
+      '<button type="button" class="portal-btn" data-end-replay="1">لعب مرة أخرى</button>' +
+      '<button type="button" class="portal-btn secondary" data-end-games="1">ألعاب التأسيس</button>' +
+      '<button type="button" class="portal-btn secondary" data-end-arena="1">الميدان</button>' +
+      "</div>" +
+      '<p class="end-round-footnote">مرآة هذه الجولة فقط — أعمدة التقدّم في مرحلة لاحقة.</p>' +
+      "</article>";
+  }
+
+  function replayLastRound() {
+    var last = foundation.lastReplay;
+    if (!last || !last.kind) {
+      exitFoundationUi();
+      return;
+    }
+    if (last.kind === "mental") {
+      openFoundationLobby("mental", "");
+      foundation.pendingTier = last.tierId || "amateur";
+      foundation.pendingLevel = LEVEL_BY_TIER[foundation.pendingTier] || last.level || 1;
+      foundation.pendingMode = last.mode || "solo";
+      paintFoundationLobby();
+      return;
+    }
+    openFoundationLobby("words", last.track || "lang");
+  }
+
+  function goToArenaStation() {
+    exitFoundationUi();
+    if (window.PortalStudentStations && typeof window.PortalStudentStations.open === "function") {
+      window.PortalStudentStations.open("live");
+    }
   }
 
   /** نبضة العداد فقط — دون إعادة رسم السؤال أو تبديل اللعبة */
@@ -511,6 +668,7 @@
     host.hidden = false;
     var kindClass = r.kind === "synonym" ? "kind-syn" : r.kind === "antonym" ? "kind-ant" : "kind-mean";
     host.setAttribute("data-active-game", "words");
+    host.setAttribute("data-phase", "play");
     host.setAttribute("data-session", String(words.sessionId || foundation.sessionId));
     host.setAttribute("data-qid", String(r.id || words.index));
     host.innerHTML =
@@ -556,6 +714,7 @@
     }
     var total = Math.max(words.rounds.length, 1);
     var trackLabel = words.track === "quran" ? "جولة ألفاظ القرآن" : "لعبة الكلمات";
+    var elapsed = (Date.now() - words.started) / 1000;
     api
       .fetchJson("/api/portal/games/words/finish", {
         method: "POST",
@@ -563,27 +722,20 @@
         body: JSON.stringify({
           answers: words.answers,
           combo_best: words.best,
-          elapsed_sec: (Date.now() - words.started) / 1000
+          elapsed_sec: elapsed
         })
       })
       .then(function (pack) {
         if (foundation.activeKey) return;
-        var host = stageHost();
-        if (!host) return;
-        host.hidden = false;
-        host.innerHTML =
-          "<p class=\"portal-empty\">انتهت " +
-          trackLabel +
-          " · " +
-          east(pack.score || 0) +
-          " / " +
-          east(total) +
-          " · +" +
-          east(pack.xp_earned || 0) +
-          " XP</p>" +
-          "<div class=\"portal-actions\" style=\"margin-top:10px;\">" +
-          "<button type=\"button\" class=\"portal-btn secondary\" data-foundation-exit=\"1\">العودة للألعاب</button>" +
-          "</div>";
+        paintEndRound(pack, {
+          kind: "words",
+          title: "انتهت " + trackLabel,
+          track: words.track,
+          total: total,
+          combo: words.best,
+          elapsed: elapsed,
+          etec_ar: "٣-١-١-١"
+        });
         if (api.refresh) api.refresh();
       })
       .catch(function (err) {
@@ -637,13 +789,15 @@
     if (!host || !item) return;
     host.hidden = false;
     host.setAttribute("data-active-game", "mental");
+    host.setAttribute("data-phase", "play");
     host.setAttribute("data-session", String(mental.sessionId || foundation.sessionId));
     host.setAttribute("data-qid", String(item.id || mental.index));
+    var tierLabel = mental.tierLabel || (TIER_BY_LEVEL[mental.level] || {}).label || "الهواة";
     host.innerHTML =
       "<div class=\"mini-hud\"><strong>" +
       esc(foundation.label || "الحساب الذهني") +
-      " · مستوى " +
-      east(mental.level) +
+      " · " +
+      esc(tierLabel) +
       "</strong><span id=\"foundation-timer\" class=\"foundation-hud-num\" dir=\"ltr\">" +
       east(mental.left) +
       " ث</span><span dir=\"ltr\" class=\"etec-code\">٣-١-١-٢</span></div>" +
@@ -663,12 +817,6 @@
           );
         })
         .join("") +
-      "</div>" +
-      "<div class=\"portal-actions\" style=\"margin-top:10px;\">" +
-      "<button type=\"button\" class=\"portal-btn secondary\" data-mental-level=\"1\">مستوى ١</button>" +
-      "<button type=\"button\" class=\"portal-btn secondary\" data-mental-level=\"3\">مستوى ٣</button>" +
-      "<button type=\"button\" class=\"portal-btn secondary\" data-mental-level=\"5\">مستوى ٥</button>" +
-      "<button type=\"button\" class=\"portal-btn secondary\" data-mental-mode=\"tournament\">بطولة فصول</button>" +
       "</div>";
   }
 
@@ -682,6 +830,8 @@
       foundation.activeKey = "";
       foundation.sessionId += 1;
     }
+    var elapsed = (Date.now() - mental.started) / 1000;
+    var total = Math.max(mental.items.length, 1);
     api
       .fetchJson("/api/portal/games/mental/finish", {
         method: "POST",
@@ -690,23 +840,22 @@
           mode: mental.mode,
           level: mental.level,
           answers: mental.answers,
-          elapsed_sec: (Date.now() - mental.started) / 1000
+          elapsed_sec: elapsed
         })
       })
       .then(function (pack) {
         if (foundation.activeKey) return;
-        var host = stageHost();
-        if (!host) return;
-        host.hidden = false;
-        host.innerHTML =
-          "<p class=\"portal-empty\">انتهى الحساب الذهني · " +
-          east(pack.score || 0) +
-          " صحيحة · +" +
-          east(pack.xp_earned || 0) +
-          " XP</p>" +
-          "<div class=\"portal-actions\" style=\"margin-top:10px;\">" +
-          "<button type=\"button\" class=\"portal-btn secondary\" data-foundation-exit=\"1\">العودة للألعاب</button>" +
-          "</div>";
+        paintEndRound(pack, {
+          kind: "mental",
+          title: "انتهى الحساب الذهني",
+          level: mental.level,
+          mode: mental.mode,
+          tierId: mental.tierId || (TIER_BY_LEVEL[mental.level] || {}).id || "amateur",
+          tierLabel: mental.tierLabel || (TIER_BY_LEVEL[mental.level] || {}).label || "الهواة",
+          total: total,
+          elapsed: elapsed,
+          etec_ar: "٣-١-١-٢"
+        });
         if (api.refresh) api.refresh();
       })
       .catch(function (err) {
@@ -714,15 +863,25 @@
       });
   }
 
-  function startMental(level, mode) {
+  function startMental(level, mode, tierId) {
     mental.level = Number(level || 1);
     mental.mode = mode || "solo";
+    var mapped = TIER_BY_LEVEL[mental.level] || { id: "amateur", label: "الهواة" };
+    mental.tierId = tierId || mapped.id;
+    mental.tierLabel = (TIER_BY_LEVEL[LEVEL_BY_TIER[mental.tierId] || mental.level] || mapped).label;
+    if (tierId && LEVEL_BY_TIER[tierId]) {
+      mental.level = LEVEL_BY_TIER[tierId];
+      mental.tierId = tierId;
+      mental.tierLabel = (TIER_BY_LEVEL[mental.level] || mapped).label;
+    }
     var sessionId = beginFoundationSession("mental");
     mental.sessionId = sessionId;
     api
       .fetchJson(
         "/api/portal/games/mental/start?level=" +
           encodeURIComponent(mental.level) +
+          "&tier=" +
+          encodeURIComponent(mental.tierId) +
           "&count=10",
         { headers: api.authHeaders(), cache: "no-store" }
       )
@@ -733,6 +892,11 @@
         mental.answers = [];
         mental.left = Number(pack.seconds || 60);
         mental.started = Date.now();
+        if (pack.tier && pack.tier.label) {
+          mental.tierLabel = pack.tier.label;
+          mental.tierId = pack.tier.id || mental.tierId;
+        }
+        if (pack.level) mental.level = Number(pack.level);
         stopMentalTimer();
         mental.timer = setInterval(function () {
           if (!isFoundationSession("mental", sessionId)) {
@@ -880,12 +1044,33 @@
     var stage = stageHost();
     if (stage) {
       stage.addEventListener("click", function (event) {
-        if (event.target.closest("[data-foundation-exit]")) {
+        if (event.target.closest("[data-foundation-exit]") || event.target.closest("[data-end-games]")) {
           exitFoundationUi();
+          return;
+        }
+        if (event.target.closest("[data-end-replay]")) {
+          replayLastRound();
+          return;
+        }
+        if (event.target.closest("[data-end-arena]")) {
+          goToArenaStation();
           return;
         }
         if (event.target.closest("[data-foundation-start]")) {
           launchFoundationPlay();
+          return;
+        }
+        var lobbyTier = event.target.closest("[data-lobby-tier]");
+        if (lobbyTier && foundation.phase === "lobby") {
+          foundation.pendingTier = lobbyTier.getAttribute("data-lobby-tier") || "amateur";
+          foundation.pendingLevel = LEVEL_BY_TIER[foundation.pendingTier] || 1;
+          paintFoundationLobby();
+          return;
+        }
+        var lobbyMode = event.target.closest("[data-lobby-mode]");
+        if (lobbyMode && foundation.phase === "lobby") {
+          foundation.pendingMode = lobbyMode.getAttribute("data-lobby-mode") || "solo";
+          api.status(foundation.pendingMode === "tournament" ? "وضع: بطولة الفصول" : "وضع: فردي");
           return;
         }
         var wc = event.target.closest("[data-word-choice]");
@@ -894,7 +1079,12 @@
           var r = words.rounds[words.index];
           var choice = wc.getAttribute("data-word-choice");
           var ok = r && choice === r.correct;
-          words.answers.push({ id: r.id, choice: choice, ok: !!ok });
+          words.answers.push({
+            id: r.id,
+            choice: choice,
+            ok: !!ok,
+            kind: (r && r.kind) || "meaning"
+          });
           words.combo = ok ? words.combo + 1 : 0;
           if (words.combo > words.best) words.best = words.combo;
           words.index += 1;
@@ -908,20 +1098,15 @@
           var item = mental.items[mental.index];
           var ch = mc.getAttribute("data-mental-choice");
           var good = item && ch === item.correct;
-          mental.answers.push({ id: item.id, choice: ch, ok: !!good });
+          mental.answers.push({
+            id: item.id,
+            choice: ch,
+            ok: !!good,
+            tier: mental.tierId || "amateur"
+          });
           mental.index += 1;
           if (mental.index >= mental.items.length) finishMental(mental.sessionId);
           else paintMental();
-          return;
-        }
-        var lvl = event.target.closest("[data-mental-level]");
-        if (lvl) {
-          startMental(lvl.getAttribute("data-mental-level"), mental.mode);
-          return;
-        }
-        var modeBtn = event.target.closest("[data-mental-mode]");
-        if (modeBtn) {
-          startMental(mental.level, modeBtn.getAttribute("data-mental-mode"));
         }
       });
     }
