@@ -328,7 +328,73 @@
     );
   }
 
-  /** بطاقة ختام الجولة — مرآة الجولة + أعمدة التقدّم (مراحل ١–٢) */
+  function renderLegendBar(legend) {
+    if (!legend) return "";
+    var pct = Math.max(0, Math.min(100, Number(legend.progress_pct) || 0));
+    return (
+      '<section class="nafs-legend-bar" aria-label="أسطورة نافس">' +
+      '<div class="nafs-legend-head">' +
+      "<strong>أسطورة نافس</strong>" +
+      '<span class="foundation-hud-num" dir="ltr">' +
+      east(legend.xp_total) +
+      " XP</span></div>" +
+      '<p class="nafs-legend-title">' +
+      esc(legend.title || "") +
+      (legend.next_title && legend.remain_xp > 0
+        ? " → " + esc(legend.next_title) + " (يتبقّى " + east(legend.remain_xp) + ")"
+        : "") +
+      "</p>" +
+      '<div class="nafs-legend-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' +
+      pct +
+      '"><span class="nafs-legend-fill" style="--pct:' +
+      pct +
+      '%"></span></div></section>'
+    );
+  }
+
+  function renderRankGap(rank) {
+    if (!rank || !rank.visible) return "";
+    return (
+      '<section class="end-round-rank" aria-label="الترتيب الآمن">' +
+      '<p class="end-round-rank-msg">' +
+      esc(rank.message || "") +
+      "</p>" +
+      '<div class="end-round-rank-meta">' +
+      '<span>المركز <strong class="foundation-hud-num" dir="ltr">' +
+      east(rank.rank) +
+      "</strong></span>" +
+      '<span>المتوسط <strong class="foundation-hud-num" dir="ltr">' +
+      east(rank.avg_metric) +
+      "</strong></span>" +
+      (rank.gap_to_next != null && Number(rank.gap_to_next) > 0
+        ? '<span>الفارق للقفزة <strong class="foundation-hud-num" dir="ltr">' +
+          east(rank.gap_to_next) +
+          "</strong></span>"
+        : "") +
+      "</div></section>"
+    );
+  }
+
+  function renderPathHint(hint) {
+    if (!hint) return "";
+    return (
+      '<section class="end-round-path-hint">' +
+      "<strong>" +
+      esc(hint.label || "مسار داعم") +
+      "</strong>" +
+      "<p>" +
+      esc(hint.blurb || "") +
+      "</p>" +
+      (hint.station
+        ? '<button type="button" class="portal-btn secondary" data-end-station="' +
+          esc(hint.station) +
+          '">افتح المسار</button>'
+        : "") +
+      "</section>"
+    );
+  }
+
+  /** بطاقة ختام الجولة — مرآة + أعمدة + ترتيب + أسطورة نافس */
   function paintEndRound(pack, meta) {
     var host = stageHost();
     if (!host) return;
@@ -341,6 +407,7 @@
 
     var tier = (pack && pack.tier) || {};
     var coach = (pack && pack.coaching) || {};
+    var endround = (pack && pack.endround) || {};
     var score = Number((pack && pack.score) || 0);
     var total = Number((pack && pack.total) || (meta && meta.total) || 1);
     var xp = Number((pack && pack.xp_earned) || 0);
@@ -351,6 +418,9 @@
     var tierLabel = tier.label || (meta && meta.tierLabel) || "";
     var accuracy = coach.accuracy_pct || String(Math.round((score / Math.max(1, total)) * 100));
     var pulseHtml = renderProgressPulse((pack && pack.progress_pulse) || null);
+    var legendHtml = renderLegendBar(endround.legend);
+    var rankHtml = renderRankGap(endround.rank);
+    var hintHtml = renderPathHint(endround.path_hint);
 
     host.innerHTML =
       '<article class="end-round-card" aria-live="polite">' +
@@ -402,32 +472,58 @@
       "</li>" +
       "</ul>" +
       pulseHtml +
+      legendHtml +
+      rankHtml +
+      hintHtml +
       '<div class="portal-actions end-round-actions">' +
       '<button type="button" class="portal-btn" data-end-replay="1">لعب مرة أخرى</button>' +
       '<button type="button" class="portal-btn secondary" data-end-games="1">ألعاب التأسيس</button>' +
       '<button type="button" class="portal-btn secondary" data-end-arena="1">الميدان</button>' +
       "</div>" +
-      '<p class="end-round-footnote">أعمدة من سجلك الحقيقي — الترتيب وأسطورة نافس في مرحلة لاحقة.</p>' +
+      '<p class="end-round-footnote">بيانات حقيقية فقط — يُخفى الترتيب إن قلّ المشاركون.</p>' +
       "</article>";
 
-    // إن غاب الملخص من الاستجابة، نجلبه دون اختلاق
-    if (!pulseHtml && meta && meta.pulseGame && api) {
-      api
-        .fetchJson(
-          "/api/portal/games/progress-pulse?game=" +
-            encodeURIComponent(meta.pulseGame) +
-            "&limit=7",
-          { headers: api.authHeaders(), cache: "no-store" }
-        )
-        .then(function (pulsePack) {
-          if (foundation.phase !== "celebrate") return;
-          var slot = host.querySelector(".end-round-actions");
-          if (!slot || !pulsePack) return;
-          var html = renderProgressPulse(pulsePack);
-          if (!html) return;
-          slot.insertAdjacentHTML("beforebegin", html);
-        })
-        .catch(function () {});
+    // إن غاب الملخص/السياق من الاستجابة، نجلبهما دون اختلاق
+    if (meta && meta.pulseGame && api) {
+      if (!pulseHtml) {
+        api
+          .fetchJson(
+            "/api/portal/games/progress-pulse?game=" +
+              encodeURIComponent(meta.pulseGame) +
+              "&limit=7",
+            { headers: api.authHeaders(), cache: "no-store" }
+          )
+          .then(function (pulsePack) {
+            if (foundation.phase !== "celebrate") return;
+            var slot = host.querySelector(".end-round-actions");
+            if (!slot || !pulsePack) return;
+            var html = renderProgressPulse(pulsePack);
+            if (!html) return;
+            slot.insertAdjacentHTML("beforebegin", html);
+          })
+          .catch(function () {});
+      }
+      if (!legendHtml) {
+        api
+          .fetchJson(
+            "/api/portal/games/endround-context?game=" +
+              encodeURIComponent(meta.pulseGame) +
+              "&accuracy=" +
+              encodeURIComponent(accuracy),
+            { headers: api.authHeaders(), cache: "no-store" }
+          )
+          .then(function (ctx) {
+            if (foundation.phase !== "celebrate" || !ctx) return;
+            var slot = host.querySelector(".end-round-actions");
+            if (!slot) return;
+            var block =
+              renderLegendBar(ctx.legend) +
+              renderRankGap(ctx.rank) +
+              renderPathHint(ctx.path_hint);
+            if (block) slot.insertAdjacentHTML("beforebegin", block);
+          })
+          .catch(function () {});
+      }
     }
   }
 
@@ -1161,6 +1257,15 @@
         }
         if (event.target.closest("[data-end-arena]")) {
           goToArenaStation();
+          return;
+        }
+        var stationBtn = event.target.closest("[data-end-station]");
+        if (stationBtn) {
+          var sid = stationBtn.getAttribute("data-end-station") || "";
+          exitFoundationUi();
+          if (sid && window.PortalStudentStations && typeof window.PortalStudentStations.open === "function") {
+            window.PortalStudentStations.open(sid);
+          }
           return;
         }
         if (event.target.closest("[data-foundation-start]")) {
