@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 # content-audit-1: أرقام هندية في الأساس + تدقيق صياغي/علمي للبطاقات والأفخاخ.
-BANK_REVISION = "wave-b-212223-1"
-EXPECTED_MIN_COUNT = 180
+BANK_REVISION = "wave-d-lughati140-1"
+EXPECTED_MIN_COUNT = 300
 
 EASTERN = "٠١٢٣٤٥٦٧٨٩"
 
@@ -240,13 +240,15 @@ def build_reading_questions() -> list[dict]:
 def all_questions() -> list[dict]:
     from .nafs_question_bank_expand150 import expand_questions
     from .nafs_wave_b_212223 import wave_b_questions
+    from .nafs_wave_d_lughati140 import wave_d_questions
 
     base = build_math_questions() + build_science_questions() + build_reading_questions()
     assert len(base) == 86, len(base)
     expanded = expand_questions()
     wave_b = wave_b_questions()
-    rows = base + expanded + wave_b
-    # منع تكرار الجذوع بين الأساس والتوسيع والموجة ب
+    wave_d = wave_d_questions()
+    rows = base + expanded + wave_b + wave_d
+    # منع تكرار الجذوع بين الأساس والتوسيع والموجة ب والموجة د
     seen = set()
     unique = []
     for row in rows:

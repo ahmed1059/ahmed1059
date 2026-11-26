@@ -26,7 +26,7 @@ def main() -> int:
         errors.append("golden deck too small")
     if MODE_NATIONAL not in MODE_CONFIG:
         errors.append("national mode missing")
-    if BANK_REVISION != "content-audit-1":
+    if BANK_REVISION != "wave-d-lughati140-1":
         errors.append("revision")
     r4 = next((c for c in GOLDEN_DECK if c["id"] == "r4"), None)
     if not r4 or "بلى" not in (r4.get("back") or "") or "نعم" not in (r4.get("back") or ""):

@@ -17,7 +17,7 @@ def main() -> int:
     from .nafs_question_bank_seed import BANK_REVISION, all_questions
     from .portal_games_api import WORD_BANK
 
-    if BANK_REVISION != "content-audit-1":
+    if BANK_REVISION != "wave-d-lughati140-1":
         errors.append(f"revision={BANK_REVISION}")
 
     rows = all_questions()
