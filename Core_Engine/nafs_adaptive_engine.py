@@ -640,6 +640,21 @@ def api_home_mock_pack(x_portal_token: str = Header(default="")):
         connection.close()
 
 
+@router.get("/api/portal/answer-sheet-training")
+def api_answer_sheet_training(x_portal_token: str = Header(default="")):
+    """موجة ج: نموذج إجابة نافس + استبانة الطالب للتدريب (بلا مفاتيح / بلا اختلاق stems)."""
+    session = _require_student(x_portal_token)
+    from .nafs_wave_c_answer_sheet import build_training_form_pack
+
+    payload = session.get("payload") or {}
+    return build_training_form_pack(
+        student_name=str(payload.get("name") or payload.get("student_name") or ""),
+        national_id=str(session.get("student_nid") or ""),
+        section=str(payload.get("section") or ""),
+        grade=str(payload.get("grade") or ""),
+    )
+
+
 @router.get("/api/portal/parent/home-mock")
 def api_parent_home_mock(student_nid: str = "", x_portal_token: str = Header(default="")):
     from .portal_owner_api import _require_parent, mask_nid

@@ -631,3 +631,12 @@ def nafs_school_record(x_session_token: str = Header(default="")):
         return pack
     finally:
         connection.close()
+
+
+@router.get("/api/session/nafs/answer-sheet-training")
+def nafs_answer_sheet_training(x_session_token: str = Header(default="")):
+    """موجة ج: نموذج إجابة نافس + استبانة الطالب (A4) — بلا مفاتيح وبلا اختلاق نصوص البنود."""
+    _user(x_session_token)
+    from .nafs_wave_c_answer_sheet import build_training_form_pack
+
+    return build_training_form_pack()

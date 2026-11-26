@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="css/app-journey-job-performance-dashboard.css?v=aj2">
   <link rel="stylesheet" href="css/app-journey-accreditation-self.css?v=aj4">
   <link rel="stylesheet" href="css/app-journey-nafs-analytics.css?v=aj3">
+  <link rel="stylesheet" href="css/nafs-wave-c-answer-sheet.css?v=c1">
   <link rel="stylesheet" href="css/responsive.css?v=r292">
   <link rel="stylesheet" href="css/print-master.css?v=c312">
   <!-- print-shell.css يُحمَّل داخل iframe الطباعة فقط؛ الملف موجود لحارس الجودة -->
@@ -574,6 +575,7 @@
           <button type="button" class="aj-detail-btn" id="aj-nafs-print-plan">طباعة خطة المعالجة ورفع نواتج التعلم (نافس) A4</button>
           <button type="button" class="aj-detail-btn" id="aj-nafs-print-record">طباعة سجل نافس المدرسي المتكامل (A4)</button>
           <button type="button" class="aj-detail-btn" id="aj-nafs-print-omr">طباعة المحاكاة الوطنية + OMR + مفتاح التصحيح</button>
+          <button type="button" class="aj-detail-btn" id="aj-nafs-print-answer-sheet">نموذج الإجابة التدريبي + استبانة الطالب (١-٤…٤-٤)</button>
           <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-nafs-docx-weekly">تصدير Word — الخطة الأسبوعية</button>
           <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-nafs-docx-matrix">تصدير Word — مصفوفة المهارات</button>
           <button type="button" class="aj-detail-btn aj-detail-btn-secondary" id="aj-nafs-docx-evidence">تصدير Word — أرشيف شواهد ETEC</button>
@@ -583,6 +585,8 @@
           <button type="button" class="aj-detail-btn" id="aj-nafs-enrich-refresh">تحديث جسر الإثراء والموهبة</button>
           <button type="button" class="aj-detail-btn" id="aj-nafs-honor-print">طباعة تقرير التتويج والبرامج A4</button>
         </div>
+        <h2 class="aj-group-title">الموجة ج — نموذج الإجابة واستبانة الطالب (A4)</h2>
+        <div id="aj-nafs-answer-sheet-host" class="aj-nafs-panel" aria-label="نموذج الإجابة التدريبي"></div>
         <h2 class="aj-group-title">المرحلة ٥ — هدف الأسبوع وأرشيف شواهد ETEC</h2>
         <div id="aj-nafs-week-goal" class="aj-nafs-panel" aria-label="هدف الأسبوع"></div>
         <div id="aj-nafs-etec-archive" class="aj-nafs-panel" aria-label="أرشيف شواهد ETEC"></div>
@@ -1984,7 +1988,8 @@
   <script src="js/app-journey-student-registry.js?v=aj145"></script>
   <script src="js/app-journey-evaluation.js?v=c284"></script>
   <script src="js/app-journey-accreditation-self.js?v=aj4"></script>
-  <script src="js/app-journey-nafs-analytics.js?v=aj7"></script>
+  <script src="js/nafs-wave-c-answer-sheet.js?v=c1"></script>
+  <script src="js/app-journey-nafs-analytics.js?v=aj8"></script>
   <script src="js/app-journey-visits.js?v=aj198"></script>
   <script src="js/app-journey-visit-plan.js?v=aj4"></script>
   <script src="js/app-journey-job-performance-notes.js?v=aj4"></script>
