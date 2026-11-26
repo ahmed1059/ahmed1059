@@ -245,7 +245,90 @@
     return east(m) + ":" + east(rs);
   }
 
-  /** بطاقة ختام الجولة — من بيانات الجولة الحالية فقط (المرحلة ١) */
+  function badgeLabel(key, labels) {
+    var map = labels || {};
+    if (key === "start") return map.start || "نقطة البداية";
+    if (key === "best") return map.best || "أفضل رقم";
+    if (key === "improved") return map.improved || "↑ تحسّن";
+    return "";
+  }
+
+  /** مخطط أعمدة المحاولات ١…ن — ارتفاع = صحيحة/دقة، نقطة = سرعة */
+  function renderProgressPulse(pulse) {
+    if (!pulse || !pulse.attempts || !pulse.attempts.length) {
+      return "";
+    }
+    var labels = pulse.labels || {};
+    var cols = pulse.attempts
+      .map(function (a) {
+        var h = Math.max(4, Math.min(100, Number(a.height_pct) || 0));
+        var speed = a.speed_mark_pct;
+        var speedHtml =
+          speed == null
+            ? ""
+            : '<span class="progress-speed-mark" style="--speed:' +
+              Math.max(0, Math.min(100, Number(speed))) +
+              '%" title="مؤشر السرعة"></span>';
+        var scoreTxt =
+          a.total > 0
+            ? east(a.score) + "/" + east(a.total)
+            : east(a.score);
+        var badges = (a.badges || [])
+          .map(function (b) {
+            return (
+              '<span class="progress-badge progress-badge-' +
+              esc(b) +
+              '">' +
+              esc(badgeLabel(b, labels)) +
+              "</span>"
+            );
+          })
+          .join("");
+        return (
+          '<div class="progress-col' +
+          (a.is_latest ? " is-latest" : "") +
+          '" data-n="' +
+          esc(String(a.n || "")) +
+          '">' +
+          '<div class="progress-col-track" aria-hidden="true">' +
+          '<div class="progress-col-fill" style="--h:' +
+          h +
+          '%"></div>' +
+          speedHtml +
+          "</div>" +
+          '<div class="progress-col-meta">' +
+          '<span class="progress-col-n foundation-hud-num" dir="ltr">' +
+          east(a.n) +
+          "</span>" +
+          '<span class="progress-col-score foundation-hud-num" dir="ltr">' +
+          scoreTxt +
+          "</span>" +
+          (a.elapsed_sec != null
+            ? '<span class="progress-col-time foundation-hud-num" dir="ltr">' +
+              east(Math.round(Number(a.elapsed_sec))) +
+              " ث</span>"
+            : "") +
+          "</div>" +
+          (badges ? '<div class="progress-col-badges">' + badges + "</div>" : "") +
+          "</div>"
+        );
+      })
+      .join("");
+    return (
+      '<section class="progress-pulse" aria-label="تقدّم المحاولات">' +
+      '<div class="progress-pulse-head">' +
+      "<strong>محاولاتك</strong>" +
+      '<span class="progress-pulse-legend">' +
+      "<span>ارتفاع العمود = الصحيحة</span>" +
+      "<span>النقطة = السرعة</span>" +
+      "</span></div>" +
+      '<div class="progress-pulse-chart" dir="rtl">' +
+      cols +
+      "</div></section>"
+    );
+  }
+
+  /** بطاقة ختام الجولة — مرآة الجولة + أعمدة التقدّم (مراحل ١–٢) */
   function paintEndRound(pack, meta) {
     var host = stageHost();
     if (!host) return;
@@ -267,6 +350,7 @@
     var title = (meta && meta.title) || "انتهت الجولة";
     var tierLabel = tier.label || (meta && meta.tierLabel) || "";
     var accuracy = coach.accuracy_pct || String(Math.round((score / Math.max(1, total)) * 100));
+    var pulseHtml = renderProgressPulse((pack && pack.progress_pulse) || null);
 
     host.innerHTML =
       '<article class="end-round-card" aria-live="polite">' +
@@ -317,13 +401,34 @@
       esc(coach.next_step || "أعد الجولة أو جرّب مسارًا أعلى.") +
       "</li>" +
       "</ul>" +
+      pulseHtml +
       '<div class="portal-actions end-round-actions">' +
       '<button type="button" class="portal-btn" data-end-replay="1">لعب مرة أخرى</button>' +
       '<button type="button" class="portal-btn secondary" data-end-games="1">ألعاب التأسيس</button>' +
       '<button type="button" class="portal-btn secondary" data-end-arena="1">الميدان</button>' +
       "</div>" +
-      '<p class="end-round-footnote">مرآة هذه الجولة فقط — أعمدة التقدّم في مرحلة لاحقة.</p>' +
+      '<p class="end-round-footnote">أعمدة من سجلك الحقيقي — الترتيب وأسطورة نافس في مرحلة لاحقة.</p>' +
       "</article>";
+
+    // إن غاب الملخص من الاستجابة، نجلبه دون اختلاق
+    if (!pulseHtml && meta && meta.pulseGame && api) {
+      api
+        .fetchJson(
+          "/api/portal/games/progress-pulse?game=" +
+            encodeURIComponent(meta.pulseGame) +
+            "&limit=7",
+          { headers: api.authHeaders(), cache: "no-store" }
+        )
+        .then(function (pulsePack) {
+          if (foundation.phase !== "celebrate") return;
+          var slot = host.querySelector(".end-round-actions");
+          if (!slot || !pulsePack) return;
+          var html = renderProgressPulse(pulsePack);
+          if (!html) return;
+          slot.insertAdjacentHTML("beforebegin", html);
+        })
+        .catch(function () {});
+    }
   }
 
   function replayLastRound() {
@@ -734,6 +839,7 @@
           total: total,
           combo: words.best,
           elapsed: elapsed,
+          pulseGame: "words",
           etec_ar: "٣-١-١-١"
         });
         if (api.refresh) api.refresh();
@@ -854,6 +960,7 @@
           tierLabel: mental.tierLabel || (TIER_BY_LEVEL[mental.level] || {}).label || "الهواة",
           total: total,
           elapsed: elapsed,
+          pulseGame: "mental",
           etec_ar: "٣-١-١-٢"
         });
         if (api.refresh) api.refresh();
