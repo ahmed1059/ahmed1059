@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بوابة الطالب — ميدان نافس</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p5">
+  <link rel="stylesheet" href="css/portal-student.css?v=p6">
 </head>
-<body class="portal-student portal-gamer">
+<body class="portal-student portal-gamer theme-royal">
+  <canvas id="portal-particles" aria-hidden="true"></canvas>
+  <canvas id="portal-confetti" aria-hidden="true"></canvas>
   <div class="portal-shell">
     <header class="portal-top portal-top-gamer">
       <div class="portal-brand">
@@ -28,6 +30,23 @@
       </div>
     </header>
     <p class="portal-status" id="portal-status"></p>
+
+    <section class="player-id-card" aria-label="هوية اللاعب">
+      <div class="player-avatar-preview" id="player-avatar-preview"></div>
+      <div class="player-id-fields">
+        <label for="player-nickname">الاسم الحركي / اللقب (يظهر في الصدارة والمبارزة)</label>
+        <input id="player-nickname" maxlength="24" placeholder="مثال: صقر ٣/١" autocomplete="off">
+        <div class="avatar-grid" id="avatar-grid" role="listbox" aria-label="اختر صورة رمزية"></div>
+        <div class="theme-switch" role="group" aria-label="ثيم الميدان">
+          <button type="button" data-theme="neon">ليلي نيون</button>
+          <button type="button" data-theme="royal" class="is-active">أخضر ملكي</button>
+          <button type="button" data-theme="day">نهاري هادئ</button>
+        </div>
+        <div class="portal-actions" style="margin-top:10px;">
+          <button type="button" class="portal-btn" id="player-save">حفظ هوية اللاعب</button>
+        </div>
+      </div>
+    </section>
 
     <nav class="portal-main-tabs gamer-tabs" role="tablist" aria-label="أقسام البوابة">
       <button type="button" class="tab is-active" data-main-tab="play">ميدان التحدي والألعاب</button>
@@ -52,8 +71,8 @@
         <section class="portal-card card-play">
           <h2>ألعاب التأسيس السريع</h2>
           <div class="mini-games">
-            <button type="button" class="mode-card" id="btn-words">لعبة الكلمات<br><span>معنى · مرادف · ضد · ٦٠ ث · 3-1-1-1</span></button>
-            <button type="button" class="mode-card" id="btn-mental">الحساب الذهني<br><span>فردي / بطولة فصول · 3-1-1-2</span></button>
+            <button type="button" class="mode-card" id="btn-words">لعبة الكلمات<br><span>معنى · مرادف · ضد · ٦٠ ث · ٣-١-١-١</span></button>
+            <button type="button" class="mode-card" id="btn-mental">الحساب الذهني<br><span>فردي / بطولة فصول · ٣-١-١-٢</span></button>
           </div>
           <div id="mini-game-stage" class="mini-game-stage" hidden></div>
         </section>
@@ -156,7 +175,8 @@
     </div>
   </div>
   <script src="js/national-id-mask.js?v=m1"></script>
-  <script src="js/portal-student.js?v=p5"></script>
-  <script src="js/portal-student-games.js?v=g1"></script>
+  <script src="js/portal-student.js?v=p6"></script>
+  <script src="js/portal-student-games.js?v=g2"></script>
+  <script src="js/portal-student-fx.js?v=fx1"></script>
 </body>
 </html>

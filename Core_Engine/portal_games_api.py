@@ -57,7 +57,55 @@ CREATE TABLE IF NOT EXISTS portal_game_runs (
     created_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS ix_portal_games_student ON portal_game_runs(student_nid, game_type);
+
+CREATE TABLE IF NOT EXISTS portal_player_profile (
+    student_nid TEXT PRIMARY KEY,
+    nickname TEXT NOT NULL DEFAULT '',
+    avatar_id TEXT NOT NULL DEFAULT 'a1',
+    theme TEXT NOT NULL DEFAULT 'royal',
+    updated_at TEXT NOT NULL
+);
 """
+
+AVATARS = [
+    {"id": "a1", "label": "فارس زمردي"},
+    {"id": "a2", "label": "نجم ذهبي"},
+    {"id": "a3", "label": "صقر سريع"},
+    {"id": "a4", "label": "درع المعرفة"},
+    {"id": "a5", "label": "شعلة التحدي"},
+    {"id": "a6", "label": "بوصلة الحصيف"},
+    {"id": "a7", "label": "هلال فضي"},
+    {"id": "a8", "label": "مفتاح الكنز"},
+    {"id": "a9", "label": "موجة عزم"},
+    {"id": "a10", "label": "جبل ثبات"},
+    {"id": "a11", "label": "برق فكرة"},
+    {"id": "a12", "label": "تاج النخبة"},
+]
+
+
+def get_player_profile(connection, student_nid: str) -> dict:
+    ensure_on_boot(connection)
+    row = connection.execute(
+        "SELECT nickname, avatar_id, theme FROM portal_player_profile WHERE student_nid = ?",
+        (student_nid,),
+    ).fetchone()
+    if not row:
+        return {"nickname": "", "avatar_id": "a1", "theme": "royal", "avatars": AVATARS}
+    return {
+        "nickname": row[0] or "",
+        "avatar_id": row[1] or "a1",
+        "theme": row[2] or "royal",
+        "avatars": AVATARS,
+    }
+
+
+def player_display_name(connection, student_nid: str, formal_name: str = "") -> str:
+    profile = get_player_profile(connection, student_nid)
+    nick = (profile.get("nickname") or "").strip()
+    if nick:
+        return nick
+    formal = (formal_name or "").strip()
+    return formal.split()[0] if formal else "لاعب"
 
 WORD_BANK = [
     {"word": "راسخة", "meaning": "ثابتة متمكنة", "synonym": "ثابتة", "antonym": "متزعزعة"},
@@ -115,6 +163,49 @@ class MentalFinishBody(BaseModel):
     elapsed_sec: float = 0
 
 
+class PlayerProfileBody(BaseModel):
+    nickname: str = ""
+    avatar_id: str = "a1"
+    theme: str = "royal"
+
+
+@router.get("/api/portal/player/profile")
+def player_profile_get(x_portal_token: str = Header(default="")):
+    session = _require_student(x_portal_token)
+    connection = connect()
+    try:
+        return {"ok": True, **get_player_profile(connection, session["student_nid"])}
+    finally:
+        connection.close()
+
+
+@router.post("/api/portal/player/profile")
+def player_profile_save(body: PlayerProfileBody, x_portal_token: str = Header(default="")):
+    session = _require_student(x_portal_token)
+    nick = str(body.nickname or "").strip()[:24]
+    avatar = body.avatar_id if any(a["id"] == body.avatar_id for a in AVATARS) else "a1"
+    theme = body.theme if body.theme in ("neon", "royal", "day") else "royal"
+    connection = connect()
+    try:
+        ensure_on_boot(connection)
+        connection.execute(
+            """
+            INSERT INTO portal_player_profile(student_nid, nickname, avatar_id, theme, updated_at)
+            VALUES (?, ?, ?, ?, ?)
+            ON CONFLICT(student_nid) DO UPDATE SET
+              nickname=excluded.nickname,
+              avatar_id=excluded.avatar_id,
+              theme=excluded.theme,
+              updated_at=excluded.updated_at
+            """,
+            (session["student_nid"], nick, avatar, theme, _iso()),
+        )
+        connection.commit()
+        return {"ok": True, "nickname": nick, "avatar_id": avatar, "theme": theme, "avatars": AVATARS}
+    finally:
+        connection.close()
+
+
 @router.post("/api/portal/presence/ping")
 def presence_ping(x_portal_token: str = Header(default="")):
     session = _require_student(x_portal_token)
@@ -125,6 +216,7 @@ def presence_ping(x_portal_token: str = Header(default="")):
         from .portal_ssot import find_student
 
         st = find_student(connection, session["student_nid"]) or {}
+        shown = player_display_name(connection, session["student_nid"], st.get("name") or session.get("display_name") or "")
         connection.execute(
             """
             INSERT INTO portal_presence(student_nid, display_name, grade, section, last_seen)
@@ -137,7 +229,7 @@ def presence_ping(x_portal_token: str = Header(default="")):
             """,
             (
                 session["student_nid"],
-                st.get("name") or session.get("display_name") or "طالب",
+                shown,
                 st.get("grade") or student.get("grade") or "",
                 st.get("section") or student.get("section") or "",
                 _iso(),

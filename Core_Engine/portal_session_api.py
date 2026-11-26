@@ -780,9 +780,16 @@ def portal_student_home(x_portal_token: str = Header(default="")):
             "SELECT best_score, status FROM portal_talent_candidates WHERE student_nid = ?",
             (nid,),
         ).fetchone()
+        try:
+            from .portal_games_api import get_player_profile
+
+            player = get_player_profile(connection, nid)
+        except Exception:
+            player = {"nickname": "", "avatar_id": "a1", "theme": "royal", "avatars": []}
         return {
             "student": student,
             "xp": xp,
+            "player": player,
             "modes": MODE_CONFIG,
             "recent_runs": runs,
             "remedial": remedial,
@@ -1258,19 +1265,32 @@ def portal_leaderboards(x_portal_token: str = Header(default="")):
                 """,
                 (start,),
             ).fetchall()
-            return [
-                {
-                    "rank": i + 1,
-                    "national_id": row[0],
-                    "name": row[1] or "",
-                    "grade": row[2] or "",
-                    "section": row[3] or "",
-                    "xp": int(row[4] or 0),
-                    "avg_score": round(float(row[5] or 0), 1),
-                    "runs": int(row[6] or 0),
-                }
-                for i, row in enumerate(rows)
-            ]
+            try:
+                from .portal_games_api import player_display_name
+            except Exception:
+                player_display_name = None
+            out = []
+            for i, row in enumerate(rows):
+                formal = row[1] or ""
+                shown = (
+                    player_display_name(connection, row[0], formal)
+                    if player_display_name
+                    else (formal.split()[0] if formal else "")
+                )
+                out.append(
+                    {
+                        "rank": i + 1,
+                        "national_id": row[0],
+                        "name": shown,
+                        "formal_name": formal,
+                        "grade": row[2] or "",
+                        "section": row[3] or "",
+                        "xp": int(row[4] or 0),
+                        "avg_score": round(float(row[5] or 0), 1),
+                        "runs": int(row[6] or 0),
+                    }
+                )
+            return out
 
         class_rows = connection.execute(
             """

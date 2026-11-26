@@ -345,7 +345,7 @@
           escapeHtml(fmtGap(row.gap)) +
           "</p>" +
           "<p>مؤشر الاعتماد: " +
-          escapeHtml(row.etec_indicator || "—") +
+          toEasternDigits(escapeHtml(row.etec_indicator || "—")) +
           "</p>" +
           (row.weakest_skill
             ? "<p>أضعف مهارة: " +
@@ -373,7 +373,7 @@
         .map(function (row) {
           return (
             "<li><strong>" +
-            escapeHtml(row.code || "") +
+            toEasternDigits(escapeHtml(row.code || "")) +
             "</strong> — " +
             escapeHtml(row.domain_label || "") +
             ": " +
@@ -719,7 +719,7 @@
         return (
           "<article class=\"aj-nafs-misc-block\" style=\"margin:0 0 14px;padding:14px;border:1px solid #d7e8e3;border-radius:14px;background:#fafcfb;\">" +
           "<h3 style=\"margin:0 0 8px;color:#0b5e56;font-size:16px;\">" +
-          escapeHtml(ind.code || "") +
+          toEasternDigits(escapeHtml(ind.code || "")) +
           " — " +
           escapeHtml(ind.label || domainLabelAr(domain)) +
           "</h3>" +
@@ -912,9 +912,9 @@
       );
     }
     if (domain.key === "reading") {
-      return "خطة قراءة صفية مكثّفة وربطها بمؤشر الاعتماد 3-1-1-1 مع قياس بعدي نصف فصلي.";
+      return "خطة قراءة صفية مكثّفة وربطها بمؤشر الاعتماد ٣-١-١-١ مع قياس بعدي نصف فصلي.";
     }
-    return "مراجعات علوم موجّهة للفجوة المسجّلة وربطها بمؤشر الاعتماد 3-1-1-3.";
+    return "مراجعات علوم موجّهة للفجوة المسجّلة وربطها بمؤشر الاعتماد ٣-١-١-٣.";
   }
 
   function domainOwner(domain, pack) {
