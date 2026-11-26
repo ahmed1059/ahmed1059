@@ -5,64 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بوابة الطالب — ميدان نافس</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p4">
+  <link rel="stylesheet" href="css/portal-student.css?v=p5">
 </head>
-<body class="portal-student">
+<body class="portal-student portal-gamer">
   <div class="portal-shell">
-    <header class="portal-top">
+    <header class="portal-top portal-top-gamer">
       <div class="portal-brand">
         <h1>ميدان تحدي نافس</h1>
         <p><span id="portal-name">…</span> — <span id="portal-meta"></span></p>
+        <div class="rank-rail" aria-label="مستوى الطالب">
+          <div class="rank-meta">
+            <strong id="portal-rank">فارس مبتدئ</strong>
+            <span id="portal-rank-next">التالي عند ٥٠ XP</span>
+          </div>
+          <div class="rank-bar"><i id="portal-rank-fill"></i></div>
+        </div>
       </div>
       <div class="portal-actions">
-        <span class="portal-chip" id="portal-xp">٠ XP</span>
+        <span class="portal-chip portal-chip-xp" id="portal-xp">٠ XP</span>
         <span class="portal-chip" id="portal-talent" hidden>مرشّح موهوبون</span>
         <button type="button" class="portal-btn secondary" id="portal-logout">خروج</button>
       </div>
     </header>
     <p class="portal-status" id="portal-status"></p>
 
-    <nav class="portal-main-tabs" role="tablist" aria-label="أقسام البوابة">
-      <button type="button" class="tab is-active" data-main-tab="arena">الميدان</button>
-      <button type="button" class="tab" data-main-tab="traps">أبواب الأخطاء الشائعة</button>
-      <button type="button" class="tab" data-main-tab="golden">الحقيبة الذهبية</button>
+    <nav class="portal-main-tabs gamer-tabs" role="tablist" aria-label="أقسام البوابة">
+      <button type="button" class="tab is-active" data-main-tab="play">ميدان التحدي والألعاب</button>
+      <button type="button" class="tab" data-main-tab="boards">منصات التتويج</button>
+      <button type="button" class="tab" data-main-tab="plan">خطتي وسلوكي</button>
+      <button type="button" class="tab" data-main-tab="counsel">استشارة سرية</button>
     </nav>
 
-    <div id="panel-arena" class="portal-main-panel is-active">
-      <div id="arena-hub" class="portal-grid">
-        <section class="portal-card">
-          <h2>اختر نمط التحدي</h2>
+    <div id="panel-play" class="portal-main-panel is-active">
+      <section class="portal-card live-radar-card">
+        <h2>الطلاب المتواجدون الآن</h2>
+        <div id="online-list" class="online-list"></div>
+        <div id="duel-inbox" class="duel-inbox"></div>
+      </section>
+
+      <div id="arena-hub" class="portal-grid play-grid">
+        <section class="portal-card card-play">
+          <h2>أنماط التحدي</h2>
           <div class="mode-grid" id="mode-grid"></div>
           <div id="result-box"></div>
         </section>
-
-        <section class="portal-card">
-          <h2>لوحات الصدارة الحية</h2>
+        <section class="portal-card card-play">
+          <h2>ألعاب التأسيس السريع</h2>
+          <div class="mini-games">
+            <button type="button" class="mode-card" id="btn-words">لعبة الكلمات<br><span>معنى · مرادف · ضد · ٦٠ ث · 3-1-1-1</span></button>
+            <button type="button" class="mode-card" id="btn-mental">الحساب الذهني<br><span>فردي / بطولة فصول · 3-1-1-2</span></button>
+          </div>
+          <div id="mini-game-stage" class="mini-game-stage" hidden></div>
+        </section>
+        <section class="portal-card card-play">
+          <h2>الحقيبة الذهبية</h2>
+          <div id="golden-deck" class="golden-deck"></div>
+        </section>
+        <section class="portal-card card-play">
+          <h2>أبواب الأخطاء الشائعة</h2>
           <div class="tabs" role="tablist">
-            <button type="button" class="tab is-active" data-board="day">أبطال اليوم</button>
-            <button type="button" class="tab" data-board="week">فرسان الأسبوع</button>
-            <button type="button" class="tab" data-board="month">نخبة الشهر</button>
-            <button type="button" class="tab" data-board="classes">دوري الفصول</button>
+            <button type="button" class="tab is-active" data-trap-door="math">الرياضيات</button>
+            <button type="button" class="tab" data-trap-door="science">العلوم</button>
+            <button type="button" class="tab" data-trap-door="reading">لغتي والقراءة</button>
           </div>
-          <div id="board-list"></div>
-        </section>
-
-        <section class="portal-card">
-          <h2>العيادات العلاجية والمهام</h2>
-          <div id="remedial-box"></div>
-        </section>
-
-        <section class="portal-card">
-          <h2>قدوة ورفق + المقصف</h2>
-          <div id="behavior-totals" class="behavior-totals"></div>
-          <div id="behavior-box"></div>
-          <h3 style="margin-top:14px;color:#0b5e56;font-size:16px;">قسائم المقصف</h3>
-          <div id="cafeteria-box"></div>
-          <h2 style="margin-top:14px;">استشارة سرية للموجه الطلابي</h2>
-          <textarea id="counsel-text" rows="3" style="width:100%;border:1px solid #c9d7d3;border-radius:10px;padding:10px;font:inherit;" placeholder="اكتب استشارتك بسرية…"></textarea>
-          <div class="portal-actions" style="margin-top:8px;">
-            <button type="button" class="portal-btn" id="counsel-send">إرسال سري</button>
-          </div>
+          <div id="trap-album" class="trap-album"></div>
         </section>
       </div>
 
@@ -90,6 +96,19 @@
         <div class="powerups" id="powerups"></div>
         <div id="trap-card" class="trap-card" hidden></div>
         <div id="q-box"></div>
+        <div id="scratch-dock" class="scratch-dock" hidden>
+          <div class="scratch-toolbar">
+            <strong>مسودة الحل</strong>
+            <button type="button" class="portal-btn secondary" data-ink="#111827">أسود</button>
+            <button type="button" class="portal-btn secondary" data-ink="#1d4ed8">أزرق</button>
+            <button type="button" class="portal-btn secondary" data-ink="#b91c1c">أحمر</button>
+            <button type="button" class="portal-btn secondary" id="scratch-erase">ممحاة</button>
+            <button type="button" class="portal-btn secondary" id="scratch-clear">مسح</button>
+            <button type="button" class="portal-btn secondary" id="scratch-expand">تكبير</button>
+            <button type="button" class="portal-btn secondary" id="scratch-close">إغلاق</button>
+          </div>
+          <canvas id="scratch-canvas" width="900" height="280" aria-label="سبورة المسودة الحسابية"></canvas>
+        </div>
         <div class="portal-actions" style="margin-top:12px;">
           <button type="button" class="portal-btn" id="arena-next">التالي / إنهاء</button>
           <button type="button" class="portal-btn secondary" id="arena-exit">العودة للميدان</button>
@@ -97,27 +116,47 @@
       </section>
     </div>
 
-    <div id="panel-traps" class="portal-main-panel" hidden>
+    <div id="panel-boards" class="portal-main-panel" hidden>
       <section class="portal-card">
-        <h2>أبواب الأخطاء الشائعة (أشهر ٦٦ فخاً في نافس)</h2>
+        <h2>منصات التتويج ودوري الفصول</h2>
         <div class="tabs" role="tablist">
-          <button type="button" class="tab is-active" data-trap-door="math">أفخاخ الرياضيات</button>
-          <button type="button" class="tab" data-trap-door="science">أفخاخ العلوم</button>
-          <button type="button" class="tab" data-trap-door="reading">أفخاخ لغتي والقراءة</button>
+          <button type="button" class="tab is-active" data-board="day">أبطال اليوم</button>
+          <button type="button" class="tab" data-board="week">فرسان الأسبوع</button>
+          <button type="button" class="tab" data-board="month">نخبة الشهر</button>
+          <button type="button" class="tab" data-board="classes">دوري الفصول</button>
         </div>
-        <div id="trap-album" class="trap-album"></div>
+        <div id="board-list"></div>
       </section>
     </div>
 
-    <div id="panel-golden" class="portal-main-panel" hidden>
+    <div id="panel-plan" class="portal-main-panel" hidden>
+      <div class="portal-grid">
+        <section class="portal-card">
+          <h2>العيادات العلاجية والمهام</h2>
+          <div id="remedial-box"></div>
+        </section>
+        <section class="portal-card">
+          <h2>قدوة ورفق + المقصف</h2>
+          <div id="behavior-totals" class="behavior-totals"></div>
+          <div id="behavior-box"></div>
+          <h3 style="margin-top:14px;color:#0b5e56;font-size:16px;">قسائم المقصف</h3>
+          <div id="cafeteria-box"></div>
+        </section>
+      </div>
+    </div>
+
+    <div id="panel-counsel" class="portal-main-panel" hidden>
       <section class="portal-card">
-        <h2>حقيبة المراجعة الذهبية</h2>
-        <p class="portal-empty">اقلب البطاقة، وأتقن القاعدة لتحصل على +٥ XP.</p>
-        <div id="golden-deck" class="golden-deck"></div>
+        <h2>استشارة سرية للموجه الطلابي</h2>
+        <textarea id="counsel-text" rows="5" style="width:100%;border:1px solid #c9d7d3;border-radius:10px;padding:10px;font:inherit;" placeholder="اكتب استشارتك بسرية…"></textarea>
+        <div class="portal-actions" style="margin-top:8px;">
+          <button type="button" class="portal-btn" id="counsel-send">إرسال سري</button>
+        </div>
       </section>
     </div>
   </div>
   <script src="js/national-id-mask.js?v=m1"></script>
-  <script src="js/portal-student.js?v=p4"></script>
+  <script src="js/portal-student.js?v=p5"></script>
+  <script src="js/portal-student-games.js?v=g1"></script>
 </body>
 </html>

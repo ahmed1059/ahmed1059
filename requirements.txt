@@ -6,3 +6,4 @@ xlrd
 Pillow
 hijri-converter
 segno
+python-docx

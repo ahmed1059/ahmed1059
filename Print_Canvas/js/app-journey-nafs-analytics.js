@@ -12,7 +12,9 @@
     bound: false,
     whatIf: { math: null, reading: null, science: null },
     bankDomain: "all",
-    includeWhatIfInPrint: false
+    includeWhatIfInPrint: false,
+    misc: null,
+    unit2: { matrix: null, weekly: null }
   };
 
   function sessionUser() {
@@ -598,6 +600,110 @@
       "</div>";
   }
 
+  function paintUnit2() {
+    var host = document.getElementById("aj-nafs-unit2");
+    if (!host) {
+      return;
+    }
+    var weekly = (state.unit2 && state.unit2.weekly) || {};
+    var matrix = ((state.unit2 && state.unit2.matrix) || {}).matrix || {};
+    var current = weekly.current || {};
+    var weeks = weekly.weeks || [];
+    var matrixHtml = ["math", "science", "reading"]
+      .map(function (key) {
+        var block = matrix[key] || {};
+        var skills = block.skills || [];
+        return (
+          "<article class=\"aj-nafs-misc-block\" style=\"margin:0 0 12px;padding:12px;border:1px solid #d7e8e3;border-radius:14px;background:#fff;\">" +
+          "<h3 style=\"margin:0 0 8px;color:#0b5e56;font-size:15px;\">" +
+          escapeHtml(block.label || key) +
+          " · " +
+          escapeHtml(block.etec || "") +
+          "</h3>" +
+          "<ul style=\"margin:0;padding:0 16px 0 0;\">" +
+          skills
+            .map(function (sk) {
+              return (
+                "<li>" +
+                escapeHtml(sk.name || "") +
+                " — الجذر " +
+                escapeHtml(sk.root || "") +
+                " · الصف " +
+                escapeHtml(sk.grade || "") +
+                "</li>"
+              );
+            })
+            .join("") +
+          "</ul></article>"
+        );
+      })
+      .join("");
+    host.innerHTML =
+      "<div style=\"margin:0 0 14px;padding:14px;border:1px solid #fcd34d;border-radius:14px;background:#fffbeb;\">" +
+      "<strong>الأسبوع التشغيلي الحالي: " +
+      toEasternDigits(weekly.current_week || current.week || "—") +
+      "</strong>" +
+      "<p style=\"margin:6px 0 0;\">التركيز: " +
+      escapeHtml(current.focus || "—") +
+      " · شاهد: " +
+      escapeHtml(current.evidence || "—") +
+      "</p></div>" +
+      "<div style=\"overflow:auto;\"><table class=\"tpl-data-table\" style=\"width:100%;border-collapse:collapse;font-size:13px;\">" +
+      "<thead><tr><th>أسبوع</th><th>التركيز</th><th>رياضيات</th><th>علوم</th><th>قراءة</th><th>الشاهد</th></tr></thead><tbody>" +
+      weeks
+        .map(function (w) {
+          var on = Number(w.week) === Number(weekly.current_week);
+          return (
+            "<tr" +
+            (on ? " style=\"background:#ecfdf5;font-weight:700;\"" : "") +
+            "><td>" +
+            toEasternDigits(w.week) +
+            "</td><td>" +
+            escapeHtml(w.focus || "") +
+            "</td><td>" +
+            escapeHtml(w.math || "") +
+            "</td><td>" +
+            escapeHtml(w.science || "") +
+            "</td><td>" +
+            escapeHtml(w.reading || "") +
+            "</td><td>" +
+            escapeHtml(w.evidence || "") +
+            "</td></tr>"
+          );
+        })
+        .join("") +
+      "</tbody></table></div>" +
+      "<h3 style=\"margin:16px 0 8px;color:#0b5e56;font-size:16px;\">مصفوفة المهارات التراكمية (١م–٣م)</h3>" +
+      matrixHtml;
+  }
+
+  function downloadDocx(kind) {
+    var user = sessionUser() || {};
+    var url = API + "/export-docx?kind=" + encodeURIComponent(kind || "weekly");
+    status("جارٍ تجهيز ملف Word…");
+    return fetch(url, { headers: authHeaders(), cache: "no-store" })
+      .then(function (response) {
+        if (!response.ok) {
+          return response.json().then(function (body) {
+            throw new Error((body && body.detail) || "تعذر التصدير");
+          });
+        }
+        return response.blob();
+      })
+      .then(function (blob) {
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "nafs_" + (kind || "weekly") + ".docx";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        status("تم تنزيل ملف Word الرسمي.");
+      })
+      .catch(function (error) {
+        status((error && error.message) || "تعذر تصدير Word.", true);
+      });
+  }
+
   function paintMisc() {
     var host = document.getElementById("aj-nafs-misc");
     if (!host) {
@@ -782,6 +888,7 @@
     paintTimetable(pack);
     paintWhatIf();
     paintBank();
+    paintUnit2();
     paintMisc();
   }
 
@@ -1381,12 +1488,19 @@
       fetchJson(API + "/questions", { headers: authHeaders(), cache: "no-store" }),
       fetchJson(API + "/misconceptions/top", { headers: authHeaders(), cache: "no-store" }).catch(function () {
         return { top: {}, indicators: {} };
+      }),
+      fetchJson(API + "/skills-matrix", { headers: authHeaders(), cache: "no-store" }).catch(function () {
+        return { matrix: {} };
+      }),
+      fetchJson(API + "/weekly-plan", { headers: authHeaders(), cache: "no-store" }).catch(function () {
+        return { weeks: [], current: {} };
       })
     ])
       .then(function (parts) {
         state.pack = parts[0];
         state.questions = parts[1];
         state.misc = parts[2];
+        state.unit2 = { matrix: parts[3], weekly: parts[4] };
         state.whatIf = { math: null, reading: null, science: null };
         paint();
         var meta = state.pack.meta || {};
@@ -1443,6 +1557,14 @@
       }
       if (t.closest("#aj-nafs-print-omr")) {
         printNationalOmr();
+        return;
+      }
+      if (t.closest("#aj-nafs-docx-weekly")) {
+        downloadDocx("weekly");
+        return;
+      }
+      if (t.closest("#aj-nafs-docx-matrix")) {
+        downloadDocx("matrix");
         return;
       }
       var trapBtn = t.closest("[data-aj-nafs-trap-sheet]");

@@ -1016,6 +1016,12 @@ def init_db():
         from .nafs_misconception_lab import ensure_on_boot as ensure_misconception_lab
 
         ensure_misconception_lab(connection)
+        from .portal_games_api import ensure_on_boot as ensure_portal_games
+
+        ensure_portal_games(connection)
+        from .nafs_unit2_ssot import ensure_on_boot as ensure_nafs_unit2
+
+        ensure_nafs_unit2(connection)
         approval_path = Path(__file__).resolve().parent.parent / "Print_Canvas" / "banks" / "approval_authorities.json"
         if approval_path.is_file():
             approval_text = approval_path.read_text(encoding="utf-8").strip()
