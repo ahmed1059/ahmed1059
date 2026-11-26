@@ -42,7 +42,7 @@ def main() -> int:
         errors.append("eastern digits missing in expand math")
     if not any("/" in r["stem"] for r in math_expand):
         errors.append("fraction slash missing in expand math")
-    if BANK_REVISION != "content-audit-1":
+    if BANK_REVISION != "wave-b-212223-1":
         errors.append("revision tag")
     # الأساس + التوسيع بلا أرقام غربية في الرياضيات/العلوم
     import re
