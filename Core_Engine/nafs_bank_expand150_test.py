@@ -42,8 +42,27 @@ def main() -> int:
         errors.append("eastern digits missing in expand math")
     if not any("/" in r["stem"] for r in math_expand):
         errors.append("fraction slash missing in expand math")
-    if BANK_REVISION != "expand-150":
+    if BANK_REVISION != "content-audit-1":
         errors.append("revision tag")
+    # الأساس + التوسيع بلا أرقام غربية في الرياضيات/العلوم
+    import re
+
+    for r in rows:
+        if r["domain"] not in ("math", "science"):
+            continue
+        blob = " ".join(
+            [
+                r.get("stem") or "",
+                r.get("choice_a") or "",
+                r.get("choice_b") or "",
+                r.get("choice_c") or "",
+                r.get("choice_d") or "",
+                r.get("rationale") or "",
+            ]
+        )
+        if re.search(r"[0-9]", blob):
+            errors.append(f"western digit in {r['domain']}: {r['stem'][:40]}")
+            break
 
     with tempfile.TemporaryDirectory() as tmp:
         conn = sqlite3.connect(str(Path(tmp) / "t.db"))

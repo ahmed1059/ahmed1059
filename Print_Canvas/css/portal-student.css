@@ -100,6 +100,9 @@ body.portal-student {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
 }
 
 .portal-chip {
@@ -1466,11 +1469,41 @@ body.theme-day .portal-top-gamer {
 .frac .num, .frac .den { display: block; padding: 0 4px; }
 .frac .num { border-bottom: 1.5px solid currentColor; }
 
+.q-stem sup,
+.q-choice sup,
+.trap-ex sup,
+.trap-rationale sup {
+  font-size: 0.72em;
+  line-height: 0;
+  vertical-align: super;
+  position: relative;
+  top: -0.1em;
+  padding-inline: 1px;
+  white-space: nowrap;
+}
+
+.trap-ex .frac,
+.trap-rationale .frac,
+.q-stem .frac,
+.q-choice .frac {
+  margin: 0 3px;
+  line-height: 1.1;
+}
+
 /* مؤشرات ETEC والأرقام المتسلسلة لا تنعكس داخل RTL */
 .etec-code {
   display: inline-block;
   direction: ltr;
   unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+#portal-xp,
+.flip-master-btn,
+.leaderboard-xp,
+.result-xp {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
