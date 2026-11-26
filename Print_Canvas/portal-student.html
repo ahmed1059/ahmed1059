@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بوابة الطالب — ميدان نافس</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p7">
+  <link rel="stylesheet" href="css/portal-student.css?v=p8">
 </head>
 <body class="portal-student portal-gamer theme-royal">
   <canvas id="portal-particles" aria-hidden="true"></canvas>
@@ -14,7 +14,18 @@
     <header class="portal-top portal-top-gamer">
       <div class="portal-brand">
         <h1>ميدان تحدي نافس</h1>
-        <p><span id="portal-name">…</span> — <span id="portal-meta"></span></p>
+        <div class="portal-identity-row">
+          <button type="button" class="settings-chip" id="btn-settings" aria-expanded="false" aria-controls="player-settings-panel" title="إعداداتي">
+            <span class="settings-avatar" id="settings-avatar-chip"></span>
+            <span class="settings-copy">
+              <strong id="portal-name">…</strong>
+              <small id="settings-nick-hint">اضغط ⚙️ لتخصيص هويتك</small>
+            </span>
+            <span class="settings-gear" aria-hidden="true">⚙️</span>
+            <span class="settings-label">إعداداتي</span>
+          </button>
+          <p class="portal-meta-line"><span id="portal-meta"></span></p>
+        </div>
         <div class="rank-rail" aria-label="مستوى الطالب">
           <div class="rank-meta">
             <strong id="portal-rank">فارس مبتدئ</strong>
@@ -31,11 +42,12 @@
     </header>
     <p class="portal-status" id="portal-status"></p>
 
-    <section class="player-id-card" aria-label="هوية اللاعب">
+    <section class="player-id-card is-collapsed" id="player-settings-panel" aria-label="هوية اللاعب" hidden>
       <div class="player-avatar-preview" id="player-avatar-preview"></div>
       <div class="player-id-fields">
         <label for="player-nickname">الاسم الحركي / اللقب (يظهر في الصدارة والمبارزة)</label>
         <input id="player-nickname" maxlength="24" placeholder="مثال: صقر ٣/١" autocomplete="off">
+        <div class="avatar-cats" id="avatar-cats" role="tablist" aria-label="فئات الصور الرمزية"></div>
         <div class="avatar-grid" id="avatar-grid" role="listbox" aria-label="اختر صورة رمزية"></div>
         <div class="theme-switch" role="group" aria-label="ثيم الميدان">
           <button type="button" data-theme="neon">ليلي نيون</button>
@@ -43,7 +55,8 @@
           <button type="button" data-theme="day">نهاري هادئ</button>
         </div>
         <div class="portal-actions" style="margin-top:10px;">
-          <button type="button" class="portal-btn" id="player-save">حفظ هوية اللاعب</button>
+          <button type="button" class="portal-btn" id="player-save">حفظ وإغلاق</button>
+          <button type="button" class="portal-btn secondary" id="player-settings-close">إلغاء</button>
         </div>
       </div>
     </section>
@@ -193,9 +206,9 @@
   </div>
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe1"></script>
-  <script src="js/portal-student.js?v=p7"></script>
+  <script src="js/portal-student.js?v=p8"></script>
   <script src="js/portal-student-games.js?v=g2"></script>
-  <script src="js/portal-student-fx.js?v=fx1"></script>
+  <script src="js/portal-student-fx.js?v=fx2"></script>
   <script src="js/portal-student-adaptive.js?v=ad1"></script>
 </body>
 </html>

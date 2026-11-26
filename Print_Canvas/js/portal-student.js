@@ -916,25 +916,47 @@
       .join("");
   }
 
+  function setSettingsOpen(open) {
+    var panel = document.getElementById("player-settings-panel");
+    var btn = document.getElementById("btn-settings");
+    if (!panel || !btn) return;
+    panel.hidden = !open;
+    panel.classList.toggle("is-collapsed", !open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    btn.classList.toggle("is-open", !!open);
+  }
+
   function paintPlayerCard() {
     var player = (state.home && state.home.player) || {};
+    var student = (state.home && state.home.student) || {};
     var nick = document.getElementById("player-nickname");
     if (nick && document.activeElement !== nick) {
       nick.value = player.nickname || "";
     }
-    var avatarId = player.avatar_id || "a1";
+    var avatarId = player.avatar_id || "falcon-island";
     var theme = player.theme || "royal";
     if (window.PortalStudentFx) {
       window.PortalStudentFx.setAvatar(avatarId);
       window.PortalStudentFx.setTheme(theme);
-      window.PortalStudentFx.renderAvatarGrid(avatarId, player.avatars);
+      window.PortalStudentFx.renderAvatarGrid(
+        avatarId,
+        player.avatars,
+        player.avatar_categories
+      );
     }
-    var shown = player.nickname || ((state.home.student || {}).name || "").split(" ")[0] || "لاعب";
+    var formal = student.name || "طالب";
+    var shown = (player.nickname || "").trim();
     var nameEl = document.getElementById("portal-name");
-    if (nameEl && player.nickname) {
-      nameEl.textContent = player.nickname + " · " + ((state.home.student || {}).name || "");
+    if (nameEl) {
+      nameEl.textContent = shown ? shown + " · " + formal : formal;
     }
-    return shown;
+    var hint = document.getElementById("settings-nick-hint");
+    if (hint) {
+      hint.textContent = shown
+        ? "اللقب: " + shown + " — اضغط لتعديل الصورة أو الثيم"
+        : "اضغط ⚙️ إعداداتي لاختيار صورتك ولقبك";
+    }
+    return shown || formal.split(" ")[0] || "لاعب";
   }
 
   function bind() {
@@ -981,13 +1003,27 @@
       if (!card) return;
       card.classList.toggle("is-flipped");
     });
+    var settingsBtn = document.getElementById("btn-settings");
+    if (settingsBtn) {
+      settingsBtn.addEventListener("click", function () {
+        var panel = document.getElementById("player-settings-panel");
+        var open = panel && panel.hidden;
+        setSettingsOpen(!!open);
+      });
+    }
+    var closeSettings = document.getElementById("player-settings-close");
+    if (closeSettings) {
+      closeSettings.addEventListener("click", function () {
+        setSettingsOpen(false);
+      });
+    }
     var savePlayer = document.getElementById("player-save");
     if (savePlayer) {
       savePlayer.addEventListener("click", function () {
         var avatarId =
           (document.querySelector(".avatar-pick.is-active") &&
             document.querySelector(".avatar-pick.is-active").getAttribute("data-avatar")) ||
-          "a1";
+          "falcon-island";
         var themeBtn = document.querySelector(".theme-switch button.is-active");
         fetchJson("/api/portal/player/profile", {
           method: "POST",
@@ -999,8 +1035,9 @@
           })
         })
           .then(function (pack) {
-            if (state.home) state.home.player = pack;
+            if (state.home) state.home.player = Object.assign({}, state.home.player || {}, pack);
             paintPlayerCard();
+            setSettingsOpen(false);
             status("حُفظت هوية اللاعب.");
           })
           .catch(function (err) {

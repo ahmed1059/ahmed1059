@@ -61,26 +61,101 @@ CREATE INDEX IF NOT EXISTS ix_portal_games_student ON portal_game_runs(student_n
 CREATE TABLE IF NOT EXISTS portal_player_profile (
     student_nid TEXT PRIMARY KEY,
     nickname TEXT NOT NULL DEFAULT '',
-    avatar_id TEXT NOT NULL DEFAULT 'a1',
+    avatar_id TEXT NOT NULL DEFAULT 'falcon-island',
     theme TEXT NOT NULL DEFAULT 'royal',
     updated_at TEXT NOT NULL
 );
 """
 
-AVATARS = [
-    {"id": "a1", "label": "فارس زمردي"},
-    {"id": "a2", "label": "نجم ذهبي"},
-    {"id": "a3", "label": "صقر سريع"},
-    {"id": "a4", "label": "درع المعرفة"},
-    {"id": "a5", "label": "شعلة التحدي"},
-    {"id": "a6", "label": "بوصلة الحصيف"},
-    {"id": "a7", "label": "هلال فضي"},
-    {"id": "a8", "label": "مفتاح الكنز"},
-    {"id": "a9", "label": "موجة عزم"},
-    {"id": "a10", "label": "جبل ثبات"},
-    {"id": "a11", "label": "برق فكرة"},
-    {"id": "a12", "label": "تاج النخبة"},
+AVATAR_CATEGORIES = [
+    {
+        "id": "falcons",
+        "label": "الصقور",
+        "items": [
+            {"id": "falcon-island", "label": "صقر الجزيرة"},
+            {"id": "falcon-peregrine", "label": "صقر الشاهين"},
+            {"id": "falcon-golden", "label": "الصقر الذهبي"},
+        ],
+    },
+    {
+        "id": "lions",
+        "label": "الأسود",
+        "items": [
+            {"id": "lion-den", "label": "أسد العرين"},
+            {"id": "lion-king", "label": "ملك الأسود"},
+            {"id": "lion-peak", "label": "أسد القمة"},
+        ],
+    },
+    {
+        "id": "cheetahs",
+        "label": "الفهود",
+        "items": [
+            {"id": "cheetah-speed", "label": "فهد السرعة"},
+            {"id": "cheetah-night", "label": "فهد الليل"},
+            {"id": "cheetah-arena", "label": "فهد الميدان"},
+        ],
+    },
+    {
+        "id": "tigers",
+        "label": "النمور",
+        "items": [
+            {"id": "tiger-challenge", "label": "النمر المتحدي"},
+            {"id": "tiger-shadow", "label": "نمر الظل"},
+            {"id": "tiger-cup", "label": "نمر البطولة"},
+        ],
+    },
+    {
+        "id": "knights",
+        "label": "الفرسان",
+        "items": [
+            {"id": "knight-arab", "label": "فارس عربي"},
+            {"id": "knight-gold", "label": "فارس الدرع الذهبي"},
+            {"id": "knight-duel", "label": "فارس التحدي"},
+        ],
+    },
+    {
+        "id": "clubs",
+        "label": "شعارات الأندية",
+        "items": [
+            {"id": "club-hilal", "label": "الهلال"},
+            {"id": "club-nasr", "label": "النصر"},
+            {"id": "club-ittihad", "label": "الاتحاد"},
+            {"id": "club-ahly", "label": "الأهلي"},
+            {"id": "club-zamalek", "label": "الزمالك"},
+            {"id": "club-madrid", "label": "ريال مدريد"},
+            {"id": "club-liverpool", "label": "ليفربول"},
+            {"id": "club-hilal-sd", "label": "الهلال السوداني"},
+        ],
+    },
 ]
+
+# توافق خلفي مع المعرفات القديمة a1–a12
+_AVATAR_LEGACY = {
+    "a1": "falcon-island",
+    "a2": "falcon-golden",
+    "a3": "falcon-peregrine",
+    "a4": "knight-arab",
+    "a5": "tiger-challenge",
+    "a6": "cheetah-speed",
+    "a7": "club-hilal",
+    "a8": "lion-king",
+    "a9": "cheetah-arena",
+    "a10": "lion-peak",
+    "a11": "tiger-shadow",
+    "a12": "knight-gold",
+}
+
+AVATARS = [item for cat in AVATAR_CATEGORIES for item in cat["items"]]
+_AVATAR_IDS = {a["id"] for a in AVATARS} | set(_AVATAR_LEGACY.keys())
+
+
+def normalize_avatar_id(avatar_id: str) -> str:
+    raw = str(avatar_id or "").strip() or "falcon-island"
+    if raw in _AVATAR_LEGACY:
+        return _AVATAR_LEGACY[raw]
+    if raw in {a["id"] for a in AVATARS}:
+        return raw
+    return "falcon-island"
 
 
 def get_player_profile(connection, student_nid: str) -> dict:
@@ -90,12 +165,19 @@ def get_player_profile(connection, student_nid: str) -> dict:
         (student_nid,),
     ).fetchone()
     if not row:
-        return {"nickname": "", "avatar_id": "a1", "theme": "royal", "avatars": AVATARS}
+        return {
+            "nickname": "",
+            "avatar_id": "falcon-island",
+            "theme": "royal",
+            "avatars": AVATARS,
+            "avatar_categories": AVATAR_CATEGORIES,
+        }
     return {
         "nickname": row[0] or "",
-        "avatar_id": row[1] or "a1",
+        "avatar_id": normalize_avatar_id(row[1] or "falcon-island"),
         "theme": row[2] or "royal",
         "avatars": AVATARS,
+        "avatar_categories": AVATAR_CATEGORIES,
     }
 
 
@@ -165,7 +247,7 @@ class MentalFinishBody(BaseModel):
 
 class PlayerProfileBody(BaseModel):
     nickname: str = ""
-    avatar_id: str = "a1"
+    avatar_id: str = "falcon-island"
     theme: str = "royal"
 
 
@@ -183,7 +265,7 @@ def player_profile_get(x_portal_token: str = Header(default="")):
 def player_profile_save(body: PlayerProfileBody, x_portal_token: str = Header(default="")):
     session = _require_student(x_portal_token)
     nick = str(body.nickname or "").strip()[:24]
-    avatar = body.avatar_id if any(a["id"] == body.avatar_id for a in AVATARS) else "a1"
+    avatar = normalize_avatar_id(body.avatar_id)
     theme = body.theme if body.theme in ("neon", "royal", "day") else "royal"
     connection = connect()
     try:
@@ -201,7 +283,14 @@ def player_profile_save(body: PlayerProfileBody, x_portal_token: str = Header(de
             (session["student_nid"], nick, avatar, theme, _iso()),
         )
         connection.commit()
-        return {"ok": True, "nickname": nick, "avatar_id": avatar, "theme": theme, "avatars": AVATARS}
+        return {
+            "ok": True,
+            "nickname": nick,
+            "avatar_id": avatar,
+            "theme": theme,
+            "avatars": AVATARS,
+            "avatar_categories": AVATAR_CATEGORIES,
+        }
     finally:
         connection.close()
 

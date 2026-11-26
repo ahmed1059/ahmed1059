@@ -775,26 +775,102 @@ body.portal-gamer {
   .play-grid { grid-template-columns: 1fr; }
 }
 
-/* هوية اللاعب + ثيمات + جسيمات */
+/* هوية اللاعب + إعداداتي + Living Avatars + Wave Mesh */
+.portal-identity-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+.portal-meta-line {
+  margin: 0;
+  color: var(--portal-muted);
+  font-size: 13px;
+}
+.settings-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.16);
+  color: inherit;
+  border-radius: 14px;
+  padding: 6px 12px 6px 8px;
+  font: inherit;
+  cursor: pointer;
+  text-align: right;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+.settings-chip:hover,
+.settings-chip.is-open {
+  background: rgba(255,255,255,0.28);
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.25);
+}
+.settings-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex: 0 0 auto;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(11,94,86,0.25);
+}
+.settings-avatar svg { width: 100%; height: 100%; display: block; }
+.settings-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.settings-copy strong {
+  font-size: 14px;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: min(420px, 58vw);
+}
+.settings-copy small {
+  font-size: 11.5px;
+  opacity: 0.9;
+  font-weight: 600;
+}
+.settings-gear { font-size: 16px; line-height: 1; }
+.settings-label {
+  font-size: 12.5px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(11,94,86,0.18);
+  white-space: nowrap;
+}
+
 .player-id-card {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  align-items: center;
+  align-items: flex-start;
   margin: 0 0 14px;
   padding: 14px 16px;
   border-radius: 16px;
-  background: rgba(255,255,255,0.88);
+  background: rgba(255,255,255,0.92);
   border: 1px solid #c9d7d3;
+  box-shadow: 0 10px 28px rgba(11,94,86,0.08);
+}
+.player-id-card[hidden],
+.player-id-card.is-collapsed[hidden] {
+  display: none !important;
 }
 .player-avatar-preview {
-  width: 72px;
-  height: 72px;
-  border-radius: 18px;
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
   overflow: hidden;
   border: 2px solid #0b5e56;
   background: #ecfdf5;
   flex: 0 0 auto;
+  box-shadow: 0 0 16px rgba(52,211,153,0.28);
 }
 .player-avatar-preview svg { width: 100%; height: 100%; display: block; }
 .player-id-fields { flex: 1; min-width: 220px; }
@@ -806,22 +882,77 @@ body.portal-gamer {
   border: 1px solid #c9d7d3;
   font: inherit;
 }
+.avatar-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.avatar-cat {
+  border-radius: 999px;
+  border: 1px solid #c9d7d3;
+  background: #fff;
+  padding: 6px 11px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #0b5e56;
+}
+.avatar-cat.is-active {
+  background: #0b5e56;
+  color: #fff;
+  border-color: #0b5e56;
+}
 .avatar-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
   margin-top: 10px;
 }
 .avatar-pick {
   border: 2px solid transparent;
-  border-radius: 12px;
-  padding: 4px;
+  border-radius: 14px;
+  padding: 6px;
   background: #fff;
   cursor: pointer;
-  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
-.avatar-pick.is-active { border-color: #0b5e56; box-shadow: 0 0 0 2px rgba(11,94,86,0.2); }
-.avatar-pick svg { width: 100%; height: 100%; display: block; }
+.avatar-pick span {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #0b5e56;
+  text-align: center;
+  line-height: 1.25;
+}
+.avatar-pick:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(11,94,86,0.12);
+}
+.avatar-pick.is-active {
+  border-color: #0b5e56;
+  box-shadow: 0 0 0 2px rgba(11,94,86,0.2), 0 0 18px rgba(52,211,153,0.35);
+}
+.avatar-pick svg { width: 100%; height: auto; aspect-ratio: 1; display: block; }
+.living-avatar .avatar-pulse {
+  transform-origin: 40px 40px;
+  animation: avatar-breathe 3.2s ease-in-out infinite;
+}
+.avatar-pick.is-active .living-avatar .avatar-pulse,
+.avatar-pick:hover .living-avatar .avatar-pulse,
+.settings-chip:hover .living-avatar .avatar-pulse,
+.player-avatar-preview .living-avatar .avatar-pulse {
+  animation-duration: 1.8s;
+  filter: drop-shadow(0 0 3px rgba(52,211,153,0.45));
+}
+@keyframes avatar-breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.045); opacity: 0.96; }
+}
 .theme-switch {
   display: flex;
   flex-wrap: wrap;
@@ -847,7 +978,7 @@ body.portal-gamer {
   height: 100%;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.55;
+  opacity: 0.42;
 }
 .portal-shell { position: relative; z-index: 1; }
 #portal-confetti {
@@ -855,6 +986,15 @@ body.portal-gamer {
   inset: 0;
   pointer-events: none;
   z-index: 50;
+}
+
+/* الأرقام الهندية والكسور فوق الخلفية دائماً */
+.portal-shell,
+.portal-card,
+.play-stage,
+.frac {
+  position: relative;
+  z-index: 1;
 }
 
 body.theme-neon.portal-gamer {
@@ -870,6 +1010,27 @@ body.theme-neon .portal-brand h1 { color: #67e8f9; }
 body.theme-neon .gamer-tabs .tab { background: #1e293b; color: #67e8f9; border-color: #334155; }
 body.theme-neon .gamer-tabs .tab.is-active { background: linear-gradient(145deg,#0891b2,#7c3aed); color:#fff; }
 body.theme-neon .portal-top-gamer { background: linear-gradient(120deg,#0e7490,#7c3aed); }
+body.theme-neon .settings-label { background: rgba(103,232,249,0.18); }
+body.theme-neon .avatar-cat { background: #1e293b; color: #67e8f9; border-color: #334155; }
+body.theme-neon .avatar-cat.is-active { background: #0891b2; color: #fff; }
+body.theme-neon .avatar-pick { background: #0f172a; }
+body.theme-neon .avatar-pick span { color: #67e8f9; }
+body.theme-neon .player-id-fields label { color: #94a3b8; }
+body.theme-neon .player-id-fields input {
+  background: #0f172a;
+  color: #e5e7eb;
+  border-color: #334155;
+}
+body.theme-neon .theme-switch button {
+  background: #1e293b;
+  color: #67e8f9;
+  border-color: #334155;
+}
+body.theme-neon .theme-switch button.is-active {
+  background: #0891b2;
+  color: #fff;
+  border-color: #0891b2;
+}
 
 body.theme-royal.portal-gamer {
   background:
@@ -890,7 +1051,9 @@ body.theme-day .portal-top-gamer {
 .frac .num { border-bottom: 1.5px solid currentColor; }
 
 @media (max-width: 860px) {
-  .avatar-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .avatar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .settings-copy strong { max-width: 46vw; }
+  .settings-label { display: none; }
   .trap-examples { grid-template-columns: 1fr; }
 }
 
