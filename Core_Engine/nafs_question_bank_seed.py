@@ -1,8 +1,9 @@
-# بنك أسئلة نافس المصحّح — 86 سؤالاً (30 رياضيات · 29 علوم · 27 لغة عربية).
+# بنك أسئلة نافس المصحّح — ١٥١+ سؤالاً (٨٦ أساس polish-2 + ٧٥ توسيع ETEC/محلي).
 from __future__ import annotations
 
-# polish-2: خلط مواضع الإجابة + إصلاح سؤال الرياضيات 6 + أرقام هندية في الجذوع الرياضية.
-BANK_REVISION = "polish-2"
+# expand-150: دمج دفعة الثالث المتوسط مع إعادة بذر عند نقص العدد أو اختلاف المراجعة.
+BANK_REVISION = "expand-150"
+EXPECTED_MIN_COUNT = 150
 
 SCHEMA_SQL = """
 CREATE TABLE IF NOT EXISTS nafs_question_bank (
@@ -219,9 +220,23 @@ def build_reading_questions() -> list[dict]:
 
 
 def all_questions() -> list[dict]:
-    rows = build_math_questions() + build_science_questions() + build_reading_questions()
-    assert len(rows) == 86, len(rows)
-    return rows
+    from .nafs_question_bank_expand150 import expand_questions
+
+    base = build_math_questions() + build_science_questions() + build_reading_questions()
+    assert len(base) == 86, len(base)
+    expanded = expand_questions()
+    rows = base + expanded
+    # منع تكرار الجذوع بين الأساس والتوسيع
+    seen = set()
+    unique = []
+    for row in rows:
+        key = (row["domain"], (row["stem"] or "").strip())
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(row)
+    assert len(unique) >= EXPECTED_MIN_COUNT, len(unique)
+    return unique
 
 
 def _meta_get(connection, key: str) -> str:
@@ -243,7 +258,7 @@ def _meta_set(connection, key: str, value: str) -> None:
 
 
 def _bank_is_stale(connection, count: int) -> bool:
-    if count < 86:
+    if count < EXPECTED_MIN_COUNT:
         return True
     if _meta_get(connection, "revision") != BANK_REVISION:
         return True
@@ -252,6 +267,12 @@ def _bank_is_stale(connection, count: int) -> bool:
     ).fetchone()
     text = (stem6[0] if stem6 else "") or ""
     if "| -٨ |" not in text and "| −٨ |" not in text:
+        return True
+    # وجود نص توسعة القراءة علامة على اكتمال الدفعة
+    expand_passage = connection.execute(
+        "SELECT COUNT(*) FROM nafs_question_bank WHERE passage_id = 'p5' AND COALESCE(active,1)=1"
+    ).fetchone()[0]
+    if int(expand_passage or 0) < 1:
         return True
     distinct = connection.execute(
         "SELECT COUNT(DISTINCT UPPER(correct)) FROM nafs_question_bank WHERE COALESCE(active,1)=1"
@@ -264,7 +285,7 @@ def ensure_nafs_question_bank(connection, force_reseed: bool = False) -> dict:
     count = connection.execute(
         "SELECT COUNT(*) FROM nafs_question_bank WHERE COALESCE(active,1)=1"
     ).fetchone()[0]
-    if count >= 86 and not force_reseed and not _bank_is_stale(connection, count):
+    if count >= EXPECTED_MIN_COUNT and not force_reseed and not _bank_is_stale(connection, count):
         return {"ok": True, "stored": count, "seeded": False, "revision": BANK_REVISION}
     connection.execute("DELETE FROM nafs_question_bank")
     rows = all_questions()
