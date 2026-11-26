@@ -112,11 +112,19 @@ MODE_DAILY = "daily"
 MODE_MOCK = "mock"
 MODE_RESCUE = "rescue"
 MODE_DUEL = "duel"
+MODE_NATIONAL = "national"
 MODE_CONFIG = {
     MODE_DAILY: {"label": "تحدي اليوم السريع", "count": 10, "seconds": 600, "xp_mult": 1},
     MODE_MOCK: {"label": "الاختبار المحاكي الشامل", "count": 20, "seconds": 1200, "xp_mult": 1},
     MODE_RESCUE: {"label": "تحدي إنقاذ المهارة الأضعف", "count": 8, "seconds": 480, "xp_mult": 2},
     MODE_DUEL: {"label": "مبارزة زميل (١ ضد ١)", "count": 8, "seconds": 480, "xp_mult": 2},
+    MODE_NATIONAL: {
+        "label": "المحاكاة الوطنية الشاملة (٦٦ سؤالاً)",
+        "count": 66,
+        "seconds": 5400,
+        "xp_mult": 2,
+        "balanced_domains": True,
+    },
 }
 
 
@@ -180,6 +188,12 @@ class AnswerBody(BaseModel):
     choice: str
     elapsed_sec: float = 0
     streak: int = 0
+
+
+class CheckAnswerBody(BaseModel):
+    run_id: int
+    question_id: int
+    choice: str = ""
 
 
 class PowerupBody(BaseModel):
@@ -379,11 +393,62 @@ def _ensure_cafeteria_voucher(connection, student_nid: str, behavior_total: int)
     return {"title": "قسيمة مقصف مستحقة", "status": "available"}
 
 
+def _row_to_question(row) -> dict:
+    return {
+        "id": int(row[0]),
+        "domain": row[1] or "",
+        "skill": row[2] or "",
+        "stem": row[3] or "",
+        "choices": {
+            "A": row[4] or "",
+            "B": row[5] or "",
+            "C": row[6] or "",
+            "D": row[7] or "",
+        },
+        "correct": (row[8] or "A").upper(),
+        "rationale": row[9] or "",
+        "passage_id": row[10] or "",
+        "passage_title": row[11] or "",
+        "passage_text": row[12] or "",
+        "common_mistake": (row[13] if len(row) > 13 else "") or "",
+        "grade_root": (row[14] if len(row) > 14 else "") or "",
+        "golden_rule": (row[15] if len(row) > 15 else "") or "",
+        "parametric": False,
+    }
+
+
 def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict]:
     from .nafs_question_bank_seed import ensure_nafs_question_bank
     from .portal_parametric import generate_parametric_batch
 
     ensure_nafs_question_bank(connection)
+    try:
+        from .nafs_misconception_lab import ensure_question_columns, enrich_question_traps
+
+        ensure_question_columns(connection)
+        enrich_question_traps(connection)
+    except Exception:
+        pass
+
+    select_sql = """
+        SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
+               correct, rationale, passage_id, passage_title, passage_text,
+               COALESCE(common_mistake,''), COALESCE(grade_root,''), COALESCE(golden_rule,'')
+        FROM nafs_question_bank
+    """
+
+    # المحاكاة الوطنية: ٢٢ لكل مجال بلا نظائر عشوائية
+    if mode == MODE_NATIONAL:
+        out: list[dict] = []
+        for dom in ("math", "science", "reading"):
+            rows = connection.execute(
+                select_sql + " WHERE COALESCE(active,1)=1 AND domain = ? ORDER BY RANDOM() LIMIT 22",
+                (dom,),
+            ).fetchall()
+            out.extend(_row_to_question(r) for r in rows)
+        random.shuffle(out)
+        return out[:66]
+
     # نظائر مهارية: نحو ٣٠٪ من الجولة (على الأقل سؤالان إن أمكن)
     parametric_n = min(max(2, count // 3), max(0, count - 1)) if count >= 3 else (1 if count > 1 else 0)
     if domain == "reading":
@@ -403,50 +468,15 @@ def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict
         where += " AND (skill LIKE ? OR domain = 'math')"
         params.append(f"%{skill}%")
     rows = connection.execute(
-        f"""
-        SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
-               correct, rationale, passage_id, passage_title, passage_text
-        FROM nafs_question_bank
-        {where}
-        ORDER BY RANDOM()
-        LIMIT ?
-        """,
+        f"{select_sql} {where} ORDER BY RANDOM() LIMIT ?",
         tuple(params + [bank_n or count]),
     ).fetchall()
     if len(rows) < bank_n:
         rows = connection.execute(
-            """
-            SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
-                   correct, rationale, passage_id, passage_title, passage_text
-            FROM nafs_question_bank
-            WHERE COALESCE(active,1)=1
-            ORDER BY RANDOM()
-            LIMIT ?
-            """,
+            f"{select_sql} WHERE COALESCE(active,1)=1 ORDER BY RANDOM() LIMIT ?",
             (bank_n or count,),
         ).fetchall()
-    out = []
-    for row in rows:
-        out.append(
-            {
-                "id": int(row[0]),
-                "domain": row[1] or "",
-                "skill": row[2] or "",
-                "stem": row[3] or "",
-                "choices": {
-                    "A": row[4] or "",
-                    "B": row[5] or "",
-                    "C": row[6] or "",
-                    "D": row[7] or "",
-                },
-                "correct": (row[8] or "A").upper(),
-                "rationale": row[9] or "",
-                "passage_id": row[10] or "",
-                "passage_title": row[11] or "",
-                "passage_text": row[12] or "",
-                "parametric": False,
-            }
-        )
+    out = [_row_to_question(row) for row in rows]
     if parametric_n:
         domains = [domain] if domain in ("math", "science") else ["math", "science"]
         generated = generate_parametric_batch(parametric_n, domains=domains)
@@ -799,6 +829,9 @@ def portal_challenge_start(body: StartChallengeBody, x_portal_token: str = Heade
                     "parametric": bool(q.get("parametric")),
                     "domain": q.get("domain") or "",
                     "skill": q.get("skill") or "",
+                    "common_mistake": q.get("common_mistake") or "",
+                    "grade_root": q.get("grade_root") or "",
+                    "golden_rule": q.get("golden_rule") or "",
                 }
                 for q in questions
             },
@@ -839,6 +872,84 @@ def portal_challenge_start(body: StartChallengeBody, x_portal_token: str = Heade
         if ghost:
             payload["ghost"] = ghost
             payload["duel"] = True
+        return payload
+    finally:
+        connection.close()
+
+
+@router.post("/api/portal/challenge/check")
+def portal_challenge_check(body: CheckAnswerBody, x_portal_token: str = Header(default="")):
+    """تحقق فوري مع بطاقة «احذر الفخ» عند الخطأ."""
+    session = _require_portal(x_portal_token, ("student",))
+    connection = connect()
+    try:
+        _ensure(connection)
+        row = connection.execute(
+            "SELECT student_nid, detail_json FROM portal_challenge_runs WHERE id = ? AND finished_at = ''",
+            (body.run_id,),
+        ).fetchone()
+        if not row or row[0] != session["student_nid"]:
+            raise HTTPException(status_code=404, detail="جولة غير موجودة.")
+        detail = json.loads(row[1] or "{}")
+        qid = str(body.question_id)
+        expected = str((detail.get("correct_map") or {}).get(qid) or "").upper()
+        choice = str(body.choice or "").upper()
+        ok = bool(expected) and choice == expected
+        q_full = (detail.get("questions_full") or {}).get(qid) or {}
+        payload = {
+            "ok": ok,
+            "question_id": body.question_id,
+            "choice": choice,
+        }
+        if not ok:
+            from .nafs_misconception_lab import SKILL_ROOTS, SKILL_TRAPS, ETEC_INDICATORS
+
+            skill = q_full.get("skill") or ""
+            domain = q_full.get("domain") or ""
+            trap = SKILL_TRAPS.get(skill) or (
+                q_full.get("golden_rule") or "راجع القاعدة الذهبية للمهارة.",
+                q_full.get("common_mistake") or "خطأ شائع في هذه المهارة.",
+            )
+            rule, mistake = trap
+            mistake = q_full.get("common_mistake") or mistake
+            rule = q_full.get("golden_rule") or rule
+            root = q_full.get("grade_root") or SKILL_ROOTS.get(skill, "٣م")
+            try:
+                from .nafs_misconception_lab import SCHEMA_EXTRA
+
+                connection.executescript(SCHEMA_EXTRA)
+            except Exception:
+                pass
+            connection.execute(
+                """
+                INSERT INTO portal_misconception_events(
+                  student_nid, question_id, domain, skill, chosen, correct, trap_key, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    session["student_nid"],
+                    body.question_id,
+                    domain,
+                    skill,
+                    choice,
+                    expected,
+                    skill or domain,
+                    _iso(),
+                ),
+            )
+            connection.commit()
+            payload["trap"] = {
+                "title": "احذر الفخ!",
+                "common_mistake": mistake,
+                "golden_rule": rule,
+                "grade_root": root,
+                "domain": domain,
+                "skill": skill,
+                "etec": ETEC_INDICATORS.get(domain, {}),
+                "rationale": q_full.get("rationale") or "",
+            }
+        else:
+            connection.commit()
         return payload
     finally:
         connection.close()

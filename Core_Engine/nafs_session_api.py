@@ -332,10 +332,18 @@ def _list_questions(connection, domain: str = "") -> list[dict]:
     if key in ("math", "reading", "science"):
         where += " AND domain = ?"
         params.append(key)
+    try:
+        from .nafs_misconception_lab import ensure_question_columns, enrich_question_traps
+
+        ensure_question_columns(connection)
+        enrich_question_traps(connection)
+    except Exception:
+        pass
     rows = connection.execute(
         f"""
         SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
-               correct, rationale, passage_id, passage_title, passage_text, sort_order
+               correct, rationale, passage_id, passage_title, passage_text, sort_order,
+               COALESCE(common_mistake,''), COALESCE(grade_root,''), COALESCE(golden_rule,'')
         FROM nafs_question_bank
         {where}
         ORDER BY
@@ -362,6 +370,9 @@ def _list_questions(connection, domain: str = "") -> list[dict]:
             "passage_title": row[11] or "",
             "passage_text": row[12] or "",
             "sort_order": int(row[13] or 0),
+            "common_mistake": row[14] or "",
+            "grade_root": row[15] or "",
+            "golden_rule": row[16] or "",
         }
         for row in rows
     ]

@@ -1,8 +1,8 @@
 # بنك أسئلة نافس المصحّح — ١٥١+ سؤالاً (٨٦ أساس polish-2 + ٧٥ توسيع ETEC/محلي).
 from __future__ import annotations
 
-# expand-150: دمج دفعة الثالث المتوسط مع إعادة بذر عند نقص العدد أو اختلاف المراجعة.
-BANK_REVISION = "expand-150"
+# misconception-lab-1: إبقاء ١٥٠+ مع حقول الخطأ الشائع والجذر التراكمي.
+BANK_REVISION = "misconception-lab-1"
 EXPECTED_MIN_COUNT = 150
 
 SCHEMA_SQL = """
@@ -21,7 +21,10 @@ CREATE TABLE IF NOT EXISTS nafs_question_bank (
     passage_title TEXT NOT NULL DEFAULT '',
     passage_text TEXT NOT NULL DEFAULT '',
     sort_order INTEGER NOT NULL DEFAULT 0,
-    active INTEGER NOT NULL DEFAULT 1
+    active INTEGER NOT NULL DEFAULT 1,
+    common_mistake TEXT NOT NULL DEFAULT '',
+    grade_root TEXT NOT NULL DEFAULT '',
+    golden_rule TEXT NOT NULL DEFAULT ''
 );
 CREATE INDEX IF NOT EXISTS ix_nafs_q_domain ON nafs_question_bank(domain, sort_order);
 CREATE TABLE IF NOT EXISTS nafs_question_bank_meta (
@@ -286,6 +289,13 @@ def ensure_nafs_question_bank(connection, force_reseed: bool = False) -> dict:
         "SELECT COUNT(*) FROM nafs_question_bank WHERE COALESCE(active,1)=1"
     ).fetchone()[0]
     if count >= EXPECTED_MIN_COUNT and not force_reseed and not _bank_is_stale(connection, count):
+        try:
+            from .nafs_misconception_lab import enrich_question_traps, ensure_question_columns
+
+            ensure_question_columns(connection)
+            enrich_question_traps(connection)
+        except Exception:
+            pass
         return {"ok": True, "stored": count, "seeded": False, "revision": BANK_REVISION}
     connection.execute("DELETE FROM nafs_question_bank")
     rows = all_questions()
@@ -316,4 +326,11 @@ def ensure_nafs_question_bank(connection, force_reseed: bool = False) -> dict:
         ],
     )
     _meta_set(connection, "revision", BANK_REVISION)
+    try:
+        from .nafs_misconception_lab import enrich_question_traps, ensure_question_columns
+
+        ensure_question_columns(connection)
+        enrich_question_traps(connection)
+    except Exception:
+        pass
     return {"ok": True, "stored": len(rows), "seeded": True, "revision": BANK_REVISION}

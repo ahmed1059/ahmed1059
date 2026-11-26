@@ -464,6 +464,10 @@ from .portal_radar_api import router as portal_radar_router
 
 app.include_router(portal_radar_router)
 
+from .nafs_misconception_lab import router as nafs_misconception_router
+
+app.include_router(nafs_misconception_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):

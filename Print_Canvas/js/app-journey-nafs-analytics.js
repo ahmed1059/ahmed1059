@@ -598,6 +598,181 @@
       "</div>";
   }
 
+  function paintMisc() {
+    var host = document.getElementById("aj-nafs-misc");
+    if (!host) {
+      return;
+    }
+    var pack = state.misc || { top: {}, indicators: {} };
+    var top = pack.top || {};
+    var indicators = pack.indicators || {};
+    host.innerHTML = ["math", "reading", "science"]
+      .map(function (domain) {
+        var ind = indicators[domain] || {};
+        var rows = top[domain] || [];
+        return (
+          "<article class=\"aj-nafs-misc-block\" style=\"margin:0 0 14px;padding:14px;border:1px solid #d7e8e3;border-radius:14px;background:#fafcfb;\">" +
+          "<h3 style=\"margin:0 0 8px;color:#0b5e56;font-size:16px;\">" +
+          escapeHtml(ind.code || "") +
+          " — " +
+          escapeHtml(ind.label || domainLabelAr(domain)) +
+          "</h3>" +
+          (rows.length
+            ? "<ol style=\"margin:0;padding:0 18px 0 0;\">" +
+              rows
+                .map(function (row, idx) {
+                  return (
+                    "<li style=\"margin:0 0 10px;\"><strong>" +
+                    toEasternDigits(idx + 1) +
+                    ". " +
+                    escapeHtml(row.skill || "") +
+                    "</strong> — " +
+                    toEasternDigits(String(row.pct || 0)) +
+                    "٪ · جذر " +
+                    escapeHtml(row.grade_root || "") +
+                    "<br><span style=\"color:#8a3b32;\">الفخ: " +
+                    escapeHtml(row.common_mistake || "") +
+                    "</span><br><span style=\"color:#0b5e56;\">القاعدة: " +
+                    escapeHtml(row.golden_rule || "") +
+                    "</span><br>" +
+                    "<button type=\"button\" class=\"aj-detail-btn aj-detail-btn-secondary\" data-aj-nafs-trap-sheet=\"" +
+                    escapeHtml(domain) +
+                    "|" +
+                    escapeHtml(row.skill || "") +
+                    "\">توليد ورقة علاجية مركّزة لهذا الفخ</button></li>"
+                  );
+                })
+                .join("") +
+              "</ol>"
+            : "<p class=\"portal-empty\">لا أحداث مسجّلة بعد — تُعرض المهارات الأعلى من البنك.</p>") +
+          "</article>"
+        );
+      })
+      .join("");
+  }
+
+  function printTrapSheet(domain, skill) {
+    if (!window.PrintEngine || typeof window.PrintEngine.open !== "function") {
+      status("محرك الطباعة الموحد غير محمّل.", true);
+      return;
+    }
+    var rows = ((state.misc || {}).top || {})[domain] || [];
+    var hit = rows.filter(function (r) {
+      return r.skill === skill;
+    })[0] || { skill: skill, common_mistake: "", golden_rule: "", grade_root: "" };
+    var ind = ((state.misc || {}).indicators || {})[domain] || {};
+    var body =
+      "<h2 style=\"color:#0b5e56;\">ورقة علاجية مركّزة — " +
+      escapeHtml(ind.code || "") +
+      "</h2>" +
+      "<p><strong>المهارة:</strong> " +
+      escapeHtml(hit.skill || "") +
+      " · <strong>الجذر التراكمي:</strong> " +
+      escapeHtml(hit.grade_root || "") +
+      "</p>" +
+      "<p><strong>الفخ الشائع:</strong> " +
+      escapeHtml(hit.common_mistake || "") +
+      "</p>" +
+      "<p><strong>القاعدة الذهبية:</strong> " +
+      escapeHtml(hit.golden_rule || "") +
+      "</p>" +
+      "<p>نشاط صفّي: ٣ مسائل نظيرة + تحقق ثنائي + قياس بعدي قصير (٥ دقائق).</p>" +
+      "<p>يُوثَّق التحسّن كشاهد في المؤشر " +
+      escapeHtml(ind.code || "") +
+      ".</p>";
+    window.PrintEngine.open("master-sheet", {
+      docTitle: "ورقة علاجية لفخ مفاهيمي",
+      title: "ورقة علاجية مركّزة للمفاهيم المغلوطة",
+      kind: "document",
+      orientation: "portrait",
+      school: SCHOOL_NAME,
+      bodyHtml: body,
+      signoff: true,
+      maxColumns: 2,
+      pageTotal: 1
+    });
+    status("وُلدت الورقة العلاجية المركّزة للفخ.");
+  }
+
+  function printNationalOmr() {
+    if (!window.PrintEngine || typeof window.PrintEngine.open !== "function") {
+      status("محرك الطباعة الموحد غير محمّل.", true);
+      return;
+    }
+    status("جارٍ تجهيز كراسة المحاكاة وورقة OMR…");
+    fetchJson(API + "/national-pack", { headers: authHeaders(), cache: "no-store" })
+      .then(function (pack) {
+        var letters = { A: "أ", B: "ب", C: "ج", D: "د" };
+        var n = 0;
+        var booklet = "";
+        var keyRows = [];
+        ["math", "science", "reading"].forEach(function (domain) {
+          var block = (pack.domains || {})[domain] || { items: [], label: domain };
+          booklet +=
+            "<h2 style=\"color:#0b5e56;font-size:15px;\">" +
+            escapeHtml(block.label || domain) +
+            " (" +
+            toEasternDigits(22) +
+            ")</h2>";
+          (block.items || []).forEach(function (item) {
+            n += 1;
+            booklet +=
+              "<p style=\"margin:8px 0;\"><strong>" +
+              toEasternDigits(n) +
+              ".</strong> " +
+              escapeHtml(item.stem || "") +
+              "<br>" +
+              ["A", "B", "C", "D"]
+                .map(function (L) {
+                  return (
+                    "<span style=\"margin-left:12px;\">" +
+                    letters[L] +
+                    ") " +
+                    escapeHtml((item.choices || {})[L] || "") +
+                    "</span>"
+                  );
+                })
+                .join(" ") +
+              "</p>";
+            keyRows.push([toEasternDigits(n), letters[item.correct] || item.correct, escapeHtml(item.skill || "")]);
+          });
+        });
+        var omr =
+          "<h2 style=\"color:#0b5e56;\">ورقة التظليل الضوئي (OMR) — ٦٦ بنداً</h2>" +
+          "<p>ظلّل الحرف الصحيح لكل سؤال. لا تستخدم قلماً رصاصياً خفيفاً.</p>" +
+          "<div style=\"display:grid;grid-template-columns:repeat(6,1fr);gap:6px;\">" +
+          Array.from({ length: 66 })
+            .map(function (_x, i) {
+              return (
+                "<div style=\"border:1px solid #ccc;padding:6px;font-size:12px;\">" +
+                toEasternDigits(i + 1) +
+                "<br>أ ○ ب ○ ج ○ د ○</div>"
+              );
+            })
+            .join("") +
+          "</div>";
+        var keyHtml =
+          "<h2 style=\"color:#0b5e56;\">مفتاح التصحيح المعتمد</h2>" +
+          tableHtml(["رقم السؤال", "الإجابة", "المهارة"], keyRows);
+        window.PrintEngine.open("master-sheet", {
+          docTitle: "المحاكاة الوطنية الشاملة",
+          title: "كراسة المحاكاة الوطنية + OMR + مفتاح التصحيح",
+          kind: "document",
+          orientation: "portrait",
+          multiPage: true,
+          school: SCHOOL_NAME,
+          bodyHtml: booklet + "<div style=\"page-break-before:always\"></div>" + omr + "<div style=\"page-break-before:always\"></div>" + keyHtml,
+          signoff: true,
+          maxColumns: 2,
+          pageTotal: 3
+        });
+        status("معاينة المحاكاة الوطنية (كراسة + OMR + مفتاح) جاهزة.");
+      })
+      .catch(function (error) {
+        status((error && error.message) || "تعذر تجهيز حزمة المحاكاة.", true);
+      });
+  }
+
   function paint() {
     var pack = state.pack || {};
     paintSummary(pack);
@@ -607,6 +782,7 @@
     paintTimetable(pack);
     paintWhatIf();
     paintBank();
+    paintMisc();
   }
 
   function domainAction(domain, pack) {
@@ -1202,11 +1378,15 @@
     status("جارٍ تحميل تحليل نافس…");
     return Promise.all([
       fetchJson(API + "/analytics", { headers: authHeaders(), cache: "no-store" }),
-      fetchJson(API + "/questions", { headers: authHeaders(), cache: "no-store" })
+      fetchJson(API + "/questions", { headers: authHeaders(), cache: "no-store" }),
+      fetchJson(API + "/misconceptions/top", { headers: authHeaders(), cache: "no-store" }).catch(function () {
+        return { top: {}, indicators: {} };
+      })
     ])
       .then(function (parts) {
         state.pack = parts[0];
         state.questions = parts[1];
+        state.misc = parts[2];
         state.whatIf = { math: null, reading: null, science: null };
         paint();
         var meta = state.pack.meta || {};
@@ -1259,6 +1439,16 @@
       }
       if (t.closest("#aj-nafs-print-record")) {
         printIntegratedRecord();
+        return;
+      }
+      if (t.closest("#aj-nafs-print-omr")) {
+        printNationalOmr();
+        return;
+      }
+      var trapBtn = t.closest("[data-aj-nafs-trap-sheet]");
+      if (trapBtn) {
+        var parts = String(trapBtn.getAttribute("data-aj-nafs-trap-sheet") || "").split("|");
+        printTrapSheet(parts[0] || "math", parts[1] || "");
         return;
       }
       var bankBtn = t.closest("[data-aj-nafs-bank]");
