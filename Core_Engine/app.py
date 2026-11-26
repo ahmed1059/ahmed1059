@@ -492,6 +492,10 @@ from .nafs_family_loop import router as nafs_family_loop_router
 
 app.include_router(nafs_family_loop_router)
 
+from .nafs_counsel_boost import router as nafs_counsel_boost_router
+
+app.include_router(nafs_counsel_boost_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):

@@ -1025,6 +1025,9 @@ def init_db():
         from .nafs_adaptive_engine import ensure_on_boot as ensure_nafs_adaptive
 
         ensure_nafs_adaptive(connection)
+        from .nafs_counsel_boost import ensure_counsel_boost
+
+        ensure_counsel_boost(connection)
         from .nafs_readalong_api import ensure_on_boot as ensure_nafs_readalong
 
         ensure_nafs_readalong(connection)

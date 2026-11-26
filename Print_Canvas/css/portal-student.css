@@ -646,6 +646,30 @@ body.portal-student {
   max-height: 150px;
   padding: 0 4px;
   width: 100%;
+  line-height: 1.85;
+  text-wrap: pretty;
+}
+.flip-face.back .flip-body .frac {
+  margin: 0 3px;
+  line-height: 1.1;
+  vertical-align: middle;
+}
+.flip-face.back .flip-body .frac .num,
+.flip-face.back .flip-body .frac .den {
+  line-height: 1.15;
+  padding: 0 3px;
+}
+.flip-face.back .flip-body .frac .num {
+  margin-bottom: 1px;
+}
+.flip-face.back .flip-body sup {
+  font-size: 0.72em;
+  line-height: 0;
+  vertical-align: super;
+  position: relative;
+  top: -0.12em;
+  padding-inline: 1px;
+  white-space: nowrap;
 }
 .flip-master-btn {
   border: 0;

@@ -1,4 +1,4 @@
-@import url("portal-student.css?v=p2");
+@import url("portal-student.css?v=p16");
 
 .owner-layout {
   display: grid;
@@ -162,4 +162,89 @@
 
 .clinic-worksheet li {
   margin: 0 0 8px;
+}
+
+.counselor-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.counselor-legend .peek-chip {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+  color: #0c4a6e;
+}
+
+.counselor-card {
+  border: 1px solid #c9d7d3;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin: 0 0 10px;
+  background: #fafcfb;
+}
+
+.counselor-card h4 {
+  margin: 0 0 6px;
+  color: #0b5e56;
+  font-size: 15px;
+}
+
+.counselor-card .counselor-msg {
+  margin: 6px 0;
+  white-space: pre-wrap;
+  line-height: 1.55;
+  color: #1f2937;
+}
+
+.counselor-card textarea {
+  width: 100%;
+  min-height: 64px;
+  border: 1px solid #c9d7d3;
+  border-radius: 8px;
+  padding: 8px;
+  font: inherit;
+  margin: 6px 0;
+}
+
+.counselor-card .counselor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.counselor-card select {
+  border: 1px solid #c9d7d3;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font: inherit;
+}
+
+.counselor-rules {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid #b7e4d8;
+  border-radius: 12px;
+  background: #f3faf7;
+}
+
+.counselor-rules table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.counselor-rules th,
+.counselor-rules td {
+  border: 1px solid #c9d7d3;
+  padding: 7px 8px;
+  text-align: right;
+}
+
+.counselor-rules th {
+  background: #e8f5f1;
+  color: #0b5e56;
 }

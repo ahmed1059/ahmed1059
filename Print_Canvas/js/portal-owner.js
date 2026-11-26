@@ -4,7 +4,7 @@
 
   var SESSION_KEY = "sessionUser";
   var EASTERN = "٠١٢٣٤٥٦٧٨٩";
-  var state = { token: "", settings: null, clinicProposals: [] };
+  var state = { token: "", settings: null, clinicProposals: [], counselorPack: null };
 
   function toEastern(t) {
     return String(t == null ? "" : t).replace(/[0-9]/g, function (d) {
@@ -863,6 +863,215 @@
     });
   }
 
+  function loadCounselorInbox() {
+    return fetchJson("/api/portal/counselor/inbox", { headers: headers(), cache: "no-store" }).then(
+      function (pack) {
+        state.counselorPack = pack;
+        var summary = document.getElementById("counselor-summary");
+        var legend = document.getElementById("counselor-legend");
+        var s = pack.summary || {};
+        if (summary) {
+          summary.hidden = false;
+          summary.innerHTML =
+            '<span class="peek-chip">استشارات: ' +
+            toEastern(s.counseling_open || 0) +
+            "</span>" +
+            '<span class="peek-chip is-hot">تنبيهات: ' +
+            toEastern(s.alerts_new || 0) +
+            "</span>" +
+            '<span class="peek-chip is-hot">حرارة vault: ' +
+            toEastern(s.vault_hot || 0) +
+            "</span>" +
+            (pack.etec_behavior
+              ? '<span class="peek-chip">ETEC ' +
+                formatEtecCode(pack.etec_behavior.code_ar || pack.etec_behavior.code || "") +
+                "</span>"
+              : "");
+        }
+        if (legend) {
+          var L = pack.legend || {};
+          legend.hidden = false;
+          legend.innerHTML = Object.keys(L)
+            .map(function (k) {
+              return '<span class="peek-chip"><strong>' + escapeHtml(k) + "</strong> — " + escapeHtml(L[k]) + "</span>";
+            })
+            .join("");
+        }
+        var inbox = document.getElementById("counselor-inbox-box");
+        var items = pack.counseling || [];
+        if (inbox) {
+          inbox.innerHTML = items.length
+            ? items
+                .map(function (row) {
+                  return (
+                    '<article class="counselor-card" data-counsel-id="' +
+                    escapeHtml(row.id) +
+                    '"><h4>' +
+                    escapeHtml(row.name || "طالب") +
+                    ' <small style="color:#5c675f;font-weight:600;">(' +
+                    toEastern(row.student_nid_masked || "") +
+                    ")</small></h4>" +
+                    '<p style="margin:0;font-size:12px;color:#5c675f;">' +
+                    escapeHtml(row.status_ar || row.status || "") +
+                    " · " +
+                    escapeHtml(row.category || "عام") +
+                    " · " +
+                    toEastern(row.created_at || "") +
+                    "</p>" +
+                    '<div class="counselor-msg">' +
+                    escapeHtml(row.message || "") +
+                    "</div>" +
+                    "<label style=\"font-size:12px;color:#5c675f;\">ملاحظة الموجّه</label>" +
+                    '<textarea data-counsel-note>' +
+                    escapeHtml(row.counselor_note || "") +
+                    "</textarea>" +
+                    '<div class="counselor-actions">' +
+                    '<select data-counsel-status>' +
+                    ["new", "open", "in_progress", "closed"]
+                      .map(function (st) {
+                        var labels = {
+                          new: "جديدة",
+                          open: "مفتوحة",
+                          in_progress: "قيد المتابعة",
+                          closed: "مغلقة"
+                        };
+                        return (
+                          '<option value="' +
+                          st +
+                          '"' +
+                          (row.status === st ? " selected" : "") +
+                          ">" +
+                          labels[st] +
+                          "</option>"
+                        );
+                      })
+                      .join("") +
+                    "</select>" +
+                    '<button type="button" class="portal-btn" data-counsel-save>حفظ المتابعة</button>' +
+                    "</div></article>"
+                  );
+                })
+                .join("")
+            : '<p class="portal-empty">لا استشارات مفتوحة حالياً.</p>';
+        }
+        var alertsBox = document.getElementById("counselor-alerts-box");
+        var alerts = pack.alerts || [];
+        if (alertsBox) {
+          alertsBox.innerHTML = alerts.length
+            ? '<table class="owner-table"><thead><tr><th>الطالب</th><th>النوع</th><th>التفاصيل</th><th>إجراء</th></tr></thead><tbody>' +
+              alerts
+                .map(function (row) {
+                  var d = row.detail || {};
+                  var detailTxt = [];
+                  if (d.latest != null) detailTxt.push("آخر نتيجة " + toEastern(d.latest) + "٪");
+                  if (d.prev_avg != null) detailTxt.push("متوسط سابق " + toEastern(d.prev_avg) + "٪");
+                  if (d.trap_heat != null) detailTxt.push("حرارة " + toEastern(d.trap_heat));
+                  if (d.absences_14d != null) detailTxt.push("غيابات " + toEastern(d.absences_14d));
+                  return (
+                    "<tr><td>" +
+                    escapeHtml(row.name || "") +
+                    "<br><small>" +
+                    toEastern(row.student_nid_masked || "") +
+                    "</small></td><td>" +
+                    escapeHtml(row.alert_type_ar || row.alert_type || "") +
+                    "</td><td>" +
+                    escapeHtml(detailTxt.join(" · ") || JSON.stringify(d)) +
+                    '</td><td><button type="button" class="portal-btn secondary" data-alert-ack="' +
+                    escapeHtml(row.id) +
+                    '">استلام</button></td></tr>'
+                  );
+                })
+                .join("") +
+              "</tbody></table>"
+            : '<p class="portal-empty">لا تنبيهات جديدة.</p>';
+        }
+        var heatBox = document.getElementById("counselor-heat-box");
+        var heat = pack.vault_hot || [];
+        if (heatBox) {
+          heatBox.innerHTML = heat.length
+            ? '<table class="owner-table"><thead><tr><th>الطالب</th><th>المهارة</th><th>الجذر</th><th>الحرارة</th><th>ETEC</th></tr></thead><tbody>' +
+              heat
+                .map(function (row) {
+                  return (
+                    "<tr><td>" +
+                    escapeHtml(row.name || "") +
+                    "<br><small>" +
+                    toEastern(row.student_nid_masked || "") +
+                    " · " +
+                    escapeHtml(row.section || "") +
+                    "</small></td><td>" +
+                    escapeHtml(row.skill || row.domain || "") +
+                    "</td><td>" +
+                    toEastern(row.grade_root || "—") +
+                    '</td><td><span class="peek-status is-open">' +
+                    toEastern(row.trap_heat || 0) +
+                    "</span></td><td>" +
+                    formatEtecCode(row.etec_code_ar || (row.etec && row.etec.code) || "") +
+                    "</td></tr>"
+                  );
+                })
+                .join("") +
+              "</tbody></table>"
+            : '<p class="portal-empty">لا حرارة عالية حالياً.</p>';
+        }
+        return pack;
+      }
+    );
+  }
+
+  function saveCounselNote(card) {
+    var id = Number(card.getAttribute("data-counsel-id"));
+    var note = (card.querySelector("[data-counsel-note]") || {}).value || "";
+    var st = (card.querySelector("[data-counsel-status]") || {}).value || "in_progress";
+    return fetchJson("/api/portal/counselor/counseling/" + id + "/update", {
+      method: "POST",
+      headers: headers(),
+      body: JSON.stringify({ note: note, status: st })
+    }).then(function () {
+      return loadCounselorInbox();
+    });
+  }
+
+  function ackAlert(alertId) {
+    return fetchJson("/api/portal/counselor/alerts/" + alertId + "/status", {
+      method: "POST",
+      headers: headers(),
+      body: JSON.stringify({ status: "acked" })
+    }).then(function () {
+      return loadCounselorInbox();
+    });
+  }
+
+  function loadBoostRules() {
+    return fetchJson("/api/portal/boost/rules", { headers: headers(), cache: "no-store" }).then(
+      function (pack) {
+        var box = document.getElementById("boost-rules-box");
+        if (!box) return pack;
+        box.hidden = false;
+        box.innerHTML =
+          "<h3 style=\"margin:0 0 8px;color:#0b5e56;font-size:15px;\">قواعد التحفيز الآلي · ETEC " +
+          formatEtecCode((pack.etec && (pack.etec.code_ar || pack.etec.code)) || "") +
+          "</h3>" +
+          '<table><thead><tr><th>الشرط</th><th>المكافأة</th><th>السقف</th></tr></thead><tbody>' +
+          (pack.rules || [])
+            .map(function (r) {
+              return (
+                "<tr><td>" +
+                escapeHtml(r.when || "") +
+                "</td><td>" +
+                escapeHtml(r.award || "") +
+                "</td><td>" +
+                escapeHtml(r.cap || "") +
+                "</td></tr>"
+              );
+            })
+            .join("") +
+          "</tbody></table>";
+        return pack;
+      }
+    );
+  }
+
   function bind() {
     Array.prototype.forEach.call(document.querySelectorAll("[data-owner-panel]"), function (btn) {
       btn.addEventListener("click", function () {
@@ -877,6 +1086,15 @@
           Promise.all([loadRadarTalent(), loadRadarAlerts()]).catch(function (e) {
             status(e.message, true);
           });
+        }
+        if (id === "panel-counselor") {
+          loadCounselorInbox()
+            .then(function () {
+              status("صندوق الموجّه محدّث.");
+            })
+            .catch(function (e) {
+              status(e.message, true);
+            });
         }
         if (id === "panel-peek") {
           loadTeacherPeek()
@@ -952,6 +1170,60 @@
             status(e.message, true);
           });
         }
+      });
+    }
+    var counselRefresh = document.getElementById("btn-counselor-refresh");
+    if (counselRefresh) {
+      counselRefresh.addEventListener("click", function () {
+        loadCounselorInbox()
+          .then(function () {
+            status("صندوق الموجّه محدّث.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
+      });
+    }
+    var boostRulesBtn = document.getElementById("btn-boost-rules");
+    if (boostRulesBtn) {
+      boostRulesBtn.addEventListener("click", function () {
+        loadBoostRules()
+          .then(function () {
+            status("قواعد التحفيز معروضة.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
+      });
+    }
+    var counselInbox = document.getElementById("counselor-inbox-box");
+    if (counselInbox) {
+      counselInbox.addEventListener("click", function (event) {
+        var saveBtn = event.target.closest("[data-counsel-save]");
+        if (!saveBtn) return;
+        var card = saveBtn.closest("[data-counsel-id]");
+        if (!card) return;
+        saveCounselNote(card)
+          .then(function () {
+            status("حُفظت متابعة الاستشارة.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
+      });
+    }
+    var counselAlerts = document.getElementById("counselor-alerts-box");
+    if (counselAlerts) {
+      counselAlerts.addEventListener("click", function (event) {
+        var ack = event.target.closest("[data-alert-ack]");
+        if (!ack) return;
+        ackAlert(ack.getAttribute("data-alert-ack"))
+          .then(function () {
+            status("تم استلام التنبيه.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
       });
     }
     document.getElementById("btn-save-identity").addEventListener("click", saveIdentity);

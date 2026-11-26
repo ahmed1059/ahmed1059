@@ -314,8 +314,23 @@ def golden_master(body: MasteryBody, x_portal_token: str = Header(default="")):
                 ),
             )
             xp = card["xp"]
+            try:
+                from .nafs_counsel_boost import apply_golden_boost
+
+                boost = apply_golden_boost(connection, session["student_nid"], body.card_id)
+            except Exception:
+                boost = None
+        else:
+            boost = None
         connection.commit()
-        return {"ok": True, "xp_earned": xp, "card_id": body.card_id}
+        return {
+            "ok": True,
+            "xp_earned": xp,
+            "card_id": body.card_id,
+            "behavior_award": (boost or {}).get("award"),
+            "behavior_totals": (boost or {}).get("behavior_totals"),
+            "cafeteria_voucher": (boost or {}).get("cafeteria_voucher"),
+        }
     finally:
         connection.close()
 
