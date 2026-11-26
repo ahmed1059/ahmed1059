@@ -686,22 +686,28 @@ def progress_pulse(
     limit: int = 7,
     x_portal_token: str = Header(default=""),
 ):
-    """ملخص محاولات الطالب للعبة الحالية من portal_game_runs (المرحلة ٢)."""
+    """ملخص محاولات الطالب: ألعاب التأسيس أو امتداد challenges من السجلات الحقيقية."""
     session = _require_student(x_portal_token)
-    from .nafs_endround_progress import build_progress_pulse, fetch_runs_for_game
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs, is_challenge_game
 
     connection = connect()
     try:
         ensure_on_boot(connection)
-        rows = fetch_runs_for_game(connection, session["student_nid"], game)
+        rows = fetch_runs(connection, session["student_nid"], game)
         pulse = build_progress_pulse(rows, limit=limit)
         g = (game or "words").strip().lower()
-        etec = "3-1-1-2" if g.startswith("mental") else "3-1-1-1"
+        if g.startswith("mental"):
+            etec = "3-1-1-2"
+        elif is_challenge_game(g):
+            etec = "3-1-1-3"
+        else:
+            etec = "3-1-1-1"
+        etec_ar = {"3-1-1-1": "٣-١-١-١", "3-1-1-2": "٣-١-١-٢", "3-1-1-3": "٣-١-١-٣"}.get(etec, "٣-١-١-١")
         return {
             "ok": True,
             "game": g,
             "etec": etec,
-            "etec_ar": "٣-١-١-٢" if etec.endswith("2") else "٣-١-١-١",
+            "etec_ar": etec_ar,
             **pulse,
         }
     finally:
@@ -714,16 +720,16 @@ def endround_context(
     accuracy: float | None = None,
     x_portal_token: str = Header(default=""),
 ):
-    """حزمة المرحلة ٣: أسطورة نافس + فارق القفزة من لوحة التحديات الأسبوعية."""
+    """حزمة المرحلة ٣–٤: أسطورة نافس + فارق القفزة + أعمدة تحدٍ عند الطلب."""
     session = _require_student(x_portal_token)
     from .nafs_endround_legend import build_endround_context
-    from .nafs_endround_progress import build_progress_pulse, fetch_runs_for_game
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs
     from .portal_session_api import _period_start
 
     connection = connect()
     try:
         ensure_on_boot(connection)
-        rows = fetch_runs_for_game(connection, session["student_nid"], game)
+        rows = fetch_runs(connection, session["student_nid"], game)
         pulse = build_progress_pulse(rows, limit=7)
         ctx = build_endround_context(
             connection,
@@ -733,15 +739,15 @@ def endround_context(
             attempts_asc=pulse.get("attempts") or [],
             period_start=_period_start("week"),
         )
-        return {"ok": True, "game": (game or "words").strip().lower(), **ctx}
+        return {"ok": True, "game": (game or "words").strip().lower(), "progress_pulse": pulse, **ctx}
     finally:
         connection.close()
 
 
 def _attach_progress_pulse(connection, student_nid: str, game: str, limit: int = 7) -> dict:
-    from .nafs_endround_progress import build_progress_pulse, fetch_runs_for_game
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs
 
-    rows = fetch_runs_for_game(connection, student_nid, game)
+    rows = fetch_runs(connection, student_nid, game)
     return build_progress_pulse(rows, limit=limit)
 
 

@@ -1,4 +1,5 @@
-# ملخص محاولات ختام الجولة — أعمدة التقدّم من portal_game_runs فقط (بلا اختلاق).
+# ملخص محاولات ختام الجولة — أعمدة التقدّم من portal_game_runs
+# وامتداد المرحلة ٤ لـ portal_challenge_runs (بلا اختلاق).
 from __future__ import annotations
 
 import json
@@ -8,6 +9,12 @@ from typing import Any
 EASTERN = "٠١٢٣٤٥٦٧٨٩"
 DEFAULT_LIMIT = 7
 MAX_LIMIT = 12
+
+# مفاتيح توجيه إلى سجلات الميدان/التحدي
+CHALLENGE_GAME_KEYS = frozenset(
+    {"challenge", "challenges", "tests", "modes", "arena", "mock", "daily", "rescue", "duel", "purge", "national"}
+)
+CHALLENGE_MODE_KEYS = frozenset({"daily", "rescue", "mock", "duel", "purge", "national"})
 
 
 def _e(v: Any) -> str:
@@ -37,13 +44,17 @@ def game_type_clause(game: str) -> tuple[str, tuple]:
     return "game_type = ?", (key,)
 
 
+def is_challenge_game(game: str) -> bool:
+    return (game or "").strip().lower() in CHALLENGE_GAME_KEYS
+
+
 def normalize_attempt(row: dict, *, abs_index: int) -> dict:
-    """صف واحد من portal_game_runs → حقول عرض نظيفة."""
+    """صف موحّد (ألعاب أو تحدٍ) → حقول عرض نظيفة بلا اختلاق total."""
     detail = parse_detail(row.get("detail_json"))
     score = int(row.get("score") or 0)
     total = int(detail.get("total") or 0)
     if total <= 0:
-        # سجلات قديمة بلا total: لا نخترع أسئلة؛ نستخدم score كسقف نسبي لاحقاً
+        # سجلات قديمة بلا total: لا نخترع أسئلة؛ نستخدم score/score_pct كسقف نسبي لاحقاً
         total = 0
     elapsed = detail.get("elapsed")
     try:
@@ -53,6 +64,14 @@ def normalize_attempt(row: dict, *, abs_index: int) -> dict:
     accuracy_pct = None
     if total > 0:
         accuracy_pct = int(round(100.0 * score / total))
+    elif detail.get("score_pct") is not None and detail.get("score_pct") != "":
+        # تحدٍ محفوظ بـ score_pct دون عدّ أسئلة — لا اختلاق total
+        try:
+            accuracy_pct = int(round(float(detail.get("score_pct"))))
+        except (TypeError, ValueError):
+            accuracy_pct = None
+    source = detail.get("source") or "game_runs"
+    mode = detail.get("mode") or ""
     return {
         "id": row.get("id"),
         "abs_index": abs_index,
@@ -63,6 +82,8 @@ def normalize_attempt(row: dict, *, abs_index: int) -> dict:
         "elapsed_sec": elapsed_sec,
         "accuracy_pct": accuracy_pct,
         "tier": detail.get("tier") or "",
+        "mode": mode,
+        "source": source,
         "created_at": row.get("created_at") or "",
     }
 
@@ -160,7 +181,7 @@ def annotate_progress(attempts_asc: list[dict]) -> list[dict]:
 
 def build_progress_pulse(rows_asc: list[dict], *, limit: int = DEFAULT_LIMIT) -> dict[str, Any]:
     """
-    rows_asc: كل محاولات اللعبة للطالب مرتبة من الأقدم للأحدث.
+    rows_asc: كل محاولات اللعبة/التحدي للطالب مرتبة من الأقدم للأحدث.
     نعرض آخر limit محاولات مع الحفاظ على abs_index الحقيقي.
     """
     limit = max(1, min(MAX_LIMIT, int(limit or DEFAULT_LIMIT)))
@@ -169,12 +190,15 @@ def build_progress_pulse(rows_asc: list[dict], *, limit: int = DEFAULT_LIMIT) ->
     ]
     window = normalized[-limit:] if normalized else []
     attempts = annotate_progress(window)
+    source = "challenge_runs" if any(a.get("source") == "challenge_runs" for a in attempts) else "game_runs"
     return {
         "attempts": attempts,
         "count": len(attempts),
         "total_runs": len(normalized),
         "limit": limit,
         "has_history": len(normalized) > 0,
+        "source": source,
+        "title": "تحدياتك" if source == "challenge_runs" else "محاولاتك",
         "labels": {
             "start": "نقطة البداية",
             "best": "أفضل رقم",
@@ -197,5 +221,68 @@ def fetch_runs_for_game(connection, student_nid: str, game: str) -> list[dict]:
     )
     cols = [d[0] for d in cur.description]
     return [dict(zip(cols, row)) for row in cur.fetchall()]
+
+
+def fetch_challenge_runs(
+    connection,
+    student_nid: str,
+    *,
+    mode: str | None = None,
+) -> list[dict]:
+    """
+    امتداد المرحلة ٤: portal_challenge_runs → صفوف متوافقة مع normalize_attempt.
+    لا اختلاق لـ total عند غيابه؛ يعتمد score_pct المحفوظ عند الحاجة.
+    """
+    sql = """
+        SELECT id, mode, correct_count, total_questions, score_pct,
+               streak_best, duration_sec, finished_at, detail_json
+        FROM portal_challenge_runs
+        WHERE student_nid = ? AND finished_at != ''
+    """
+    params: list[Any] = [student_nid]
+    mode_key = (mode or "").strip().lower()
+    if mode_key in CHALLENGE_MODE_KEYS:
+        sql += " AND mode = ?"
+        params.append(mode_key)
+    sql += " ORDER BY datetime(finished_at) ASC, id ASC"
+    cur = connection.execute(sql, tuple(params))
+    rows: list[dict] = []
+    for row in cur.fetchall():
+        detail = parse_detail(row[8])
+        total = int(row[3] or 0)
+        score = int(row[2] or 0)
+        try:
+            duration = float(row[6] or 0)
+        except (TypeError, ValueError):
+            duration = 0.0
+        detail_out = {
+            "total": total if total > 0 else 0,
+            "elapsed": duration if duration > 0 else None,
+            "tier": detail.get("tier") or "",
+            "mode": row[1] or "",
+            "score_pct": float(row[4] or 0),
+            "source": "challenge_runs",
+        }
+        rows.append(
+            {
+                "id": row[0],
+                "game_type": f"challenge:{row[1] or 'run'}",
+                "score": score,
+                "combo_best": int(row[5] or 0),
+                "detail_json": detail_out,
+                "created_at": row[7] or "",
+            }
+        )
+    return rows
+
+
+def fetch_runs(connection, student_nid: str, game: str) -> list[dict]:
+    """توجيه موحّد: أنماط التحدي/الميدان → challenge_runs؛ وإلا ألعاب التأسيس."""
+    key = (game or "").strip().lower()
+    if key in CHALLENGE_MODE_KEYS:
+        return fetch_challenge_runs(connection, student_nid, mode=key)
+    if key in CHALLENGE_GAME_KEYS:
+        return fetch_challenge_runs(connection, student_nid)
+    return fetch_runs_for_game(connection, student_nid, game)
 
 
