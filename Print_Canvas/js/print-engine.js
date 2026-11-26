@@ -201,9 +201,11 @@
       root.AJPrint._lastArm = lastArm;
       root.AJPrint._lastTitle = lastTitle;
       root.AJPrint.show(html, opts);
-      return { ok: true, preview: true };
+      return { ok: true, preview: true, via: "aj-print-stage" };
     }
-    return { ok: false, error: "لوحة المعاينة غير جاهزة." };
+    /* بوابة الطالب وغيرها بلا AJPrint: اطبع عبر الإطار المعزول بدل الصمت */
+    var job = printHtml(html, opts);
+    return { ok: true, preview: false, via: "sandbox-iframe-print", job: job };
   }
 
   function openMasterSheet(payload) {
