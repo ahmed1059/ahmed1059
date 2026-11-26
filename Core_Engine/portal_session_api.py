@@ -1260,25 +1260,6 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
                     finished,
                 ),
             )
-        # نقاط سلوك رمزية عند التميز
-        if score_pct >= 90:
-            connection.execute(
-                """
-                INSERT INTO portal_behavior_points(student_nid, program, points, note, created_at)
-                VALUES (?, 'قدوة', 2, 'تميز في تحدي نافس', ?)
-                """,
-                (session["student_nid"], finished),
-            )
-        if score_pct >= 80 and best_streak >= 3:
-            connection.execute(
-                """
-                INSERT INTO portal_behavior_points(student_nid, program, points, note, created_at)
-                VALUES (?, 'رفق', 1, 'سلسلة إجابات صحيحة متواصلة', ?)
-                """,
-                (session["student_nid"], finished),
-            )
-        behavior_totals = _behavior_totals(connection, session["student_nid"])
-        voucher = _ensure_cafeteria_voucher(connection, session["student_nid"], int(behavior_totals.get("total") or 0))
         talent_flag = None
         risk_flag = None
         try:
@@ -1311,6 +1292,31 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
         except Exception:
             mastery_pack = None
             vault_pack = None
+        # المرحلة ٤: تحفيز موحّد (قدوة/رفق/نخبة/مقصف) بعد تحديث المخزن
+        boost_pack = None
+        try:
+            from .nafs_counsel_boost import apply_challenge_boosts
+
+            boost_pack = apply_challenge_boosts(
+                connection,
+                session["student_nid"],
+                mode=str(row[1] or ""),
+                score_pct=score_pct,
+                best_streak=best_streak,
+                run_id=body.run_id,
+            )
+        except Exception:
+            boost_pack = None
+        if boost_pack:
+            behavior_totals = boost_pack.get("behavior_totals") or _behavior_totals(
+                connection, session["student_nid"]
+            )
+            voucher = boost_pack.get("cafeteria_voucher")
+        else:
+            behavior_totals = _behavior_totals(connection, session["student_nid"])
+            voucher = _ensure_cafeteria_voucher(
+                connection, session["student_nid"], int(behavior_totals.get("total") or 0)
+            )
         connection.commit()
         return {
             "run_id": body.run_id,
@@ -1327,6 +1333,8 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
             "duel": duel_result,
             "behavior_totals": behavior_totals,
             "cafeteria_voucher": voucher,
+            "behavior_awards": (boost_pack or {}).get("awards") or [],
+            "elite": (boost_pack or {}).get("elite"),
             "talent": talent_flag,
             "risk_alert": risk_flag,
         }

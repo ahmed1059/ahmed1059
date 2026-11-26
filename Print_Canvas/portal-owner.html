@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>لوحة مالك المنظومة والدعم السريع</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-owner.css?v=o4">
+  <link rel="stylesheet" href="css/portal-owner.css?v=o5">
 </head>
 <body class="portal-student">
   <div class="portal-shell owner-layout">
@@ -26,6 +26,7 @@
       <button type="button" class="tab is-active" data-owner-panel="panel-owner">إعدادات المالك</button>
       <button type="button" class="tab" data-owner-panel="panel-identity">هوية المدرسة</button>
       <button type="button" class="tab" data-owner-panel="panel-radar">مرصد الموهوبين</button>
+      <button type="button" class="tab" data-owner-panel="panel-counselor">صندوق الموجّه</button>
       <button type="button" class="tab" data-owner-panel="panel-peek">معاينة التعثر</button>
       <button type="button" class="tab" data-owner-panel="panel-clinics">عيادات علاجية</button>
       <button type="button" class="tab" data-owner-panel="panel-rbac">هرم الصلاحيات</button>
@@ -95,6 +96,24 @@
       <div id="radar-talent-box"></div>
       <h3 style="margin-top:14px;color:#0b5e56;font-size:16px;">تنبيهات الموجه الطلابي</h3>
       <div id="radar-alerts-box"></div>
+    </section>
+
+    <section class="portal-card owner-panel" id="panel-counselor">
+      <h2>صندوق عمل الموجّه الطلابي</h2>
+      <p class="portal-empty" style="margin:0 0 10px;">استشارات سرية من بوابة الطالب + مؤشرات التراجع والتعثر الحراري للتدخل المبكر. الأرقام هندية ومؤشرات ETEC باتجاه LTR.</p>
+      <div class="portal-actions" style="margin-bottom:10px;">
+        <button type="button" class="portal-btn" id="btn-counselor-refresh">تحديث الصندوق</button>
+        <button type="button" class="portal-btn secondary" id="btn-boost-rules">قواعد التحفيز</button>
+      </div>
+      <div id="counselor-summary" class="peek-summary" hidden></div>
+      <div id="counselor-legend" class="counselor-legend" hidden></div>
+      <h3 style="color:#0b5e56;font-size:16px;">الاستشارات الواردة</h3>
+      <div id="counselor-inbox-box"></div>
+      <h3 style="margin-top:14px;color:#0b5e56;font-size:16px;">تنبيهات التراجع المبكر</h3>
+      <div id="counselor-alerts-box"></div>
+      <h3 style="margin-top:14px;color:#0b5e56;font-size:16px;">حرارة مخزن الإتقان (≥٢)</h3>
+      <div id="counselor-heat-box"></div>
+      <div id="boost-rules-box" class="counselor-rules" hidden></div>
     </section>
 
     <section class="portal-card owner-panel" id="panel-peek">
@@ -207,6 +226,6 @@
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe12"></script>
   <script src="/cores/print-master-core.js?v=c308"></script>
-  <script src="js/portal-owner.js?v=o4"></script>
+  <script src="js/portal-owner.js?v=o5"></script>
 </body>
 </html>
