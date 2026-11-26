@@ -328,6 +328,49 @@
         : "<p class=\"portal-empty\">لا عيادات علاجية مسندة حالياً.</p>";
     }
 
+    var explainHost = document.getElementById("behavior-explain");
+    if (explainHost) {
+      var explain = home.behavior_explain || null;
+      if (explain && Array.isArray(explain.programs) && explain.programs.length) {
+        explainHost.innerHTML =
+          '<div class="behavior-explain-card">' +
+          '<header class="behavior-explain-head">' +
+          "<strong>" +
+          escapeHtml(explain.title || "قدوة ورفق والمقصف") +
+          "</strong>" +
+          (explain.etec_ar
+            ? '<span dir="ltr" class="etec-code">' +
+              escapeHtml(explain.etec_ar) +
+              "</span>"
+            : "") +
+          "</header>" +
+          (explain.blurb
+            ? '<p class="behavior-explain-blurb">' + escapeHtml(explain.blurb) + "</p>"
+            : "") +
+          '<ul class="behavior-explain-list">' +
+          explain.programs
+            .map(function (row) {
+              return (
+                "<li>" +
+                "<strong>" +
+                escapeHtml(row.title || "") +
+                "</strong>" +
+                "<span>" +
+                escapeHtml(row.meaning || "") +
+                "</span>" +
+                (row.howto
+                  ? "<small>" + escapeHtml(row.howto) + "</small>"
+                  : "") +
+                "</li>"
+              );
+            })
+            .join("") +
+          "</ul></div>";
+      } else {
+        explainHost.innerHTML = "";
+      }
+    }
+
     var totals = home.behavior_totals || {};
     var behTotals = document.getElementById("behavior-totals");
     if (behTotals) {

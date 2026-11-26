@@ -614,8 +614,8 @@
       '<div class="end-round-metric"><span class="lbl">الزمن</span><strong class="foundation-hud-num" dir="ltr">' +
       formatElapsed(elapsed) +
       "</strong></div>" +
-      (combo
-        ? '<div class="end-round-metric"><span class="lbl">Combo</span><strong class="foundation-hud-num" dir="ltr">×' +
+      (Number(combo) > 0
+        ? '<div class="end-round-metric"><span class="lbl">أفضل سلسلة</span><strong class="foundation-hud-num" dir="ltr">×' +
           east(combo) +
           "</strong></div>"
         : "") +
@@ -723,10 +723,14 @@
     timerEl.textContent = east(leftSeconds) + " ث";
   }
 
+  function formatComboHud(combo) {
+    return "سلسلة ×" + east(combo);
+  }
+
   function updateFoundationComboHud(combo) {
     var comboEl = el("foundation-combo");
     if (!comboEl) return;
-    comboEl.textContent = "Combo ×" + east(combo);
+    comboEl.textContent = formatComboHud(combo);
   }
 
   function el(id) {
@@ -1051,8 +1055,8 @@
     host.innerHTML =
       "<div class=\"mini-hud\"><strong>" +
       esc(foundation.label || (words.track === "quran" ? "ألفاظ القرآن الكريم" : "لعبة الكلمات")) +
-      "</strong><span id=\"foundation-combo\" class=\"foundation-hud-num\" dir=\"ltr\">Combo ×" +
-      east(words.combo) +
+      "</strong><span id=\"foundation-combo\" class=\"foundation-hud-num\" dir=\"ltr\">" +
+      formatComboHud(words.combo) +
       "</span><span id=\"foundation-timer\" class=\"foundation-hud-num\" dir=\"ltr\">" +
       east(words.left) +
       " ث</span><span dir=\"ltr\" class=\"etec-code\">٣-١-١-١</span></div>" +
