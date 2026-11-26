@@ -403,6 +403,159 @@
     );
   }
 
+  function mathOrEsc(text) {
+    if (api && typeof api.renderArabicMath === "function") {
+      return api.renderArabicMath(text || "");
+    }
+    return esc(text || "");
+  }
+
+  function shortStem(stem) {
+    var t = String(stem || "").replace(/\s+/g, " ").trim();
+    if (t.length <= 96) return t;
+    return t.slice(0, 94) + "…";
+  }
+
+  function answerDisplay(row, side) {
+    var letter =
+      side === "yours"
+        ? row.choice_ar || row.choice || ""
+        : row.correct_ar || row.correct || "";
+    var label =
+      side === "yours" ? row.choice_label || "" : row.correct_label || "";
+    var parts = [];
+    if (letter) parts.push(String(letter));
+    if (label) parts.push(String(label));
+    return parts.join(" — ") || "—";
+  }
+
+  /** بطاقة مراجعة موحّدة: ملخص + أخطاء أولاً + إجابتك/الصحيحة + تعليل محفوظ فقط */
+  function renderRoundReview(pack) {
+    var items = (pack && pack.review) || [];
+    var summary = (pack && pack.review_summary) || {};
+    if (!items.length && !summary.total && summary.total !== 0) return "";
+    var total = summary.total != null ? Number(summary.total) : items.length;
+    var correctN =
+      summary.correct_count != null
+        ? Number(summary.correct_count)
+        : items.filter(function (r) {
+            return r && r.ok;
+          }).length;
+    var wrongN =
+      summary.wrong_count != null
+        ? Number(summary.wrong_count)
+        : Math.max(0, total - correctN);
+    var totalAr = summary.total_ar || east(total);
+    var correctAr = summary.correct_count_ar || east(correctN);
+    var wrongAr = summary.wrong_count_ar || east(wrongN);
+    var defaultMode = wrongN > 0 ? "wrong" : "all";
+
+    function rowHtml(row) {
+      var rationale = String((row && row.rationale) || "").trim();
+      return (
+        '<li class="round-review-item' +
+        (row && row.ok ? " is-ok" : " is-wrong") +
+        '">' +
+        '<div class="round-review-stem">' +
+        (row && row.ok ? "✓ " : "✗ ") +
+        mathOrEsc(shortStem((row && row.stem) || "")) +
+        "</div>" +
+        '<div class="round-review-pair">' +
+        '<span class="round-review-yours"><em>إجابتك</em> ' +
+        mathOrEsc(answerDisplay(row || {}, "yours")) +
+        "</span>" +
+        '<span class="round-review-correct"><em>الصحيحة</em> ' +
+        mathOrEsc(answerDisplay(row || {}, "correct")) +
+        "</span>" +
+        "</div>" +
+        (rationale
+          ? '<p class="round-review-rationale">' + mathOrEsc(rationale) + "</p>"
+          : "") +
+        "</li>"
+      );
+    }
+
+    var wrongItems = items.filter(function (r) {
+      return r && !r.ok;
+    });
+    var wrongList =
+      wrongItems.length > 0
+        ? wrongItems.map(rowHtml).join("")
+        : '<li class="round-review-empty">لا أخطاء في هذه الجولة.</li>';
+    var allList =
+      items.length > 0
+        ? items.map(rowHtml).join("")
+        : '<li class="round-review-empty">لا بنود مراجعة محفوظة.</li>';
+
+    return (
+      '<section class="round-review-card" data-review-mode="' +
+      defaultMode +
+      '">' +
+      '<header class="round-review-head">' +
+      "<strong>مراجعة الجولة</strong>" +
+      '<div class="round-review-summary" dir="ltr">' +
+      '<span><em>صحيحة</em> ' +
+      esc(correctAr) +
+      "</span>" +
+      '<span><em>أخطاء</em> ' +
+      esc(wrongAr) +
+      "</span>" +
+      '<span><em>المجموع</em> ' +
+      esc(totalAr) +
+      "</span>" +
+      "</div>" +
+      "</header>" +
+      '<div class="round-review-tabs" role="tablist">' +
+      '<button type="button" class="portal-btn secondary' +
+      (defaultMode === "wrong" ? " is-active" : "") +
+      '" data-review-tab="wrong" role="tab" aria-selected="' +
+      (defaultMode === "wrong" ? "true" : "false") +
+      '">الأخطاء (' +
+      esc(wrongAr) +
+      ")</button>" +
+      '<button type="button" class="portal-btn secondary' +
+      (defaultMode === "all" ? " is-active" : "") +
+      '" data-review-tab="all" role="tab" aria-selected="' +
+      (defaultMode === "all" ? "true" : "false") +
+      '">الكل (' +
+      esc(totalAr) +
+      ")</button>" +
+      "</div>" +
+      '<ul class="round-review-list" data-review-panel="wrong"' +
+      (defaultMode === "wrong" ? "" : " hidden") +
+      ">" +
+      wrongList +
+      "</ul>" +
+      '<ul class="round-review-list" data-review-panel="all"' +
+      (defaultMode === "all" ? "" : " hidden") +
+      ">" +
+      allList +
+      "</ul>" +
+      "</section>"
+    );
+  }
+
+  function bindRoundReviewTabs(root) {
+    if (!root) return;
+    var card = root.querySelector(".round-review-card");
+    if (!card || card.getAttribute("data-bound") === "1") return;
+    card.setAttribute("data-bound", "1");
+    card.addEventListener("click", function (event) {
+      var tab = event.target.closest("[data-review-tab]");
+      if (!tab || !card.contains(tab)) return;
+      var mode = tab.getAttribute("data-review-tab") || "wrong";
+      card.setAttribute("data-review-mode", mode);
+      Array.prototype.forEach.call(card.querySelectorAll("[data-review-tab]"), function (btn) {
+        var on = btn.getAttribute("data-review-tab") === mode;
+        btn.classList.toggle("is-active", on);
+        btn.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      Array.prototype.forEach.call(card.querySelectorAll("[data-review-panel]"), function (panel) {
+        panel.hidden = panel.getAttribute("data-review-panel") !== mode;
+      });
+    });
+  }
+
   /** بطاقة ختام الجولة — مرآة + أعمدة + ترتيب + أسطورة نافس */
   function paintEndRound(pack, meta) {
     var host = stageHost();
@@ -430,6 +583,7 @@
     var legendHtml = renderLegendBar(endround.legend);
     var rankHtml = renderRankGap(endround.rank);
     var hintHtml = renderPathHint(endround.path_hint);
+    var reviewHtml = renderRoundReview(pack || {});
 
     host.innerHTML =
       '<article class="end-round-card" aria-live="polite">' +
@@ -480,6 +634,7 @@
       esc(coach.next_step || "أعد الجولة أو جرّب مسارًا أعلى.") +
       "</li>" +
       "</ul>" +
+      reviewHtml +
       pulseHtml +
       legendHtml +
       rankHtml +
@@ -491,6 +646,7 @@
       "</div>" +
       '<p class="end-round-footnote">بيانات حقيقية فقط — يُخفى الترتيب إن قلّ المشاركون.</p>' +
       "</article>";
+    bindRoundReviewTabs(host);
 
     // إن غاب الملخص/السياق من الاستجابة، نجلبهما دون اختلاق
     if (meta && meta.pulseGame && api) {
@@ -756,6 +912,17 @@
                 : "تعادل شريف!"
           );
           if (win && window.PortalStudentFx) window.PortalStudentFx.confetti();
+          paintEndRound(pack, {
+            kind: "live",
+            title: win
+              ? "انتهت المبارزة — فوز"
+              : pack.winner
+                ? "انتهت المبارزة"
+                : "انتهت المبارزة — تعادل",
+            total: Number(pack.total || (live.questions && live.questions.length) || 0),
+            elapsed: Math.max(0, 60 - Number(live.secondsLeft || 0)),
+            etec_ar: pack.etec_ar || "٣-١-١-٤"
+          });
           if (api.refresh) api.refresh();
         }
       })
@@ -1304,7 +1471,17 @@
             id: r.id,
             choice: choice,
             ok: !!ok,
-            kind: (r && r.kind) || "meaning"
+            kind: (r && r.kind) || "meaning",
+            stem: (r && r.prompt) || "",
+            correct: (r && r.correct) || "",
+            choices: (r && r.choices) || null,
+            choice_label:
+              r && r.choices && choice ? String(r.choices[choice] || "") : "",
+            correct_label:
+              r && r.choices && r.correct
+                ? String(r.choices[r.correct] || "")
+                : "",
+            rationale: (r && r.rationale) || ""
           });
           words.combo = ok ? words.combo + 1 : 0;
           if (words.combo > words.best) words.best = words.combo;
@@ -1323,7 +1500,17 @@
             id: item.id,
             choice: ch,
             ok: !!good,
-            tier: mental.tierId || "amateur"
+            tier: mental.tierId || "amateur",
+            stem: (item && item.stem) || "",
+            correct: (item && item.correct) || "",
+            choices: (item && item.choices) || null,
+            choice_label:
+              item && item.choices && ch ? String(item.choices[ch] || "") : "",
+            correct_label:
+              item && item.choices && item.correct
+                ? String(item.choices[item.correct] || "")
+                : "",
+            rationale: (item && item.rationale) || ""
           });
           mental.index += 1;
           if (mental.index >= mental.items.length) finishMental(mental.sessionId);
@@ -1380,6 +1567,9 @@
     renderProgressPulse: renderProgressPulse,
     renderLegendBar: renderLegendBar,
     renderRankGap: renderRankGap,
-    renderPathHint: renderPathHint
+    renderPathHint: renderPathHint,
+    renderRoundReview: renderRoundReview,
+    bindRoundReviewTabs: bindRoundReviewTabs,
+    paintEndRound: paintEndRound
   };
 })();

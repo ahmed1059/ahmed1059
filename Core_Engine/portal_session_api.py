@@ -1250,7 +1250,6 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
         xp = 0
         streak = 0
         best_streak = 0
-        reviewed = []
         for ans in answers:
             qid = str(ans.get("question_id") or "")
             choice = str(ans.get("choice") or "").upper()
@@ -1270,31 +1269,21 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
                 xp += gain
             else:
                 streak = 0
-            q_full = (detail.get("questions_full") or {}).get(qid) or {}
-            stem = q_full.get("stem") or ""
-            rationale = q_full.get("rationale") or ""
-            qid_int = 0
-            try:
-                qid_int = int(qid)
-            except ValueError:
-                qid_int = 0
-            if not stem and qid_int > 0:
-                qrow = connection.execute(
-                    "SELECT stem, rationale, choice_a, choice_b, choice_c, choice_d FROM nafs_question_bank WHERE id = ?",
-                    (qid_int,),
-                ).fetchone()
-                stem = (qrow[0] if qrow else "") or ""
-                rationale = (qrow[1] if qrow else "") or rationale
-            reviewed.append(
-                {
-                    "question_id": qid_int,
-                    "choice": choice,
-                    "correct": expected,
-                    "ok": is_ok,
-                    "rationale": rationale,
-                    "stem": stem,
-                }
-            )
+        from .nafs_endround_review import review_from_challenge_answers
+
+        def _lookup_bank(qid_int: int):
+            return connection.execute(
+                "SELECT stem, rationale, choice_a, choice_b, choice_c, choice_d FROM nafs_question_bank WHERE id = ?",
+                (qid_int,),
+            ).fetchone()
+
+        review_pack = review_from_challenge_answers(
+            answers,
+            correct_map=correct_map,
+            questions_full=detail.get("questions_full") or {},
+            lookup_row=_lookup_bank,
+        )
+        reviewed = review_pack.get("items") or []
         total = max(int(row[3] or len(answers) or 1), 1)
         score_pct = round(100.0 * correct_count / total, 1)
         prev = connection.execute(
@@ -1309,6 +1298,14 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
         badge = _badge_for(score_pct, prev_best)
         detail["badge"] = badge
         detail["review"] = reviewed
+        detail["review_summary"] = {
+            "total": review_pack.get("total"),
+            "correct_count": review_pack.get("correct_count"),
+            "wrong_count": review_pack.get("wrong_count"),
+            "total_ar": review_pack.get("total_ar"),
+            "correct_count_ar": review_pack.get("correct_count_ar"),
+            "wrong_count_ar": review_pack.get("wrong_count_ar"),
+        }
         ghost = detail.get("ghost") or {}
         duel_result = None
         if row[1] == MODE_DUEL and ghost:
@@ -1463,6 +1460,11 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
             "streak_best": best_streak,
             "badge": badge,
             "review": reviewed,
+            "review_summary": detail.get("review_summary") or {
+                "total": total,
+                "correct_count": correct_count,
+                "wrong_count": max(0, total - correct_count),
+            },
             "mastery": mastery_pack,
             "error_vault": vault_pack,
             "duel": duel_result,

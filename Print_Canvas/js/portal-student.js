@@ -921,6 +921,10 @@
           typeof gamesUi.renderPathHint === "function"
             ? gamesUi.renderPathHint(endround.path_hint)
             : "";
+        var reviewHtml =
+          typeof gamesUi.renderRoundReview === "function"
+            ? gamesUi.renderRoundReview(result)
+            : "";
         box.innerHTML =
           "<div class=\"result-box end-round-card\"><strong>انتهت الجولة</strong>" +
           (tierLabel
@@ -946,27 +950,15 @@
               escapeHtml(result.coaching.message) +
               "</p>"
             : "") +
+          reviewHtml +
           "</div>" +
           pulseHtml +
           legendHtml +
           rankHtml +
-          hintHtml +
-          "<ul class=\"portal-list\">" +
-          (result.review || [])
-            .slice(0, 8)
-            .map(function (row) {
-              return (
-                "<li>" +
-                (row.ok ? "✓" : "✗") +
-                " " +
-                renderArabicMath(row.stem || "") +
-                "<br><small>" +
-                renderArabicMath(row.rationale || "") +
-                "</small></li>"
-              );
-            })
-            .join("") +
-          "</ul>";
+          hintHtml;
+        if (typeof gamesUi.bindRoundReviewTabs === "function") {
+          gamesUi.bindRoundReviewTabs(box);
+        }
         document.getElementById("arena-stage").classList.remove("is-open");
         document.body.classList.remove("arena-playing");
         var hubDone = document.getElementById("arena-hub");
