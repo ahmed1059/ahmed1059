@@ -39,6 +39,12 @@
     stopMentalTimer();
     foundation.activeKey = "";
     foundation.sessionId += 1;
+    var host = document.getElementById("mini-game-stage");
+    if (host) {
+      host.removeAttribute("data-active-game");
+      host.removeAttribute("data-session");
+      host.removeAttribute("data-qid");
+    }
   }
 
   function beginFoundationSession(key) {
@@ -51,6 +57,19 @@
 
   function isFoundationSession(key, sessionId) {
     return foundation.activeKey === key && foundation.sessionId === sessionId;
+  }
+
+  /** نبضة العداد فقط — دون إعادة رسم السؤال أو تبديل اللعبة */
+  function updateFoundationTimerHud(leftSeconds) {
+    var timerEl = el("foundation-timer");
+    if (!timerEl) return;
+    timerEl.textContent = east(leftSeconds) + " ث";
+  }
+
+  function updateFoundationComboHud(combo) {
+    var comboEl = el("foundation-combo");
+    if (!comboEl) return;
+    comboEl.textContent = "Combo ×" + east(combo);
   }
 
   function el(id) {
@@ -357,12 +376,15 @@
     if (!host || !r) return;
     host.hidden = false;
     var kindClass = r.kind === "synonym" ? "kind-syn" : r.kind === "antonym" ? "kind-ant" : "kind-mean";
+    host.setAttribute("data-active-game", "words");
+    host.setAttribute("data-session", String(words.sessionId || foundation.sessionId));
+    host.setAttribute("data-qid", String(r.id || words.index));
     host.innerHTML =
       "<div class=\"mini-hud\"><strong>" +
       (words.track === "quran" ? "ألفاظ القرآن الكريم" : "لعبة الكلمات") +
-      "</strong><span>Combo ×" +
+      "</strong><span id=\"foundation-combo\">Combo ×" +
       east(words.combo) +
-      "</span><span>" +
+      "</span><span id=\"foundation-timer\">" +
       east(words.left) +
       " ث</span><span dir=\"ltr\" class=\"etec-code\">٣-١-١-١</span></div>" +
       "<div class=\"word-card " +
@@ -455,7 +477,7 @@
             return;
           }
           words.left -= 1;
-          paintWords();
+          updateFoundationTimerHud(words.left);
           if (words.left <= 0) finishWords(sessionId);
         }, 1000);
         paintWords();
@@ -474,12 +496,15 @@
     var item = mental.items[mental.index];
     if (!host || !item) return;
     host.hidden = false;
+    host.setAttribute("data-active-game", "mental");
+    host.setAttribute("data-session", String(mental.sessionId || foundation.sessionId));
+    host.setAttribute("data-qid", String(item.id || mental.index));
     host.innerHTML =
       "<div class=\"mini-hud\"><strong>حساب ذهني · مستوى " +
       east(mental.level) +
-      "</strong><span>" +
+      "</strong><span id=\"foundation-timer\">" +
       east(mental.left) +
-      " ث</span></div>" +
+      " ث</span><span dir=\"ltr\" class=\"etec-code\">٣-١-١-٢</span></div>" +
       "<p class=\"q-stem mental-stem\">" +
       esc(item.stem || "") +
       "</p><div class=\"q-choices\">" +
@@ -567,7 +592,7 @@
             return;
           }
           mental.left -= 1;
-          paintMental();
+          updateFoundationTimerHud(mental.left);
           if (mental.left <= 0) finishMental(sessionId);
         }, 1000);
         paintMental();
