@@ -485,6 +485,25 @@
     }
     var homeMock = el("btn-home-mock");
     if (homeMock) homeMock.addEventListener("click", requestHomeMock);
+    var answerSheetBtn = el("btn-nafs-answer-sheet");
+    if (answerSheetBtn) {
+      answerSheetBtn.addEventListener("click", function () {
+        api.status("جارٍ تجهيز نموذج الإجابة التدريبي…");
+        api
+          .fetchJson("/api/portal/answer-sheet-training", { headers: api.authHeaders(), cache: "no-store" })
+          .then(function (pack) {
+            if (window.NafsWaveCAnswerSheet && typeof window.NafsWaveCAnswerSheet.openPrint === "function") {
+              window.NafsWaveCAnswerSheet.openPrint(pack);
+              api.status("نموذج الإجابة واستبانة الطالب جاهزان للطباعة/التدريب.");
+              return;
+            }
+            api.status("وحدة النموذج غير محمّلة.", true);
+          })
+          .catch(function (err) {
+            api.status(err.message || "تعذر تجهيز النموذج.", true);
+          });
+      });
+    }
 
     document.body.addEventListener("click", function (event) {
       if (!el("readalong-stage") || el("readalong-stage").hidden) return;

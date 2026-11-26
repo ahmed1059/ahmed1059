@@ -18,7 +18,8 @@
     weekGoal: null,
     etecArchive: null,
     enrichBridge: null,
-    honorReport: null
+    honorReport: null,
+    answerSheetPack: null
   };
 
   function formatEtecLtr(code) {
@@ -1835,6 +1836,58 @@
     return page1 + page2 + page3 + page4 + page5 + page6 + page7;
   }
 
+  function mountAnswerSheetTraining(pack) {
+    var host = document.getElementById("aj-nafs-answer-sheet-host");
+    if (!host) return;
+    state.answerSheetPack = pack || null;
+    if (!pack) {
+      host.innerHTML = "<p class=\"aj-lede\">تعذر تحميل نموذج الإجابة التدريبي.</p>";
+      return;
+    }
+    if (window.NafsWaveCAnswerSheet && typeof window.NafsWaveCAnswerSheet.mountInteractive === "function") {
+      window.NafsWaveCAnswerSheet.mountInteractive(host, pack);
+      return;
+    }
+    host.innerHTML =
+      "<p class=\"aj-lede\">وحدة العرض غير محمّلة. استخدم زر الطباعة بعد تحديث الصفحة.</p>";
+  }
+
+  function loadAnswerSheetTraining() {
+    return fetchJson(API + "/answer-sheet-training", { headers: authHeaders(), cache: "no-store" })
+      .then(function (pack) {
+        mountAnswerSheetTraining(pack);
+        return pack;
+      })
+      .catch(function (error) {
+        mountAnswerSheetTraining(null);
+        throw error;
+      });
+  }
+
+  function printAnswerSheetTraining() {
+    var pack = state.answerSheetPack;
+    function open(p) {
+      if (window.NafsWaveCAnswerSheet && typeof window.NafsWaveCAnswerSheet.openPrint === "function") {
+        window.NafsWaveCAnswerSheet.openPrint(p);
+        status("معاينة نموذج الإجابة واستبانة الطالب (١-٤…٤-٤) جاهزة.");
+        return;
+      }
+      status("وحدة نموذج الإجابة غير محمّلة.", true);
+    }
+    if (pack) {
+      open(pack);
+      return;
+    }
+    status("جارٍ تجهيز نموذج الإجابة التدريبي…");
+    loadAnswerSheetTraining()
+      .then(function (p) {
+        open(p);
+      })
+      .catch(function (error) {
+        status((error && error.message) || "تعذر تجهيز نموذج الإجابة.", true);
+      });
+  }
+
   function printIntegratedRecord() {
     if (!window.PrintEngine || typeof window.PrintEngine.open !== "function") {
       status("محرك الطباعة الموحد غير محمّل.", true);
@@ -1897,6 +1950,9 @@
       }),
       fetchJson(API + "/enrich-bridge", { headers: authHeaders(), cache: "no-store" }).catch(function () {
         return null;
+      }),
+      fetchJson(API + "/answer-sheet-training", { headers: authHeaders(), cache: "no-store" }).catch(function () {
+        return null;
       })
     ])
       .then(function (parts) {
@@ -1907,8 +1963,10 @@
         state.weekGoal = parts[5] || parts[4] || null;
         state.etecArchive = parts[6] || null;
         state.enrichBridge = parts[7] || null;
+        state.answerSheetPack = parts[8] || null;
         state.whatIf = { math: null, reading: null, science: null };
         paint();
+        mountAnswerSheetTraining(state.answerSheetPack);
         var meta = state.pack.meta || {};
         var tt = state.pack.timetable || {};
         var counts = (state.questions && state.questions.counts) || {};
@@ -1963,6 +2021,10 @@
       }
       if (t.closest("#aj-nafs-print-omr")) {
         printNationalOmr();
+        return;
+      }
+      if (t.closest("#aj-nafs-print-answer-sheet")) {
+        printAnswerSheetTraining();
         return;
       }
       if (t.closest("#aj-nafs-docx-weekly")) {
@@ -2043,6 +2105,8 @@
     load: load,
     refresh: refresh,
     printRemedialPlan: printRemedialPlan,
-    printIntegratedRecord: printIntegratedRecord
+    printIntegratedRecord: printIntegratedRecord,
+    printAnswerSheetTraining: printAnswerSheetTraining,
+    loadAnswerSheetTraining: loadAnswerSheetTraining
   };
 })();

@@ -1,0 +1,474 @@
+/* موجة ج: نموذج إجابة نافس + استبانة الطالب — Sky Blue / A4 */
+:root {
+  --nafs-c-sky: #4aa3d9;
+  --nafs-c-sky-light: #d7eef8;
+  --nafs-c-sky-mid: #7ec4e8;
+  --nafs-c-ink: #12324a;
+  --nafs-c-mark: #111111;
+  --nafs-c-banner: #e67e22;
+  --nafs-c-line: #9ccfe8;
+}
+
+.nafs-c-host {
+  direction: rtl;
+  color: var(--nafs-c-ink);
+  font-family: "Tajawal", "Segoe UI", Tahoma, sans-serif;
+}
+
+.nafs-c-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 16px;
+}
+
+.nafs-c-page {
+  position: relative;
+  width: 210mm;
+  min-height: 297mm;
+  max-width: 100%;
+  margin: 0 auto 18px;
+  padding: 10mm 12mm 12mm 14mm;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid var(--nafs-c-sky-mid);
+  box-shadow: 0 1px 0 rgba(18, 50, 74, 0.06);
+  overflow: hidden;
+}
+
+.nafs-c-page + .nafs-c-page {
+  page-break-before: always;
+}
+
+.nafs-c-timing {
+  position: absolute;
+  top: 8mm;
+  bottom: 8mm;
+  width: 3.2mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.nafs-c-timing.is-start {
+  inset-inline-start: 3mm;
+}
+
+.nafs-c-timing.is-end {
+  inset-inline-end: 3mm;
+}
+
+.nafs-c-timing span {
+  display: block;
+  height: 3.6mm;
+  background: var(--nafs-c-mark);
+  border-radius: 0.4mm;
+}
+
+.nafs-c-banner {
+  background: var(--nafs-c-banner);
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+.nafs-c-banner .etec-ltr,
+.nafs-c-etec-row .etec-ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.nafs-c-etec-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+
+.nafs-c-etec-row .nafs-c-page-box {
+  border: 1px solid var(--nafs-c-ink);
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #fff;
+  white-space: nowrap;
+}
+
+.nafs-c-sky-bar {
+  background: var(--nafs-c-sky);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  text-align: center;
+  padding: 5px 8px;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+.nafs-c-id-box {
+  border: 1.5px solid var(--nafs-c-sky);
+  background: linear-gradient(180deg, #fff 0%, var(--nafs-c-sky-light) 140%);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 6px 12px;
+  font-size: 12px;
+}
+
+.nafs-c-id-box label {
+  display: block;
+  color: #5c675f;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.nafs-c-id-box .nafs-c-field {
+  min-height: 22px;
+  border-bottom: 1px dashed var(--nafs-c-line);
+  font-weight: 600;
+}
+
+.nafs-c-section-grid {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  align-items: center;
+}
+
+.nafs-c-chip {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--nafs-c-sky);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  background: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.nafs-c-chip.is-on,
+.nafs-c-bubble.is-on {
+  background: var(--nafs-c-sky);
+  color: #fff;
+}
+
+.nafs-c-grids {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.nafs-c-digit-grid {
+  border: 1.5px solid var(--nafs-c-sky);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.nafs-c-digit-grid h4 {
+  margin: 0;
+  background: var(--nafs-c-sky);
+  color: #fff;
+  font-size: 11px;
+  text-align: center;
+  padding: 4px 6px;
+}
+
+.nafs-c-digit-grid .nafs-c-en {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-size: 9px;
+  opacity: 0.9;
+}
+
+.nafs-c-digit-body {
+  display: grid;
+  gap: 0;
+  padding: 4px;
+}
+
+.nafs-c-digit-col {
+  display: grid;
+  grid-template-rows: repeat(10, 14px);
+  gap: 1px;
+  justify-items: center;
+}
+
+.nafs-c-digit-wrap {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+}
+
+.nafs-c-digit-wrap .nafs-c-bubble {
+  width: 12px;
+  height: 12px;
+  font-size: 8px;
+}
+
+.nafs-c-answer-block {
+  border: 1.5px solid var(--nafs-c-sky);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.nafs-c-answer-cols {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  direction: rtl;
+  gap: 0;
+}
+
+.nafs-c-answer-col {
+  border-inline-start: 1px solid var(--nafs-c-line);
+  padding: 4px 3px 6px;
+}
+
+.nafs-c-answer-col:first-child {
+  border-inline-start: 0;
+}
+
+.nafs-c-col-head {
+  display: grid;
+  grid-template-columns: 18px repeat(4, 1fr);
+  gap: 1px;
+  background: var(--nafs-c-sky-light);
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  padding: 2px 0;
+  margin-bottom: 2px;
+}
+
+.nafs-c-qrow {
+  display: grid;
+  grid-template-columns: 18px repeat(4, 1fr);
+  gap: 1px;
+  align-items: center;
+  border-bottom: 1px solid #e8f4fb;
+  min-height: 16px;
+  padding: 1px 0;
+}
+
+.nafs-c-qnum {
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.nafs-c-bubble {
+  width: 13px;
+  height: 13px;
+  margin: 0 auto;
+  border: 1.4px solid var(--nafs-c-sky);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: var(--nafs-c-sky);
+  background: #fff;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+}
+
+.nafs-c-bubble:focus-visible {
+  outline: 2px solid var(--nafs-c-banner);
+  outline-offset: 1px;
+}
+
+.nafs-c-shade-guide {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 10px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.nafs-c-shade-guide .ok {
+  border: 1px solid var(--nafs-c-sky);
+  background: var(--nafs-c-sky-light);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.nafs-c-shade-guide .bad {
+  opacity: 0.75;
+}
+
+.nafs-c-vlabel {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  position: absolute;
+  inset-inline-end: 5mm;
+  top: 40mm;
+  font-size: 10px;
+  color: var(--nafs-c-sky);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.nafs-c-q-item {
+  border: 1px solid var(--nafs-c-line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  background: #fff;
+}
+
+.nafs-c-q-item .nafs-c-q-head {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.nafs-c-q-item .nafs-c-badge {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--nafs-c-sky);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.nafs-c-stem-slot {
+  flex: 1;
+  min-height: 28px;
+  border: 1px dashed var(--nafs-c-line);
+  border-radius: 4px;
+  background: var(--nafs-c-sky-light);
+  padding: 4px 8px;
+  font-size: 11px;
+  color: #5c675f;
+}
+
+.nafs-c-multi-banner {
+  background: var(--nafs-c-sky);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.nafs-c-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.nafs-c-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.nafs-c-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.nafs-c-matrix th,
+.nafs-c-matrix td {
+  border: 1px solid var(--nafs-c-line);
+  text-align: center;
+  padding: 4px;
+  background: #fff;
+}
+
+.nafs-c-matrix th {
+  background: var(--nafs-c-sky-light);
+  color: var(--nafs-c-ink);
+}
+
+.nafs-c-matrix td:first-child {
+  background: #f7fbfd;
+  width: 28px;
+  font-weight: 700;
+}
+
+.nafs-c-closing {
+  margin-top: 14px;
+  border: 1.5px solid var(--nafs-c-sky);
+  background: var(--nafs-c-sky-light);
+  border-radius: 6px;
+  padding: 10px 12px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.nafs-c-note {
+  font-size: 11px;
+  color: #5c675f;
+  margin: 0 0 8px;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  body.nafs-c-print,
+  body.nafs-c-print * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .nafs-c-toolbar,
+  .aj-nafs-toolbar,
+  .portal-actions {
+    display: none !important;
+  }
+
+  .nafs-c-page {
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .nafs-c-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  .nafs-c-bubble,
+  .nafs-c-chip {
+    cursor: default;
+  }
+}
