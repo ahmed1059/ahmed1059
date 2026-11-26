@@ -134,12 +134,16 @@
     var home = state.home || {};
     var student = home.student || {};
     document.getElementById("portal-name").textContent = student.name || "طالب";
+    var maskedId =
+      window.NationalIdMask && typeof window.NationalIdMask.mask === "function"
+        ? window.NationalIdMask.mask(student.national_id || "", 3)
+        : toEastern(String(student.national_id || "").replace(/\d(?=\d{3})/g, "*"));
     document.getElementById("portal-meta").textContent =
       (student.grade || "—") +
       " · فصل " +
       toEastern(student.section || "—") +
-      " · هوية " +
-      toEastern(student.national_id || "—");
+      " · هوية: " +
+      maskedId;
     document.getElementById("portal-xp").textContent = toEastern(home.xp || 0) + " XP";
 
     var modes = home.modes || {};

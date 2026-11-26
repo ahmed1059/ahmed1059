@@ -422,3 +422,32 @@ body.login-opening .login-message {
 .portal-gate-panel.is-active {
   display: block;
 }
+
+.nid-mask-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nid-mask-wrap input {
+  flex: 1;
+}
+
+.nid-eye-btn {
+  border: 1px solid #c9d7d3;
+  background: #fff;
+  color: #0b5e56;
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.nid-eye-btn.is-on {
+  background: #0b5e56;
+  color: #fff;
+  border-color: #0b5e56;
+}

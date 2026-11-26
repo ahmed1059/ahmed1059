@@ -53,7 +53,7 @@
                         <p>أدخل رقم السجل المدني وكلمة المرور.</p>
 
                         <label for="national-id">رقم السجل المدني</label>
-                        <input id="national-id" name="national_id" type="text" inputmode="numeric" autocomplete="username" placeholder="أدخل رقم السجل المدني">
+                        <input id="national-id" name="national-id-masked" type="text" inputmode="numeric" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" placeholder="يُعرض مقنّعاً (آخر ٣ أرقام)">
 
                         <label for="access-key">كلمة المرور</label>
                         <input id="access-key" name="access-key" class="password-masked" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" placeholder="كلمة المرور" readonly>
@@ -81,7 +81,7 @@
                     <form id="student-login-form" class="portal-gate-panel" data-gate-panel="student" autocomplete="off">
                         <p>ادخل برقم الهوية الوطنية وآخر ٤ أرقام من جوال ولي الأمر، أو بمسح/إدخال رمز QR Pass.</p>
                         <label for="student-nid">رقم الهوية الوطنية</label>
-                        <input id="student-nid" name="student_nid" type="text" inputmode="numeric" autocomplete="off" placeholder="هوية الطالب">
+                        <input id="student-nid" name="student-nid-masked" type="text" inputmode="numeric" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" placeholder="يُعرض مقنّعاً (آخر ٣ أرقام)">
                         <label for="student-last4">آخر ٤ أرقام من جوال ولي الأمر</label>
                         <input id="student-last4" name="student_last4" type="text" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="مثال: ٢٦١٩">
                         <div class="opening-or"><span>أو</span></div>
@@ -140,8 +140,9 @@
             </div>
         </section>
     </div>
-    <script src="js/login.js?v=open8"></script>
-    <script src="js/portal-login.js?v=p1"></script>
+    <script src="js/national-id-mask.js?v=m1"></script>
+    <script src="js/login.js?v=open9"></script>
+    <script src="js/portal-login.js?v=p2"></script>
 <script src="js/page-nav.js?v=nav1"></script>
 </body>
 </html>

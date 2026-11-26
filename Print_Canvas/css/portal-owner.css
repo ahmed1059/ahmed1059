@@ -1,0 +1,65 @@
+@import url("portal-student.css?v=p2");
+
+.owner-layout {
+  display: grid;
+  gap: 14px;
+}
+
+.owner-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.owner-panel { display: none; }
+.owner-panel.is-active { display: block; }
+
+.owner-form {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.owner-form label {
+  font-size: 13px;
+  color: #5c675f;
+}
+
+.owner-form input,
+.owner-form select,
+.owner-form textarea {
+  border: 1px solid #c9d7d3;
+  border-radius: 8px;
+  padding: 9px 10px;
+  font: inherit;
+}
+
+.owner-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.owner-table th,
+.owner-table td {
+  border: 1px solid #c9d7d3;
+  padding: 8px;
+  text-align: right;
+}
+
+.owner-table th {
+  background: #f3f7f6;
+  color: #0b5e56;
+}
+
+.owner-print {
+  border: 2px solid #005a53;
+  padding: 16px;
+  background: #fff;
+  margin-top: 12px;
+}
+
+.owner-print h3 {
+  color: #0b5e56;
+  margin: 0 0 8px;
+}
