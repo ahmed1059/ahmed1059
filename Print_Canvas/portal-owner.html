@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لوحة مالك المنظومة والدعم السريع</title>
+  <link rel="stylesheet" href="css/fonts.css?v=font1">
+  <link rel="stylesheet" href="css/portal-owner.css?v=o1">
+</head>
+<body class="portal-student">
+  <div class="portal-shell owner-layout">
+    <header class="portal-top">
+      <div class="portal-brand">
+        <h1 id="owner-hero">أ. أحمد علي هيازع الشهري</h1>
+        <p id="owner-title">معلم الرياضيات — مالك المنظومة ومطوّرها</p>
+        <p id="owner-nid-masked" style="color:#5c675f;font-size:13px;"></p>
+      </div>
+      <div class="portal-actions">
+        <a class="portal-btn secondary" href="login.html">خروج</a>
+        <a class="portal-btn secondary" href="app-journey.html">رحلة المدير</a>
+      </div>
+    </header>
+    <p class="portal-status" id="owner-status"></p>
+
+    <nav class="owner-nav" aria-label="أقسام اللوحة">
+      <button type="button" class="tab is-active" data-owner-panel="panel-owner">إعدادات المالك</button>
+      <button type="button" class="tab" data-owner-panel="panel-rbac">هرم الصلاحيات</button>
+      <button type="button" class="tab" data-owner-panel="panel-support">الدعم السريع</button>
+      <button type="button" class="tab" data-owner-panel="panel-tools">ورقة علاجية / نبض صباحي</button>
+      <button type="button" class="tab" data-owner-panel="panel-audit">سجل التدقيق</button>
+    </nav>
+
+    <section class="portal-card owner-panel is-active" id="panel-owner">
+      <h2>تثبيت مالك المنظومة وتوقيعات A4</h2>
+      <div class="owner-form">
+        <label>اسم المالك</label>
+        <input id="f-owner-name">
+        <label>الصفة</label>
+        <input id="f-owner-title">
+        <label>مسار توقيع الوكيل (A4)</label>
+        <input id="f-sign-vice">
+        <label>مسار توقيع المدير (A4)</label>
+        <input id="f-sign-manager">
+        <label>مسار توقيع المالك (A4)</label>
+        <input id="f-sign-owner">
+        <button type="button" class="portal-btn" id="btn-save-settings">حفظ الإعدادات</button>
+      </div>
+    </section>
+
+    <section class="portal-card owner-panel" id="panel-rbac">
+      <h2>الهرم الرباعي للصلاحيات (قابل للتعميم على عدة مدارس)</h2>
+      <ul class="portal-list" id="rbac-pyramid"></ul>
+      <div class="owner-form">
+        <label>هوية المنسوب (مقنّعة)</label>
+        <input id="rbac-nid" autocomplete="off">
+        <label>المستوى</label>
+        <select id="rbac-level">
+          <option value="0">٠ — مالك المنظومة</option>
+          <option value="1">١ — قيادة المدرسة</option>
+          <option value="2" selected>٢ — المعلمون والموجهون</option>
+          <option value="3">٣ — الطالب / ولي الأمر</option>
+        </select>
+        <label>التسمية</label>
+        <input id="rbac-label" placeholder="مثال: وكيل الشؤون التعليمية">
+        <button type="button" class="portal-btn" id="btn-rbac">تعيين المستوى</button>
+      </div>
+      <div id="rbac-table" style="margin-top:12px;"></div>
+    </section>
+
+    <section class="portal-card owner-panel" id="panel-support">
+      <h2>الدعم السريع لحسابات الطلاب وأولياء الأمور</h2>
+      <div class="owner-form">
+        <label>بحث (اسم / هوية / جوال)</label>
+        <div class="portal-actions">
+          <input id="support-q" style="flex:1;padding:9px;border:1px solid #c9d7d3;border-radius:8px;">
+          <button type="button" class="portal-btn" id="btn-support-search">بحث</button>
+        </div>
+      </div>
+      <div id="support-results" style="margin-top:10px;"></div>
+      <div class="owner-form" style="margin-top:14px;">
+        <label>تعديل جوال ولي الأمر (مستوى ٠ و١)</label>
+        <input id="sup-nid" placeholder="هوية الطالب" autocomplete="off">
+        <input id="sup-phone" placeholder="الجوال الجديد">
+        <button type="button" class="portal-btn" id="btn-phone">حفظ الجوال</button>
+        <label>إصدار OTP ليوم واحد لمعلم</label>
+        <input id="otp-nid" placeholder="هوية المعلم" autocomplete="off">
+        <button type="button" class="portal-btn secondary" id="btn-otp">إصدار الرمز</button>
+        <p id="otp-out" class="portal-empty"></p>
+        <label>طباعة بطاقة QR Pass A4</label>
+        <input id="qr-nid" placeholder="هوية الطالب" autocomplete="off">
+        <button type="button" class="portal-btn secondary" id="btn-qr">توليد البطاقة</button>
+        <div id="qr-preview"></div>
+      </div>
+    </section>
+
+    <section class="portal-card owner-panel" id="panel-tools">
+      <h2>مولّد ورقة العمل العلاجية + نبض المدرسة الصباحي</h2>
+      <div class="owner-form">
+        <label>المجال</label>
+        <select id="ws-domain">
+          <option value="math">رياضيات</option>
+          <option value="reading">قراءة</option>
+          <option value="science">علوم</option>
+        </select>
+        <label>المهارة (اختياري)</label>
+        <input id="ws-skill" placeholder="مثال: الجبر">
+        <label>هويات الطلاب (مفصولة بفاصلة)</label>
+        <input id="ws-nids">
+        <button type="button" class="portal-btn" id="btn-ws">توليد ورقة ٥ أسئلة A4</button>
+        <div id="ws-preview"></div>
+        <button type="button" class="portal-btn secondary" id="btn-brief">تحديث نبض المدرسة الصباحي</button>
+        <div id="brief-box"></div>
+      </div>
+    </section>
+
+    <section class="portal-card owner-panel" id="panel-audit">
+      <h2>سجل التدقيق (Audit Log)</h2>
+      <button type="button" class="portal-btn" id="btn-audit">تحديث السجل</button>
+      <div id="audit-box" style="margin-top:10px;"></div>
+    </section>
+  </div>
+  <script src="js/national-id-mask.js?v=m1"></script>
+  <script src="js/print-engine.js?v=pe12"></script>
+  <script src="/cores/print-master-core.js?v=c308"></script>
+  <script src="js/portal-owner.js?v=o1"></script>
+</body>
+</html>

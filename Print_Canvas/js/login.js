@@ -30,6 +30,21 @@ function armMaskedSecret(input) {
 
 document.querySelectorAll(".password-masked").forEach(armMaskedSecret);
 
+if (window.NationalIdMask && document.getElementById("national-id")) {
+    window.NationalIdMask.arm(document.getElementById("national-id"), {
+        realName: "national_id_real",
+        tail: 3
+    });
+}
+
+function readNationalId() {
+    var input = document.getElementById("national-id");
+    if (input && typeof input._nidGet === "function") {
+        return input._nidGet();
+    }
+    return cleanId(input && input.value);
+}
+
 (function () {
     var params = new URLSearchParams(window.location.search);
     if (params.get("reason") === "expired") {
@@ -171,14 +186,19 @@ function showRoles(person) {
 
 document.getElementById("staff-search").addEventListener("change", function () {
     if (this.value) {
-        document.getElementById("national-id").value = this.value;
+        var nidInput = document.getElementById("national-id");
+        if (nidInput && typeof nidInput._nidSet === "function") {
+            nidInput._nidSet(this.value);
+        } else {
+            nidInput.value = this.value;
+        }
     }
 });
 
 document.getElementById("login-form").addEventListener("submit", function (event) {
     event.preventDefault();
     var message = document.getElementById("login-message");
-    var identity = cleanId(document.getElementById("national-id").value) || document.getElementById("staff-search").value;
+    var identity = readNationalId() || document.getElementById("staff-search").value;
     var password = document.getElementById("access-key").value;
     document.getElementById("role-choice").hidden = true;
     if (!identity || !password) {

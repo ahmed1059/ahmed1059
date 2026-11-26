@@ -19,12 +19,23 @@
     });
   });
 
+  if (window.NationalIdMask && document.getElementById("student-nid")) {
+    window.NationalIdMask.arm(document.getElementById("student-nid"), {
+      realName: "student_nid_real",
+      tail: 3
+    });
+  }
+
   var studentForm = document.getElementById("student-login-form");
   if (studentForm) {
     studentForm.addEventListener("submit", function (event) {
       event.preventDefault();
       var message = document.getElementById("student-login-message");
-      var nid = (document.getElementById("student-nid").value || "").replace(/\D/g, "");
+      var nidInput = document.getElementById("student-nid");
+      var nid =
+        nidInput && typeof nidInput._nidGet === "function"
+          ? nidInput._nidGet()
+          : (nidInput.value || "").replace(/\D/g, "");
       var last4 = (document.getElementById("student-last4").value || "").replace(/\D/g, "").slice(-4);
       var qr = (document.getElementById("student-qr").value || "").trim();
       if (!qr && (!nid || last4.length !== 4)) {

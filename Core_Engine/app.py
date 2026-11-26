@@ -228,6 +228,11 @@ def portal_parent_page():
     return FileResponse(CANVAS_DIR / "portal-parent.html")
 
 
+@app.get("/portal-owner.html")
+def portal_owner_page():
+    return FileResponse(CANVAS_DIR / "portal-owner.html")
+
+
 class LoginBody(BaseModel):
     national_id: str = ""
     password: str = ""
@@ -446,6 +451,10 @@ app.include_router(nafs_session_router)
 from .portal_session_api import router as portal_session_router
 
 app.include_router(portal_session_router)
+
+from .portal_owner_api import router as portal_owner_router
+
+app.include_router(portal_owner_router)
 
 
 @app.get("/api/users")
