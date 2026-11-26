@@ -24,6 +24,8 @@
 
     <nav class="owner-nav" aria-label="أقسام اللوحة">
       <button type="button" class="tab is-active" data-owner-panel="panel-owner">إعدادات المالك</button>
+      <button type="button" class="tab" data-owner-panel="panel-identity">هوية المدرسة</button>
+      <button type="button" class="tab" data-owner-panel="panel-radar">مرصد الموهوبين</button>
       <button type="button" class="tab" data-owner-panel="panel-rbac">هرم الصلاحيات</button>
       <button type="button" class="tab" data-owner-panel="panel-support">الدعم السريع</button>
       <button type="button" class="tab" data-owner-panel="panel-tools">ورقة علاجية / نبض صباحي</button>
@@ -45,6 +47,52 @@
         <input id="f-sign-owner">
         <button type="button" class="portal-btn" id="btn-save-settings">حفظ الإعدادات</button>
       </div>
+    </section>
+
+    <section class="portal-card owner-panel" id="panel-identity">
+      <h2>محتوى صفحة «من نحن» (SSOT قابل للتعديل)</h2>
+      <div class="owner-form">
+        <label>اسم المدرسة</label>
+        <input id="id-school-name">
+        <label>الرقم الإحصائي</label>
+        <input id="id-stat-no">
+        <label>الإدارة التعليمية</label>
+        <input id="id-admin">
+        <label>مدير المدرسة</label>
+        <input id="id-principal">
+        <label>عدد الطلاب (عرض)</label>
+        <input id="id-students" type="number" min="0">
+        <label>عدد المنسوبين (عرض)</label>
+        <input id="id-staff" type="number" min="0">
+        <label>من نحن</label>
+        <textarea id="id-about" rows="3"></textarea>
+        <label>الرؤية</label>
+        <textarea id="id-vision" rows="2"></textarea>
+        <label>الرسالة</label>
+        <textarea id="id-mission" rows="2"></textarea>
+        <label>القيم (سطر لكل قيمة)</label>
+        <textarea id="id-values" rows="3"></textarea>
+        <label>الأهداف (سطر لكل هدف)</label>
+        <textarea id="id-goals" rows="4"></textarea>
+        <label>الشركاء (سطر لكل شريك)</label>
+        <textarea id="id-partners" rows="3"></textarea>
+        <label>ملاحظة التواصل</label>
+        <textarea id="id-contact" rows="2"></textarea>
+        <button type="button" class="portal-btn" id="btn-save-identity">حفظ محتوى الهوية</button>
+        <p id="id-live" class="portal-empty"></p>
+      </div>
+    </section>
+
+    <section class="portal-card owner-panel" id="panel-radar">
+      <h2>مرصد الموهوبين والتدخل المبكر</h2>
+      <div class="portal-actions" style="margin-bottom:10px;">
+        <button type="button" class="portal-btn" id="btn-radar-talent">تحديث المرشحين</button>
+        <button type="button" class="portal-btn secondary" id="btn-radar-alerts">تحديث التنبيهات</button>
+      </div>
+      <h3 style="color:#0b5e56;font-size:16px;">مرشحو رعاية الموهوبين (≥٩٥٪)</h3>
+      <div id="radar-talent-box"></div>
+      <h3 style="margin-top:14px;color:#0b5e56;font-size:16px;">تنبيهات الموجه الطلابي</h3>
+      <div id="radar-alerts-box"></div>
     </section>
 
     <section class="portal-card owner-panel" id="panel-rbac">
@@ -122,6 +170,6 @@
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe12"></script>
   <script src="/cores/print-master-core.js?v=c308"></script>
-  <script src="js/portal-owner.js?v=o1"></script>
+  <script src="js/portal-owner.js?v=o2"></script>
 </body>
 </html>

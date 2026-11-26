@@ -3,112 +3,96 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>الصفحة الرئيسية — متوسطة سعد بن الربيع الأنصاري</title>
+    <title>من نحن — متوسطة سعد بن الربيع الأنصاري</title>
     <link rel="stylesheet" href="css/fonts.css?v=font1">
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/theme-core.css?v=space2">
     <link rel="stylesheet" href="css/opening-surface.css?v=open4">
-    <link rel="stylesheet" href="css/page-nav.css?v=nav1">
+    <link rel="stylesheet" href="css/page-nav.css?v=nav2">
+    <link rel="stylesheet" href="css/identity-tabs.css?v=id1">
 </head>
 <body class="identity-page">
     <header class="app-header">
         <div class="header-right">
             <img src="/assets/ministry_logo.png" class="header-logo" alt="وزارة التعليم">
-            <a class="header-title home-title" href="dashboard.html#home"><strong>متوسطة سعد بن الربيع الأنصاري</strong><span class="home-caption">الصفحة الرئيسية</span></a>
+            <div class="header-title home-title">
+                <strong id="id-school-name">متوسطة سعد بن الربيع الأنصاري</strong>
+                <span class="home-caption">الهوية المؤسسية</span>
+            </div>
         </div>
-        <a class="command-exit" href="login.html">خروج</a>
-        <nav class="page-nav" aria-label="تعريف المدرسة">
-            <a href="identity.html#about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6.5 19c.8-2.8 2.8-4.2 5.5-4.2s4.7 1.4 5.5 4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>من نحن</a>
-            <a href="identity.html#vision"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>الرؤية والرسالة</a>
-            <a href="identity.html#goals"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>أهدافنا</a>
-            <a href="identity.html#partners"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.8 18c.7-2.4 2.4-3.6 4.2-3.6s3.5 1.2 4.2 3.6M12 18c.6-2 2-3.2 3.8-3.2 1.7 0 3.1 1.1 3.8 3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>شركاؤنا</a>
-            <a href="identity.html#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 8l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>تواصل معنا</a>
+        <a class="identity-back-login" href="login.html" title="العودة إلى تسجيل الدخول">← العودة إلى تسجيل الدخول</a>
+        <nav class="page-nav identity-tabs" id="identity-tabs" role="tablist" aria-label="أقسام الهوية">
+            <button type="button" class="is-active" role="tab" aria-selected="true" data-tab="about" id="tab-about">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6.5 19c.8-2.8 2.8-4.2 5.5-4.2s4.7 1.4 5.5 4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                من نحن
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-tab="vision" id="tab-vision">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+                الرؤية والرسالة
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-tab="goals" id="tab-goals">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>
+                أهدافنا
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-tab="partners" id="tab-partners">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.8 18c.7-2.4 2.4-3.6 4.2-3.6s3.5 1.2 4.2 3.6M12 18c.6-2 2-3.2 3.8-3.2 1.7 0 3.1 1.1 3.8 3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                شركاؤنا
+            </button>
+            <button type="button" role="tab" aria-selected="false" data-tab="contact" id="tab-contact">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 8l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                تواصل معنا
+            </button>
         </nav>
     </header>
     <main class="identity-main">
-        <section id="about">
-            <h2>من نحن</h2>
-            <p>متوسطة سعد بن الربيع الأنصاري. مدير المدرسة: نايف بن سمير حجيف المخلفي.</p>
-            <p id="about-copy"></p>
+        <section id="about" class="identity-panel is-active" role="tabpanel" aria-labelledby="tab-about">
+            <div class="identity-hero-card">
+                <div class="identity-hero-mark" aria-hidden="true">س</div>
+                <div>
+                    <h2>من نحن</h2>
+                    <p id="about-copy" class="identity-lead"></p>
+                </div>
+            </div>
+            <div class="identity-stat-grid" id="about-stats"></div>
+            <div class="identity-meta-card" id="about-meta"></div>
         </section>
-        <section id="vision">
-            <h2>الرؤية والرسالة</h2>
-            <h3>الرؤية</h3>
-            <p id="vision-copy"></p>
-            <h3>الرسالة</h3>
-            <p id="mission-copy"></p>
-            <h3>القيم</h3>
-            <ul id="values-copy"></ul>
+
+        <section id="vision" class="identity-panel" role="tabpanel" aria-labelledby="tab-vision" hidden>
+            <h2>الرؤية والرسالة والقيم</h2>
+            <div class="identity-card-grid">
+                <article class="identity-tile">
+                    <div class="identity-tile-icon" aria-hidden="true">◎</div>
+                    <h3>الرؤية</h3>
+                    <p id="vision-copy"></p>
+                </article>
+                <article class="identity-tile">
+                    <div class="identity-tile-icon" aria-hidden="true">◇</div>
+                    <h3>الرسالة</h3>
+                    <p id="mission-copy"></p>
+                </article>
+            </div>
+            <h3 class="identity-subhead">القيم</h3>
+            <ul class="identity-chip-list" id="values-copy"></ul>
         </section>
-        <section id="goals">
-            <h2>أهدافنا</h2>
-            <ul id="goals-copy"></ul>
+
+        <section id="goals" class="identity-panel" role="tabpanel" aria-labelledby="tab-goals" hidden>
+            <h2>أهدافنا الاستراتيجية</h2>
+            <ol class="identity-goal-list" id="goals-copy"></ol>
         </section>
-        <section id="partners">
+
+        <section id="partners" class="identity-panel" role="tabpanel" aria-labelledby="tab-partners" hidden>
             <h2>شركاؤنا</h2>
-            <p id="partners-copy"></p>
-            <ul id="partners-list"></ul>
+            <p class="identity-lead">نعمل مع شركاء التعليم والمجتمع لتعزيز نواتج التعلم والرعاية.</p>
+            <div class="identity-card-grid" id="partners-list"></div>
         </section>
-        <section id="contact">
+
+        <section id="contact" class="identity-panel" role="tabpanel" aria-labelledby="tab-contact" hidden>
             <h2>تواصل معنا</h2>
-            <ul>
-                <li>المدرسة: متوسطة سعد بن الربيع الأنصاري</li>
-                <li>مدير المدرسة: نايف بن سمير حجيف المخلفي</li>
-                <li>الرقم الإحصائي: <span id="contact-stat"></span></li>
-                <li id="contact-admin-row">الإدارة: <span id="contact-admin"></span></li>
-                <li id="contact-office-row">مكتب التعليم: <span id="contact-office"></span></li>
-            </ul>
+            <ul class="identity-contact-list" id="contact-list"></ul>
+            <p id="contact-note" class="identity-lead"></p>
         </section>
     </main>
     <script src="js/page-nav.js?v=nav1"></script>
-    <script>
-        fetch("/api/content/principal")
-            .then(function (response) { return response.json(); })
-            .then(function (data) {
-                var intro = data.introduction || {};
-                document.getElementById("about-copy").textContent = (intro.paragraphs || []).join(" ");
-                document.getElementById("vision-copy").textContent = data.vision ? data.vision.text : "";
-                document.getElementById("mission-copy").textContent = data.mission ? data.mission.text : "";
-                var values = document.getElementById("values-copy");
-                (data.values || []).forEach(function (item) {
-                    var line = document.createElement("li");
-                    line.textContent = item.name;
-                    values.appendChild(line);
-                });
-                var goals = document.getElementById("goals-copy");
-                var partner = null;
-                ((data.strategic_goals && data.strategic_goals.goals) || []).forEach(function (goal) {
-                    var line = document.createElement("li");
-                    line.textContent = goal.text || "";
-                    goals.appendChild(line);
-                    if ((goal.text || "").indexOf("الشراكة") !== -1) {
-                        partner = goal;
-                    }
-                });
-                if (partner) {
-                    document.getElementById("partners-copy").textContent = partner.text;
-                    var list = document.getElementById("partners-list");
-                    (partner.programs || []).forEach(function (name) {
-                        var line = document.createElement("li");
-                        line.textContent = name;
-                        list.appendChild(line);
-                    });
-                }
-            });
-        fetch("/api/settings")
-            .then(function (response) { return response.json(); })
-            .then(function (data) {
-                var school = data.school || {};
-                document.getElementById("contact-stat").textContent = school.statistical_number || "";
-                document.getElementById("contact-admin").textContent = school.education_administration || "";
-                var office = document.getElementById("contact-office");
-                var row = document.getElementById("contact-office-row");
-                if (school.education_office) {
-                    office.textContent = school.education_office;
-                } else if (row) {
-                    row.remove();
-                }
-            });
-    </script>
+    <script src="js/identity-page.js?v=id1"></script>
 </body>
 </html>

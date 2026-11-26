@@ -418,13 +418,155 @@
       });
   }
 
+  function lines(value) {
+    return String(value || "")
+      .split(/\n+/)
+      .map(function (s) {
+        return s.trim();
+      })
+      .filter(Boolean);
+  }
+
+  function paintIdentity(pack) {
+    var c = (pack && pack.content) || {};
+    document.getElementById("id-school-name").value = c.school_name || "";
+    document.getElementById("id-stat-no").value = c.statistical_number || "";
+    document.getElementById("id-admin").value = c.education_administration || "";
+    document.getElementById("id-principal").value = c.principal_name || "";
+    document.getElementById("id-students").value = c.display_students != null ? c.display_students : 338;
+    document.getElementById("id-staff").value = c.display_staff != null ? c.display_staff : 39;
+    document.getElementById("id-about").value = c.about || "";
+    document.getElementById("id-vision").value = c.vision || "";
+    document.getElementById("id-mission").value = c.mission || "";
+    document.getElementById("id-values").value = (c.values || []).join("\n");
+    document.getElementById("id-goals").value = (c.goals || []).join("\n");
+    document.getElementById("id-partners").value = (c.partners || []).join("\n");
+    document.getElementById("id-contact").value = c.contact_note || "";
+    var live = (pack && pack.live) || {};
+    document.getElementById("id-live").textContent =
+      "حي من SSOT: " +
+      (live.students_live != null ? live.students_live : "—") +
+      " طالب · " +
+      (live.staff_live != null ? live.staff_live : "—") +
+      " منسوب (العرض المعتمد أعلاه لا يُستبدل تلقائياً).";
+  }
+
+  function loadIdentity() {
+    return fetchJson("/api/portal/owner/identity", { headers: headers(), cache: "no-store" }).then(paintIdentity);
+  }
+
+  function saveIdentity() {
+    fetchJson("/api/portal/owner/identity", {
+      method: "POST",
+      headers: headers(),
+      body: JSON.stringify({
+        school_name: document.getElementById("id-school-name").value,
+        statistical_number: document.getElementById("id-stat-no").value,
+        education_administration: document.getElementById("id-admin").value,
+        principal_name: document.getElementById("id-principal").value,
+        display_students: Number(document.getElementById("id-students").value || 338),
+        display_staff: Number(document.getElementById("id-staff").value || 39),
+        about: document.getElementById("id-about").value,
+        vision: document.getElementById("id-vision").value,
+        mission: document.getElementById("id-mission").value,
+        values: lines(document.getElementById("id-values").value),
+        goals: lines(document.getElementById("id-goals").value),
+        partners: lines(document.getElementById("id-partners").value),
+        contact_note: document.getElementById("id-contact").value
+      })
+    })
+      .then(function (pack) {
+        paintIdentity({ content: pack.content, live: {} });
+        status("حُفظ محتوى الهوية المؤسسية.");
+      })
+      .catch(function (e) {
+        status(e.message, true);
+      });
+  }
+
+  function loadRadarTalent() {
+    return fetchJson("/api/portal/radar/talent", { headers: headers(), cache: "no-store" }).then(function (pack) {
+      var items = pack.items || [];
+      document.getElementById("radar-talent-box").innerHTML = items.length
+        ? "<table class=\"owner-table\"><thead><tr><th>الاسم</th><th>الصف</th><th>الهوية</th><th>أفضل نتيجة</th><th>الحالة</th></tr></thead><tbody>" +
+          items
+            .map(function (row) {
+              return (
+                "<tr><td>" +
+                escapeHtml(row.name || "") +
+                "</td><td>" +
+                escapeHtml((row.grade || "") + " / " + (row.section || "")) +
+                "</td><td>" +
+                escapeHtml(row.national_id_masked || "") +
+                "</td><td>" +
+                escapeHtml(String(row.best_score || "")) +
+                "٪</td><td>" +
+                escapeHtml(row.status || "") +
+                "</td></tr>"
+              );
+            })
+            .join("") +
+          "</tbody></table>"
+        : "<p class=\"portal-empty\">لا مرشحين بعد — يظهر الطلاب عند تحقيق ٩٥٪ فأعلى.</p>";
+    });
+  }
+
+  function loadRadarAlerts() {
+    return fetchJson("/api/portal/radar/alerts", { headers: headers(), cache: "no-store" }).then(function (pack) {
+      var items = pack.items || [];
+      document.getElementById("radar-alerts-box").innerHTML = items.length
+        ? "<table class=\"owner-table\"><thead><tr><th>الطالب</th><th>النوع</th><th>التفاصيل</th><th>الحالة</th></tr></thead><tbody>" +
+          items
+            .map(function (row) {
+              return (
+                "<tr><td>" +
+                escapeHtml(row.name || "") +
+                "<br><small>" +
+                escapeHtml(row.national_id_masked || "") +
+                "</small></td><td>" +
+                escapeHtml(row.alert_type || "") +
+                "</td><td>" +
+                escapeHtml(JSON.stringify(row.detail || {})) +
+                "</td><td>" +
+                escapeHtml(row.status || "") +
+                "</td></tr>"
+              );
+            })
+            .join("") +
+          "</tbody></table>"
+        : "<p class=\"portal-empty\">لا تنبيهات تدخل مبكر حالياً.</p>";
+    });
+  }
+
   function bind() {
     Array.prototype.forEach.call(document.querySelectorAll("[data-owner-panel]"), function (btn) {
       btn.addEventListener("click", function () {
-        showPanel(btn.getAttribute("data-owner-panel"));
+        var id = btn.getAttribute("data-owner-panel");
+        showPanel(id);
+        if (id === "panel-identity") {
+          loadIdentity().catch(function (e) {
+            status(e.message, true);
+          });
+        }
+        if (id === "panel-radar") {
+          Promise.all([loadRadarTalent(), loadRadarAlerts()]).catch(function (e) {
+            status(e.message, true);
+          });
+        }
       });
     });
     document.getElementById("btn-save-settings").addEventListener("click", saveSettings);
+    document.getElementById("btn-save-identity").addEventListener("click", saveIdentity);
+    document.getElementById("btn-radar-talent").addEventListener("click", function () {
+      loadRadarTalent().catch(function (e) {
+        status(e.message, true);
+      });
+    });
+    document.getElementById("btn-radar-alerts").addEventListener("click", function () {
+      loadRadarAlerts().catch(function (e) {
+        status(e.message, true);
+      });
+    });
     document.getElementById("btn-rbac").addEventListener("click", assignRbac);
     document.getElementById("btn-support-search").addEventListener("click", searchSupport);
     document.getElementById("btn-phone").addEventListener("click", updatePhone);

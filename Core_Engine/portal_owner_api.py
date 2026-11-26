@@ -786,8 +786,20 @@ def parent_absence(body: AbsenceBody, x_portal_token: str = Header(default="")):
             """,
             (phone, nid, str(body.excuse_date or "").strip(), reason, _iso()),
         )
+        risk = None
+        try:
+            from .portal_radar_api import ensure_radar_tables, evaluate_absence_risk
+
+            ensure_radar_tables(connection)
+            risk = evaluate_absence_risk(connection, nid)
+        except Exception:
+            risk = None
         connection.commit()
-        return {"ok": True, "message": "وُفع عذر الغياب الإلكتروني وبانتظار اعتماد المدرسة."}
+        return {
+            "ok": True,
+            "message": "وُفع عذر الغياب الإلكتروني وبانتظار اعتماد المدرسة.",
+            "risk_alert": risk,
+        }
     finally:
         connection.close()
 

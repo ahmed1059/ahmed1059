@@ -456,6 +456,14 @@ from .portal_owner_api import router as portal_owner_router
 
 app.include_router(portal_owner_router)
 
+from .portal_identity_api import router as portal_identity_router
+
+app.include_router(portal_identity_router)
+
+from .portal_radar_api import router as portal_radar_router
+
+app.include_router(portal_radar_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):
