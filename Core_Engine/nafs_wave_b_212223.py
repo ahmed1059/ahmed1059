@@ -716,11 +716,20 @@ def build_prob_pack() -> list[dict]:
 
 
 def wave_b_questions() -> list[dict]:
+    from .nafs_visual_integrity import attach_wave_b_diagrams
+
     rows = build_stats_pack() + build_data_pack() + build_prob_pack()
     assert len(rows) == 30, len(rows)
+    rows = attach_wave_b_diagrams(rows)
     # توزيع المستويات: هواة / محترفين / نخبة موجودة كلها
     tiers = {r["tier"] for r in rows}
     assert tiers >= {TIER_AMATEUR, TIER_PRO, TIER_ELITE}
+    # كل سؤال يذكر شكلاً يجب أن يحمل رسماً
+    for r in rows:
+        stem = r.get("stem") or ""
+        if "يبين شكل" in stem or "مدرج تكراري للعمر" in stem or "الصندوق وطرفاه" in stem or "قطاع دائري رباعي" in stem:
+            assert (r.get("diagram_svg") or "").strip(), stem[:60]
+        r.setdefault("student_ready", 1)
     return rows
 
 

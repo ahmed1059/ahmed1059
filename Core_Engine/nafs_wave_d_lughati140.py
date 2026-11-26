@@ -65,23 +65,21 @@ def _q_from_item(
     passage = str(training.get("passage") or "").strip()
     passage_note = str(training.get("passage_note") or "").strip()
     skill = SKILL_BY_TIER[tier_id]
-    stem = str(item.get("stem") or "").strip()
-    a = str(item.get("choice_a") or "").strip()
-    b = str(item.get("choice_b") or "").strip()
-    c = str(item.get("choice_c") or "").strip()
-    d = str(item.get("choice_d") or "").strip()
+    from .nafs_visual_integrity import clean_ocr_ar, is_real_passage
+
+    stem = clean_ocr_ar(str(item.get("stem") or "").strip())
+    a = clean_ocr_ar(str(item.get("choice_a") or "").strip())
+    b = clean_ocr_ar(str(item.get("choice_b") or "").strip())
+    c = clean_ocr_ar(str(item.get("choice_c") or "").strip())
+    d = clean_ocr_ar(str(item.get("choice_d") or "").strip())
     if not (stem and a and b and c and d):
         raise ValueError(f"incomplete item T{t}Q{n}")
     # وسم المصدر داخل الجذع لمنع إسقاط التكرارات عبر التدريبات (نفس صياغة السؤال في أكثر من نص)
     source_ref = f"ت{_e(t)}-س{_e(n)}"
     stem_unique = f"﴿{source_ref}﴾ {stem}"
-    # لا نختلق نص القراءة: إن كان المقطع المشوّه بالمسح قد صُفّي، نُبقي إحالة المصدر فقط
-    if passage:
-        passage_text = passage
-    elif passage_note:
-        passage_text = f"{PACK_SOURCE} · {title} · {passage_note}"
-    else:
-        passage_text = f"{PACK_SOURCE} · {title}"
+    # لا نختلق نص قراءة ولا نعرض وصفاً مصدرياً مضلّلاً كقطعة قراءة
+    passage_text = passage if is_real_passage(passage) else ""
+    student_ready = 1 if passage_text else 0
     return {
         "domain": "reading",
         "skill": skill,
@@ -93,7 +91,7 @@ def _q_from_item(
         "correct": correct,
         "rationale": f"{title} · البند {_e(n)} · مفتاح موثّق من النسخة المجابة",
         "passage_id": f"{BANK_TAG}:t{t:02d}",
-        "passage_title": title,
+        "passage_title": title if passage_text else "",
         "passage_text": passage_text,
         "sort_order": sort_order,
         "common_mistake": "الإجابة من الذاكرة دون الرجوع إلى النص أو خلط الحقيقة بالرأي.",
@@ -106,6 +104,10 @@ def _q_from_item(
         "bank_tag": BANK_TAG,
         "training": t,
         "item_n": n,
+        "diagram_svg": "",
+        "diagram_alt": "",
+        "student_ready": student_ready,
+        "archive_note": passage_note if not passage_text else "",
     }
 
 

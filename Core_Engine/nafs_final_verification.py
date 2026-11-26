@@ -17,7 +17,7 @@ FORTIFIED = (
     ROOT / "Print_Canvas" / "dashboard.html",
 )
 EXPECTED_BANK = 330
-EXPECTED_REVISION = "wave-d-lughati140-1"
+EXPECTED_REVISION = "visual-diagram-gate-1"
 EXPECTED_WAVE_D = 140
 EXPECTED_WAVE_B = 30
 EXPECTED_GOLDEN = 22
