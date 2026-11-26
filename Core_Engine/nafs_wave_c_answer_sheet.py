@@ -153,14 +153,17 @@ def questionnaire_items() -> list[dict[str, Any]]:
     return student + school + teachers
 
 
-def answer_columns() -> list[dict[str, Any]]:
-    """٥ أعمدة رأسية من اليمين إلى اليسار لشبكة ١–٧٥."""
-    per_col = ANSWER_ITEM_COUNT // ANSWER_COLUMNS
-    rem = ANSWER_ITEM_COUNT % ANSWER_COLUMNS
+def answer_columns(item_count: int | None = None) -> list[dict[str, Any]]:
+    """٥ أعمدة رأسية من اليمين إلى اليسار لشبكة الإجابات (١…ن)."""
+    total = max(1, int(item_count or ANSWER_ITEM_COUNT))
+    per_col = total // ANSWER_COLUMNS
+    rem = total % ANSWER_COLUMNS
     cols: list[dict[str, Any]] = []
     start = 1
     for c in range(ANSWER_COLUMNS):
         count = per_col + (1 if c < rem else 0)
+        if count <= 0:
+            continue
         end = start + count - 1
         nums = list(range(start, end + 1))
         cols.append(
@@ -176,6 +179,102 @@ def answer_columns() -> list[dict[str, Any]]:
         )
         start = end + 1
     return cols
+
+
+def ministry_id_eastern() -> str:
+    """S-40341 → S-٤٠٣٤١ مع الإبقاء على البادئة اللاتينية."""
+    return "".join(EASTERN[int(ch)] if ch.isdigit() else ch for ch in SCHOOL_MINISTRY_ID)
+
+
+def school_block() -> dict[str, Any]:
+    return {
+        "code": SCHOOL_CODE,
+        "code_ar": _e(SCHOOL_CODE),
+        "ministry_id": SCHOOL_MINISTRY_ID,
+        "ministry_id_ar": ministry_id_eastern(),
+        "name": SCHOOL_NAME,
+        "office": EDUCATION_OFFICE,
+        "grade_default": GRADE,
+    }
+
+
+def build_omr_sheet_pack(
+    item_count: int,
+    *,
+    student_name: str = "",
+    national_id: str = "",
+    section: str = "",
+    grade: str = "",
+    title: str = "ورقة التظليل الضوئي (OMR)",
+    purpose: str = "home-mock",
+) -> dict[str, Any]:
+    """ورقة OMR بنفس قالب Sky Blue / Timing Marks — بعدد البنود المعتمد فقط، بلا اختلاق مفاتيح."""
+    total = max(1, int(item_count))
+    return {
+        "ok": True,
+        "wave": WAVE_TAG,
+        "purpose": purpose,
+        "omr_only": True,
+        "no_answer_key": True,
+        "source": SOURCE_REF,
+        "title": title,
+        "title_ar": title,
+        "school": school_block(),
+        "student": {
+            "name": student_name or "",
+            "national_id": national_id or "",
+            "section": section or "",
+            "grade": grade or GRADE,
+        },
+        "palette": {
+            "sky": "#4aa3d9",
+            "sky_light": "#d7eef8",
+            "sky_mid": "#7ec4e8",
+            "ink": "#12324a",
+            "mark": "#111111",
+            "banner": "#e67e22",
+        },
+        "pages": [
+            {
+                "code": "omr",
+                "code_ar": "OMR",
+                "title": title,
+                "kind": "answer_sheet",
+            }
+        ],
+        "answer_sheet": {
+            "item_count": total,
+            "item_count_ar": _e(total),
+            "columns": answer_columns(total),
+            "choices": list(ANSWER_CHOICES),
+            "school_code_grid": digit_grid(
+                columns=SCHOOL_CODE_DIGITS,
+                label="رمز المدرسة",
+                label_en="School Code",
+            ),
+            "national_id_grid": digit_grid(
+                columns=NATIONAL_ID_DIGITS,
+                label="رقم السجل المدني / رقم الإقامة",
+                label_en="National / Iqama ID",
+            ),
+            "etec_ltr": ["ETEC", "Qiyas", "NAFS"],
+            "shading_guide": {
+                "correct": "تظليل كامل للدائرة",
+                "wrong": ["✓", "✗", "تظليل جزئي", "خارج الدائرة"],
+            },
+        },
+        "labels_ar": {
+            "full_name": "الاسم الرباعي",
+            "school_name": "اسم المدرسة",
+            "grade": "الصف",
+            "section": "الفصل",
+            "national_id": "السجل المدني",
+            "ministry_no": "الرقم الوزاري",
+            "answers": "إجابات الأسئلة",
+            "timing_marks": "علامات ضبط المسح",
+            "page_of": "صفحة",
+        },
+    }
 
 
 def digit_grid(*, columns: int, label: str, label_en: str = "") -> dict[str, Any]:
@@ -205,14 +304,7 @@ def build_training_form_pack(
         "wave": WAVE_TAG,
         "source": SOURCE_REF,
         "no_answer_key": True,
-        "school": {
-            "code": SCHOOL_CODE,
-            "code_ar": _e(SCHOOL_CODE),
-            "ministry_id": SCHOOL_MINISTRY_ID,
-            "name": SCHOOL_NAME,
-            "office": EDUCATION_OFFICE,
-            "grade_default": GRADE,
-        },
+        "school": school_block(),
         "student": {
             "name": student_name or "",
             "national_id": national_id or "",

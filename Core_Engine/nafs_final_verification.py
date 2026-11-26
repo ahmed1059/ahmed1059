@@ -360,8 +360,12 @@ def verify_answer_sheet_a4() -> dict[str, Any]:
     css = (ROOT / "Print_Canvas" / "css" / "nafs-wave-c-answer-sheet.css").read_text(encoding="utf-8")
     print_shell = (ROOT / "Print_Canvas" / "css" / "print-shell.css").read_text(encoding="utf-8")
 
-    if "school.code_ar || east(school.code" not in js:
+    if "ministry_id_ar" not in js and "school.code_ar || east(school.code" not in js:
         errors.append("js school code eastern path")
+    if "ministry_id_ar" not in js:
+        errors.append("js ministry_id_ar path")
+    if "renderOmrOnly" not in js:
+        errors.append("js OMR-only renderer")
     # في مصدر JS تظهر السمات داخل سلاسل مُهرَّبة: dir=\"ltr\"
     if "etec-ltr" not in js or 'dir=\\"ltr\\"' not in js:
         errors.append("js ETEC LTR attrs")

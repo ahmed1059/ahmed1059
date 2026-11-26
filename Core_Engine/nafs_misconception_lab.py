@@ -772,13 +772,26 @@ def national_pack(x_session_token: str = Header(default="")):
                     for r in rows
                 ],
             }
+        total_items = sum(len((pack.get(d) or {}).get("items") or []) for d in ("math", "science", "reading"))
+        from .nafs_wave_c_answer_sheet import SCHOOL_NAME, build_omr_sheet_pack, eastern_digits
+
+        omr_sheet = build_omr_sheet_pack(
+            total_items or 66,
+            grade="الثالث المتوسط",
+            title=f"ورقة التظليل الضوئي (OMR) — {eastern_digits(total_items or 66)} بنداً",
+            purpose="national-mock",
+        )
         connection.commit()
         return {
             "ok": True,
             "title": "المحاكاة الوطنية الشاملة",
-            "total": 66,
+            "total": total_items or 66,
+            "total_ar": eastern_digits(total_items or 66),
             "minutes": 90,
+            "school": SCHOOL_NAME,
             "domains": pack,
+            "omr_sheet": omr_sheet,
+            "no_invented_keys": True,
         }
     finally:
         connection.close()

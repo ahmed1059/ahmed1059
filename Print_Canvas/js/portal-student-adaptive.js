@@ -357,11 +357,61 @@
       });
   }
 
+  function homeMockCssHref() {
+    var links = document.querySelectorAll("link[rel=\"stylesheet\"]");
+    for (var i = 0; i < links.length; i += 1) {
+      var href = links[i].getAttribute("href") || "";
+      if (href.indexOf("nafs-wave-c-answer-sheet.css") !== -1) return href;
+    }
+    return "css/nafs-wave-c-answer-sheet.css";
+  }
+
   function printHomeMock(pack) {
     var items = pack.items || [];
     var key = pack.answer_key || [];
     var letters = { A: "أ", B: "ب", C: "ج", D: "د" };
-    var body =
+    var sheetApi = window.NafsWaveCAnswerSheet || {};
+    var omrHtml = "";
+    if (pack.omr_sheet && typeof sheetApi.renderOmrOnly === "function") {
+      omrHtml = sheetApi.renderOmrOnly(pack.omr_sheet);
+    } else if (typeof sheetApi.renderOmrOnly === "function" && items.length) {
+      omrHtml = sheetApi.renderOmrOnly({
+        omr_only: true,
+        title: "ورقة التظليل OMR — اختبار منزلي",
+        school: {
+          name: pack.school || "",
+          code: pack.code || "40341",
+          code_ar: pack.code_ar || east(pack.code || "40341"),
+          ministry_id_ar: pack.ministry_id_ar || ""
+        },
+        student: {
+          name: pack.student_name || "",
+          national_id: pack.student_nid || "",
+          grade: pack.grade || "",
+          section: pack.section || ""
+        },
+        answer_sheet: {
+          item_count: items.length,
+          item_count_ar: east(items.length),
+          columns: [
+            {
+              items: items.map(function (q) {
+                return { n: q.n, n_ar: east(q.n), choices: ["أ", "ب", "ج", "د"] };
+              })
+            }
+          ],
+          school_code_grid: { columns: 6, label: "رمز المدرسة", digits: [] },
+          national_id_grid: { columns: 10, label: "رقم السجل المدني / رقم الإقامة", digits: [] }
+        },
+        labels_ar: { ministry_no: "الرقم الوزاري", answers: "إجابات الأسئلة" }
+      });
+    } else {
+      omrHtml =
+        "<p class=\"portal-empty\">تعذر تحميل قالب OMR المعتمد (Sky Blue). أعد تحميل الصفحة.</p>";
+    }
+
+    var booklet =
+      "<section class=\"home-mock-booklet\" dir=\"rtl\">" +
       "<h2 style=\"color:#0b5e56;text-align:center;\">اختبار منزلي بإشراف ولي الأمر</h2>" +
       "<p><strong>الطالب:</strong> " +
       esc(pack.student_name || "") +
@@ -371,9 +421,12 @@
       east(pack.section || "") +
       " · المدرسة " +
       esc(pack.school || "") +
-      " (" +
-      east(pack.code || "40341") +
-      ")</p>" +
+      " · الرقم الوزاري <span class=\"etec-ltr\" dir=\"ltr\">" +
+      esc(pack.ministry_id_ar || pack.code_ar || east(pack.code || "40341")) +
+      "</span>" +
+      " · شاهد <span class=\"etec-code\" dir=\"ltr\">" +
+      esc(pack.evidence_code_ar || "١-٣-١-٢") +
+      "</span></p>" +
       items
         .map(function (q) {
           return (
@@ -397,62 +450,73 @@
           );
         })
         .join("") +
-      "<div style=\"page-break-before:always\"></div>" +
-      "<h2 style=\"color:#0b5e56;\">ورقة التظليل OMR</h2>" +
-      "<div style=\"display:grid;grid-template-columns:repeat(5,1fr);gap:8px;\">" +
-      items
-        .map(function (q) {
-          return (
-            "<div style=\"border:1px solid #ccc;padding:8px;font-size:12px;\">" +
-            east(q.n) +
-            "<br>أ ○ ب ○ ج ○ د ○</div>"
-          );
-        })
-        .join("") +
-      "</div>" +
-      "<div style=\"page-break-before:always\"></div>" +
+      "</section>";
+
+    var keyHtml =
+      "<section class=\"home-mock-key\" dir=\"rtl\" style=\"page-break-before:always\">" +
       "<h2 style=\"color:#0b5e56;\">مفتاح التصحيح لولي الأمر</h2>" +
-      "<ol>" +
-      key
-        .map(function (r) {
-          return (
-            "<li>" +
-            east(r.n) +
-            " → " +
-            esc(r.answer || "") +
-            " · " +
-            esc(r.skill || "") +
-            "</li>"
-          );
-        })
-        .join("") +
-      "</ol>" +
-      "<h3 style=\"color:#0b5e56;\">إقرار ولي الأمر المراقب (شاهد <span class=\"etec-code\" dir=\"ltr\">١-٣-١-٢</span>)</h3>" +
+      (key.length
+        ? "<ol>" +
+          key
+            .map(function (r) {
+              return (
+                "<li>" +
+                east(r.n) +
+                " → " +
+                esc(r.answer || "") +
+                " · " +
+                esc(r.skill || "") +
+                "</li>"
+              );
+            })
+            .join("") +
+          "</ol>"
+        : "<p>لا مفتاح محفوظ لهذه الحزمة — تُعرض الإجابات المعتمدة فقط عند توفرها في البنك.</p>") +
+      "<h3 style=\"color:#0b5e56;\">إقرار ولي الأمر المراقب (شاهد <span class=\"etec-code\" dir=\"ltr\">" +
+      esc(pack.evidence_code_ar || "١-٣-١-٢") +
+      "</span>)</h3>" +
       "<p>" +
       esc(pack.parent_pledge || "") +
       "</p>" +
-      "<p style=\"margin-top:28px;\">اسم ولي الأمر: ........................ &nbsp;&nbsp; التوقيع: ........................ &nbsp;&nbsp; التاريخ: ............</p>";
+      "<p style=\"margin-top:28px;\">اسم ولي الأمر: ........................ &nbsp;&nbsp; التوقيع: ........................ &nbsp;&nbsp; التاريخ: ............</p>" +
+      "</section>";
+
+    var wrapped =
+      "<link rel=\"stylesheet\" href=\"" +
+      esc(homeMockCssHref()) +
+      "\">" +
+      "<div class=\"nafs-c-print-root home-mock-print\" dir=\"rtl\" lang=\"ar\">" +
+      booklet +
+      "<div style=\"page-break-before:always\"></div>" +
+      omrHtml +
+      keyHtml +
+      "</div>";
 
     if (window.PrintEngine && typeof window.PrintEngine.open === "function") {
-      window.PrintEngine.open("master-sheet", {
-        docTitle: "اختبار منزلي",
-        title: "اختبار منزلي بإشراف ولي الأمر + OMR",
-        kind: "document",
-        orientation: "portrait",
+      window.PrintEngine.open("raw-html", {
+        html: wrapped,
+        docTitle: "اختبار منزلي بإشراف ولي الأمر + OMR",
         multiPage: true,
-        school: pack.school || "متوسطة سعد بن الربيع الأنصاري",
-        bodyHtml: body,
-        signoff: true,
-        maxColumns: 2,
-        pageTotal: 3
+        orientation: "portrait",
+        arm: { orientation: "portrait", multiPage: true }
       });
-    } else {
-      var w = window.open("", "_blank");
-      if (w) {
-        w.document.write("<html lang=\"ar\" dir=\"rtl\"><head><title>اختبار منزلي</title></head><body>" + body + "</body></html>");
-        w.document.close();
-        w.print();
-      }
+      return;
+    }
+    var w = window.open("", "_blank");
+    if (w) {
+      w.document.write(
+        "<!DOCTYPE html><html lang=\"ar\" dir=\"rtl\"><head><meta charset=\"utf-8\"><title>اختبار منزلي</title>" +
+          "<link rel=\"stylesheet\" href=\"" +
+          esc(homeMockCssHref()) +
+          "\"></head><body>" +
+          booklet +
+          "<div style=\"page-break-before:always\"></div>" +
+          omrHtml +
+          keyHtml +
+          "</body></html>"
+      );
+      w.document.close();
+      w.print();
     }
   }
 
