@@ -26,6 +26,20 @@
     return document.getElementById(id);
   }
 
+  function east(value) {
+    if (!api || typeof api.toEastern !== "function") {
+      return value == null ? "" : String(value);
+    }
+    return api.toEastern(value == null ? "" : value);
+  }
+
+  function esc(value) {
+    if (!api || typeof api.escapeHtml !== "function") {
+      return value == null ? "" : String(value);
+    }
+    return api.escapeHtml(value == null ? "" : value);
+  }
+
   function pingPresence() {
     if (!api) return;
     api.fetchJson("/api/portal/presence/ping", { method: "POST", headers: api.authHeaders(), body: "{}" }).catch(function () {});
@@ -34,6 +48,10 @@
   function paintOnline(pack) {
     var host = el("online-list");
     if (!host) return;
+    if (!api) {
+      host.innerHTML = "<p class=\"portal-empty\">جارٍ تهيئة الرادار…</p>";
+      return;
+    }
     var rows = (pack && pack.online) || [];
     if (!rows.length) {
       host.innerHTML = "<p class=\"portal-empty\">لا زملاء متصلين الآن — ابقَ هنا وسيظهر الرادار فور دخول أحدهم.</p>";
@@ -45,14 +63,14 @@
           "<div class=\"online-chip\">" +
           "<span class=\"dot-live\" aria-hidden=\"true\"></span>" +
           "<span>" +
-          api.escapeHtml(row.name || "زميل") +
+          esc(row.name || "زميل") +
           " · " +
-          api.escapeHtml(row.grade || "") +
+          esc(row.grade || "") +
           "/" +
-          api.toEastern(row.section || "") +
+          east(row.section || "") +
           "</span>" +
           "<button type=\"button\" class=\"portal-btn\" data-challenge=\"" +
-          api.escapeHtml(row.national_id || "") +
+          esc(row.national_id || "") +
           "\">⚔️ تحدَّ الآن</button></div>"
         );
       })
@@ -75,14 +93,14 @@
         return (
           "<div class=\"duel-invite\">" +
           "<strong>دعوة مبارزة من " +
-          api.escapeHtml(row.other_name || row.challenger_name || "زميل") +
+          esc(row.other_name || row.challenger_name || "زميل") +
           "</strong>" +
           "<div class=\"portal-actions\">" +
           "<button type=\"button\" class=\"portal-btn\" data-duel-accept=\"" +
-          api.escapeHtml(id) +
+          esc(id) +
           "\">قبول</button>" +
           "<button type=\"button\" class=\"portal-btn secondary\" data-duel-reject=\"" +
-          api.escapeHtml(id) +
+          esc(id) +
           "\">رفض</button></div></div>"
         );
       })
@@ -119,8 +137,8 @@
     if (rails) rails.hidden = false;
     if (el("duel-you-bar")) el("duel-you-bar").style.width = youPct + "%";
     if (el("duel-ghost-bar")) el("duel-ghost-bar").style.width = otherPct + "%";
-    if (el("duel-you-label")) el("duel-you-label").textContent = api.toEastern(youPct) + "٪";
-    if (el("duel-ghost-label")) el("duel-ghost-label").textContent = api.toEastern(otherPct) + "٪";
+    if (el("duel-you-label")) el("duel-you-label").textContent = east(youPct) + "٪";
+    if (el("duel-ghost-label")) el("duel-ghost-label").textContent = east(otherPct) + "٪";
     if (el("duel-ghost-name")) el("duel-ghost-name").textContent = "المنافس";
   }
 
@@ -133,10 +151,10 @@
     stage.classList.add("is-open");
     el("arena-title").textContent = "مبارزة مباشرة";
     el("arena-progress").textContent =
-      "سؤال " + api.toEastern(live.index + 1) + " من " + api.toEastern(live.questions.length);
+      "سؤال " + east(live.index + 1) + " من " + east(live.questions.length);
     var html =
       "<p class=\"q-stem\">" +
-      api.escapeHtml(q.stem || "") +
+      esc(q.stem || "") +
       "</p><div class=\"q-choices\">";
     ["A", "B", "C", "D"].forEach(function (letter) {
       var selected = live.answers[q.id] === letter;
@@ -148,7 +166,7 @@
         "\"><span class=\"letter\">" +
         ({ A: "أ", B: "ب", C: "ج", D: "د" }[letter] || letter) +
         "</span>" +
-        api.escapeHtml((q.choices && q.choices[letter]) || "") +
+        esc((q.choices && q.choices[letter]) || "") +
         "</button>";
     });
     html += "</div>";
@@ -181,7 +199,7 @@
           var win = pack.winner === live.you;
           api.status(
             win
-              ? "فزت بالمبارزة · +" + api.toEastern(50) + " XP ولقب بطل الجولة!"
+              ? "فزت بالمبارزة · +" + east(50) + " XP ولقب بطل الجولة!"
               : pack.winner
                 ? "انتهت المبارزة — حاول مرة أخرى."
                 : "تعادل شريف!"
@@ -213,7 +231,7 @@
       if (t) {
         var m = Math.max(0, Math.floor(live.secondsLeft / 60));
         var s = Math.max(0, live.secondsLeft % 60);
-        t.textContent = api.toEastern(m) + ":" + api.toEastern(String(s).padStart(2, "0"));
+        t.textContent = east(m) + ":" + east(String(s).padStart(2, "0"));
       }
       if (live.secondsLeft <= 0) {
         reportLiveProgress();
@@ -308,16 +326,16 @@
     var kindClass = r.kind === "synonym" ? "kind-syn" : r.kind === "antonym" ? "kind-ant" : "kind-mean";
     host.innerHTML =
       "<div class=\"mini-hud\"><strong>لعبة الكلمات</strong><span>Combo ×" +
-      api.toEastern(words.combo) +
+      east(words.combo) +
       "</span><span>" +
-      api.toEastern(words.left) +
+      east(words.left) +
       " ث</span></div>" +
       "<div class=\"word-card " +
       kindClass +
       "\"><em>" +
-      api.escapeHtml(r.kind_ar || "") +
+      esc(r.kind_ar || "") +
       "</em><p>" +
-      api.escapeHtml(r.prompt || "") +
+      esc(r.prompt || "") +
       "</p></div><div class=\"q-choices\">" +
       ["A", "B", "C", "D"]
         .map(function (letter) {
@@ -327,7 +345,7 @@
             "\"><span class=\"letter\">" +
             ({ A: "أ", B: "ب", C: "ج", D: "د" }[letter] || letter) +
             "</span>" +
-            api.escapeHtml((r.choices && r.choices[letter]) || "") +
+            esc((r.choices && r.choices[letter]) || "") +
             "</button>"
           );
         })
@@ -351,9 +369,9 @@
       .then(function (pack) {
         stageHost().innerHTML =
           "<p class=\"portal-empty\">انتهت لعبة الكلمات · " +
-          api.toEastern(pack.score || 0) +
+          east(pack.score || 0) +
           " / ١٠ · +" +
-          api.toEastern(pack.xp_earned || 0) +
+          east(pack.xp_earned || 0) +
           " XP</p>";
         if (api.refresh) api.refresh();
       })
@@ -393,12 +411,12 @@
     host.hidden = false;
     host.innerHTML =
       "<div class=\"mini-hud\"><strong>حساب ذهني · مستوى " +
-      api.toEastern(mental.level) +
+      east(mental.level) +
       "</strong><span>" +
-      api.toEastern(mental.left) +
+      east(mental.left) +
       " ث</span></div>" +
       "<p class=\"q-stem mental-stem\">" +
-      api.escapeHtml(item.stem || "") +
+      esc(item.stem || "") +
       "</p><div class=\"q-choices\">" +
       ["A", "B", "C", "D"]
         .map(function (letter) {
@@ -408,7 +426,7 @@
             "\"><span class=\"letter\">" +
             ({ A: "أ", B: "ب", C: "ج", D: "د" }[letter] || letter) +
             "</span>" +
-            api.escapeHtml((item.choices && item.choices[letter]) || "") +
+            esc((item.choices && item.choices[letter]) || "") +
             "</button>"
           );
         })
@@ -439,9 +457,9 @@
       .then(function (pack) {
         stageHost().innerHTML =
           "<p class=\"portal-empty\">انتهى الحساب الذهني · " +
-          api.toEastern(pack.score || 0) +
+          east(pack.score || 0) +
           " صحيحة · +" +
-          api.toEastern(pack.xp_earned || 0) +
+          east(pack.xp_earned || 0) +
           " XP</p>";
         if (api.refresh) api.refresh();
       })
