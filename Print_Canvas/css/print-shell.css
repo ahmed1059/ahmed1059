@@ -921,15 +921,20 @@ img.sig-image {
     page-break-inside: avoid;
   }
 
-  body.print-shell {
-    counter-reset: page;
-  }
-
+  /* لا تُصفَّر عدّادات page/pages الخاصة بالوسائط الصفحية — كانت تسبب «الصفحة ٠ من ٠». */
   body.print-shell .pm-page-num::after {
     content: counter(page);
   }
 
-  body.print-shell .pm-pages-num::after {
+  body.print-shell .pm-document[data-page-total] .pm-page-num::after {
+    content: counter(page);
+  }
+
+  body.print-shell .pm-pages-num[data-total]::after {
+    content: attr(data-total);
+  }
+
+  body.print-shell .pm-pages-num:not([data-total])::after {
     content: counter(pages);
   }
 

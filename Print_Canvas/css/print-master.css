@@ -651,10 +651,7 @@
     page-break-inside: avoid;
   }
 
-  body.app-journey.print-master {
-    counter-reset: page;
-  }
-
+  /* الاعتماد على عدّاد الصفحات الأصلي + data-total؛ تجنّب counter-reset الذي يصفّر العرض. */
   body.app-journey.print-master .pm-page-num::after {
     content: counter(page, pm-eastern-decimal);
   }

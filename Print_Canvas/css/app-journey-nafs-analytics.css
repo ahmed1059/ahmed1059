@@ -309,13 +309,48 @@
 }
 
 .aj-nafs-init-cell {
-  white-space: nowrap;
+  white-space: normal;
   display: inline-block;
   max-width: 100%;
+  line-height: 1.35;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .aj-nafs-initiatives-line .aj-nafs-init-cell {
-  white-space: nowrap;
+  white-space: normal;
+}
+
+/* جداول السجل المطبوع: منع تداخل أعمدة المبادرات والقياس */
+.aj-nafs-print-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.aj-nafs-print-table th,
+.aj-nafs-print-table td {
+  vertical-align: top;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.aj-nafs-print-table th:nth-child(1),
+.aj-nafs-print-table td:nth-child(1) {
+  width: 12%;
+}
+
+.aj-nafs-print-table th:nth-child(3),
+.aj-nafs-print-table td:nth-child(3) {
+  width: 34%;
+}
+
+#view-nafes .etec-code,
+.aj-nafs-print-page .etec-code,
+.pm-body .etec-code {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
 }
 
 .aj-nafs-page-foot {

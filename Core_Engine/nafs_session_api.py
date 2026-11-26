@@ -246,6 +246,16 @@ def _domains(card: dict, metrics: dict, statements: dict[str, str]) -> list[dict
 
 
 def build_nafs_analytics(connection) -> dict:
+    from .nafs_school_record_40341 import (
+        AVERAGE_MASTERY_PCT,
+        ENROLLED,
+        GRADE,
+        SOURCE_CARD,
+        TESTED,
+        build_school_record_pack,
+        tracks_pack,
+    )
+
     card = _card_row(connection)
     metrics = _load_metrics_nafes()
     statements = _indicator_map(connection)
@@ -266,16 +276,35 @@ def build_nafs_analytics(connection) -> dict:
                 "domain_label": "الرياضيات",
             }
     meta = metrics.get("meta") if isinstance(metrics, dict) else {}
+    enrolled = card.get("enrolled") or (meta or {}).get("enrolled_count") or ENROLLED
+    tested = card.get("tested") or (meta or {}).get("tested_count") or TESTED
+    mastery = (meta or {}).get("average_mastery_pct")
+    if mastery is None:
+        mastery = AVERAGE_MASTERY_PCT
+    bank_count = int(
+        connection.execute(
+            "SELECT COUNT(*) FROM nafs_question_bank WHERE COALESCE(active,1)=1"
+        ).fetchone()[0]
+        or 0
+    )
+    school_record = build_school_record_pack(
+        enrolled=enrolled,
+        tested=tested,
+        average_mastery_pct=mastery,
+        question_bank_count=bank_count,
+    )
     return {
         "ok": True,
         "card": card,
         "meta": {
-            "grade": card.get("grade") or (meta or {}).get("grade") or "",
-            "enrolled": card.get("enrolled") or "",
-            "tested": card.get("tested") or (meta or {}).get("tested_count") or "",
-            "average_mastery_pct": (meta or {}).get("average_mastery_pct"),
-            "source": (meta or {}).get("source") or "",
+            "grade": card.get("grade") or (meta or {}).get("grade") or GRADE,
+            "enrolled": enrolled,
+            "tested": tested,
+            "average_mastery_pct": mastery,
+            "source": (meta or {}).get("source") or SOURCE_CARD,
         },
+        "tracks": tracks_pack(tested=tested),
+        "school_record": school_record,
         "priority_skill": priority,
         "domains": domains,
         "indicators": _ordered_indicators(statements),
@@ -431,15 +460,22 @@ def _nafs_teachers(connection) -> list[dict]:
 
 
 def build_nafs_dossier(connection) -> dict:
+    from .nafs_school_record_40341 import (
+        EXAM_WINDOW,
+        INITIATIVES,
+        PLAN_WEEKS,
+        QUESTION_BANK_BASELINE,
+        mock_schedule,
+        school_identity,
+        tracks_pack,
+    )
+
     analytics = build_nafs_analytics(connection)
     domains = analytics.get("domains") or []
     by_key = {row["key"]: row for row in domains}
     tested = _num(analytics.get("meta", {}).get("tested")) or 101
-    # توزيع تقريبي: منخفضو الإتقان علاجي مكثف، والباقون إثرائي/متابعة
-    math_low = _num((by_key.get("math") or {}).get("score")) or 18.8
-    remedial_share = max(0.35, min(0.75, (100 - math_low) / 100))
-    remedial_n = int(round(tested * remedial_share))
-    enrich_n = int(tested) - remedial_n
+    # مسارات موثّقة (٧٦ علاجي / ٢٥ إثرائي) — بلا اشتقاق نسبي مختلق
+    tracks = analytics.get("tracks") or tracks_pack(tested=tested)
     challenges = [
         {
             "key": "math",
@@ -460,19 +496,16 @@ def build_nafs_dossier(connection) -> dict:
     for item in challenges:
         item["qr_svg"] = _qr_svg(item["url"])
     sample_questions = _list_questions(connection)[:9]
+    bank_count = connection.execute(
+        "SELECT COUNT(*) FROM nafs_question_bank WHERE COALESCE(active,1)=1"
+    ).fetchone()[0]
+    mocks = mock_schedule()
     return {
         "ok": True,
-        "school": {
-            "name": "متوسطة سعد بن الربيع الأنصاري",
-            "code": "40341",
-            "education_office": "الإدارة العامة للتعليم بمنطقة المدينة المنورة",
-        },
+        "school": school_identity(),
         "analytics": analytics,
-        "tracks": {
-            "tested": int(tested),
-            "remedial": remedial_n,
-            "enrichment": enrich_n,
-        },
+        "school_record": analytics.get("school_record"),
+        "tracks": tracks,
         "skills_matrix": {
             "math": 15,
             "science": 10,
@@ -504,15 +537,15 @@ def build_nafs_dossier(connection) -> dict:
         },
         "achievement_committee": _achievement_team(connection),
         "nafs_teachers": _nafs_teachers(connection),
-        "initiatives": ["قارئ الحصيف", "تحدي الأرقام", "قدوة", "رفق"],
-        "mocks": ["Mock 1", "Mock 2", "Mock 3", "Mock 4"],
-        "exam_window": "شوال / ذو القعدة",
-        "weeks": 18,
+        "initiatives": list(INITIATIVES),
+        "mocks": [row["name"] for row in mocks],
+        "mock_tiers": mocks,
+        "exam_window": EXAM_WINDOW,
+        "weeks": PLAN_WEEKS,
         "challenges": challenges,
         "sample_questions": sample_questions,
-        "question_bank_count": connection.execute(
-            "SELECT COUNT(*) FROM nafs_question_bank WHERE COALESCE(active,1)=1"
-        ).fetchone()[0],
+        "question_bank_count": bank_count,
+        "question_bank_baseline": QUESTION_BANK_BASELINE,
     }
 
 
@@ -578,5 +611,23 @@ def nafs_dossier(x_session_token: str = Header(default="")):
         payload = build_nafs_dossier(connection)
         connection.commit()
         return payload
+    finally:
+        connection.close()
+
+
+@router.get("/api/session/nafs/school-record")
+def nafs_school_record(x_session_token: str = Header(default="")):
+    """مرجع قراءة سجل 40341 للوحة المعلم/المالك — أرقام موثّقة فقط."""
+    _user(x_session_token)
+    connection = connect()
+    try:
+        from .nafs_question_bank_seed import ensure_nafs_question_bank
+
+        ensure_nafs_question_bank(connection)
+        analytics = build_nafs_analytics(connection)
+        connection.commit()
+        pack = analytics.get("school_record") or {}
+        pack["ok"] = True
+        return pack
     finally:
         connection.close()
