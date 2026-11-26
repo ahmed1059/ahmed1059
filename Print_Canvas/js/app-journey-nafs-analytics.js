@@ -96,10 +96,10 @@
         );
       }
     );
-    // أسس بصيغة ^ — معزولة في math-atom حتى لا يفرّقها flex/RTL
+    // أسس بصيغة ^ — dir=rtl حتى لا يسبق الأس الأساس عند قراءة الفقرة العربية
     text = text.replace(/([0-9٠-٩أ-يA-Za-zسصقع])\^(\d+)/g, function (_m, base, exp) {
       return keep(
-        '<span class="math-atom" dir="ltr">' +
+        '<span class="math-atom" dir="rtl">' +
           toEasternDigits(base) +
           "<sup>" +
           toEasternDigits(exp) +
@@ -110,7 +110,7 @@
     text = text.replace(/([0-9٠-٩أ-يA-Za-zس])([²³⁴⁵⁶⁷⁸⁹⁰¹])/g, function (_m, base, exp) {
       var map = { "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9", "⁰": "0" };
       return keep(
-        '<span class="math-atom" dir="ltr">' +
+        '<span class="math-atom" dir="rtl">' +
           toEasternDigits(base) +
           "<sup>" +
           toEasternDigits(map[exp] || exp) +

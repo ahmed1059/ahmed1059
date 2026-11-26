@@ -27,7 +27,7 @@ function escapeHtml(text) {
     .replace(/"/g, "&quot;");
 }
 function wrapMathAtom(innerHtml) {
-  return '<span class="math-atom" dir="ltr">' + innerHtml + "</span>";
+  return '<span class="math-atom" dir="rtl">' + innerHtml + "</span>";
 }
 function renderArabicMath(raw) {
   var source = String(raw == null ? "" : raw);
@@ -58,15 +58,22 @@ const samples = [
   "في المثلث القائم: أ² + ب² = ج² حيث ج الوتر. مثال: ٣-٤-٥.",
   "نضرب المعاملات ونجمع الأسس: (٢ص³)(٣ص²)=٦ص⁵.",
   "س^3 + ص^2",
+  "ناتج ٣⁴ يساوي:",
+  "ناتج ٢³ يساوي:",
 ];
 for (const s of samples) {
   const html = renderArabicMath(s);
-  const atoms = (html.match(/<span class="math-atom" dir="ltr">/g) || []).length;
+  const atoms = (html.match(/<span class="math-atom" dir="rtl">/g) || []).length;
   const loose = /[أ-يA-Za-z٠-٩0-9]<sup>/.test(html.replace(/<span class="math-atom"[^>]*>.*?<\/span>/gs, ""));
   if (atoms < 1) { console.error("FAIL no atoms", s, html); process.exit(1); }
   if (loose) { console.error("FAIL loose sup", s, html); process.exit(1); }
-  if (!html.includes("<sup>") || !/dir="ltr"/.test(html)) { console.error("FAIL", html); process.exit(1); }
-  console.log("OK", atoms, html.slice(0, 120));
+  if (!html.includes("<sup>") || !/dir="rtl"/.test(html)) { console.error("FAIL dir", html); process.exit(1); }
+  // داخل الذرة: الأساس قبل <sup> في DOM حتى يظهر الأساس أولاً عند قراءة RTL
+  if (!/<span class="math-atom" dir="rtl">[^<]+<sup>/.test(html)) {
+    console.error("FAIL base-before-sup", html); process.exit(1);
+  }
+  if (/dir="ltr"/.test(html)) { console.error("FAIL leftover ltr atom", html); process.exit(1); }
+  console.log("OK", atoms, html.slice(0, 140));
 }
 """
 
@@ -77,8 +84,21 @@ def main() -> int:
     css = PORTAL_CSS.read_text(encoding="utf-8")
     if "wrapMathAtom" not in js or 'class="math-atom"' not in js:
         errors.append("portal-student.js missing math-atom wrap")
+    if 'dir="rtl"' not in js or "wrapMathAtom" not in js:
+        errors.append("math-atom must use dir=rtl so base precedes exponent in RTL reading")
+    if 'dir="ltr">' in js and "math-atom" in js:
+        # لا نسمح بذرات أسس ltr في بوابة الطالب
+        if re.search(r'class="math-atom" dir="ltr"', js):
+            errors.append("leftover math-atom dir=ltr in portal-student.js")
     if ".math-atom" not in css or "unicode-bidi: isolate" not in css:
         errors.append("portal-student.css missing math-atom rules")
+    if not re.search(r"\.math-atom\s*\{[^}]*direction:\s*rtl", css, re.S):
+        errors.append("math-atom css direction must be rtl")
+    analytics = (ROOT / "Print_Canvas" / "js" / "app-journey-nafs-analytics.js").read_text(encoding="utf-8")
+    if re.search(r'class="math-atom" dir="ltr"', analytics):
+        errors.append("analytics still has math-atom dir=ltr")
+    if 'class="math-atom" dir="rtl"' not in analytics:
+        errors.append("analytics missing math-atom dir=rtl")
     if re.search(r"\.flip-face\.back \.flip-body\s*\{[^}]*display:\s*flex", css, re.S):
         errors.append("flip-body still display:flex")
     if "display: block" not in css:

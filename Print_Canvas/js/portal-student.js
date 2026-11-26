@@ -78,9 +78,14 @@
       .replace(/"/g, "&quot;");
   }
 
-  /** عزل الأساس+الأس في عقدة واحدة حتى لا يفرّقها flex/RTL */
+  /**
+   * عزل الأساس+الأس في عقدة واحدة.
+   * dir=rtl ضروري: داخل فقرة عربية تدخل العين من يمين الذرة؛
+   * مع ltr كانت العين تصطدم بالأس أولاً فيظهر «⁴٣» بدل «٣⁴».
+   * ترتيب DOM يبقى أساس ثم <sup>أس</sup>.
+   */
   function wrapMathAtom(innerHtml) {
-    return '<span class="math-atom" dir="ltr">' + innerHtml + "</span>";
+    return '<span class="math-atom" dir="rtl">' + innerHtml + "</span>";
   }
 
   function renderArabicMath(raw) {
