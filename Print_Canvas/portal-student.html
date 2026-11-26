@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بوابة الطالب — ميدان نافس</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p10">
+  <link rel="stylesheet" href="css/portal-student.css?v=p12">
 </head>
 <body class="portal-student portal-gamer theme-royal">
   <canvas id="portal-particles" aria-hidden="true"></canvas>
@@ -206,9 +206,10 @@
   </div>
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe1"></script>
-  <script src="js/portal-student.js?v=p11"></script>
   <script src="js/portal-student-games.js?v=g3"></script>
   <script src="js/portal-student-fx.js?v=fx2"></script>
   <script src="js/portal-student-adaptive.js?v=ad2"></script>
+  <!-- أخيراً: بعد تعريف Games/Adaptive/Fx حتى لا يحدث null.toEastern عند الإقلاع -->
+  <script src="js/portal-student.js?v=p12"></script>
 </body>
 </html>
