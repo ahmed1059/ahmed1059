@@ -36,7 +36,20 @@
   ];
 
   function toEastern(text) {
-    if (text == null || text === "") {
+    if (text == null) {
+      return "";
+    }
+    if (typeof text === "object") {
+      try {
+        text = "valueOf" in text ? text.valueOf() : text;
+      } catch (_err) {
+        return "";
+      }
+      if (text == null || typeof text === "object") {
+        return "";
+      }
+    }
+    if (typeof text === "number" && !isFinite(text)) {
       return "";
     }
     return String(text)
@@ -104,9 +117,22 @@
     });
   }
 
+  function isTechnicalFault(msg) {
+    var s = String(msg == null ? "" : msg);
+    return /Cannot read propert|TypeError|ReferenceError|undefined is not|null is not|reading 'toEastern'|toEastern/i.test(
+      s
+    );
+  }
+
   function status(msg, isError) {
     var el = document.getElementById("portal-status");
     if (!el) {
+      return;
+    }
+    if (isTechnicalFault(msg)) {
+      console.warn("[portal-student]", msg);
+      el.textContent = "";
+      el.classList.remove("is-error");
       return;
     }
     el.textContent = msg || "";
@@ -1208,25 +1234,20 @@
       return;
     }
     bind();
-    /*
-     * portal-student.js يُحمَّل قبل games/adaptive.
-     * نؤجّل bootHelpers+refresh لماكروتامسك تالٍ حتى تُعرَّف الوحدات،
-     * ثم نهيّئ api قبل أول paintHomeExtras لتفادي null.toEastern.
-     */
-    setTimeout(function () {
-      bootHelpers();
-      refresh()
-        .then(function () {
-          showMainTab("play");
-        })
-        .catch(function (error) {
-          status(error.message || "تعذر تحميل البوابة.", true);
-          if (error.status === 401) {
-            sessionStorage.removeItem(TOKEN_KEY);
-            window.location.href = "login.html";
-          }
-        });
-    }, 0);
+    /* يُحمَّل هذا الملف آخراً في portal-student.html؛ api جاهز قبل أول refresh */
+    bootHelpers();
+    refresh()
+      .then(function () {
+        showMainTab("play");
+        setSettingsOpen(false);
+      })
+      .catch(function (error) {
+        status(error.message || "تعذر تحميل البوابة.", true);
+        if (error.status === 401) {
+          sessionStorage.removeItem(TOKEN_KEY);
+          window.location.href = "login.html";
+        }
+      });
   }
 
   window.PortalStudentUI = {
