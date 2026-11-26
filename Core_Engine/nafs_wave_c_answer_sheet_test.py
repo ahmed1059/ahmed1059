@@ -112,6 +112,8 @@ def main() -> int:
         errors.append("js module API")
     if "etec-ltr" not in js or "ltr" not in js:
         errors.append("js ETEC LTR")
+    if "school.code_ar || east(school.code" not in js:
+        errors.append("js school code must render eastern digits")
     if "يمكن للطالب تعبئة أكثر من إجابة" not in js:
         errors.append("multi-select banner in js")
     if "printAnswerSheetTraining" not in analytics or "answer-sheet-training" not in analytics:

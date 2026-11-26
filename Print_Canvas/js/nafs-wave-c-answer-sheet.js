@@ -148,7 +148,7 @@
       "<div><label>" +
       esc(labels.ministry_no || "الرقم الوزاري") +
       "</label><div class=\"nafs-c-field etec-ltr\" dir=\"ltr\">" +
-      esc(school.code || "40341") +
+      esc(school.code_ar || east(school.code || "40341")) +
       "</div></div>" +
       "<div><label>" +
       esc(labels.grade || "الصف") +
