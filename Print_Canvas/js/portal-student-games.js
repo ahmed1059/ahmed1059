@@ -314,10 +314,15 @@
         );
       })
       .join("");
+    var headTitle = pulse.title || (pulse.source === "challenge_runs" ? "تحدياتك" : "محاولاتك");
     return (
-      '<section class="progress-pulse" aria-label="تقدّم المحاولات">' +
+      '<section class="progress-pulse" aria-label="' +
+      esc(headTitle) +
+      '">' +
       '<div class="progress-pulse-head">' +
-      "<strong>محاولاتك</strong>" +
+      "<strong>" +
+      esc(headTitle) +
+      "</strong>" +
       '<span class="progress-pulse-legend">' +
       "<span>ارتفاع العمود = الصحيحة</span>" +
       "<span>النقطة = السرعة</span>" +
@@ -1371,6 +1376,10 @@
   window.PortalStudentGames = {
     boot: boot,
     refreshPresence: refreshPresence,
-    onQuestionPainted: onQuestionPainted
+    onQuestionPainted: onQuestionPainted,
+    renderProgressPulse: renderProgressPulse,
+    renderLegendBar: renderLegendBar,
+    renderRankGap: renderRankGap,
+    renderPathHint: renderPathHint
   };
 })();

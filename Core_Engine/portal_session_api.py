@@ -1367,6 +1367,47 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
             program_noms = sync_student_programs(connection, session["student_nid"])
         except Exception:
             program_noms = []
+        # المرحلة ٤ ختام التحدي: أعمدة التقدّم + أسطورة نافس من السجلات الحقيقية
+        pulse = None
+        endround_ctx = None
+        tier_pack = None
+        coach_pack = None
+        try:
+            from .nafs_challenge_tiers import coaching_from_round, resolve_tier
+            from .nafs_endround_legend import build_endround_context
+            from .nafs_endround_progress import build_progress_pulse, fetch_challenge_runs
+
+            mode_key = str(row[1] or "")
+            tier_pack = resolve_tier(mode=mode_key)
+            detail["tier"] = tier_pack.get("id") or ""
+            connection.execute(
+                "UPDATE portal_challenge_runs SET detail_json = ? WHERE id = ?",
+                (json.dumps(detail, ensure_ascii=False), body.run_id),
+            )
+            pulse = build_progress_pulse(
+                fetch_challenge_runs(connection, session["student_nid"], mode=mode_key or None),
+                limit=7,
+            )
+            coach_pack = coaching_from_round(
+                score=correct_count,
+                total=total,
+                combo_best=best_streak,
+                elapsed_sec=float(duration or 0),
+                tier_label=tier_pack.get("label") or "",
+            )
+            endround_ctx = build_endround_context(
+                connection,
+                student_nid=session["student_nid"],
+                game="challenges",
+                accuracy_pct=score_pct,
+                attempts_asc=pulse.get("attempts") or [],
+                period_start=_period_start("week"),
+            )
+        except Exception:
+            pulse = None
+            endround_ctx = None
+            tier_pack = None
+            coach_pack = None
         connection.commit()
         return {
             "run_id": body.run_id,
@@ -1395,6 +1436,12 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
                 }
                 for p in (program_noms or [])
             ],
+            "tier": tier_pack,
+            "coaching": coach_pack,
+            "progress_pulse": pulse,
+            "endround": endround_ctx,
+            "etec": "3-1-1-3",
+            "etec_ar": "٣-١-١-٣",
         }
     finally:
         connection.close()

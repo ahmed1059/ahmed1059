@@ -883,8 +883,35 @@
           extra += "<br>حصلت على قسيمة مقصف مستحقة.";
         }
         var box = document.getElementById("result-box");
+        var tierLabel =
+          result.tier && result.tier.label ? escapeHtml(result.tier.label) : "";
+        var etecAr = result.etec_ar || "٣-١-١-٣";
+        var gamesUi = window.PortalStudentGames || {};
+        var pulseHtml =
+          typeof gamesUi.renderProgressPulse === "function"
+            ? gamesUi.renderProgressPulse(result.progress_pulse || null)
+            : "";
+        var endround = result.endround || {};
+        var legendHtml =
+          typeof gamesUi.renderLegendBar === "function"
+            ? gamesUi.renderLegendBar(endround.legend)
+            : "";
+        var rankHtml =
+          typeof gamesUi.renderRankGap === "function"
+            ? gamesUi.renderRankGap(endround.rank)
+            : "";
+        var hintHtml =
+          typeof gamesUi.renderPathHint === "function"
+            ? gamesUi.renderPathHint(endround.path_hint)
+            : "";
         box.innerHTML =
-          "<div class=\"result-box\"><strong>انتهت الجولة</strong><br>النتيجة: " +
+          "<div class=\"result-box end-round-card\"><strong>انتهت الجولة</strong>" +
+          (tierLabel
+            ? ' · <span class="end-round-tier">' + tierLabel + "</span>"
+            : "") +
+          ' · <span dir="ltr" class="etec-code">' +
+          escapeHtml(etecAr) +
+          "</span><br>النتيجة: " +
           toEastern(result.score_pct) +
           "٪ (" +
           toEastern(result.correct_count) +
@@ -897,7 +924,16 @@
           (result.badge ? " · وسام: " + escapeHtml(result.badge) : "") +
           duelLine +
           extra +
+          (result.coaching && result.coaching.message
+            ? "<p class=\"end-round-message\">" +
+              escapeHtml(result.coaching.message) +
+              "</p>"
+            : "") +
           "</div>" +
+          pulseHtml +
+          legendHtml +
+          rankHtml +
+          hintHtml +
           "<ul class=\"portal-list\">" +
           (result.review || [])
             .slice(0, 8)

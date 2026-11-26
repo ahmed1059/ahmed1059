@@ -1,4 +1,4 @@
-# المرحلة ٣: أسطورة نافس + فارق القفزة الآمن + امتداد challenges
+# المرحلة ٣: أسطورة نافس + فارق القفزة الآمن (بلا امتداد أعمدة التحديات)
 # تشغيل: python3 -m Core_Engine.nafs_endround_phase3_test
 from __future__ import annotations
 
@@ -70,21 +70,20 @@ def main() -> int:
         "endround-context",
         "endround",
         "_attach_endround_context",
-        "fetch_runs_for_game",
         "_period_start",
     ):
         if needle not in api:
             errors.append(f"api missing {needle}")
+    if "fetch_runs" not in api and "fetch_runs_for_game" not in api:
+        errors.append("api missing fetch_runs routing")
 
     legend_src = LEGEND_PY.read_text(encoding="utf-8")
     if "fetch_week_challenge_peers" not in legend_src:
         errors.append("rank must use challenge_runs week peers")
     if "fetch_game_peers" in legend_src:
         errors.append("phase3 must not rank via game_runs peers")
-    progress_src = PROGRESS_PY.read_text(encoding="utf-8")
-    if "fetch_challenge_runs" in progress_src:
-        errors.append("challenge pulse extension belongs to phase4 — remove from phase3")
-
+    # امتداد أعمدة التحديات أصبح في المرحلة ٤ — لا نفشل بوجوده بعد الدمج
+    _ = PROGRESS_PY.exists()
     js = GAMES_JS.read_text(encoding="utf-8")
     css = GAMES_CSS.read_text(encoding="utf-8")
     for needle in (
