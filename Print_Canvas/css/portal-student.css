@@ -1101,6 +1101,12 @@ body.portal-gamer {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px;
 }
+/* إخفاء قاطع لقائمة البطاقات أثناء الجلسة — يتفوق على display:grid */
+#foundation-game-tiles[hidden],
+#foundation-game-tiles.is-hidden-session,
+[data-station="games"].is-foundation-session #foundation-game-tiles {
+  display: none !important;
+}
 .foundation-session-bar {
   display: flex;
   align-items: center;
@@ -1110,6 +1116,32 @@ body.portal-gamer {
 }
 .foundation-session-bar[hidden] {
   display: none !important;
+}
+.foundation-lobby {
+  text-align: center;
+  padding: 18px 12px 8px;
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+.foundation-lobby-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0b5e56;
+}
+.foundation-lobby-blurb {
+  margin: 0;
+  max-width: 34rem;
+  color: #5c675f;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.foundation-lobby-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 .foundation-active-title {
   margin: 0;
