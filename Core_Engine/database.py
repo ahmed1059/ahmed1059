@@ -1022,6 +1022,12 @@ def init_db():
         from .nafs_unit2_ssot import ensure_on_boot as ensure_nafs_unit2
 
         ensure_nafs_unit2(connection)
+        from .nafs_adaptive_engine import ensure_on_boot as ensure_nafs_adaptive
+
+        ensure_nafs_adaptive(connection)
+        from .nafs_readalong_api import ensure_on_boot as ensure_nafs_readalong
+
+        ensure_nafs_readalong(connection)
         approval_path = Path(__file__).resolve().parent.parent / "Print_Canvas" / "banks" / "approval_authorities.json"
         if approval_path.is_file():
             approval_text = approval_path.read_text(encoding="utf-8").strip()

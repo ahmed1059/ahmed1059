@@ -476,6 +476,14 @@ from .nafs_unit2_ssot import router as nafs_unit2_router
 
 app.include_router(nafs_unit2_router)
 
+from .nafs_adaptive_engine import router as nafs_adaptive_router
+
+app.include_router(nafs_adaptive_router)
+
+from .nafs_readalong_api import router as nafs_readalong_router
+
+app.include_router(nafs_readalong_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):

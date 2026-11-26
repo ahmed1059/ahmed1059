@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بوابة الطالب — ميدان نافس</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p6">
+  <link rel="stylesheet" href="css/portal-student.css?v=p7">
 </head>
 <body class="portal-student portal-gamer theme-royal">
   <canvas id="portal-particles" aria-hidden="true"></canvas>
@@ -60,6 +60,23 @@
         <h2>الطلاب المتواجدون الآن</h2>
         <div id="online-list" class="online-list"></div>
         <div id="duel-inbox" class="duel-inbox"></div>
+      </section>
+
+      <section class="portal-card adaptive-strip">
+        <h2>شريط تطهير الأخطاء ومؤشر الإتقان</h2>
+        <p id="purge-banner" class="purge-banner">جارٍ تحميل سجل الأخطاء…</p>
+        <div id="mastery-bars" class="mastery-bars"></div>
+        <div id="vault-list" class="vault-list"></div>
+        <div class="portal-actions">
+          <button type="button" class="portal-btn" data-mode="purge" id="btn-purge">تحدي تصفية الأخطاء</button>
+          <button type="button" class="portal-btn secondary" id="btn-home-mock">اختبار منزلي ورقي (OMR)</button>
+        </div>
+      </section>
+
+      <section class="portal-card readalong-card">
+        <h2>القراءة المتزامنة بالصوت والصور · ٣-١-١-١</h2>
+        <div id="readalong-list" class="readalong-list"></div>
+        <div id="readalong-stage" class="readalong-stage" hidden></div>
       </section>
 
       <div id="arena-hub" class="portal-grid play-grid">
@@ -175,8 +192,10 @@
     </div>
   </div>
   <script src="js/national-id-mask.js?v=m1"></script>
-  <script src="js/portal-student.js?v=p6"></script>
+  <script src="js/print-engine.js?v=pe1"></script>
+  <script src="js/portal-student.js?v=p7"></script>
   <script src="js/portal-student-games.js?v=g2"></script>
   <script src="js/portal-student-fx.js?v=fx1"></script>
+  <script src="js/portal-student-adaptive.js?v=ad1"></script>
 </body>
 </html>
