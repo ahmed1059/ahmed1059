@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بوابة الطالب — ميدان نافس</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p12">
+  <link rel="stylesheet" href="css/portal-student.css?v=p13">
 </head>
 <body class="portal-student portal-gamer theme-royal">
   <canvas id="portal-particles" aria-hidden="true"></canvas>
@@ -86,28 +86,64 @@
         </div>
       </section>
 
-      <section class="portal-card readalong-card">
-        <h2>القراءة المتزامنة بالصوت والصور · <span class="etec-code" dir="ltr">٣-١-١-١</span></h2>
-        <div id="readalong-list" class="readalong-list"></div>
-        <div id="readalong-stage" class="readalong-stage" hidden></div>
+      <section class="portal-card collapsible-card is-collapsed readalong-card" data-collapse="readalong">
+        <button type="button" class="collapse-launcher" id="btn-collapse-readalong" aria-expanded="false" aria-controls="readalong-body">
+          <span class="collapse-glyph" aria-hidden="true">
+            <svg viewBox="0 0 64 64" class="tile-svg"><defs><linearGradient id="raG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b5e56"/><stop offset="100%" stop-color="#34d399"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#raG)"/><path d="M14 18h26c6 0 10 4 10 10v8c0 6-4 10-10 10H28l-8 8v-8h-6c-4 0-8-4-8-10V26c0-4 4-8 8-8z" fill="#fff" opacity=".95"/><circle cx="26" cy="30" r="3" fill="#0b5e56"/><circle cx="36" cy="30" r="3" fill="#0b5e56"/><circle cx="46" cy="30" r="3" fill="#0b5e56"/></svg>
+          </span>
+          <span class="collapse-copy">
+            <strong>القراءة المتزامنة بالصوت والصور</strong>
+            <small>مؤشر <span class="etec-code" dir="ltr">٣-١-١-١</span> · اضغط للفتح</small>
+          </span>
+          <span class="collapse-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div class="collapse-body" id="readalong-body" hidden>
+          <div id="readalong-list" class="readalong-list"></div>
+          <div id="readalong-stage" class="readalong-stage" hidden></div>
+        </div>
       </section>
 
       <div id="arena-hub" class="portal-grid play-grid">
-        <section class="portal-card card-play">
-          <h2>أنماط التحدي</h2>
-          <div class="mode-grid" id="mode-grid"></div>
-          <div id="result-box"></div>
+        <section class="portal-card card-play collapsible-card is-collapsed" data-collapse="modes">
+          <button type="button" class="collapse-launcher" id="btn-collapse-modes" aria-expanded="false" aria-controls="modes-body">
+            <span class="collapse-glyph" aria-hidden="true">
+              <svg viewBox="0 0 64 64" class="tile-svg"><defs><linearGradient id="mdG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0e7490"/><stop offset="100%" stop-color="#67e8f9"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#mdG)"/><path d="M18 40l10-22 8 14 6-10 12 18H18z" fill="#fff"/><circle cx="46" cy="20" r="5" fill="#fbbf24"/></svg>
+            </span>
+            <span class="collapse-copy">
+              <strong>أنماط التحدي</strong>
+              <small>يومي · محاكي · إنقاذ · تصفية · مبارزة · وطني</small>
+            </span>
+            <span class="collapse-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="collapse-body" id="modes-body" hidden>
+            <div class="mode-grid" id="mode-grid"></div>
+            <div id="result-box"></div>
+          </div>
         </section>
         <section class="portal-card card-play">
           <h2>ألعاب التأسيس السريع</h2>
           <div class="mini-games">
-            <button type="button" class="mode-card" id="btn-words">لعبة الكلمات<br><span>معنى · مرادف · ضد · ٦٠ ث · <span class="etec-code" dir="ltr">٣-١-١-١</span></span></button>
-            <button type="button" class="mode-card" id="btn-mental">الحساب الذهني<br><span>فردي / بطولة فصول · <span class="etec-code" dir="ltr">٣-١-١-٢</span></span></button>
+            <button type="button" class="mode-card game-tile" id="btn-words">
+              <span class="game-tile-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#ecfdf5"/><path d="M10 14h28v4H10zm0 8h20v4H10zm0 8h24v4H10z" fill="#0b5e56"/></svg></span>
+              <strong>لعبة الكلمات</strong>
+              <span>معنى · مرادف · ضد · ٦٠ ث · <span class="etec-code" dir="ltr">٣-١-١-١</span></span>
+            </button>
+            <button type="button" class="mode-card game-tile" id="btn-quran-words">
+              <span class="game-tile-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#fff7ed"/><path d="M12 34V14l12 6 12-6v20l-12 6z" fill="#b45309"/><path d="M24 20v20" stroke="#fde68a" stroke-width="2"/></svg></span>
+              <strong>ألفاظ القرآن الكريم</strong>
+              <span>معاني قرآنية مبسّطة · تأسيس لغوي · <span class="etec-code" dir="ltr">٣-١-١-١</span></span>
+            </button>
+            <button type="button" class="mode-card game-tile" id="btn-mental">
+              <span class="game-tile-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#eef2ff"/><text x="10" y="30" font-size="16" font-family="Tajawal,sans-serif" fill="#3730a3">١٢×٣</text></svg></span>
+              <strong>الحساب الذهني</strong>
+              <span>فردي / بطولة فصول · <span class="etec-code" dir="ltr">٣-١-١-٢</span></span>
+            </button>
           </div>
           <div id="mini-game-stage" class="mini-game-stage" hidden></div>
         </section>
         <section class="portal-card card-play">
           <h2>الحقيبة الذهبية</h2>
+          <p class="section-hint">اقلب البطاقة لترى القاعدة، ثم سجّل إتقانك (+٥ XP).</p>
           <div id="golden-deck" class="golden-deck"></div>
         </section>
         <section class="portal-card card-play">
@@ -117,7 +153,14 @@
             <button type="button" class="tab" data-trap-door="science">العلوم</button>
             <button type="button" class="tab" data-trap-door="reading">لغتي والقراءة</button>
           </div>
-          <div id="trap-album" class="trap-album"></div>
+          <div class="trap-carousel" id="trap-carousel">
+            <div id="trap-album" class="trap-album trap-album-carousel"></div>
+            <div class="trap-nav">
+              <button type="button" class="portal-btn secondary" id="trap-prev">السابق</button>
+              <span class="trap-counter" id="trap-counter">٠ / ٠</span>
+              <button type="button" class="portal-btn secondary" id="trap-next">التالي</button>
+            </div>
+          </div>
         </section>
       </div>
 
@@ -206,10 +249,10 @@
   </div>
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe1"></script>
-  <script src="js/portal-student-games.js?v=g3"></script>
+  <script src="js/portal-student-games.js?v=g4"></script>
   <script src="js/portal-student-fx.js?v=fx2"></script>
   <script src="js/portal-student-adaptive.js?v=ad2"></script>
   <!-- أخيراً: بعد تعريف Games/Adaptive/Fx حتى لا يحدث null.toEastern عند الإقلاع -->
-  <script src="js/portal-student.js?v=p12"></script>
+  <script src="js/portal-student.js?v=p13"></script>
 </body>
 </html>

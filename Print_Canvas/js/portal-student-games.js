@@ -18,7 +18,7 @@
     challenger: "",
     opponent: ""
   };
-  var words = { rounds: [], index: 0, answers: [], combo: 0, best: 0, timer: null, left: 60, started: 0 };
+  var words = { rounds: [], index: 0, answers: [], combo: 0, best: 0, timer: null, left: 60, started: 0, track: "lang" };
   var mental = { items: [], index: 0, answers: [], level: 1, mode: "solo", timer: null, left: 60, started: 0 };
   var scratch = { ink: "#111827", erasing: false, drawing: false, expanded: false };
 
@@ -325,11 +325,13 @@
     host.hidden = false;
     var kindClass = r.kind === "synonym" ? "kind-syn" : r.kind === "antonym" ? "kind-ant" : "kind-mean";
     host.innerHTML =
-      "<div class=\"mini-hud\"><strong>لعبة الكلمات</strong><span>Combo ×" +
+      "<div class=\"mini-hud\"><strong>" +
+      (words.track === "quran" ? "ألفاظ القرآن الكريم" : "لعبة الكلمات") +
+      "</strong><span>Combo ×" +
       east(words.combo) +
       "</span><span>" +
       east(words.left) +
-      " ث</span></div>" +
+      " ث</span><span dir=\"ltr\" class=\"etec-code\">٣-١-١-١</span></div>" +
       "<div class=\"word-card " +
       kindClass +
       "\"><em>" +
@@ -356,6 +358,7 @@
   function finishWords() {
     if (words.timer) clearInterval(words.timer);
     words.timer = null;
+    var total = Math.max(words.rounds.length, 1);
     api
       .fetchJson("/api/portal/games/words/finish", {
         method: "POST",
@@ -368,9 +371,13 @@
       })
       .then(function (pack) {
         stageHost().innerHTML =
-          "<p class=\"portal-empty\">انتهت لعبة الكلمات · " +
+          "<p class=\"portal-empty\">انتهت " +
+          (words.track === "quran" ? "جولة ألفاظ القرآن" : "لعبة الكلمات") +
+          " · " +
           east(pack.score || 0) +
-          " / ١٠ · +" +
+          " / " +
+          east(total) +
+          " · +" +
           east(pack.xp_earned || 0) +
           " XP</p>";
         if (api.refresh) api.refresh();
@@ -380,15 +387,20 @@
       });
   }
 
-  function startWords() {
+  function startWords(track) {
+    track = track || "lang";
     api
-      .fetchJson("/api/portal/games/words/start", { headers: api.authHeaders(), cache: "no-store" })
+      .fetchJson("/api/portal/games/words/start?track=" + encodeURIComponent(track), {
+        headers: api.authHeaders(),
+        cache: "no-store"
+      })
       .then(function (pack) {
         words.rounds = pack.rounds || [];
         words.index = 0;
         words.answers = [];
         words.combo = 0;
         words.best = 0;
+        words.track = pack.track || track;
         words.left = Number(pack.seconds || 60);
         words.started = Date.now();
         if (words.timer) clearInterval(words.timer);
@@ -598,11 +610,23 @@
       });
     }
     var wordsBtn = el("btn-words");
-    if (wordsBtn) wordsBtn.addEventListener("click", startWords);
+    if (wordsBtn) {
+      wordsBtn.addEventListener("click", function () {
+        startWords("lang");
+      });
+    }
+    var quranBtn = el("btn-quran-words");
+    if (quranBtn) {
+      quranBtn.addEventListener("click", function () {
+        startWords("quran");
+      });
+    }
     var mentalBtn = el("btn-mental");
-    if (mentalBtn) mentalBtn.addEventListener("click", function () {
-      startMental(1, "solo");
-    });
+    if (mentalBtn) {
+      mentalBtn.addEventListener("click", function () {
+        startMental(1, "solo");
+      });
+    }
     var stage = stageHost();
     if (stage) {
       stage.addEventListener("click", function (event) {

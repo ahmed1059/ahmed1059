@@ -190,18 +190,43 @@ def player_display_name(connection, student_nid: str, formal_name: str = "") -> 
     return formal.split()[0] if formal else "لاعب"
 
 WORD_BANK = [
-    {"word": "راسخة", "meaning": "ثابتة متمكنة", "synonym": "ثابتة", "antonym": "متزعزعة"},
-    {"word": "يُهدر", "meaning": "يُضيَّع بلا فائدة", "synonym": "يُبدّد", "antonym": "يُحفظ"},
-    {"word": "مستدام", "meaning": "مستمر بعناية", "synonym": "متواصل", "antonym": "مؤقت"},
-    {"word": "الحصيف", "meaning": "الواعي المتأني", "synonym": "الرزين", "antonym": "المتهور"},
-    {"word": "شامخة", "meaning": "عالية معتزة", "synonym": "مرتفعة", "antonym": "منخفضة"},
-    {"word": "يضيء", "meaning": "يرشد وينير", "synonym": "ينير", "antonym": "يظلم"},
-    {"word": "استراتيجية", "meaning": "خطة حل مناسبة", "synonym": "خطة", "antonym": "عشوائية"},
-    {"word": "أنظف", "meaning": "أقل تلويثاً", "synonym": "أنقى", "antonym": "أوسخ"},
-    {"word": "دقيقة", "meaning": "منضبطة وصحيحة", "synonym": "محكمة", "antonym": "غامضة"},
-    {"word": "قدوة", "meaning": "مثال يُحتذى", "synonym": "أسوة", "antonym": "منفّر"},
-    {"word": "ترشيد", "meaning": "استخدام معتدل", "synonym": "اقتصاد", "antonym": "تبذير"},
-    {"word": "تعجّل", "meaning": "أسرع بلا تروٍّ", "synonym": "تسرّع", "antonym": "تأنّى"},
+    {"word": "راسخة", "meaning": "ثابتة متمكنة", "synonym": "ثابتة", "antonym": "متزعزعة", "track": "lang"},
+    {"word": "يُهدر", "meaning": "يُضيَّع بلا فائدة", "synonym": "يُبدّد", "antonym": "يُحفظ", "track": "lang"},
+    {"word": "مستدام", "meaning": "مستمر بعناية", "synonym": "متواصل", "antonym": "مؤقت", "track": "lang"},
+    {"word": "الحصيف", "meaning": "الواعي المتأني", "synonym": "الرزين", "antonym": "المتهور", "track": "lang"},
+    {"word": "شامخة", "meaning": "عالية معتزة", "synonym": "مرتفعة", "antonym": "منخفضة", "track": "lang"},
+    {"word": "يضيء", "meaning": "يرشد وينير", "synonym": "ينير", "antonym": "يظلم", "track": "lang"},
+    {"word": "استراتيجية", "meaning": "خطة حل مناسبة", "synonym": "خطة", "antonym": "عشوائية", "track": "lang"},
+    {"word": "أنظف", "meaning": "أقل تلويثاً", "synonym": "أنقى", "antonym": "أوسخ", "track": "lang"},
+    {"word": "دقيقة", "meaning": "منضبطة وصحيحة", "synonym": "محكمة", "antonym": "غامضة", "track": "lang"},
+    {"word": "قدوة", "meaning": "مثال يُحتذى", "synonym": "أسوة", "antonym": "منفّر", "track": "lang"},
+    {"word": "ترشيد", "meaning": "استخدام معتدل", "synonym": "اقتصاد", "antonym": "تبذير", "track": "lang"},
+    {"word": "تعجّل", "meaning": "أسرع بلا تروٍّ", "synonym": "تسرّع", "antonym": "تأنّى", "track": "lang"},
+    {"word": "مثابرة", "meaning": "استمرار في الجهد", "synonym": "مداومة", "antonym": "تراخٍ", "track": "lang"},
+    {"word": "إتقان", "meaning": "إحكام العمل بجودة", "synonym": "إحسان", "antonym": "إهمال", "track": "lang"},
+    {"word": "تأمّل", "meaning": "نظر عميق بتدبّر", "synonym": "تفكّر", "antonym": "غفلة", "track": "lang"},
+    {"word": "تعاون", "meaning": "عمل مشترك بنظام", "synonym": "تكاتف", "antonym": "تفرّق", "track": "lang"},
+    {"word": "مسؤولية", "meaning": "تحمّل الأمانة والواجب", "synonym": "تكليف", "antonym": "تهرّب", "track": "lang"},
+    {"word": "انضباط", "meaning": "التزام بالقواعد", "synonym": "نظام", "antonym": "فوضى", "track": "lang"},
+    {"word": "طموح", "meaning": "سعي عالٍ للهدف", "synonym": "همّة", "antonym": "قنوط", "track": "lang"},
+    {"word": "إنصات", "meaning": "استماع بتركيز", "synonym": "إصغاء", "antonym": "تشويش", "track": "lang"},
+    # ألفاظ قرآنية مبسّطة للمرحلة المتوسطة (معنى · مرادف · ضد تربوي)
+    {"word": "هدى", "meaning": "رشد وإرشاد إلى الحق", "synonym": "رشاد", "antonym": "ضلال", "track": "quran"},
+    {"word": "تقوى", "meaning": "امتثال أوامر الله واجتناب نواهيه", "synonym": "خشية", "antonym": "غفلة", "track": "quran"},
+    {"word": "صبر", "meaning": "ثبات على الحق بلا جزع", "synonym": "ثبات", "antonym": "جزع", "track": "quran"},
+    {"word": "رزق", "meaning": "ما يسوقه الله من عطاء", "synonym": "عطاء", "antonym": "منع", "track": "quran"},
+    {"word": "شكر", "meaning": "اعتراف بالنعمة وطاعته", "synonym": "حمد", "antonym": "كفران", "track": "quran"},
+    {"word": "أمانة", "meaning": "حفظ الحقوق وأداؤها", "synonym": "عهد", "antonym": "خيانة", "track": "quran"},
+    {"word": "عدل", "meaning": "إنصاف بلا ميل", "synonym": "قسط", "antonym": "ظلم", "track": "quran"},
+    {"word": "رحمة", "meaning": "رفق وإحسان ولين", "synonym": "رأفة", "antonym": "قسوة", "track": "quran"},
+    {"word": "علم", "meaning": "معرفة صحيحة نافعة", "synonym": "معرفة", "antonym": "جهل", "track": "quran"},
+    {"word": "برّ", "meaning": "إحسان وطاعة وخير", "synonym": "خير", "antonym": "إثم", "track": "quran"},
+    {"word": "توبة", "meaning": "رجوع إلى الله بندم", "synonym": "أوبة", "antonym": "إصرار", "track": "quran"},
+    {"word": "يقين", "meaning": "إيمان راسخ بلا شك", "synonym": "طُمأنينة", "antonym": "ريب", "track": "quran"},
+    {"word": "إخلاص", "meaning": "تجريد العمل لله", "synonym": "صفاء", "antonym": "رياء", "track": "quran"},
+    {"word": "عفو", "meaning": "صفح عن الزلة", "synonym": "صفح", "antonym": "انتقام", "track": "quran"},
+    {"word": "حكمة", "meaning": "وضع الشيء في موضعه", "synonym": "بصيرة", "antonym": "طيش", "track": "quran"},
+    {"word": "فلاح", "meaning": "نجاح ونجاة", "synonym": "نجاح", "antonym": "خسارة", "track": "quran"},
 ]
 
 
@@ -585,26 +610,41 @@ def live_duel_get(duel_id: str, x_portal_token: str = Header(default="")):
 
 
 @router.get("/api/portal/games/words/start")
-def words_start(x_portal_token: str = Header(default="")):
+def words_start(track: str = "lang", x_portal_token: str = Header(default="")):
     _require_student(x_portal_token)
+    track = (track or "lang").strip().lower()
+    if track not in ("lang", "quran", "mixed"):
+        track = "lang"
+    if track == "mixed":
+        pool = list(WORD_BANK)
+    else:
+        pool = [w for w in WORD_BANK if w.get("track") == track] or list(WORD_BANK)
     rounds = []
-    sample = random.sample(WORD_BANK, k=min(10, len(WORD_BANK)))
+    sample = random.sample(pool, k=min(12, len(pool)))
     kinds = ["meaning", "synonym", "antonym"]
     for i, item in enumerate(sample):
         kind = kinds[i % 3]
+        same_track = [w for w in pool if w["word"] != item["word"]]
         if kind == "meaning":
-            prompt = f"ما معنى «{item['word']}»؟"
+            prompt = (
+                f"ما معنى اللفظ القرآني «{item['word']}»؟"
+                if item.get("track") == "quran"
+                else f"ما معنى «{item['word']}»؟"
+            )
             correct = item["meaning"]
-            distractors = [w["meaning"] for w in WORD_BANK if w["word"] != item["word"]]
+            distractors = [w["meaning"] for w in same_track]
         elif kind == "synonym":
             prompt = f"مرادف «{item['word']}»:"
             correct = item["synonym"]
-            distractors = [w["synonym"] for w in WORD_BANK if w["word"] != item["word"]]
+            distractors = [w["synonym"] for w in same_track]
         else:
             prompt = f"ضد «{item['word']}»:"
             correct = item["antonym"]
-            distractors = [w["antonym"] for w in WORD_BANK if w["word"] != item["word"]]
+            distractors = [w["antonym"] for w in same_track]
+        distractors = list(dict.fromkeys(distractors))
         opts = [correct] + random.sample(distractors, k=min(3, len(distractors)))
+        while len(opts) < 4:
+            opts.append(correct + "·")
         random.shuffle(opts)
         letters = ["A", "B", "C", "D"]
         choices = {letters[j]: opts[j] for j in range(4)}
@@ -617,10 +657,19 @@ def words_start(x_portal_token: str = Header(default="")):
                 "prompt": prompt,
                 "choices": choices,
                 "correct": correct_letter,
+                "track": item.get("track") or track,
                 "etec": "3-1-1-1",
             }
         )
-    return {"ok": True, "seconds": 60, "rounds": rounds, "etec": "3-1-1-1"}
+    return {
+        "ok": True,
+        "seconds": 60,
+        "rounds": rounds,
+        "track": track,
+        "bank_size": len(pool),
+        "etec": "3-1-1-1",
+        "etec_ar": "٣-١-١-١",
+    }
 
 
 @router.post("/api/portal/games/words/finish")
