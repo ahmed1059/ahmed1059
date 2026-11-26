@@ -113,19 +113,30 @@
       })
       .join("");
 
+    var omrOnly = !!pack.omr_only;
+    var pageCode = omrOnly ? "omr" : "1-4";
+    var pageCodeAr = omrOnly ? "OMR" : "١-٤";
+    var bannerTitle = omrOnly
+      ? esc(pack.title || pack.title_ar || "ورقة التظليل الضوئي (OMR)")
+      : "ورقة الإجابة صفحة ( " + east(1) + " ) — إجابات الأسئلة";
+
     return (
-      "<section class=\"nafs-c-page\" data-page=\"1-4\">" +
+      "<section class=\"nafs-c-page\" data-page=\"" +
+      pageCode +
+      "\">" +
       "<div class=\"nafs-c-timing is-start\" aria-hidden=\"true\">" +
       timingMarks(30) +
       "</div>" +
-      "<div class=\"nafs-c-banner\">ورقة الإجابة صفحة ( " +
-      east(1) +
-      " ) — إجابات الأسئلة · <span class=\"etec-ltr\" dir=\"ltr\">ETEC / Qiyas / NAFS</span></div>" +
+      "<div class=\"nafs-c-banner\">" +
+      bannerTitle +
+      " · <span class=\"etec-ltr\" dir=\"ltr\">ETEC / Qiyas / NAFS</span></div>" +
       "<div class=\"nafs-c-etec-row\">" +
       "<div><span class=\"etec-ltr\" dir=\"ltr\">Education &amp; Training Evaluation Commission</span></div>" +
       "<div class=\"nafs-c-page-box\">صفحة رقم ( " +
       east(1) +
-      " ) · ١-٤</div></div>" +
+      " ) · " +
+      pageCodeAr +
+      "</div></div>" +
       "<div class=\"nafs-c-shade-guide\">" +
       "<span class=\"ok\">صواب: تظليل كامل</span>" +
       "<span class=\"bad\">خطأ: ✓ · ✗ · جزئي · خارج الدائرة</span></div>" +
@@ -148,7 +159,11 @@
       "<div><label>" +
       esc(labels.ministry_no || "الرقم الوزاري") +
       "</label><div class=\"nafs-c-field etec-ltr\" dir=\"ltr\">" +
-      esc(school.code_ar || east(school.code || "40341")) +
+      esc(
+        school.ministry_id_ar ||
+          school.code_ar ||
+          east(school.ministry_id || school.code || "40341")
+      ) +
       "</div></div>" +
       "<div><label>" +
       esc(labels.grade || "الصف") +
@@ -276,7 +291,7 @@
       "<div class=\"nafs-c-banner\">استبانة الطالب — صفحة ( " +
       east(pageIndex) +
       " ) · " +
-      esc(pageCode.replace("-", "–")) +
+      esc(pageMeta.code_ar || east(String(pageCode || "").replace("-", "–"))) +
       "</div>" +
       "<div class=\"nafs-c-etec-row\">" +
       "<div class=\"nafs-c-sky-bar\" style=\"flex:1;margin:0\">" +
@@ -284,7 +299,9 @@
       "</div>" +
       "<div class=\"nafs-c-page-box\">صفحة رقم ( " +
       east(pageIndex) +
-      " )</div></div>" +
+      " ) · " +
+      esc(pageMeta.code_ar || east(String(pageCode || "").replace("-", "–"))) +
+      "</div></div>" +
       "<p class=\"nafs-c-note\">تظليل تفاعلي للتدريب. نصوص البنود تُقرأ من كتيب نافس الرسمي ولا تُختلق في النظام.</p>" +
       items.map(questionnaireItemHtml).join("") +
       closing +
@@ -294,6 +311,9 @@
 
   function renderPack(pack) {
     pack = pack || {};
+    if (pack.omr_only) {
+      return renderOmrOnly(pack);
+    }
     return (
       "<div class=\"nafs-c-host\" dir=\"rtl\" lang=\"ar\">" +
       answerSheetPage(pack) +
@@ -302,6 +322,20 @@
       questionnairePage(pack, "4-4", 4) +
       "</div>"
     );
+  }
+
+  /** ورقة OMR فقط (اختبار منزلي / محاكاة) بنفس قالب Sky Blue وTiming Marks */
+  function renderOmrOnly(pack) {
+    pack = Object.assign({}, pack || {}, { omr_only: true });
+    return (
+      "<div class=\"nafs-c-host nafs-c-omr-host\" dir=\"rtl\" lang=\"ar\">" +
+      answerSheetPage(pack) +
+      "</div>"
+    );
+  }
+
+  function openOmrPrint(pack) {
+    return openPrint(Object.assign({}, pack || {}, { omr_only: true }));
   }
 
   function bindBubbles(root) {
@@ -437,7 +471,9 @@
   global.NafsWaveCAnswerSheet = {
     east: east,
     renderPack: renderPack,
+    renderOmrOnly: renderOmrOnly,
     openPrint: openPrint,
+    openOmrPrint: openOmrPrint,
     mountInteractive: mountInteractive,
     bindBubbles: bindBubbles
   };

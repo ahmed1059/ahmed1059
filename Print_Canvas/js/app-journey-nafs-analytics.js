@@ -974,34 +974,43 @@
             keyRows.push([toEasternDigits(n), letters[item.correct] || item.correct, escapeHtml(item.skill || "")]);
           });
         });
-        var omr =
-          "<h2 style=\"color:#0b5e56;\">ورقة التظليل الضوئي (OMR) — ٦٦ بنداً</h2>" +
-          "<p>ظلّل الحرف الصحيح لكل سؤال. لا تستخدم قلماً رصاصياً خفيفاً.</p>" +
-          "<div style=\"display:grid;grid-template-columns:repeat(6,1fr);gap:6px;\">" +
-          Array.from({ length: 66 })
-            .map(function (_x, i) {
-              return (
-                "<div style=\"border:1px solid #ccc;padding:6px;font-size:12px;\">" +
-                toEasternDigits(i + 1) +
-                "<br>أ ○ ب ○ ج ○ د ○</div>"
-              );
-            })
-            .join("") +
-          "</div>";
+        var omrHtml = "";
+        var sheetApi = window.NafsWaveCAnswerSheet || {};
+        if (pack.omr_sheet && typeof sheetApi.renderOmrOnly === "function") {
+          omrHtml = sheetApi.renderOmrOnly(pack.omr_sheet);
+        }
+        if (!omrHtml) {
+          status("تعذر بناء ورقة OMR من القالب المعتمد (يتطلب omr_sheet من الخادم).", true);
+          return;
+        }
         var keyHtml =
           "<h2 style=\"color:#0b5e56;\">مفتاح التصحيح المعتمد</h2>" +
           tableHtml(["رقم السؤال", "الإجابة", "المهارة"], keyRows);
-        window.PrintEngine.open("master-sheet", {
-          docTitle: "المحاكاة الوطنية الشاملة",
-          title: "كراسة المحاكاة الوطنية + OMR + مفتاح التصحيح",
-          kind: "document",
-          orientation: "portrait",
+        var cssHref = "css/nafs-wave-c-answer-sheet.css";
+        Array.prototype.forEach.call(document.querySelectorAll("link[rel=\"stylesheet\"]"), function (link) {
+          var href = link.getAttribute("href") || "";
+          if (href.indexOf("nafs-wave-c-answer-sheet.css") !== -1) cssHref = href;
+        });
+        var wrapped =
+          "<link rel=\"stylesheet\" href=\"" +
+          escapeHtml(cssHref) +
+          "\">" +
+          "<div class=\"nafs-c-print-root\" dir=\"rtl\" lang=\"ar\">" +
+          "<section dir=\"rtl\">" +
+          booklet +
+          "</section>" +
+          "<div style=\"page-break-before:always\"></div>" +
+          omrHtml +
+          "<div style=\"page-break-before:always\"></div>" +
+          "<section dir=\"rtl\">" +
+          keyHtml +
+          "</section></div>";
+        window.PrintEngine.open("raw-html", {
+          html: wrapped,
+          docTitle: "كراسة المحاكاة الوطنية + OMR + مفتاح التصحيح",
           multiPage: true,
-          school: SCHOOL_NAME,
-          bodyHtml: booklet + "<div style=\"page-break-before:always\"></div>" + omr + "<div style=\"page-break-before:always\"></div>" + keyHtml,
-          signoff: true,
-          maxColumns: 2,
-          pageTotal: 3
+          orientation: "portrait",
+          arm: { orientation: "portrait", multiPage: true }
         });
         status("معاينة المحاكاة الوطنية (كراسة + OMR + مفتاح) جاهزة.");
       })

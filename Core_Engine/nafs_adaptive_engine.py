@@ -573,24 +573,49 @@ def build_home_mock_pack(connection, student_nid: str, count: int = 20) -> dict:
                 "passage_text": q.get("passage_text") or "",
             }
         )
-        key_rows.append(
-            {
-                "n": i,
-                "answer": letters.get(str(q.get("correct") or "A").upper(), "أ"),
-                "skill": q.get("skill") or "",
-            }
-        )
+        correct = str(q.get("correct") or "").strip().upper()
+        answer_ar = letters.get(correct, "")
+        if answer_ar:
+            key_rows.append(
+                {
+                    "n": i,
+                    "answer": answer_ar,
+                    "skill": q.get("skill") or "",
+                }
+            )
+    from .nafs_wave_c_answer_sheet import (
+        SCHOOL_CODE,
+        SCHOOL_NAME,
+        build_omr_sheet_pack,
+        eastern_digits,
+        ministry_id_eastern,
+    )
+
+    omr_sheet = build_omr_sheet_pack(
+        len(items),
+        student_name=student.get("name") or "",
+        national_id=student_nid or "",
+        section=student.get("section") or "",
+        grade=student.get("grade") or "",
+        title="ورقة التظليل OMR — اختبار منزلي",
+        purpose="home-mock",
+    )
     pack = {
         "student_nid": student_nid,
         "student_name": student.get("name") or "",
         "grade": student.get("grade") or "",
         "section": student.get("section") or "",
-        "school": "متوسطة سعد بن الربيع الأنصاري",
-        "code": "40341",
+        "school": SCHOOL_NAME,
+        "code": SCHOOL_CODE,
+        "code_ar": eastern_digits(SCHOOL_CODE),
+        "ministry_id": "S-40341",
+        "ministry_id_ar": ministry_id_eastern(),
         "created_at": _iso(),
         "evidence_code": "1-3-1-2",
+        "evidence_code_ar": eastern_digits("1-3-1-2"),
         "items": items,
         "answer_key": key_rows,
+        "omr_sheet": omr_sheet,
         "parent_pledge": (
             "أقر أنا ولي أمر الطالب بأنني راقبت ابني أثناء أداء هذا الاختبار المنزلي "
             "دون مساعدة في الإجابات، وأتعهد بتسليم الورقة للمعلم في اليوم التالي."
