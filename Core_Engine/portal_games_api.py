@@ -562,6 +562,47 @@ def live_duel_action(body: DuelActionBody, x_portal_token: str = Header(default=
             {"id": q["id"], "stem": q["stem"], "choices": q["choices"], "domain": q.get("domain")}
             for q in (detail.get("questions") or [])
         ]
+        review_items: list = []
+        review_summary: dict = {}
+        if status == "finished":
+            from .nafs_endround_review import review_from_game_answers
+
+            cmap = detail.get("correct_map") or {}
+            q_by_id = {str(q.get("id")): q for q in (detail.get("questions") or [])}
+            mine = ((detail.get("progress") or {}).get(session["student_nid"]) or {}).get(
+                "answers"
+            ) or []
+            enriched = []
+            for ans in mine:
+                qid = str((ans or {}).get("id") or "")
+                q = q_by_id.get(qid) or {}
+                enriched.append(
+                    {
+                        "id": qid,
+                        "choice": (ans or {}).get("choice") or "",
+                        "correct": cmap.get(qid) or q.get("correct") or "",
+                        "stem": q.get("stem") or "",
+                        "choices": q.get("choices") if isinstance(q.get("choices"), dict) else None,
+                        "rationale": q.get("rationale") or "",
+                    }
+                )
+            review_pack = review_from_game_answers(enriched)
+            review_items = review_pack.get("items") or []
+            review_summary = {
+                "total": review_pack.get("total"),
+                "correct_count": review_pack.get("correct_count"),
+                "wrong_count": review_pack.get("wrong_count"),
+                "total_ar": review_pack.get("total_ar"),
+                "correct_count_ar": review_pack.get("correct_count_ar"),
+                "wrong_count_ar": review_pack.get("wrong_count_ar"),
+            }
+            detail["review"] = review_items
+            detail["review_summary"] = review_summary
+            connection.execute(
+                "UPDATE portal_live_duels SET detail_json = ? WHERE id = ?",
+                (json.dumps(detail, ensure_ascii=False), body.duel_id),
+            )
+            connection.commit()
         return {
             "ok": True,
             "status": status,
@@ -571,6 +612,26 @@ def live_duel_action(body: DuelActionBody, x_portal_token: str = Header(default=
             "progress": detail.get("progress") or {},
             "winner": detail.get("winner") or "",
             "correct_map": detail.get("correct_map") if status == "finished" else {},
+            "review": review_items,
+            "review_summary": review_summary,
+            "score": (
+                int(
+                    ((detail.get("progress") or {}).get(session["student_nid"]) or {}).get(
+                        "correct"
+                    )
+                    or 0
+                )
+                if status == "finished"
+                else 0
+            ),
+            "total": len(review_items) if status == "finished" else 0,
+            "xp_earned": (
+                50
+                if status == "finished" and detail.get("winner") == session["student_nid"]
+                else 0
+            ),
+            "etec": "3-1-1-4",
+            "etec_ar": "٣-١-١-٤",
         }
     finally:
         connection.close()
@@ -780,6 +841,8 @@ def words_finish(body: WordFinishBody, x_portal_token: str = Header(default=""))
         ensure_on_boot(connection)
         from .nafs_challenge_tiers import coaching_from_round, resolve_tier
 
+        from .nafs_endround_review import review_from_game_answers
+
         score = sum(1 for a in body.answers if a.get("ok"))
         total = max(1, len(body.answers or []))
         xp = score * 3 + (5 if body.combo_best >= 3 else 0)
@@ -792,6 +855,7 @@ def words_finish(body: WordFinishBody, x_portal_token: str = Header(default=""))
                 counts[k] = counts.get(k, 0) + 1
             kind = max(counts.items(), key=lambda kv: kv[1])[0]
         tier = resolve_tier(word_kind=kind, default="amateur")
+        review_pack = review_from_game_answers(body.answers or [])
         connection.execute(
             """
             INSERT INTO portal_game_runs(student_nid, game_type, score, combo_best, detail_json, created_at)
@@ -807,6 +871,15 @@ def words_finish(body: WordFinishBody, x_portal_token: str = Header(default=""))
                         "elapsed": body.elapsed_sec,
                         "tier": tier.get("id"),
                         "total": total,
+                        "review": review_pack.get("items") or [],
+                        "review_summary": {
+                            "total": review_pack.get("total"),
+                            "correct_count": review_pack.get("correct_count"),
+                            "wrong_count": review_pack.get("wrong_count"),
+                            "total_ar": review_pack.get("total_ar"),
+                            "correct_count_ar": review_pack.get("correct_count_ar"),
+                            "wrong_count_ar": review_pack.get("wrong_count_ar"),
+                        },
                     },
                     ensure_ascii=False,
                 ),
@@ -851,6 +924,15 @@ def words_finish(body: WordFinishBody, x_portal_token: str = Header(default=""))
             "coaching": coach,
             "progress_pulse": pulse,
             "endround": ctx,
+            "review": review_pack.get("items") or [],
+            "review_summary": {
+                "total": review_pack.get("total"),
+                "correct_count": review_pack.get("correct_count"),
+                "wrong_count": review_pack.get("wrong_count"),
+                "total_ar": review_pack.get("total_ar"),
+                "correct_count_ar": review_pack.get("correct_count_ar"),
+                "wrong_count_ar": review_pack.get("wrong_count_ar"),
+            },
             "etec": "3-1-1-1",
             "etec_ar": "٣-١-١-١",
         }
@@ -932,12 +1014,15 @@ def mental_finish(body: MentalFinishBody, x_portal_token: str = Header(default="
         ensure_on_boot(connection)
         from .nafs_challenge_tiers import coaching_from_round, resolve_tier
 
+        from .nafs_endround_review import review_from_game_answers
+
         score = sum(1 for a in body.answers if a.get("ok"))
         total = max(1, len(body.answers or []))
         level = max(1, min(5, int(body.level or 1)))
         xp = score * 2 + (level * 2)
         tier = resolve_tier(mental_level=level)
         budget = 90.0 if level >= 3 else 60.0
+        review_pack = review_from_game_answers(body.answers or [])
         connection.execute(
             """
             INSERT INTO portal_game_runs(student_nid, game_type, score, combo_best, detail_json, created_at)
@@ -955,6 +1040,15 @@ def mental_finish(body: MentalFinishBody, x_portal_token: str = Header(default="
                         "tier": tier.get("id"),
                         "total": total,
                         "level": level,
+                        "review": review_pack.get("items") or [],
+                        "review_summary": {
+                            "total": review_pack.get("total"),
+                            "correct_count": review_pack.get("correct_count"),
+                            "wrong_count": review_pack.get("wrong_count"),
+                            "total_ar": review_pack.get("total_ar"),
+                            "correct_count_ar": review_pack.get("correct_count_ar"),
+                            "wrong_count_ar": review_pack.get("wrong_count_ar"),
+                        },
                     },
                     ensure_ascii=False,
                 ),
@@ -1000,6 +1094,15 @@ def mental_finish(body: MentalFinishBody, x_portal_token: str = Header(default="
             "coaching": coach,
             "progress_pulse": pulse,
             "endround": ctx,
+            "review": review_pack.get("items") or [],
+            "review_summary": {
+                "total": review_pack.get("total"),
+                "correct_count": review_pack.get("correct_count"),
+                "wrong_count": review_pack.get("wrong_count"),
+                "total_ar": review_pack.get("total_ar"),
+                "correct_count_ar": review_pack.get("correct_count_ar"),
+                "wrong_count_ar": review_pack.get("wrong_count_ar"),
+            },
             "etec": "3-1-1-2",
             "etec_ar": "٣-١-١-٢",
         }
