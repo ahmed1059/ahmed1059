@@ -68,7 +68,8 @@
     "education_admin": "الإدارة العامة للتعليم بمنطقة المدينة المنورة",
     "students_total": 354,
     "nafes_tested": 101,
-    "source": "1448 تحليل بطاقة نافس.pdf · ثالث متوسط · S-40341 · تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ"
+    "source": "1448 تحليل بطاقة نافس.pdf · ثالث متوسط · S-40341 · تحليل التقرير الخارجي لسعد بن الربيع.pdf · دورة التقويم الأولى 1448هـ",
+    "nafes_enrolled": 111
   },
   "nafes": {
     "meta": {
@@ -78,7 +79,24 @@
       "triple_domains_mastery_approx_students": 5,
       "triple_domains_mastery_delta_points": -11.2,
       "average_mastery_pct": 29.7,
-      "source": "1448 تحليل بطاقة نافس.pdf · ثالث متوسط · S-40341"
+      "source": "1448 تحليل بطاقة نافس.pdf · ثالث متوسط · S-40341",
+      "enrolled_count": 111,
+      "remedial_count": 76,
+      "enrichment_count": 25,
+      "question_bank_baseline": 86,
+      "plan_weeks": 18,
+      "initiatives": [
+        "قارئ الحصيف",
+        "تحدي الأرقام",
+        "قدوة",
+        "رفق"
+      ],
+      "mocks": [
+        "Mock 1",
+        "Mock 2",
+        "Mock 3",
+        "Mock 4"
+      ]
     },
     "math": {
       "score": 18.8,

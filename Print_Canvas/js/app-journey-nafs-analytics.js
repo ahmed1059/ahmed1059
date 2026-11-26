@@ -317,6 +317,7 @@
     }
     var meta = pack.meta || {};
     var priority = pack.priority_skill || {};
+    var tracks = pack.tracks || (pack.school_record && pack.school_record.tracks) || {};
     host.innerHTML =
       "<article class=\"aj-nafs-card\"><span>الصف / المرحلة</span><strong>" +
       escapeHtml(meta.grade || "—") +
@@ -332,6 +333,11 @@
           ? toEasternDigits(Number(meta.average_mastery_pct).toFixed(1)) + "٪"
           : "—"
       ) +
+      "</strong></article>" +
+      "<article class=\"aj-nafs-card\"><span>مسار علاجي / إثرائي</span><strong>" +
+      toEasternDigits(String(tracks.remedial != null ? tracks.remedial : "—")) +
+      " / " +
+      toEasternDigits(String(tracks.enrichment != null ? tracks.enrichment : "—")) +
       "</strong></article>" +
       "<article class=\"aj-nafs-card is-priority\"><span>أولوية المعالجة</span><strong>" +
       escapeHtml(priority.name || "—") +
@@ -367,8 +373,9 @@
           escapeHtml(fmtGap(row.gap)) +
           "</p>" +
           "<p>مؤشر الاعتماد: " +
+          '<span dir="ltr" class="etec-code">' +
           toEasternDigits(escapeHtml(row.etec_indicator || "—")) +
-          "</p>" +
+          "</span></p>" +
           (row.weakest_skill
             ? "<p>أضعف مهارة: " +
               escapeHtml(row.weakest_skill) +
@@ -1617,7 +1624,7 @@
         (analytics.indicators || [])
           .map(function (row) {
             return (
-              "<li><strong>" +
+              "<li><strong dir=\"ltr\" class=\"etec-code\">" +
               toEasternDigits(row.code) +
               "</strong> — " +
               escapeHtml(row.domain_label) +
@@ -1627,7 +1634,18 @@
             );
           })
           .join("") +
-        "</ul>"
+        "</ul>" +
+        "<p class=\"tpl-p\">مسار علاجي " +
+        toEasternDigits(String((dossier.tracks || {}).remedial != null ? dossier.tracks.remedial : 76)) +
+        " · إثرائي " +
+        toEasternDigits(String((dossier.tracks || {}).enrichment != null ? dossier.tracks.enrichment : 25)) +
+        " من " +
+        toEasternDigits(String((dossier.tracks || {}).tested != null ? dossier.tracks.tested : meta.tested || 101)) +
+        " · بنك الأسئلة المصحّح (أساس " +
+        toEasternDigits(String(dossier.question_bank_baseline || 86)) +
+        " / حيّ " +
+        toEasternDigits(String(dossier.question_bank_count || 0)) +
+        ").</p>"
     );
 
     var page2 =
@@ -1792,10 +1810,15 @@
           toEasternDigits(20) +
           " بنداً · خيارات أ–د · للاستخدام مع بنك الأسئلة المصحّح.</p>" +
           tableHtml(
-            ["المحاكاة", "الأسبوع المقترح", "الهدف"],
-            (dossier.mocks || []).map(function (name, idx) {
+            ["المحاكاة", "المستوى", "الأسبوع المقترح", "الهدف"],
+            (dossier.mock_tiers || (dossier.mocks || []).map(function (name) {
+              return { name: name, tier_label: "" };
+            })).map(function (row, idx) {
+              var name = row.name || row;
+              var tierLabel = row.tier_label || "";
               return [
-                escapeHtml(toEasternDigits(name)),
+                escapeHtml(toEasternDigits(String(name))),
+                escapeHtml(tierLabel || "—"),
                 toEasternDigits(String(11 + idx)),
                 escapeHtml("قياس جاهزية المجال الثلاثي قبل النافذة الوطنية")
               ];
