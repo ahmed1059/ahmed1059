@@ -784,7 +784,7 @@ body.portal-student {
 }
 .math-atom {
   display: inline-block;
-  direction: ltr;
+  direction: rtl;
   unicode-bidi: isolate;
   white-space: nowrap;
   vertical-align: baseline;
