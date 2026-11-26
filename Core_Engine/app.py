@@ -468,6 +468,14 @@ from .nafs_misconception_lab import router as nafs_misconception_router
 
 app.include_router(nafs_misconception_router)
 
+from .portal_games_api import router as portal_games_router
+
+app.include_router(portal_games_router)
+
+from .nafs_unit2_ssot import router as nafs_unit2_router
+
+app.include_router(nafs_unit2_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):

@@ -19,13 +19,21 @@
     boardTab: "day",
     duelPoll: null,
     runStartedAt: 0,
-    mainTab: "arena",
+    mainTab: "play",
     trapDoor: "math",
     trapAlbum: null,
     golden: null,
     checked: {},
     rescueActive: null
   };
+
+  var RANK_TIERS = [
+    { min: 0, title: "فارس مبتدئ", next: 50 },
+    { min: 50, title: "فارس نشط", next: 150 },
+    { min: 150, title: "بطل الأسبوع", next: 350 },
+    { min: 350, title: "نخبة الصف", next: 700 },
+    { min: 700, title: "أسطورة نافس", next: 1200 }
+  ];
 
   function toEastern(text) {
     return String(text == null ? "" : text)
@@ -153,6 +161,7 @@
       " · هوية: " +
       maskedId;
     document.getElementById("portal-xp").textContent = toEastern(home.xp || 0) + " XP";
+    paintRank(Number(home.xp || 0));
 
     var modes = home.modes || {};
     var modeHost = document.getElementById("mode-grid");
@@ -256,6 +265,36 @@
           "مرشّح موهوبون · " + toEastern(home.talent.best_score || "") + "٪";
       }
     }
+  }
+
+  function paintRank(xp) {
+    var tier = RANK_TIERS[0];
+    var i;
+    for (i = 0; i < RANK_TIERS.length; i += 1) {
+      if (xp >= RANK_TIERS[i].min) {
+        tier = RANK_TIERS[i];
+      }
+    }
+    var nextMin = tier.next;
+    var prevMin = tier.min;
+    var span = Math.max(1, nextMin - prevMin);
+    var pct = Math.min(100, Math.round(((xp - prevMin) / span) * 100));
+    var rankEl = document.getElementById("portal-rank");
+    var nextEl = document.getElementById("portal-rank-next");
+    var fill = document.getElementById("portal-rank-fill");
+    if (rankEl) rankEl.textContent = tier.title;
+    if (nextEl) {
+      nextEl.textContent =
+        xp >= 1200
+          ? "وصلت أعلى رتبة"
+          : "التالي «" +
+            (RANK_TIERS[Math.min(RANK_TIERS.length - 1, RANK_TIERS.indexOf(tier) + 1)].title || "") +
+            "» عند " +
+            toEastern(nextMin) +
+            " XP · تبقّى " +
+            toEastern(Math.max(0, nextMin - xp));
+    }
+    if (fill) fill.style.width = pct + "%";
   }
 
   function paintBoards() {
@@ -395,11 +434,17 @@
         escapeHtml(q.passage_text) +
         "</blockquote>";
     }
+    var isMath = String(q.domain || "").toLowerCase() === "math" || /رياض|كسور|معادل|فيثاغور|حساب/.test(q.stem || "");
     document.getElementById("q-box").innerHTML =
       passage +
+      "<div class=\"q-stem-row\">" +
       "<p class=\"q-stem\">" +
       renderArabicMath(q.stem || "") +
       "</p>" +
+      (isMath
+        ? "<button type=\"button\" class=\"scratch-toggle\" id=\"scratch-open\" title=\"مسودة الحل\">✏️ مسودة الحل</button>"
+        : "") +
+      "</div>" +
       "<div class=\"q-choices\">" +
       ["A", "B", "C", "D"]
         .map(function (letter) {
@@ -422,6 +467,9 @@
     hideTrap();
     paintPowerups();
     paintNationalMap();
+    if (window.PortalStudentGames && typeof window.PortalStudentGames.onQuestionPainted === "function") {
+      window.PortalStudentGames.onQuestionPainted(q, isMath);
+    }
   }
 
   function paintPowerups() {
@@ -464,7 +512,7 @@
         state.secondsLeft = Number(pack.seconds || 600);
         state.runStartedAt = Date.now();
         stopTimer();
-        showMainTab("arena");
+        showMainTab("play");
         var rails = document.getElementById("duel-rails");
         if (rails) {
           rails.hidden = !pack.duel;
@@ -759,15 +807,20 @@
     Array.prototype.forEach.call(document.querySelectorAll("[data-main-tab]"), function (btn) {
       btn.classList.toggle("is-active", btn.getAttribute("data-main-tab") === id);
     });
-    ["arena", "traps", "golden"].forEach(function (key) {
+    ["play", "boards", "plan", "counsel"].forEach(function (key) {
       var panel = document.getElementById("panel-" + key);
       if (!panel) return;
       var on = key === id;
       panel.classList.toggle("is-active", on);
       panel.hidden = !on;
     });
-    if (id === "traps") loadTrapAlbum();
-    if (id === "golden") loadGoldenDeck();
+    if (id === "play") {
+      loadTrapAlbum();
+      loadGoldenDeck();
+      if (window.PortalStudentGames && typeof window.PortalStudentGames.refreshPresence === "function") {
+        window.PortalStudentGames.refreshPresence();
+      }
+    }
   }
 
   function loadTrapAlbum() {
@@ -929,13 +982,28 @@
       return;
     }
     bind();
-    refresh().catch(function (error) {
-      status(error.message || "تعذر تحميل البوابة.", true);
-      if (error.status === 401) {
-        sessionStorage.removeItem(TOKEN_KEY);
-        window.location.href = "login.html";
-      }
-    });
+    refresh()
+      .then(function () {
+        showMainTab("play");
+        if (window.PortalStudentGames && typeof window.PortalStudentGames.boot === "function") {
+          window.PortalStudentGames.boot({
+            token: state.token,
+            fetchJson: fetchJson,
+            authHeaders: authHeaders,
+            status: status,
+            toEastern: toEastern,
+            escapeHtml: escapeHtml,
+            refresh: refresh
+          });
+        }
+      })
+      .catch(function (error) {
+        status(error.message || "تعذر تحميل البوابة.", true);
+        if (error.status === 401) {
+          sessionStorage.removeItem(TOKEN_KEY);
+          window.location.href = "login.html";
+        }
+      });
   }
 
   boot();

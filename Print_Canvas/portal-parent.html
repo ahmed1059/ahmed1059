@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بوابة ولي الأمر الذكية</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p2">
+  <link rel="stylesheet" href="css/portal-student.css?v=p5">
 </head>
 <body class="portal-student">
   <div class="portal-shell">
@@ -86,7 +86,11 @@
             (rem.length ? "<ul class=\"portal-list\">" + rem.map(function (r) {
               return "<li>" + escapeHtml(r.subject || "") + " — " + escapeHtml(r.skill || "") + " · " + escapeHtml(r.status || "") + "</li>";
             }).join("") + "</ul>" : "<p class=\"portal-empty\">لا مهام علاجية حالياً.</p>") +
-            "<h2>ميثاق الشراكة الأسرية</h2>" +
+            "<h2>ميثاق الـ ٢٠ دقيقة اليومية (شاهد 1-3-1-2)</h2>" +
+            "<p class=\"portal-empty\" style=\"margin-bottom:8px;\">نشارك ابننا في مراجعة قصيرة يومياً، وقراءة حرة، ومتابعة تحدي نافس الأسبوعي، مع الالتزام بالحضور.</p>" +
+            "<div class=\"family-weekly\" data-weekly-nid=\"" + escapeHtml(nid) + "\">جارٍ تحميل قائمة التحقق…</div>" +
+            "<div class=\"portal-actions\" style=\"margin-top:8px;\"><button type=\"button\" class=\"portal-btn\" data-weekly-save=\"" + escapeHtml(nid) + "\">حفظ التحقق الأسبوعي</button></div>" +
+            "<h2>ميثاق الشراكة الأسرية — التوقيع</h2>" +
             "<label>اسم الموقّع</label><input class=\"pact-name\" style=\"width:100%;padding:8px;border:1px solid #c9d7d3;border-radius:8px;\" placeholder=\"اسم ولي الأمر\">" +
             "<div class=\"portal-actions\" style=\"margin-top:8px;\"><button type=\"button\" class=\"portal-btn\" data-pact=\"" + escapeHtml(nid) + "\">تأكيد الاطلاع والتوقيع الإلكتروني</button></div>" +
             "<h2>رفع عذر غياب إلكتروني</h2>" +
@@ -99,12 +103,68 @@
             "</section>";
         }).join("");
 
+        kids.forEach(function (row) {
+          var nid = (row.student && row.student.national_id) || "";
+          if (!nid) return;
+          fetch("/api/portal/parent/family-weekly?student_nid=" + encodeURIComponent(nid), {
+            headers: headers,
+            cache: "no-store"
+          })
+            .then(function (r) {
+              return r.json().then(function (b) {
+                if (!r.ok) throw new Error(b.detail || "تعذر التحميل");
+                return b;
+              });
+            })
+            .then(function (pack) {
+              var box = host.querySelector('[data-weekly-nid="' + nid + '"]');
+              if (!box) return;
+              var checks = pack.checks || {};
+              box.innerHTML =
+                "<small>أسبوع " +
+                escapeHtml(pack.week_key || "") +
+                "</small>" +
+                (pack.checklist || [])
+                  .map(function (item) {
+                    return (
+                      "<label style=\"display:flex;gap:8px;align-items:flex-start;margin:6px 0;\">" +
+                      "<input type=\"checkbox\" data-check=\"" +
+                      escapeHtml(item.id) +
+                      "\"" +
+                      (checks[item.id] ? " checked" : "") +
+                      "> <span>" +
+                      escapeHtml(item.label || "") +
+                      "</span></label>"
+                    );
+                  })
+                  .join("") +
+                "<textarea class=\"weekly-note\" rows=\"2\" placeholder=\"ملاحظة أسبوعية اختيارية\" style=\"width:100%;margin-top:6px;padding:8px;border:1px solid #c9d7d3;border-radius:8px;\">" +
+                escapeHtml(pack.note || "") +
+                "</textarea>";
+            })
+            .catch(function () {});
+        });
+
         host.addEventListener("click", function (event) {
           var pact = event.target.closest("[data-pact]");
           var absence = event.target.closest("[data-absence]");
           var phone = event.target.closest("[data-phone]");
+          var weekly = event.target.closest("[data-weekly-save]");
           var card = event.target.closest(".portal-card");
           if (!card) return;
+          if (weekly) {
+            var checks = {};
+            Array.prototype.forEach.call(card.querySelectorAll("[data-check]"), function (input) {
+              checks[input.getAttribute("data-check")] = !!input.checked;
+            });
+            post("/api/portal/parent/family-weekly", {
+              student_nid: weekly.getAttribute("data-weekly-save"),
+              checks: checks,
+              note: (card.querySelector(".weekly-note") || {}).value || ""
+            })
+              .then(function (b) { status(b.message || "حُفظ التحقق الأسبوعي."); })
+              .catch(function (e) { status(e.message, true); });
+          }
           if (pact) {
             var signed = (card.querySelector(".pact-name") || {}).value || "";
             post("/api/portal/parent/pact", { student_nid: pact.getAttribute("data-pact"), signed_name: signed })
