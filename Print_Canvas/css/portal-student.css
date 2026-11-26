@@ -893,3 +893,116 @@ body.theme-day .portal-top-gamer {
   .avatar-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .trap-examples { grid-template-columns: 1fr; }
 }
+
+/* تكيّف + قراءة متزامنة */
+.adaptive-strip, .readalong-card { margin-bottom: 14px; }
+.purge-banner {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  font-weight: 700;
+}
+.mastery-bars { display: grid; gap: 8px; margin-bottom: 12px; }
+.mastery-overall { font-weight: 800; color: #0b5e56; }
+.mastery-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1.4fr auto auto;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+}
+.mastery-track {
+  height: 10px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+.mastery-track i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #0b5e56, #34d399);
+}
+.vault-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.vault-tile {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+}
+.vault-tile.domain-math { border-top: 3px solid #0b5e56; }
+.vault-tile.domain-science { border-top: 3px solid #0e7490; }
+.vault-tile.domain-reading { border-top: 3px solid #9f1239; }
+
+.readalong-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.ra-card {
+  border: 1px solid #c9d7d3;
+  border-radius: 14px;
+  background: #fff;
+  padding: 10px;
+  text-align: right;
+  cursor: pointer;
+  font: inherit;
+}
+.ra-card strong { display: block; color: #0b5e56; margin: 8px 0 4px; }
+.ra-card span { color: #5c675f; font-size: 12.5px; }
+.ra-scene { width: 100%; height: auto; border-radius: 12px; display: block; }
+.readalong-stage { margin-top: 14px; }
+.ra-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.4fr;
+  gap: 14px;
+}
+.ra-visual p { color: #5c675f; font-size: 13px; }
+.ra-controls { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+.ra-sentence {
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  line-height: 1.7;
+  transition: background 0.2s ease;
+}
+.ra-sentence.is-active {
+  background: #fef3c7;
+  outline: 2px solid #f59e0b;
+}
+.ra-vocab { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.ra-word {
+  border: 1px solid #0b5e56;
+  background: #ecfdf5;
+  color: #0b5e56;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font: inherit;
+  cursor: pointer;
+}
+.ra-word-card {
+  margin: 8px 0 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+}
+.ra-questions { display: grid; gap: 12px; }
+.ra-q {
+  border: 1px solid #d7e8e3;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fafcfb;
+}
+
+@media (max-width: 860px) {
+  .ra-layout { grid-template-columns: 1fr; }
+  .mastery-row { grid-template-columns: 1fr; }
+}

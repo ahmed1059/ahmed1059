@@ -113,6 +113,7 @@ MODE_MOCK = "mock"
 MODE_RESCUE = "rescue"
 MODE_DUEL = "duel"
 MODE_NATIONAL = "national"
+MODE_PURGE = "purge"
 MODE_CONFIG = {
     MODE_DAILY: {"label": "تحدي اليوم السريع", "count": 10, "seconds": 600, "xp_mult": 1},
     MODE_MOCK: {"label": "الاختبار المحاكي الشامل", "count": 20, "seconds": 1200, "xp_mult": 1},
@@ -124,6 +125,12 @@ MODE_CONFIG = {
         "seconds": 5400,
         "xp_mult": 2,
         "balanced_domains": True,
+    },
+    MODE_PURGE: {
+        "label": "تحدي تصفية الأخطاء",
+        "count": 8,
+        "seconds": 480,
+        "xp_mult": 2,
     },
 }
 
@@ -786,10 +793,22 @@ def portal_student_home(x_portal_token: str = Header(default="")):
             player = get_player_profile(connection, nid)
         except Exception:
             player = {"nickname": "", "avatar_id": "a1", "theme": "royal", "avatars": []}
+        vault = None
+        mastery = None
+        try:
+            from .nafs_adaptive_engine import vault_summary, mastery_index
+
+            vault = vault_summary(connection, nid)
+            mastery = mastery_index(connection, nid)
+        except Exception:
+            vault = None
+            mastery = None
         return {
             "student": student,
             "xp": xp,
             "player": player,
+            "error_vault": vault,
+            "mastery": mastery,
             "modes": MODE_CONFIG,
             "recent_runs": runs,
             "remedial": remedial,
@@ -821,7 +840,20 @@ def portal_challenge_start(body: StartChallengeBody, x_portal_token: str = Heade
     connection = connect()
     try:
         _ensure(connection)
-        questions = _pick_questions(connection, mode, str(body.domain or "").strip().lower(), cfg["count"])
+        try:
+            from .nafs_adaptive_engine import ensure_on_boot as ensure_adaptive, smart_pick_questions
+
+            ensure_adaptive(connection)
+            questions = smart_pick_questions(
+                connection,
+                session["student_nid"],
+                mode,
+                str(body.domain or "").strip().lower(),
+                cfg["count"],
+                _pick_questions,
+            )
+        except Exception:
+            questions = _pick_questions(connection, mode, str(body.domain or "").strip().lower(), cfg["count"])
         if not questions:
             raise HTTPException(status_code=404, detail="بنك الأسئلة فارغ.")
         started = _iso()
@@ -944,6 +976,20 @@ def portal_challenge_check(body: CheckAnswerBody, x_portal_token: str = Header(d
                     _iso(),
                 ),
             )
+            visual = None
+            try:
+                from .nafs_adaptive_engine import upsert_error_vault, _visual_card
+
+                q_full_local = dict(q_full)
+                q_full_local["id"] = body.question_id
+                q_full_local["domain"] = domain
+                q_full_local["skill"] = skill
+                q_full_local["common_mistake"] = mistake
+                q_full_local["golden_rule"] = rule
+                upsert_error_vault(connection, session["student_nid"], q_full_local, choice, expected, False)
+                visual = _visual_card(domain, mistake, rule, mistake, rule)
+            except Exception:
+                visual = None
             connection.commit()
             payload["trap"] = {
                 "title": "احذر الفخ!",
@@ -954,8 +1000,19 @@ def portal_challenge_check(body: CheckAnswerBody, x_portal_token: str = Header(d
                 "skill": skill,
                 "etec": ETEC_INDICATORS.get(domain, {}),
                 "rationale": q_full.get("rationale") or "",
+                "wrong_example": mistake,
+                "correct_example": rule,
+                "visual": visual,
             }
         else:
+            try:
+                from .nafs_adaptive_engine import upsert_error_vault
+
+                q_full_ok = dict(q_full)
+                q_full_ok["id"] = body.question_id
+                upsert_error_vault(connection, session["student_nid"], q_full_ok, choice, expected, True)
+            except Exception:
+                pass
             connection.commit()
         return payload
     finally:
@@ -1211,6 +1268,23 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
         except Exception:
             talent_flag = None
             risk_flag = None
+        mastery_pack = None
+        vault_pack = None
+        try:
+            from .nafs_adaptive_engine import apply_run_outcomes, mastery_index, vault_summary
+
+            apply_run_outcomes(
+                connection,
+                session["student_nid"],
+                str(row[1] or ""),
+                reviewed,
+                detail.get("questions_full") or {},
+            )
+            mastery_pack = mastery_index(connection, session["student_nid"])
+            vault_pack = vault_summary(connection, session["student_nid"])
+        except Exception:
+            mastery_pack = None
+            vault_pack = None
         connection.commit()
         return {
             "run_id": body.run_id,
@@ -1222,6 +1296,8 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
             "streak_best": best_streak,
             "badge": badge,
             "review": reviewed,
+            "mastery": mastery_pack,
+            "error_vault": vault_pack,
             "duel": duel_result,
             "behavior_totals": behavior_totals,
             "cafeteria_voucher": voucher,

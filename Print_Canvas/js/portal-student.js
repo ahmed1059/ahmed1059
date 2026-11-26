@@ -163,6 +163,9 @@
     document.getElementById("portal-xp").textContent = toEastern(home.xp || 0) + " XP";
     paintRank(Number(home.xp || 0));
     paintPlayerCard();
+    if (window.PortalStudentAdaptive && typeof window.PortalStudentAdaptive.paintHomeExtras === "function") {
+      window.PortalStudentAdaptive.paintHomeExtras(home);
+    }
 
     var modes = home.modes || {};
     var modeHost = document.getElementById("mode-grid");
@@ -170,6 +173,7 @@
       ["daily", modes.daily],
       ["mock", modes.mock],
       ["rescue", modes.rescue],
+      ["purge", modes.purge],
       ["duel", modes.duel],
       ["national", modes.national]
     ]
@@ -1080,6 +1084,19 @@
             toEastern: toEastern,
             escapeHtml: escapeHtml,
             refresh: refresh
+          });
+        }
+        if (window.PortalStudentAdaptive && typeof window.PortalStudentAdaptive.boot === "function") {
+          window.PortalStudentAdaptive.boot({
+            token: state.token,
+            fetchJson: fetchJson,
+            authHeaders: authHeaders,
+            status: status,
+            toEastern: toEastern,
+            escapeHtml: escapeHtml,
+            renderArabicMath: renderArabicMath,
+            refresh: refresh,
+            startMode: startMode
           });
         }
       })
