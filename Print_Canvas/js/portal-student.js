@@ -256,6 +256,45 @@
       }
     }
 
+    var noms = home.program_nominations || [];
+    var progBox = document.getElementById("programs-box");
+    var progList = document.getElementById("programs-list");
+    if (progBox) {
+      progBox.innerHTML = noms.length
+        ? noms
+            .map(function (row) {
+              return (
+                '<span class="portal-chip">' +
+                escapeHtml(row.track_label || row.program_name || "") +
+                (row.etec_code
+                  ? ' · <span class="etec-code" dir="ltr">' +
+                    toEastern(escapeHtml(row.etec_code)) +
+                    "</span>"
+                  : "") +
+                "</span>"
+              );
+            })
+            .join("")
+        : "";
+    }
+    if (progList) {
+      progList.innerHTML = noms.length
+        ? "<ul class=\"portal-list\">" +
+          noms
+            .map(function (row) {
+              return (
+                "<li><strong>" +
+                escapeHtml(row.track_label || "") +
+                "</strong> — " +
+                escapeHtml(row.reason || row.program_name || "") +
+                "</li>"
+              );
+            })
+            .join("") +
+          "</ul>"
+        : "<p class=\"portal-empty\">أكمل التحديات ليُرشَّح اسمك لبرامج موهبة وإثراء وقارئ الحصيف وتحدي الأرقام.</p>";
+    }
+
     var rem = home.remedial || [];
     var remBox = document.getElementById("remedial-box");
     if (remBox) {
@@ -414,6 +453,7 @@
       "<ol class=\"board-list\">" +
       rows
         .map(function (row) {
+          var progs = row.programs || [];
           return (
             "<li><span class=\"rank\">" +
             toEastern(row.rank) +
@@ -421,6 +461,14 @@
             escapeHtml(row.name || "") +
             "<br><small>" +
             escapeHtml((row.grade || "") + " / " + (row.section || "")) +
+            (progs.length
+              ? " · " +
+                progs
+                  .map(function (p) {
+                    return escapeHtml(p);
+                  })
+                  .join(" · ")
+              : "") +
             "</small></span><strong>" +
             toEastern(row.xp || 0) +
             " XP</strong></li>"

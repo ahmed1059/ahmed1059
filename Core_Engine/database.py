@@ -1031,6 +1031,9 @@ def init_db():
         from .nafs_weekly_etec import ensure_weekly_etec
 
         ensure_weekly_etec(connection)
+        from .nafs_enrich_bridge import ensure_enrich_bridge
+
+        ensure_enrich_bridge(connection)
         from .nafs_readalong_api import ensure_on_boot as ensure_nafs_readalong
 
         ensure_nafs_readalong(connection)

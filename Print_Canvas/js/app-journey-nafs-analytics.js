@@ -16,7 +16,9 @@
     misc: null,
     unit2: { matrix: null, weekly: null },
     weekGoal: null,
-    etecArchive: null
+    etecArchive: null,
+    enrichBridge: null,
+    honorReport: null
   };
 
   function formatEtecLtr(code) {
@@ -999,8 +1001,169 @@
     paintBank();
     paintWeekGoal();
     paintEtecArchive();
+    paintEnrichBridge();
     paintUnit2();
     paintMisc();
+  }
+
+  function paintEnrichBridge() {
+    var host = document.getElementById("aj-nafs-enrich-bridge");
+    if (!host) return;
+    var pack = state.enrichBridge;
+    if (!pack) {
+      host.innerHTML =
+        "<p class=\"aj-nafs-empty\">اضغط «تحديث جسر الإثراء والموهبة» لاشتقاق المرشحين من نافس.</p>";
+      return;
+    }
+    var tracks = pack.tracks || {};
+    var grouped = pack.grouped || {};
+    var s = pack.summary_ar || pack.summary || {};
+    host.innerHTML =
+      "<div class=\"aj-nafs-summary\" style=\"margin-bottom:12px;\">" +
+      Object.keys(tracks)
+        .map(function (k) {
+          var t = tracks[k] || {};
+          return (
+            "<article class=\"aj-nafs-card\"><span>" +
+            escapeHtml(t.label || k) +
+            "</span><strong>" +
+            toEasternDigits(s[k] || 0) +
+            "</strong><small style=\"display:block;margin-top:4px;\">" +
+            formatEtecLtr(t.etec_ar || t.etec || "") +
+            "</small></article>"
+          );
+        })
+        .join("") +
+      "</div>" +
+      Object.keys(tracks)
+        .map(function (k) {
+          var t = tracks[k] || {};
+          var rows = grouped[k] || [];
+          return (
+            "<article class=\"aj-nafs-misc-block\" style=\"margin:0 0 12px;padding:12px;border:1px solid #d7e8e3;border-radius:14px;background:#fff;\">" +
+            "<h3 style=\"margin:0 0 8px;color:#0b5e56;font-size:15px;\">" +
+            escapeHtml(t.label || k) +
+            " · " +
+            formatEtecLtr(t.etec_ar || t.etec || "") +
+            "</h3>" +
+            (rows.length
+              ? "<ol style=\"margin:0;padding:0 18px 0 0;\">" +
+                rows
+                  .slice(0, 8)
+                  .map(function (row) {
+                    return (
+                      "<li><strong>" +
+                      escapeHtml(row.name || "") +
+                      "</strong> — " +
+                      toEasternDigits(row.score_ar || row.score || 0) +
+                      " · " +
+                      escapeHtml(row.section || "") +
+                      "<br><span style=\"color:#5c675f;font-size:12px;\">" +
+                      escapeHtml(row.reason || "") +
+                      "</span></li>"
+                    );
+                  })
+                  .join("") +
+                "</ol>"
+              : "<p class=\"aj-nafs-empty\">لا مرشحين في هذا المسار بعد.</p>") +
+            "</article>"
+          );
+        })
+        .join("");
+  }
+
+  function refreshEnrichBridge() {
+    return fetchJson(API + "/enrich-bridge/refresh", {
+      method: "POST",
+      headers: Object.assign({ "Content-Type": "application/json" }, authHeaders()),
+      body: JSON.stringify({ limit_students: 150 })
+    }).then(function (pack) {
+      state.enrichBridge = pack.pack || pack;
+      paintEnrichBridge();
+      status(
+        "جسر الإثراء: " +
+          toEasternDigits((pack.written || 0)) +
+          " ترشيحاً من " +
+          toEasternDigits(pack.scanned || 0) +
+          " طالباً نشطاً."
+      );
+      return pack;
+    });
+  }
+
+  function printHonorReport() {
+    return fetchJson(API + "/honor-report", { headers: authHeaders(), cache: "no-store" }).then(
+      function (pack) {
+        state.honorReport = pack;
+        if (!window.PrintEngine || typeof window.PrintEngine.open !== "function") {
+          status("محرك الطباعة الموحد غير محمّل.", true);
+          return pack;
+        }
+        var boards = pack.boards || {};
+        function ol(title, rows, mapFn) {
+          rows = rows || [];
+          return (
+            "<h3 style=\"color:#0b5e56;\">" +
+            escapeHtml(title) +
+            "</h3><ol>" +
+            rows
+              .slice(0, 10)
+              .map(function (r, i) {
+                return "<li>" + escapeHtml(mapFn(r, i)) + "</li>";
+              })
+              .join("") +
+            "</ol>"
+          );
+        }
+        var body =
+          "<h2 style=\"text-align:center;color:#0b5e56;\">" +
+          escapeHtml(pack.title || "") +
+          "</h2>" +
+          "<p style=\"text-align:center;\">" +
+          escapeHtml((pack.school && pack.school.name) || SCHOOL_NAME) +
+          " (" +
+          toEasternDigits((pack.school && pack.school.stat_no) || "40341") +
+          ")</p>" +
+          ol("أبطال اليوم", boards.day, function (r) {
+            return (r.name || "") + " — " + toEasternDigits(r.xp_ar || r.xp || 0) + " XP";
+          }) +
+          ol("فرسان الأسبوع", boards.week, function (r) {
+            return (r.name || "") + " — " + toEasternDigits(r.xp_ar || r.xp || 0) + " XP";
+          }) +
+          ol("دوري الفصول", boards.classes_week, function (r) {
+            return (r.label || "") + " — " + toEasternDigits(r.xp_ar || r.xp || 0) + " XP";
+          }) +
+          ol("نخبة الصف", boards.elite_class, function (r) {
+            return (
+              (r.name || "") +
+              " · فصل " +
+              (r.section || "") +
+              " — المركز " +
+              toEasternDigits(r.place_ar || r.place || "") +
+              " · " +
+              toEasternDigits(r.xp_ar || r.xp || 0) +
+              " XP"
+            );
+          }) +
+          "<p style=\"text-align:center;direction:ltr;unicode-bidi:isolate;font-weight:800;color:#0b5e56;\">" +
+          escapeHtml(pack.barcode || "") +
+          "</p>";
+        window.PrintEngine.open("master-sheet", {
+          docTitle: pack.title || "تقرير التتويج",
+          title: pack.title || "تقرير منصات التتويج",
+          kind: "document",
+          orientation: "portrait",
+          school: SCHOOL_NAME,
+          bodyHtml: body,
+          signoff: true,
+          maxColumns: 2,
+          pageTotal: 1,
+          fileName: "تقرير_التتويج_والبرامج_النوعية"
+        });
+        status("معاينة تقرير التتويج والبرامج جاهزة.");
+        return pack;
+      }
+    );
   }
 
   function loadEtecArchive() {
@@ -1696,6 +1859,9 @@
       }),
       fetchJson(API + "/etec-archive", { headers: authHeaders(), cache: "no-store" }).catch(function () {
         return null;
+      }),
+      fetchJson(API + "/enrich-bridge", { headers: authHeaders(), cache: "no-store" }).catch(function () {
+        return null;
       })
     ])
       .then(function (parts) {
@@ -1705,6 +1871,7 @@
         state.unit2 = { matrix: parts[3], weekly: parts[4] };
         state.weekGoal = parts[5] || parts[4] || null;
         state.etecArchive = parts[6] || null;
+        state.enrichBridge = parts[7] || null;
         state.whatIf = { math: null, reading: null, science: null };
         paint();
         var meta = state.pack.meta || {};
@@ -1786,6 +1953,18 @@
       if (t.closest("#aj-nafs-etec-refresh")) {
         refreshEtecArchive().catch(function (error) {
           status((error && error.message) || "تعذر أرشفة الشواهد.", true);
+        });
+        return;
+      }
+      if (t.closest("#aj-nafs-enrich-refresh")) {
+        refreshEnrichBridge().catch(function (error) {
+          status((error && error.message) || "تعذر تحديث جسر الإثراء.", true);
+        });
+        return;
+      }
+      if (t.closest("#aj-nafs-honor-print")) {
+        printHonorReport().catch(function (error) {
+          status((error && error.message) || "تعذر تجهيز تقرير التتويج.", true);
         });
         return;
       }
