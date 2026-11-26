@@ -1103,6 +1103,7 @@
       .map(function (card) {
         var domain = escapeHtml(card.domain || "math");
         var title = escapeHtml(card.front || card.title || "قاعدة ذهبية");
+        var bodyHtml = renderGoldenBack(card);
         return (
           "<button type=\"button\" class=\"flip-card domain-" +
           domain +
@@ -1122,9 +1123,7 @@
           "<div class=\"flip-hint\">اضغط للتقليب</div>" +
           "</div>" +
           "<div class=\"flip-face back\">" +
-          "<div class=\"flip-body\">" +
-          renderArabicMath(card.back || "") +
-          "</div>" +
+          bodyHtml +
           "<span class=\"flip-master-btn\" data-master=\"" +
           escapeHtml(card.id) +
           "\" role=\"button\">" +
@@ -1136,6 +1135,30 @@
         );
       })
       .join("");
+  }
+
+  /** ظهر البطاقة: ثلاث طبقات منضبطة للرياضيات، ونص حر لغيرها */
+  function renderGoldenBack(card) {
+    var isTriple =
+      card &&
+      (card.layout === "triple" ||
+        (card.line_title && card.line_concept && card.line_example));
+    if (isTriple) {
+      return (
+        '<div class="flip-body flip-triple">' +
+        '<div class="line-title">' +
+        escapeHtml(card.line_title || card.front || card.title || "") +
+        "</div>" +
+        '<div class="line-concept">' +
+        renderArabicMath(card.line_concept || "") +
+        "</div>" +
+        '<div class="line-example">' +
+        renderArabicMath(card.line_example || "") +
+        "</div>" +
+        "</div>"
+      );
+    }
+    return '<div class="flip-body">' + renderArabicMath((card && card.back) || "") + "</div>";
   }
 
   function setCollapseOpen(key, open) {

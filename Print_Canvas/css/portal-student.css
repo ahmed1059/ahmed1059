@@ -698,6 +698,53 @@ body.portal-student {
   line-height: 1.85;
   text-wrap: pretty;
 }
+.flip-face.back .flip-body.flip-triple {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 7px;
+  max-height: 168px;
+  padding: 6px 6px 0;
+}
+.flip-triple .line-title,
+.flip-triple .line-concept,
+.flip-triple .line-example {
+  display: block;
+  width: 100%;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.flip-triple .line-title {
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.35;
+  color: #fffbeb;
+}
+.flip-triple .line-concept {
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.flip-triple .line-example {
+  font-weight: 700;
+  font-size: 12.5px;
+  line-height: 1.5;
+  opacity: 0.96;
+  padding-top: 2px;
+  border-top: 1px solid rgba(255, 251, 235, 0.28);
+  white-space: nowrap;
+  overflow-x: auto;
+  max-width: 100%;
+}
+.flip-triple .line-concept .math-atom,
+.flip-triple .line-example .math-atom,
+.flip-triple .line-concept .frac,
+.flip-triple .line-example .frac {
+  white-space: nowrap;
+}
 .flip-face.back .flip-body .frac {
   margin: 0 3px;
   line-height: 1.1;

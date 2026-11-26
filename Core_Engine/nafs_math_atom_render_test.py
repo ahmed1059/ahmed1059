@@ -87,11 +87,18 @@ def main() -> int:
     from .nafs_misconception_lab import GOLDEN_DECK
 
     m1 = next((c for c in GOLDEN_DECK if c["id"] == "m1"), None)
-    if not m1 or "أ² + ب² = ج²" not in (m1.get("back") or ""):
+    if not m1 or "أ² + ب² = ج²" not in (m1.get("line_concept") or m1.get("back") or ""):
         errors.append("m1 pythagoras content changed unexpectedly")
     for c in GOLDEN_DECK:
-        back = c.get("back") or ""
-        if re.search(r"[0-9]", back):
+        blob = " ".join(
+            [
+                c.get("back") or "",
+                c.get("line_title") or "",
+                c.get("line_concept") or "",
+                c.get("line_example") or "",
+            ]
+        )
+        if re.search(r"[0-9]", blob):
             errors.append(f"western digit in golden {c['id']}")
 
     try:
