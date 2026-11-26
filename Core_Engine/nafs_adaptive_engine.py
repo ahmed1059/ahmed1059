@@ -92,6 +92,11 @@ def _e(value: Any) -> str:
 
 def ensure_on_boot(connection) -> dict:
     connection.executescript(SCHEMA)
+    cols = {r[1] for r in connection.execute("PRAGMA table_info(student_error_vault)").fetchall()}
+    if "grade_root" not in cols:
+        connection.execute(
+            "ALTER TABLE student_error_vault ADD COLUMN grade_root TEXT NOT NULL DEFAULT ''"
+        )
     return {"ok": True, "engine": "adaptive-v1"}
 
 
@@ -171,6 +176,7 @@ def upsert_error_vault(
 
     mistake = str(question.get("common_mistake") or "")
     rule = str(question.get("golden_rule") or "")
+    root = str(question.get("grade_root") or "")
     wrong_ex = str(question.get("wrong_example") or question.get("stem") or "")[:240]
     correct_ex = str(question.get("correct_example") or rule or "")[:240]
     if row:
@@ -178,10 +184,10 @@ def upsert_error_vault(
             """
             UPDATE student_error_vault
             SET trap_heat=trap_heat+1, status='open', streak_ok=0, chosen=?, correct=?,
-                last_seen=?, common_mistake=?, golden_rule=?
+                last_seen=?, common_mistake=?, golden_rule=?, grade_root=COALESCE(NULLIF(?, ''), grade_root)
             WHERE id=?
             """,
-            (chosen, correct, _iso(), mistake, rule, row[0]),
+            (chosen, correct, _iso(), mistake, rule, root, row[0]),
         )
     else:
         connection.execute(
@@ -189,8 +195,8 @@ def upsert_error_vault(
             INSERT INTO student_error_vault(
               student_nid, question_id, domain, skill, stem, chosen, correct,
               wrong_example, correct_example, common_mistake, golden_rule,
-              trap_heat, status, streak_ok, last_seen
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'open', 0, ?)
+              trap_heat, status, streak_ok, last_seen, grade_root
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'open', 0, ?, ?)
             """,
             (
                 student_nid,
@@ -205,6 +211,7 @@ def upsert_error_vault(
                 mistake,
                 rule,
                 _iso(),
+                root,
             ),
         )
 
@@ -344,7 +351,8 @@ def vault_summary(connection, student_nid: str) -> dict:
     open_rows = connection.execute(
         """
         SELECT id, question_id, domain, skill, stem, chosen, correct, wrong_example,
-               correct_example, common_mistake, golden_rule, trap_heat, status, streak_ok
+               correct_example, common_mistake, golden_rule, trap_heat, status, streak_ok,
+               COALESCE(grade_root, '')
         FROM student_error_vault
         WHERE student_nid = ? AND status IN ('open','recovering')
         ORDER BY trap_heat DESC, last_seen DESC LIMIT 12
@@ -375,6 +383,7 @@ def vault_summary(connection, student_nid: str) -> dict:
             "trap_heat": r[11],
             "status": r[12],
             "streak_ok": r[13],
+            "grade_root": r[14] or "",
             "etec": ETEC.get(r[2] or "", {}),
             "visual": _visual_card(r[2] or "", r[9] or "", r[10] or "", r[7] or "", r[8] or ""),
         }
@@ -697,5 +706,106 @@ def api_parent_home_ack(body: HomeAckBody, x_portal_token: str = Header(default=
             "evidence_code": "1-3-1-2",
             "message": "وُثّق إقرار ولي الأمر للاختبار المنزلي كشاهد ١-٣-١-٢.",
         }
+    finally:
+        connection.close()
+
+
+def teacher_peek(connection, grade: str = "", section: str = "", limit: int = 40) -> dict:
+    """معاينة حيّة للمعلم: متعثرون + مهارة + جذر تراكمي + حالة التطهير."""
+    ensure_on_boot(connection)
+    limit = max(5, min(int(limit or 40), 80))
+    params: list[Any] = []
+    where = "v.status IN ('open','recovering')"
+    join_extra = ""
+    if grade:
+        join_extra += " AND COALESCE(s.grade,'') LIKE ?"
+        params.append(f"%{grade.strip()}%")
+    if section:
+        join_extra += " AND COALESCE(s.classroom, '') = ?"
+        params.append(str(section).strip())
+    rows = connection.execute(
+        f"""
+        SELECT v.student_nid,
+               COALESCE(s.name, ''),
+               COALESCE(s.grade, ''),
+               COALESCE(s.classroom, ''),
+               v.domain, v.skill, COALESCE(v.grade_root, ''),
+               v.trap_heat, v.status, v.common_mistake, v.golden_rule, v.last_seen
+        FROM student_error_vault v
+        LEFT JOIN noor_students s ON s.national_id = v.student_nid
+        WHERE {where}{join_extra}
+        ORDER BY v.trap_heat DESC, v.last_seen DESC
+        LIMIT ?
+        """,
+        tuple(params + [limit]),
+    ).fetchall()
+    items = []
+    for r in rows:
+        domain = r[4] or ""
+        root = r[6] or ""
+        status = r[8] or "open"
+        items.append(
+            {
+                "student_nid_masked": (r[0] or "")[-4:].rjust(4, "*") if r[0] else "",
+                "student_nid": r[0] or "",
+                "name": r[1] or "طالب",
+                "grade": r[2] or "",
+                "section": r[3] or "",
+                "domain": domain,
+                "skill": r[5] or "",
+                "grade_root": root,
+                "trap_heat": int(r[7] or 0),
+                "status": status,
+                "status_ar": {
+                    "open": "يحتاج تطهيراً",
+                    "recovering": "قيد الاستعادة",
+                    "recovered": "مُتقَن",
+                }.get(status, status),
+                "common_mistake": r[9] or "",
+                "golden_rule": r[10] or "",
+                "last_seen": r[11] or "",
+                "etec": ETEC.get(domain, {}),
+                "remedial_hint": (
+                    f"وجّه لتمرين علاجي على جذر {root} قبل مهارة الصف الحالي."
+                    if root in ("١م", "١", "1م", "٢م", "٢", "2م")
+                    else "درّب على القاعدة الذهبية ثم نظير رقمي."
+                ),
+            }
+        )
+    by_root: dict[str, int] = defaultdict(int)
+    for it in items:
+        by_root[it["grade_root"] or "٣م"] += 1
+    return {
+        "ok": True,
+        "count": len(items),
+        "by_root": dict(by_root),
+        "items": items,
+        "legend": {
+            "١م": "فاقد من الصف الأول متوسط",
+            "٢م": "فاقد من الصف الثاني متوسط",
+            "٣م": "مهارة الصف الحالي",
+        },
+    }
+
+
+@router.get("/api/portal/teacher/peek")
+def api_teacher_peek(
+    grade: str = "",
+    section: str = "",
+    limit: int = 40,
+    x_session_token: str = Header(default=""),
+):
+    """Teacher Peek — للمعلمين والقيادة (مستوى ≤ ٢)."""
+    from .portal_owner_api import _require_level
+
+    user, level = _require_level(x_session_token, 2)
+    connection = connect()
+    try:
+        pack = teacher_peek(connection, grade=grade, section=section, limit=limit)
+        pack["viewer"] = {
+            "name": user.get("name") or "",
+            "level": level,
+        }
+        return pack
     finally:
         connection.close()

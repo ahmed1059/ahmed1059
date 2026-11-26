@@ -497,7 +497,7 @@ def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict
 
 
 def _public_question(q: dict) -> dict:
-    return {
+    out = {
         "id": q["id"],
         "domain": q["domain"],
         "skill": q["skill"],
@@ -506,6 +506,12 @@ def _public_question(q: dict) -> dict:
         "passage_title": q.get("passage_title") or "",
         "passage_text": q.get("passage_text") or "",
     }
+    if q.get("grade_root"):
+        out["grade_root"] = q.get("grade_root")
+    if q.get("rescue"):
+        out["rescue"] = True
+        out["half_xp"] = bool(q.get("half_xp"))
+    return out
 
 
 @router.post("/api/portal/sync-students")
@@ -871,6 +877,8 @@ def portal_challenge_start(body: StartChallengeBody, x_portal_token: str = Heade
                     "common_mistake": q.get("common_mistake") or "",
                     "grade_root": q.get("grade_root") or "",
                     "golden_rule": q.get("golden_rule") or "",
+                    "wrong_example": q.get("wrong_example") or "",
+                    "correct_example": q.get("correct_example") or "",
                 }
                 for q in questions
             },
@@ -953,6 +961,17 @@ def portal_challenge_check(body: CheckAnswerBody, x_portal_token: str = Header(d
             mistake = q_full.get("common_mistake") or mistake
             rule = q_full.get("golden_rule") or rule
             root = q_full.get("grade_root") or SKILL_ROOTS.get(skill, "٣م")
+            wrong_ex = q_full.get("wrong_example") or mistake
+            correct_ex = q_full.get("correct_example") or rule
+            if root in ("١م", "1م", "١", "1"):
+                remedial_hint = "الجذر من الصف الأول متوسط — تمرّن أولاً على أساسيات المهارة ثم عد للسؤال."
+                remedial_label = "تمرين علاجي على جذر ١م"
+            elif root in ("٢م", "2م", "٢", "2"):
+                remedial_hint = "الجذر من الصف الثاني متوسط — راجع المهارة السابقة بنظير مبسّط."
+                remedial_label = "تمرين علاجي على جذر ٢م"
+            else:
+                remedial_hint = "ثبّت القاعدة الذهبية ثم أجب عن نظير رقمي لاستعادة نصف النقاط."
+                remedial_label = "سؤال إنقاذ فوري"
             try:
                 from .nafs_misconception_lab import SCHEMA_EXTRA
 
@@ -986,11 +1005,15 @@ def portal_challenge_check(body: CheckAnswerBody, x_portal_token: str = Header(d
                 q_full_local["skill"] = skill
                 q_full_local["common_mistake"] = mistake
                 q_full_local["golden_rule"] = rule
+                q_full_local["grade_root"] = root
+                q_full_local["wrong_example"] = wrong_ex
+                q_full_local["correct_example"] = correct_ex
                 upsert_error_vault(connection, session["student_nid"], q_full_local, choice, expected, False)
-                visual = _visual_card(domain, mistake, rule, mistake, rule)
+                visual = _visual_card(domain, mistake, rule, wrong_ex, correct_ex)
             except Exception:
                 visual = None
             connection.commit()
+            etec = ETEC_INDICATORS.get(domain, {}) or {}
             payload["trap"] = {
                 "title": "احذر الفخ!",
                 "common_mistake": mistake,
@@ -998,10 +1021,13 @@ def portal_challenge_check(body: CheckAnswerBody, x_portal_token: str = Header(d
                 "grade_root": root,
                 "domain": domain,
                 "skill": skill,
-                "etec": ETEC_INDICATORS.get(domain, {}),
+                "etec": etec,
+                "etec_code_ar": etec.get("code_ar") or etec.get("code") or "",
                 "rationale": q_full.get("rationale") or "",
-                "wrong_example": mistake,
-                "correct_example": rule,
+                "wrong_example": wrong_ex,
+                "correct_example": correct_ex,
+                "remedial_hint": remedial_hint,
+                "remedial_label": remedial_label,
                 "visual": visual,
             }
         else:

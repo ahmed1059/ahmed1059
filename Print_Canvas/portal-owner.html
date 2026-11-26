@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>لوحة مالك المنظومة والدعم السريع</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-owner.css?v=o1">
+  <link rel="stylesheet" href="css/portal-owner.css?v=o3">
 </head>
 <body class="portal-student">
   <div class="portal-shell owner-layout">
@@ -26,6 +26,7 @@
       <button type="button" class="tab is-active" data-owner-panel="panel-owner">إعدادات المالك</button>
       <button type="button" class="tab" data-owner-panel="panel-identity">هوية المدرسة</button>
       <button type="button" class="tab" data-owner-panel="panel-radar">مرصد الموهوبين</button>
+      <button type="button" class="tab" data-owner-panel="panel-peek">معاينة التعثر</button>
       <button type="button" class="tab" data-owner-panel="panel-rbac">هرم الصلاحيات</button>
       <button type="button" class="tab" data-owner-panel="panel-support">الدعم السريع</button>
       <button type="button" class="tab" data-owner-panel="panel-tools">ورقة علاجية / نبض صباحي</button>
@@ -93,6 +94,22 @@
       <div id="radar-talent-box"></div>
       <h3 style="margin-top:14px;color:#0b5e56;font-size:16px;">تنبيهات الموجه الطلابي</h3>
       <div id="radar-alerts-box"></div>
+    </section>
+
+    <section class="portal-card owner-panel" id="panel-peek">
+      <h2>معاينة التعثر الحيّة (Teacher Peek)</h2>
+      <p class="portal-empty" style="margin:0 0 10px;">مؤشر سريع للطلاب المتعثرين والمهارة والجذر التراكمي وحالة التطهير — من مخزن الإتقان الموحد.</p>
+      <div class="owner-form peek-filters">
+        <label>الصف (اختياري)</label>
+        <input id="peek-grade" placeholder="مثال: ثالث متوسط">
+        <label>الفصل (اختياري)</label>
+        <input id="peek-section" placeholder="مثال: أ">
+        <div class="portal-actions">
+          <button type="button" class="portal-btn" id="btn-peek-refresh">تحديث المعاينة</button>
+        </div>
+      </div>
+      <div id="peek-summary" class="peek-summary" hidden></div>
+      <div id="peek-box"></div>
     </section>
 
     <section class="portal-card owner-panel" id="panel-rbac">
@@ -170,6 +187,6 @@
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe12"></script>
   <script src="/cores/print-master-core.js?v=c308"></script>
-  <script src="js/portal-owner.js?v=o2"></script>
+  <script src="js/portal-owner.js?v=o3"></script>
 </body>
 </html>

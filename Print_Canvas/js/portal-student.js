@@ -605,6 +605,10 @@
       return;
     }
     host.hidden = false;
+    var root = trap.grade_root || (q && q.grade_root) || "";
+    var etec = trap.etec || {};
+    var etecCode = trap.etec_code_ar || etec.code_ar || etec.code || "";
+    var rescueLabel = trap.remedial_label || "سؤال إنقاذ فوري (نظير رقمي)";
     var examples =
       trap.wrong_example || trap.correct_example
         ? "<div class=\"trap-examples\"><div class=\"trap-ex wrong\"><b>❌ الخطأ الشائع</b>" +
@@ -613,21 +617,45 @@
           renderArabicMath(trap.correct_example || "") +
           "</div></div>"
         : "";
+    var rationale = trap.rationale
+      ? "<p class=\"trap-rationale\"><strong>التعليل العلمي:</strong> " +
+        renderArabicMath(trap.rationale) +
+        "</p>"
+      : "";
+    var rootChip = root
+      ? "<span class=\"trap-root-chip\" title=\"الجذر التراكمي\">جذر " +
+        toEastern(escapeHtml(root)) +
+        "</span>"
+      : "";
+    var etecChip = etecCode
+      ? "<span class=\"trap-etec-chip\">مؤشر " + formatEtecCode(etecCode) + "</span>"
+      : "";
+    var remedial =
+      trap.remedial_hint
+        ? "<p class=\"trap-remedial\">" + escapeHtml(trap.remedial_hint) + "</p>"
+        : "";
     host.innerHTML =
       "<h3>" +
       escapeHtml(trap.title || "احذر الفخ!") +
-      "</h3><p><strong>تشريح الخطأ الشائع:</strong> " +
-      escapeHtml(trap.common_mistake || "") +
-      "</p><div class=\"rule\">القاعدة الذهبية: " +
-      escapeHtml(trap.golden_rule || "") +
-      (trap.grade_root ? " · الجذر: " + toEastern(escapeHtml(trap.grade_root)) : "") +
+      "</h3><div class=\"trap-meta\">" +
+      rootChip +
+      etecChip +
+      "</div><p><strong>تشريح الخطأ الشائع:</strong> " +
+      renderArabicMath(trap.common_mistake || "") +
+      "</p>" +
+      rationale +
+      "<div class=\"rule\">القاعدة الذهبية: " +
+      renderArabicMath(trap.golden_rule || "") +
       "</div>" +
       examples +
-      "<div class=\"portal-actions\" style=\"margin-top:10px;\"><button type=\"button\" class=\"portal-btn\" id=\"rescue-btn\">سؤال إنقاذ فوري (نظير رقمي)</button></div>";
+      remedial +
+      "<div class=\"portal-actions\" style=\"margin-top:10px;\"><button type=\"button\" class=\"portal-btn\" id=\"rescue-btn\">" +
+      escapeHtml(rescueLabel) +
+      "</button></div>";
     var btn = document.getElementById("rescue-btn");
     if (btn) {
       btn.onclick = function () {
-        startRescue(q);
+        startRescue(q, trap);
       };
     }
   }
@@ -640,14 +668,15 @@
     }
   }
 
-  function startRescue(q) {
+  function startRescue(q, trap) {
     fetchJson("/api/portal/misconceptions/rescue", {
       method: "POST",
       headers: authHeaders(),
       body: JSON.stringify({
         run_id: state.run.run_id,
-        domain: (q && q.domain) || "math",
-        skill: (q && q.skill) || ""
+        domain: (q && q.domain) || (trap && trap.domain) || "math",
+        skill: (q && q.skill) || (trap && trap.skill) || "",
+        grade_root: (trap && trap.grade_root) || (q && q.grade_root) || ""
       })
     })
       .then(function (pack) {

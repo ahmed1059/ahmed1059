@@ -239,6 +239,7 @@ class RescueBody(BaseModel):
     run_id: int = 0
     domain: str = "math"
     skill: str = ""
+    grade_root: str = ""
 
 
 def _portal_student(token: str) -> dict:
@@ -385,21 +386,82 @@ def record_misconception(body: TrapEventBody, x_portal_token: str = Header(defau
 
 @router.post("/api/portal/misconceptions/rescue")
 def rescue_question(body: RescueBody, x_portal_token: str = Header(default="")):
-    """نظير رقمي فوري لاستعادة نصف نقاط السؤال."""
+    """تمرين علاجي على الجذر التراكمي أو نظير رقمي فوري لاستعادة نصف النقاط."""
     session = _portal_student(x_portal_token)
     from .portal_parametric import generate_parametric_batch
 
     connection = connect()
     try:
         domain = (body.domain or "math").lower()
-        if domain not in ("math", "science"):
+        if domain not in ("math", "science", "reading"):
             domain = "math"
-        generated = generate_parametric_batch(1, domains=[domain])
-        q = generated[0]
-        q["id"] = -9000 - abs(hash((session["student_nid"], body.run_id, body.skill)) % 1000)
+        skill = (body.skill or "").strip()
+        root = (body.grade_root or "").strip() or SKILL_ROOTS.get(skill, "٣م")
+        q = None
+        # أولوية: سؤال من البنك على نفس المهارة + الجذر التراكمي (١م/٢م)
+        try:
+            ensure_question_columns(connection)
+            row = connection.execute(
+                """
+                SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
+                       correct, rationale, common_mistake, grade_root, golden_rule
+                FROM nafs_question_bank
+                WHERE COALESCE(active,1)=1
+                  AND domain = ?
+                  AND (? = '' OR skill = ?)
+                  AND (? = '' OR grade_root = ?)
+                ORDER BY RANDOM()
+                LIMIT 1
+                """,
+                (domain, skill, skill, root, root),
+            ).fetchone()
+            if not row and root in ("١م", "٢م", "1م", "2م"):
+                row = connection.execute(
+                    """
+                    SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
+                           correct, rationale, common_mistake, grade_root, golden_rule
+                    FROM nafs_question_bank
+                    WHERE COALESCE(active,1)=1
+                      AND domain = ?
+                      AND grade_root = ?
+                    ORDER BY RANDOM()
+                    LIMIT 1
+                    """,
+                    (domain, root),
+                ).fetchone()
+            if row:
+                correct = (row[8] or "A").strip().upper()[:1] or "A"
+                q = {
+                    "id": int(row[0]),
+                    "domain": row[1] or domain,
+                    "skill": row[2] or skill,
+                    "stem": row[3] or "",
+                    "choices": {
+                        "A": row[4] or "",
+                        "B": row[5] or "",
+                        "C": row[6] or "",
+                        "D": row[7] or "",
+                    },
+                    "correct": correct,
+                    "rationale": row[9] or "",
+                    "common_mistake": row[10] or "",
+                    "grade_root": row[11] or root,
+                    "golden_rule": row[12] or "",
+                    "from_bank": True,
+                }
+        except Exception:
+            q = None
+        if not q:
+            gen_domain = domain if domain in ("math", "science") else "math"
+            generated = generate_parametric_batch(1, domains=[gen_domain])
+            q = generated[0]
+            q["id"] = -9000 - abs(hash((session["student_nid"], body.run_id, skill, root)) % 1000)
+            q["skill"] = skill or q.get("skill") or ""
+            q["grade_root"] = root
+            q["from_bank"] = False
         q["rescue"] = True
         q["half_xp"] = True
-        # خزّن الإجابة في detail الجولة إن وُجدت
+        q["grade_root"] = q.get("grade_root") or root
         if body.run_id:
             row = connection.execute(
                 "SELECT detail_json FROM portal_challenge_runs WHERE id = ? AND student_nid = ?",
@@ -414,28 +476,39 @@ def rescue_question(body: RescueBody, x_portal_token: str = Header(default="")):
                     "stem": q.get("stem") or "",
                     "rationale": q.get("rationale") or "",
                     "choices": q.get("choices") or {},
-                    "parametric": True,
+                    "parametric": not q.get("from_bank"),
                     "rescue": True,
-                    "domain": domain,
-                    "skill": body.skill or q.get("skill") or "",
+                    "domain": q.get("domain") or domain,
+                    "skill": q.get("skill") or skill,
+                    "grade_root": q.get("grade_root") or root,
+                    "common_mistake": q.get("common_mistake") or "",
+                    "golden_rule": q.get("golden_rule") or "",
                 }
                 connection.execute(
                     "UPDATE portal_challenge_runs SET detail_json = ? WHERE id = ?",
                     (json.dumps(detail, ensure_ascii=False), body.run_id),
                 )
                 connection.commit()
+        root_msg = {
+            "١م": "تمرين علاجي على جذر الصف الأول متوسط — أجب صح لاستعادة نصف النقاط.",
+            "٢م": "تمرين علاجي على جذر الصف الثاني متوسط — أجب صح لاستعادة نصف النقاط.",
+            "1م": "تمرين علاجي على جذر الصف الأول متوسط — أجب صح لاستعادة نصف النقاط.",
+            "2م": "تمرين علاجي على جذر الصف الثاني متوسط — أجب صح لاستعادة نصف النقاط.",
+        }.get(root, "أجب صح لاستعادة نصف نقاط السؤال.")
         return {
             "ok": True,
             "question": {
                 "id": q["id"],
-                "domain": q["domain"],
-                "skill": q.get("skill") or body.skill,
+                "domain": q.get("domain") or domain,
+                "skill": q.get("skill") or skill,
                 "stem": q["stem"],
                 "choices": q["choices"],
                 "rescue": True,
                 "half_xp": True,
+                "grade_root": q.get("grade_root") or root,
             },
-            "message": "أجب صح لاستعادة نصف نقاط السؤال.",
+            "grade_root": q.get("grade_root") or root,
+            "message": root_msg,
         }
     finally:
         connection.close()
