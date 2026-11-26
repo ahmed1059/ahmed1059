@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 # content-audit-1: أرقام هندية في الأساس + تدقيق صياغي/علمي للبطاقات والأفخاخ.
-BANK_REVISION = "content-audit-1"
-EXPECTED_MIN_COUNT = 150
+BANK_REVISION = "wave-b-212223-1"
+EXPECTED_MIN_COUNT = 180
 
 EASTERN = "٠١٢٣٤٥٦٧٨٩"
 
@@ -239,12 +239,14 @@ def build_reading_questions() -> list[dict]:
 
 def all_questions() -> list[dict]:
     from .nafs_question_bank_expand150 import expand_questions
+    from .nafs_wave_b_212223 import wave_b_questions
 
     base = build_math_questions() + build_science_questions() + build_reading_questions()
     assert len(base) == 86, len(base)
     expanded = expand_questions()
-    rows = base + expanded
-    # منع تكرار الجذوع بين الأساس والتوسيع
+    wave_b = wave_b_questions()
+    rows = base + expanded + wave_b
+    # منع تكرار الجذوع بين الأساس والتوسيع والموجة ب
     seen = set()
     unique = []
     for row in rows:
@@ -330,14 +332,21 @@ def ensure_nafs_question_bank(connection, force_reseed: bool = False) -> dict:
         except Exception:
             pass
         return {"ok": True, "stored": count, "seeded": False, "revision": BANK_REVISION}
+    try:
+        from .nafs_misconception_lab import ensure_question_columns
+
+        ensure_question_columns(connection)
+    except Exception:
+        pass
     connection.execute("DELETE FROM nafs_question_bank")
     rows = all_questions()
     connection.executemany(
         """
         INSERT INTO nafs_question_bank (
             domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
-            correct, rationale, passage_id, passage_title, passage_text, sort_order, active
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+            correct, rationale, passage_id, passage_title, passage_text, sort_order, active,
+            common_mistake, grade_root, golden_rule
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)
         """,
         [
             (
@@ -354,6 +363,9 @@ def ensure_nafs_question_bank(connection, force_reseed: bool = False) -> dict:
                 r["passage_title"],
                 r["passage_text"],
                 r["sort_order"],
+                r.get("common_mistake") or "",
+                r.get("grade_root") or "",
+                r.get("golden_rule") or "",
             )
             for r in rows
         ],
