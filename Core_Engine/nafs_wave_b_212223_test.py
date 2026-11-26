@@ -94,7 +94,7 @@ def main() -> int:
         if c["id"] not in deck_ids:
             errors.append(f"golden deck missing {c['id']}")
 
-    if BANK_REVISION != "wave-d-lughati140-1" or EXPECTED_MIN_COUNT < 300:
+    if BANK_REVISION != "visual-diagram-gate-1" or EXPECTED_MIN_COUNT < 300:
         errors.append("seed revision/count")
 
     all_rows = all_questions()

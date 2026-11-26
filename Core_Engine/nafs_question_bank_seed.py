@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 # content-audit-1: أرقام هندية في الأساس + تدقيق صياغي/علمي للبطاقات والأفخاخ.
-BANK_REVISION = "wave-d-lughati140-1"
+BANK_REVISION = "visual-diagram-gate-1"
 EXPECTED_MIN_COUNT = 300
 
 EASTERN = "٠١٢٣٤٥٦٧٨٩"
@@ -342,13 +342,20 @@ def ensure_nafs_question_bank(connection, force_reseed: bool = False) -> dict:
         pass
     connection.execute("DELETE FROM nafs_question_bank")
     rows = all_questions()
+    try:
+        from .nafs_visual_integrity import ensure_diagram_columns, student_displayable
+
+        ensure_diagram_columns(connection)
+    except Exception:
+        student_displayable = None  # type: ignore
     connection.executemany(
         """
         INSERT INTO nafs_question_bank (
             domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
             correct, rationale, passage_id, passage_title, passage_text, sort_order, active,
-            common_mistake, grade_root, golden_rule
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)
+            common_mistake, grade_root, golden_rule,
+            diagram_svg, diagram_alt, student_ready
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?, ?, ?)
         """,
         [
             (
@@ -368,6 +375,13 @@ def ensure_nafs_question_bank(connection, force_reseed: bool = False) -> dict:
                 r.get("common_mistake") or "",
                 r.get("grade_root") or "",
                 r.get("golden_rule") or "",
+                r.get("diagram_svg") or "",
+                r.get("diagram_alt") or "",
+                int(
+                    r["student_ready"]
+                    if "student_ready" in r
+                    else (1 if (student_displayable is None or student_displayable(r)) else 0)
+                ),
             )
             for r in rows
         ],

@@ -575,17 +575,34 @@
       "سؤال " + toEastern(state.index + 1) + " من " + toEastern(state.run.questions.length);
     document.getElementById("arena-title").textContent = state.run.label || "التحدي";
     var passage = "";
-    if (q.passage_text) {
+    var passageText = String(q.passage_text || "").trim();
+    var placeholder =
+      passageText.indexOf("نص التدريب في المصدر المطبوع") >= 0 ||
+      passageText.indexOf("يُعرض السؤال والخيارات المعتمدة بعد التنقية") >= 0 ||
+      (passageText.indexOf("مذكرة") >= 0 && passageText.length < 120);
+    if (passageText && !placeholder) {
       passage =
         "<blockquote class=\"passage\"><strong>" +
         escapeHtml(q.passage_title || "نص") +
         "</strong><br>" +
-        escapeHtml(q.passage_text) +
+        escapeHtml(passageText) +
         "</blockquote>";
+    }
+    var diagram = "";
+    if (q.diagram_svg) {
+      diagram =
+        "<figure class=\"q-diagram\" aria-label=\"" +
+        escapeHtml(q.diagram_alt || "شكل توضيحي للسؤال") +
+        "\">" +
+        String(q.diagram_svg) +
+        "<figcaption class=\"q-diagram-cap\">" +
+        escapeHtml(q.diagram_alt || "شكل توضيحي للسؤال") +
+        "</figcaption></figure>";
     }
     var isMath = String(q.domain || "").toLowerCase() === "math" || /رياض|كسور|معادل|فيثاغور|حساب/.test(q.stem || "");
     document.getElementById("q-box").innerHTML =
       passage +
+      diagram +
       "<div class=\"q-stem-row\">" +
       "<p class=\"q-stem\">" +
       renderArabicMath(q.stem || "") +

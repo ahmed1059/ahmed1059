@@ -317,21 +317,40 @@ def pick_purge_questions(connection, student_nid: str, count: int = 8) -> list[d
     out: list[dict] = []
     if ids:
         placeholders = ",".join("?" for _ in ids)
-        rows = connection.execute(
-            f"""
-            SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
-                   correct, rationale, passage_id, passage_title, passage_text,
-                   COALESCE(common_mistake,''), COALESCE(grade_root,''), COALESCE(golden_rule,'')
-            FROM nafs_question_bank WHERE id IN ({placeholders})
-            """,
-            tuple(ids),
-        ).fetchall()
+        try:
+            rows = connection.execute(
+                f"""
+                SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
+                       correct, rationale, passage_id, passage_title, passage_text,
+                       COALESCE(common_mistake,''), COALESCE(grade_root,''), COALESCE(golden_rule,''),
+                       COALESCE(diagram_svg,''), COALESCE(diagram_alt,''), COALESCE(student_ready,1)
+                FROM nafs_question_bank
+                WHERE id IN ({placeholders}) AND COALESCE(student_ready,1)=1
+                """,
+                tuple(ids),
+            ).fetchall()
+        except Exception:
+            rows = connection.execute(
+                f"""
+                SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
+                       correct, rationale, passage_id, passage_title, passage_text,
+                       COALESCE(common_mistake,''), COALESCE(grade_root,''), COALESCE(golden_rule,'')
+                FROM nafs_question_bank WHERE id IN ({placeholders})
+                """,
+                tuple(ids),
+            ).fetchall()
         from .portal_session_api import _row_to_question
 
         by_id = {_row_to_question(r)["id"]: _row_to_question(r) for r in rows}
         for qid in ids:
             if qid in by_id and len(out) < count:
                 out.append(by_id[qid])
+        try:
+            from .nafs_visual_integrity import filter_student_questions
+
+            out = filter_student_questions(out)
+        except Exception:
+            pass
     if len(out) < count:
         from .portal_parametric import generate_parametric_batch
 

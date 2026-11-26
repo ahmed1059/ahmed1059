@@ -401,7 +401,7 @@ def _ensure_cafeteria_voucher(connection, student_nid: str, behavior_total: int)
 
 
 def _row_to_question(row) -> dict:
-    return {
+    q = {
         "id": int(row[0]),
         "domain": row[1] or "",
         "skill": row[2] or "",
@@ -420,8 +420,12 @@ def _row_to_question(row) -> dict:
         "common_mistake": (row[13] if len(row) > 13 else "") or "",
         "grade_root": (row[14] if len(row) > 14 else "") or "",
         "golden_rule": (row[15] if len(row) > 15 else "") or "",
+        "diagram_svg": (row[16] if len(row) > 16 else "") or "",
+        "diagram_alt": (row[17] if len(row) > 17 else "") or "",
+        "student_ready": int(row[18]) if len(row) > 18 and row[18] is not None else 1,
         "parametric": False,
     }
+    return q
 
 
 def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict]:
@@ -440,19 +444,43 @@ def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict
     select_sql = """
         SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
                correct, rationale, passage_id, passage_title, passage_text,
-               COALESCE(common_mistake,''), COALESCE(grade_root,''), COALESCE(golden_rule,'')
+               COALESCE(common_mistake,''), COALESCE(grade_root,''), COALESCE(golden_rule,''),
+               COALESCE(diagram_svg,''), COALESCE(diagram_alt,''), COALESCE(student_ready,1)
         FROM nafs_question_bank
     """
+    ready_clause = " AND COALESCE(student_ready,1)=1"
+
+    def _run_select(sql: str, params: tuple):
+        try:
+            return connection.execute(sql, params).fetchall()
+        except Exception:
+            basic = """
+                SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
+                       correct, rationale, passage_id, passage_title, passage_text,
+                       COALESCE(common_mistake,''), COALESCE(grade_root,''), COALESCE(golden_rule,'')
+                FROM nafs_question_bank
+            """
+            fb = sql.replace(select_sql.strip(), basic.strip()).replace(ready_clause, "")
+            return connection.execute(fb, params).fetchall()
 
     # المحاكاة الوطنية: ٢٢ لكل مجال بلا نظائر عشوائية
     if mode == MODE_NATIONAL:
         out: list[dict] = []
         for dom in ("math", "science", "reading"):
-            rows = connection.execute(
-                select_sql + " WHERE COALESCE(active,1)=1 AND domain = ? ORDER BY RANDOM() LIMIT 22",
+            rows = _run_select(
+                select_sql
+                + " WHERE COALESCE(active,1)=1"
+                + ready_clause
+                + " AND domain = ? ORDER BY RANDOM() LIMIT 22",
                 (dom,),
-            ).fetchall()
+            )
             out.extend(_row_to_question(r) for r in rows)
+        try:
+            from .nafs_visual_integrity import filter_student_questions
+
+            out = filter_student_questions(out)
+        except Exception:
+            pass
         random.shuffle(out)
         return out[:66]
 
@@ -462,7 +490,7 @@ def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict
         parametric_n = 0
     bank_n = max(0, count - parametric_n)
     params: list[Any] = []
-    where = "WHERE COALESCE(active,1)=1"
+    where = "WHERE COALESCE(active,1)=1" + ready_clause
     if domain in ("math", "reading", "science"):
         where += " AND domain = ?"
         params.append(domain)
@@ -474,16 +502,22 @@ def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict
         skill = (weak[0] if weak else "") or "الجبر"
         where += " AND (skill LIKE ? OR domain = 'math')"
         params.append(f"%{skill}%")
-    rows = connection.execute(
+    rows = _run_select(
         f"{select_sql} {where} ORDER BY RANDOM() LIMIT ?",
         tuple(params + [bank_n or count]),
-    ).fetchall()
+    )
     if len(rows) < bank_n:
-        rows = connection.execute(
-            f"{select_sql} WHERE COALESCE(active,1)=1 ORDER BY RANDOM() LIMIT ?",
+        rows = _run_select(
+            f"{select_sql} WHERE COALESCE(active,1)=1{ready_clause} ORDER BY RANDOM() LIMIT ?",
             (bank_n or count,),
-        ).fetchall()
+        )
     out = [_row_to_question(row) for row in rows]
+    try:
+        from .nafs_visual_integrity import filter_student_questions
+
+        out = filter_student_questions(out)
+    except Exception:
+        pass
     if parametric_n:
         domains = [domain] if domain in ("math", "science") else ["math", "science"]
         generated = generate_parametric_batch(parametric_n, domains=domains)
@@ -491,12 +525,19 @@ def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict
         base = -1000 - random.randint(0, 5000)
         for i, q in enumerate(generated):
             q["id"] = base - i
+            q.setdefault("student_ready", 1)
             out.append(q)
     random.shuffle(out)
     return out[:count]
 
 
 def _public_question(q: dict) -> dict:
+    try:
+        from .nafs_visual_integrity import prepare_public_question
+
+        q = prepare_public_question(q)
+    except Exception:
+        pass
     out = {
         "id": q["id"],
         "domain": q["domain"],
@@ -506,6 +547,9 @@ def _public_question(q: dict) -> dict:
         "passage_title": q.get("passage_title") or "",
         "passage_text": q.get("passage_text") or "",
     }
+    if q.get("diagram_svg"):
+        out["diagram_svg"] = q.get("diagram_svg")
+        out["diagram_alt"] = q.get("diagram_alt") or "شكل توضيحي للسؤال"
     if q.get("grade_root"):
         out["grade_root"] = q.get("grade_root")
     if q.get("rescue"):

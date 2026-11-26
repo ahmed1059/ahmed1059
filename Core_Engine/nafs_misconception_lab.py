@@ -275,6 +275,12 @@ def ensure_question_columns(connection) -> None:
         connection.execute(
             "ALTER TABLE nafs_question_bank ADD COLUMN golden_rule TEXT NOT NULL DEFAULT ''"
         )
+    try:
+        from .nafs_visual_integrity import ensure_diagram_columns
+
+        ensure_diagram_columns(connection)
+    except Exception:
+        pass
 
 
 def enrich_question_traps(connection) -> int:

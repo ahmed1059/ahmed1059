@@ -99,7 +99,7 @@ class WaveDLughati140Tests(unittest.TestCase):
         by_passage = [r for r in rows if str(r.get("passage_id", "")).startswith(BANK_TAG)]
         self.assertGreaterEqual(len(by_passage), 140)
         self.assertGreaterEqual(len(rows), EXPECTED_MIN_COUNT)
-        self.assertEqual(BANK_REVISION, "wave-d-lughati140-1")
+        self.assertEqual(BANK_REVISION, "visual-diagram-gate-1")
         reading = [r for r in rows if r["domain"] == "reading"]
         self.assertGreaterEqual(len(reading), 140 + 40)  # موجة د + بنك قراءة سابق
 
