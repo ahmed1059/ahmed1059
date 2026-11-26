@@ -120,3 +120,46 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+.clinic-card {
+  border: 1px solid #c9d7d3;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin: 0 0 10px;
+  background: #fafcfb;
+}
+
+.clinic-card h3 {
+  margin: 0 0 6px;
+  color: #0b5e56;
+  font-size: 16px;
+}
+
+.clinic-card .clinic-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 8px;
+}
+
+.clinic-card.is-open {
+  opacity: 0.72;
+  border-style: dashed;
+}
+
+.clinic-worksheet {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid #b7e4d8;
+  border-radius: 12px;
+  background: #f3faf7;
+}
+
+.clinic-worksheet ol {
+  margin: 8px 0 0;
+  padding-inline-start: 22px;
+}
+
+.clinic-worksheet li {
+  margin: 0 0 8px;
+}
