@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/fonts.css?v=font1">
     <link rel="stylesheet" href="css/design-system.css">
     <link rel="stylesheet" href="css/theme-core.css?v=space2">
-    <link rel="stylesheet" href="css/login-opening.css?v=open2">
+    <link rel="stylesheet" href="css/login-opening.css?v=open3">
     <link rel="stylesheet" href="css/page-nav.css?v=nav1">
 </head>
 <body class="login-page login-opening">
@@ -41,35 +41,68 @@
 
         <section class="opening-scene" aria-label="افتتاحية الدخول">
             <div class="opening-panel">
-                <form id="login-form" class="login-card" autocomplete="off">
+                <div class="login-card portal-gate">
                     <h2>تسجيل الدخول</h2>
-                    <p>أدخل رقم السجل المدني وكلمة المرور.</p>
-
-                    <label for="national-id">رقم السجل المدني</label>
-                    <input id="national-id" name="national_id" type="text" inputmode="numeric" autocomplete="username" placeholder="أدخل رقم السجل المدني">
-
-                    <label for="access-key">كلمة المرور</label>
-                    <input id="access-key" name="access-key" class="password-masked" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" placeholder="كلمة المرور" readonly>
-
-                    <div class="login-actions">
-                        <button class="btn-unified-primary" type="submit">الدخول إلى المنظومة</button>
+                    <div class="portal-gate-tabs" role="tablist" aria-label="نوع الدخول">
+                        <button type="button" class="portal-gate-tab is-active" data-gate="staff">القيادة والمنسوبون</button>
+                        <button type="button" class="portal-gate-tab" data-gate="student">الطالب</button>
+                        <button type="button" class="portal-gate-tab" data-gate="parent">ولي الأمر</button>
                     </div>
 
-                    <div class="opening-or"><span>أو</span></div>
+                    <form id="login-form" class="portal-gate-panel is-active" data-gate-panel="staff" autocomplete="off">
+                        <p>أدخل رقم السجل المدني وكلمة المرور.</p>
 
-                    <label for="staff-search">الدخول بالبحث عن الاسم</label>
-                    <select id="staff-search">
-                        <option value="">اختر الاسم من كشف الكادر</option>
-                    </select>
+                        <label for="national-id">رقم السجل المدني</label>
+                        <input id="national-id" name="national_id" type="text" inputmode="numeric" autocomplete="username" placeholder="أدخل رقم السجل المدني">
 
-                    <p id="login-message" class="login-message"></p>
-                    <p id="trial-banner" class="login-message" hidden style="margin-top:10px;color:#0b5e56;font-weight:700;"></p>
+                        <label for="access-key">كلمة المرور</label>
+                        <input id="access-key" name="access-key" class="password-masked" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" placeholder="كلمة المرور" readonly>
 
-                    <section id="role-choice" class="role-choice" hidden>
-                        <h2 id="role-choice-name"></h2>
-                        <div id="role-choice-actions" class="role-choice-actions"></div>
-                    </section>
-                </form>
+                        <div class="login-actions">
+                            <button class="btn-unified-primary" type="submit">الدخول إلى المنظومة</button>
+                        </div>
+
+                        <div class="opening-or"><span>أو</span></div>
+
+                        <label for="staff-search">الدخول بالبحث عن الاسم</label>
+                        <select id="staff-search">
+                            <option value="">اختر الاسم من كشف الكادر</option>
+                        </select>
+
+                        <p id="login-message" class="login-message"></p>
+                        <p id="trial-banner" class="login-message" hidden style="margin-top:10px;color:#0b5e56;font-weight:700;"></p>
+
+                        <section id="role-choice" class="role-choice" hidden>
+                            <h2 id="role-choice-name"></h2>
+                            <div id="role-choice-actions" class="role-choice-actions"></div>
+                        </section>
+                    </form>
+
+                    <form id="student-login-form" class="portal-gate-panel" data-gate-panel="student" autocomplete="off">
+                        <p>ادخل برقم الهوية الوطنية وآخر ٤ أرقام من جوال ولي الأمر، أو بمسح/إدخال رمز QR Pass.</p>
+                        <label for="student-nid">رقم الهوية الوطنية</label>
+                        <input id="student-nid" name="student_nid" type="text" inputmode="numeric" autocomplete="off" placeholder="هوية الطالب">
+                        <label for="student-last4">آخر ٤ أرقام من جوال ولي الأمر</label>
+                        <input id="student-last4" name="student_last4" type="text" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="مثال: ٢٦١٩">
+                        <div class="opening-or"><span>أو</span></div>
+                        <label for="student-qr">رمز بطاقة QR Pass</label>
+                        <input id="student-qr" name="student_qr" type="text" autocomplete="off" placeholder="NAFS-…">
+                        <div class="login-actions">
+                            <button class="btn-unified-primary" type="submit">دخول ميدان نافس</button>
+                        </div>
+                        <p id="student-login-message" class="login-message"></p>
+                    </form>
+
+                    <form id="parent-login-form" class="portal-gate-panel" data-gate-panel="parent" autocomplete="off">
+                        <p>ادخل برقم جوال ولي الأمر المسجّل في نظام نور لعرض أبنائك فقط.</p>
+                        <label for="parent-phone">رقم جوال ولي الأمر</label>
+                        <input id="parent-phone" name="parent_phone" type="text" inputmode="tel" autocomplete="tel" placeholder="05xxxxxxxx أو 9665xxxxxxxx">
+                        <div class="login-actions">
+                            <button class="btn-unified-primary" type="submit">دخول بوابة ولي الأمر</button>
+                        </div>
+                        <p id="parent-login-message" class="login-message"></p>
+                    </form>
+                </div>
                 <section id="password-change" class="login-card" hidden>
                     <h2>كلمة مرور خاصة</h2>
                     <p id="password-change-name"></p>
@@ -108,6 +141,7 @@
         </section>
     </div>
     <script src="js/login.js?v=open8"></script>
+    <script src="js/portal-login.js?v=p1"></script>
 <script src="js/page-nav.js?v=nav1"></script>
 </body>
 </html>
