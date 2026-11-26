@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>لوحة مالك المنظومة والدعم السريع</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-owner.css?v=o5">
+  <link rel="stylesheet" href="css/portal-owner.css?v=o6">
 </head>
 <body class="portal-student">
   <div class="portal-shell owner-layout">
@@ -26,6 +26,7 @@
       <button type="button" class="tab is-active" data-owner-panel="panel-owner">إعدادات المالك</button>
       <button type="button" class="tab" data-owner-panel="panel-identity">هوية المدرسة</button>
       <button type="button" class="tab" data-owner-panel="panel-radar">مرصد الموهوبين</button>
+      <button type="button" class="tab" data-owner-panel="panel-enrich">جسر الإثراء والموهبة</button>
       <button type="button" class="tab" data-owner-panel="panel-counselor">صندوق الموجّه</button>
       <button type="button" class="tab" data-owner-panel="panel-peek">معاينة التعثر</button>
       <button type="button" class="tab" data-owner-panel="panel-clinics">عيادات علاجية</button>
@@ -96,6 +97,19 @@
       <div id="radar-talent-box"></div>
       <h3 style="margin-top:14px;color:#0b5e56;font-size:16px;">تنبيهات الموجه الطلابي</h3>
       <div id="radar-alerts-box"></div>
+    </section>
+
+    <section class="portal-card owner-panel" id="panel-enrich">
+      <h2>جسر البرامج النوعية والإثراء</h2>
+      <p class="portal-empty" style="margin:0 0 10px;">ترشيح تلقائي من ميدان نافس (إتقان، قراءة متزامنة، حساب ذهني، تطهير، صدارة) إلى موهبة / إثراء / قارئ الحصيف / تحدي الأرقام — مدرسة ٤٠٣٤١.</p>
+      <div class="portal-actions" style="margin-bottom:10px;">
+        <button type="button" class="portal-btn" id="btn-enrich-refresh">تحديث الترشيحات</button>
+        <button type="button" class="portal-btn secondary" id="btn-enrich-load">عرض الجسر</button>
+        <button type="button" class="portal-btn secondary" id="btn-honor-report">تقرير التتويج للطباعة</button>
+      </div>
+      <div id="enrich-summary" class="peek-summary" hidden></div>
+      <div id="enrich-box"></div>
+      <div id="honor-report-box" class="counselor-rules" hidden></div>
     </section>
 
     <section class="portal-card owner-panel" id="panel-counselor">
@@ -226,6 +240,6 @@
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe12"></script>
   <script src="/cores/print-master-core.js?v=c308"></script>
-  <script src="js/portal-owner.js?v=o6"></script>
+  <script src="js/portal-owner.js?v=o7"></script>
 </body>
 </html>

@@ -500,6 +500,10 @@ from .nafs_weekly_etec import router as nafs_weekly_etec_router
 
 app.include_router(nafs_weekly_etec_router)
 
+from .nafs_enrich_bridge import router as nafs_enrich_bridge_router
+
+app.include_router(nafs_enrich_bridge_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):

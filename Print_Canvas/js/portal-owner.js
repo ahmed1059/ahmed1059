@@ -872,6 +872,159 @@
     });
   }
 
+  function loadEnrichBridge() {
+    return fetchJson("/api/session/nafs/enrich-bridge", { headers: headers(), cache: "no-store" }).then(
+      function (pack) {
+        var summary = document.getElementById("enrich-summary");
+        var box = document.getElementById("enrich-box");
+        var s = pack.summary_ar || pack.summary || {};
+        var tracks = pack.tracks || {};
+        if (summary) {
+          summary.hidden = false;
+          summary.innerHTML = Object.keys(tracks)
+            .map(function (k) {
+              var t = tracks[k] || {};
+              return (
+                '<span class="peek-chip">' +
+                escapeHtml(t.label || k) +
+                ": " +
+                toEastern(s[k] || 0) +
+                " · ETEC " +
+                formatEtecCode(t.etec_ar || t.etec || "") +
+                "</span>"
+              );
+            })
+            .join("");
+        }
+        var grouped = pack.grouped || {};
+        if (box) {
+          box.innerHTML = Object.keys(tracks)
+            .map(function (k) {
+              var t = tracks[k] || {};
+              var rows = grouped[k] || [];
+              return (
+                "<h3 style=\"margin:14px 0 8px;color:#0b5e56;font-size:16px;\">" +
+                escapeHtml(t.label || k) +
+                " — " +
+                formatEtecCode(t.etec_ar || t.etec || "") +
+                "</h3>" +
+                (rows.length
+                  ? '<table class="owner-table"><thead><tr><th>الطالب</th><th>الفصل</th><th>الدرجة</th><th>السبب</th></tr></thead><tbody>' +
+                    rows
+                      .slice(0, 25)
+                      .map(function (row) {
+                        return (
+                          "<tr><td>" +
+                          escapeHtml(row.name || "") +
+                          "<br><small>" +
+                          toEastern(row.student_nid_masked || "") +
+                          "</small></td><td>" +
+                          escapeHtml(row.section || "") +
+                          "</td><td>" +
+                          toEastern(row.score_ar || row.score || 0) +
+                          "</td><td>" +
+                          escapeHtml(row.reason || "") +
+                          "</td></tr>"
+                        );
+                      })
+                      .join("") +
+                    "</tbody></table>"
+                  : '<p class="portal-empty">لا مرشحين بعد — حدّث الترشيحات بعد نشاط نافس.</p>')
+              );
+            })
+            .join("");
+        }
+        return pack;
+      }
+    );
+  }
+
+  function refreshEnrichBridge() {
+    return fetchJson("/api/session/nafs/enrich-bridge/refresh", {
+      method: "POST",
+      headers: headers(),
+      body: JSON.stringify({ limit_students: 150 })
+    }).then(function () {
+      return loadEnrichBridge();
+    });
+  }
+
+  function loadHonorReport() {
+    return fetchJson("/api/session/nafs/honor-report", { headers: headers(), cache: "no-store" }).then(
+      function (pack) {
+        var box = document.getElementById("honor-report-box");
+        if (!box) return pack;
+        box.hidden = false;
+        var boards = pack.boards || {};
+        function listBoard(title, rows, xpKey) {
+          rows = rows || [];
+          return (
+            "<h4 style=\"margin:12px 0 6px;color:#0b5e56;\">" +
+            escapeHtml(title) +
+            "</h4><ol style=\"margin:0;padding:0 18px 0 0;\">" +
+            rows
+              .slice(0, 8)
+              .map(function (r) {
+                return (
+                  "<li>" +
+                  escapeHtml(r.name || r.label || "") +
+                  " — " +
+                  toEastern(r[xpKey || "xp_ar"] || r.xp || 0) +
+                  " XP</li>"
+                );
+              })
+              .join("") +
+            "</ol>"
+          );
+        }
+        box.innerHTML =
+          "<h3 style=\"margin:0 0 8px;color:#0b5e56;\">" +
+          escapeHtml(pack.title || "تقرير التتويج") +
+          " · " +
+          toEastern((pack.school && pack.school.stat_no_ar) || "٤٠٣٤١") +
+          "</h3>" +
+          listBoard("أبطال اليوم", boards.day) +
+          listBoard("فرسان الأسبوع", boards.week) +
+          listBoard("نخبة الشهر", boards.month) +
+          listBoard("دوري الفصول", boards.classes_week) +
+          listBoard(
+            "نخبة الصف",
+            (boards.elite_class || []).map(function (r) {
+              return {
+                name: (r.name || "") + " (" + (r.section || "") + ")",
+                xp_ar: r.xp_ar,
+                xp: r.xp
+              };
+            })
+          ) +
+          "<p style=\"margin:10px 0 0;direction:ltr;unicode-bidi:isolate;font-weight:800;color:#0b5e56;\">" +
+          escapeHtml(pack.barcode || "") +
+          "</p>" +
+          (window.PrintEngine
+            ? '<div class="portal-actions" style="margin-top:10px;"><button type="button" class="portal-btn" id="btn-honor-print">طباعة A4</button></div>'
+            : "");
+        var printBtn = document.getElementById("btn-honor-print");
+        if (printBtn && window.PrintEngine) {
+          printBtn.onclick = function () {
+            window.PrintEngine.open("master-sheet", {
+              docTitle: pack.title || "تقرير التتويج",
+              title: pack.title || "تقرير منصات التتويج",
+              kind: "document",
+              orientation: "portrait",
+              school: (pack.school && pack.school.name) || "",
+              bodyHtml: box.innerHTML,
+              signoff: true,
+              maxColumns: 2,
+              pageTotal: 1,
+              fileName: "تقرير_التتويج_والبرامج"
+            });
+          };
+        }
+        return pack;
+      }
+    );
+  }
+
   function loadCounselorInbox() {
     return fetchJson("/api/portal/counselor/inbox", { headers: headers(), cache: "no-store" }).then(
       function (pack) {
@@ -1096,6 +1249,15 @@
             status(e.message, true);
           });
         }
+        if (id === "panel-enrich") {
+          loadEnrichBridge()
+            .then(function () {
+              status("جسر الإثراء والموهبة محدّث.");
+            })
+            .catch(function (e) {
+              status(e.message, true);
+            });
+        }
         if (id === "panel-counselor") {
           loadCounselorInbox()
             .then(function () {
@@ -1179,6 +1341,42 @@
             status(e.message, true);
           });
         }
+      });
+    }
+    var enrichLoad = document.getElementById("btn-enrich-load");
+    if (enrichLoad) {
+      enrichLoad.addEventListener("click", function () {
+        loadEnrichBridge()
+          .then(function () {
+            status("جسر الإثراء معروض.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
+      });
+    }
+    var enrichRefresh = document.getElementById("btn-enrich-refresh");
+    if (enrichRefresh) {
+      enrichRefresh.addEventListener("click", function () {
+        refreshEnrichBridge()
+          .then(function () {
+            status("أُعيد بناء ترشيحات البرامج من نافس.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
+      });
+    }
+    var honorBtn = document.getElementById("btn-honor-report");
+    if (honorBtn) {
+      honorBtn.addEventListener("click", function () {
+        loadHonorReport()
+          .then(function () {
+            status("تقرير التتويج جاهز للمعاينة/الطباعة.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
       });
     }
     var counselRefresh = document.getElementById("btn-counselor-refresh");

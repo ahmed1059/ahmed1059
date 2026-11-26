@@ -825,6 +825,31 @@ def portal_student_home(x_portal_token: str = Header(default="")):
             }
         except Exception:
             week_goal = None
+        program_noms = []
+        try:
+            from .nafs_enrich_bridge import ensure_enrich_bridge
+
+            ensure_enrich_bridge(connection)
+            program_noms = [
+                {
+                    "track_key": r[0],
+                    "track_label": r[1],
+                    "program_name": r[2],
+                    "reason": r[3],
+                    "etec_code": r[4],
+                }
+                for r in connection.execute(
+                    """
+                    SELECT track_key, track_label, program_name, reason, etec_code
+                    FROM portal_program_nominations
+                    WHERE student_nid = ? AND status = 'nominated'
+                    ORDER BY score DESC
+                    """,
+                    (nid,),
+                )
+            ]
+        except Exception:
+            program_noms = []
         return {
             "student": student,
             "xp": xp,
@@ -832,6 +857,7 @@ def portal_student_home(x_portal_token: str = Header(default="")):
             "error_vault": vault,
             "mastery": mastery,
             "week_goal": week_goal,
+            "program_nominations": program_noms,
             "modes": MODE_CONFIG,
             "recent_runs": runs,
             "remedial": remedial,
@@ -1334,6 +1360,13 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
             voucher = _ensure_cafeteria_voucher(
                 connection, session["student_nid"], int(behavior_totals.get("total") or 0)
             )
+        program_noms = []
+        try:
+            from .nafs_enrich_bridge import sync_student_programs
+
+            program_noms = sync_student_programs(connection, session["student_nid"])
+        except Exception:
+            program_noms = []
         connection.commit()
         return {
             "run_id": body.run_id,
@@ -1354,6 +1387,14 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
             "elite": (boost_pack or {}).get("elite"),
             "talent": talent_flag,
             "risk_alert": risk_flag,
+            "program_nominations": [
+                {
+                    "track_key": p["track_key"],
+                    "track_label": p["track_label"],
+                    "program_name": p["program_name"],
+                }
+                for p in (program_noms or [])
+            ],
         }
     finally:
         connection.close()
@@ -1442,11 +1483,36 @@ def portal_leaderboards(x_portal_token: str = Header(default="")):
             for i, row in enumerate(class_rows)
             if (row[0] or row[1])
         ]
+        # شارات برامج من جسر الإثراء (إن وُجدت) — بلا قاعدة موازية
+        program_map: dict[str, list[str]] = {}
+        try:
+            from .nafs_enrich_bridge import ensure_enrich_bridge
+
+            ensure_enrich_bridge(connection)
+            for pr in connection.execute(
+                """
+                SELECT student_nid, track_label FROM portal_program_nominations
+                WHERE status = 'nominated'
+                """
+            ):
+                program_map.setdefault(pr[0], [])
+                if pr[1] and pr[1] not in program_map[pr[0]]:
+                    program_map[pr[0]].append(pr[1])
+        except Exception:
+            program_map = {}
+
+        def attach(rows: list[dict]) -> list[dict]:
+            for row in rows:
+                nid = row.get("national_id") or ""
+                row["programs"] = program_map.get(nid, [])
+            return rows
+
         return {
-            "day": board("day"),
-            "week": board("week"),
-            "month": board("month"),
+            "day": attach(board("day")),
+            "week": attach(board("week")),
+            "month": attach(board("month")),
             "classes_week": classes,
+            "programs_legend": ["موهبة", "إثراء", "قارئ الحصيف", "تحدي الأرقام"],
         }
     finally:
         connection.close()
