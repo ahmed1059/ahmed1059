@@ -96,15 +96,27 @@ CREATE TABLE IF NOT EXISTS portal_qr_passes (
     pass_code TEXT NOT NULL,
     created_at TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS portal_cafeteria_vouchers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_nid TEXT NOT NULL,
+    title TEXT NOT NULL DEFAULT 'قسيمة مقصف',
+    points_cost INTEGER NOT NULL DEFAULT 5,
+    status TEXT NOT NULL DEFAULT 'available',
+    created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS ix_portal_cafeteria_student ON portal_cafeteria_vouchers(student_nid, status);
 """
 
 MODE_DAILY = "daily"
 MODE_MOCK = "mock"
 MODE_RESCUE = "rescue"
+MODE_DUEL = "duel"
 MODE_CONFIG = {
     MODE_DAILY: {"label": "تحدي اليوم السريع", "count": 10, "seconds": 600, "xp_mult": 1},
     MODE_MOCK: {"label": "الاختبار المحاكي الشامل", "count": 20, "seconds": 1200, "xp_mult": 1},
     MODE_RESCUE: {"label": "تحدي إنقاذ المهارة الأضعف", "count": 8, "seconds": 480, "xp_mult": 2},
+    MODE_DUEL: {"label": "مبارزة زميل (١ ضد ١)", "count": 8, "seconds": 480, "xp_mult": 2},
 }
 
 
@@ -118,6 +130,12 @@ def _iso(dt: datetime | None = None) -> str:
 
 def _ensure(connection) -> None:
     connection.executescript(PORTAL_SCHEMA)
+    try:
+        from .portal_radar_api import ensure_radar_tables
+
+        ensure_radar_tables(connection)
+    except Exception:
+        pass
     sync_student_ssot(connection, force=False)
 
 
@@ -276,10 +294,101 @@ def _section_key(grade: str, section: str) -> str:
     return f"{g} / {s}".strip(" /")
 
 
+def _pick_ghost(connection, student_nid: str, question_count: int, seconds: int) -> dict:
+    """خصم شبح من جولة سابقة (أو نظير اصطناعي) لعرض شريط تقدم المبارزة."""
+    from .portal_owner_api import mask_nid
+
+    row = connection.execute(
+        """
+        SELECT r.student_nid, COALESCE(s.name, ''), r.score_pct, r.duration_sec, r.correct_count, r.total_questions
+        FROM portal_challenge_runs r
+        LEFT JOIN noor_students s ON s.national_id = r.student_nid
+        WHERE r.finished_at != '' AND r.student_nid != ?
+        ORDER BY RANDOM()
+        LIMIT 1
+        """,
+        (student_nid,),
+    ).fetchone()
+    if row:
+        name = (row[1] or "زميل الصف").strip() or "زميل الصف"
+        # إخفاء اللقب الكامل — الاسم الأول فقط للخصوصية
+        short = name.split()[0] if name else "زميل"
+        target = float(row[2] or 70)
+        duration = max(60, int(row[3] or seconds))
+    else:
+        short = "زميل الصف"
+        name = short
+        target = float(random.randint(65, 88))
+        duration = max(90, int(seconds * 0.85))
+        row = ("", name, target, duration, 0, question_count)
+    # وتيرة إجابة الشبح عبر الأسئلة
+    pace = []
+    cursor = 0.0
+    step = duration / max(question_count, 1)
+    for i in range(question_count):
+        jitter = random.uniform(0.65, 1.25)
+        cursor += step * jitter
+        pace.append(round(min(duration - 1, cursor), 1))
+    expected_correct = max(1, int(round(question_count * target / 100.0)))
+    return {
+        "ghost_name": short,
+        "ghost_nid_masked": mask_nid(row[0]) if row[0] else "***",
+        "ghost_target_score": round(target, 1),
+        "ghost_pace_sec": pace,
+        "ghost_expected_correct": expected_correct,
+        "ghost_duration_sec": duration,
+    }
+
+
+def _behavior_totals(connection, student_nid: str) -> dict:
+    rows = connection.execute(
+        """
+        SELECT program, COALESCE(SUM(points),0)
+        FROM portal_behavior_points
+        WHERE student_nid = ?
+        GROUP BY program
+        """,
+        (student_nid,),
+    ).fetchall()
+    totals = {"قدوة": 0, "رفق": 0}
+    for program, points in rows:
+        key = str(program or "").strip() or "أخرى"
+        totals[key] = int(points or 0)
+    totals["total"] = sum(int(v) for k, v in totals.items() if k != "total")
+    return totals
+
+
+def _ensure_cafeteria_voucher(connection, student_nid: str, behavior_total: int) -> dict | None:
+    """قسيمة مقصف لكل ٥ نقاط سلوك إيجابي (مرة واحدة لكل عتبة)."""
+    if behavior_total < 5:
+        return None
+    tiers = behavior_total // 5
+    existing = connection.execute(
+        "SELECT COUNT(*) FROM portal_cafeteria_vouchers WHERE student_nid = ?",
+        (student_nid,),
+    ).fetchone()[0]
+    if int(existing or 0) >= tiers:
+        return None
+    connection.execute(
+        """
+        INSERT INTO portal_cafeteria_vouchers(student_nid, title, points_cost, status, created_at)
+        VALUES (?, 'قسيمة مقصف مستحقة', 5, 'available', ?)
+        """,
+        (student_nid, _iso()),
+    )
+    return {"title": "قسيمة مقصف مستحقة", "status": "available"}
+
+
 def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict]:
     from .nafs_question_bank_seed import ensure_nafs_question_bank
+    from .portal_parametric import generate_parametric_batch
 
     ensure_nafs_question_bank(connection)
+    # نظائر مهارية: نحو ٣٠٪ من الجولة (على الأقل سؤالان إن أمكن)
+    parametric_n = min(max(2, count // 3), max(0, count - 1)) if count >= 3 else (1 if count > 1 else 0)
+    if domain == "reading":
+        parametric_n = 0
+    bank_n = max(0, count - parametric_n)
     params: list[Any] = []
     where = "WHERE COALESCE(active,1)=1"
     if domain in ("math", "reading", "science"):
@@ -302,9 +411,9 @@ def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict
         ORDER BY RANDOM()
         LIMIT ?
         """,
-        tuple(params + [count]),
+        tuple(params + [bank_n or count]),
     ).fetchall()
-    if len(rows) < count:
+    if len(rows) < bank_n:
         rows = connection.execute(
             """
             SELECT id, domain, skill, stem, choice_a, choice_b, choice_c, choice_d,
@@ -314,7 +423,7 @@ def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict
             ORDER BY RANDOM()
             LIMIT ?
             """,
-            (count,),
+            (bank_n or count,),
         ).fetchall()
     out = []
     for row in rows:
@@ -335,9 +444,19 @@ def _pick_questions(connection, mode: str, domain: str, count: int) -> list[dict
                 "passage_id": row[10] or "",
                 "passage_title": row[11] or "",
                 "passage_text": row[12] or "",
+                "parametric": False,
             }
         )
-    return out
+    if parametric_n:
+        domains = [domain] if domain in ("math", "science") else ["math", "science"]
+        generated = generate_parametric_batch(parametric_n, domains=domains)
+        # معرفات سالبة فريدة داخل الجولة
+        base = -1000 - random.randint(0, 5000)
+        for i, q in enumerate(generated):
+            q["id"] = base - i
+            out.append(q)
+    random.shuffle(out)
+    return out[:count]
 
 
 def _public_question(q: dict) -> dict:
@@ -614,7 +733,23 @@ def portal_student_home(x_portal_token: str = Header(default="")):
                 (nid,),
             )
         ]
-        # بذور سلوك إيجابية خفيفة إن لم توجد (قدوة/رفق) — نقاط صفرية تعريفية فقط لا تُخترع
+        behavior_totals = _behavior_totals(connection, nid)
+        vouchers = [
+            {"id": r[0], "title": r[1], "points_cost": r[2], "status": r[3], "created_at": r[4]}
+            for r in connection.execute(
+                """
+                SELECT id, title, points_cost, status, created_at
+                FROM portal_cafeteria_vouchers
+                WHERE student_nid = ?
+                ORDER BY id DESC LIMIT 10
+                """,
+                (nid,),
+            )
+        ]
+        talent = connection.execute(
+            "SELECT best_score, status FROM portal_talent_candidates WHERE student_nid = ?",
+            (nid,),
+        ).fetchone()
         return {
             "student": student,
             "xp": xp,
@@ -622,6 +757,13 @@ def portal_student_home(x_portal_token: str = Header(default="")):
             "recent_runs": runs,
             "remedial": remedial,
             "behavior": behavior,
+            "behavior_totals": behavior_totals,
+            "cafeteria_vouchers": vouchers,
+            "talent": (
+                {"nominated": True, "best_score": talent[0], "status": talent[1]}
+                if talent
+                else {"nominated": False}
+            ),
             "powerups": [
                 {"id": "fifty", "label": "حذف إجابتين (٥٠:٥٠)", "per_run": 1},
                 {"id": "hint", "label": "تلميح المعلم", "per_run": 1},
@@ -646,6 +788,28 @@ def portal_challenge_start(body: StartChallengeBody, x_portal_token: str = Heade
         if not questions:
             raise HTTPException(status_code=404, detail="بنك الأسئلة فارغ.")
         started = _iso()
+        detail: dict[str, Any] = {
+            "question_ids": [q["id"] for q in questions],
+            "correct_map": {str(q["id"]): q["correct"] for q in questions},
+            "questions_full": {
+                str(q["id"]): {
+                    "stem": q.get("stem") or "",
+                    "rationale": q.get("rationale") or "",
+                    "choices": q.get("choices") or {},
+                    "parametric": bool(q.get("parametric")),
+                    "domain": q.get("domain") or "",
+                    "skill": q.get("skill") or "",
+                }
+                for q in questions
+            },
+            "seconds": cfg["seconds"],
+            "xp_mult": cfg["xp_mult"],
+            "powerups_left": {"fifty": 1, "hint": 1, "freeze": 1},
+        }
+        ghost = None
+        if mode == MODE_DUEL:
+            ghost = _pick_ghost(connection, session["student_nid"], len(questions), cfg["seconds"])
+            detail["ghost"] = ghost
         cur = connection.execute(
             """
             INSERT INTO portal_challenge_runs
@@ -658,21 +822,12 @@ def portal_challenge_start(body: StartChallengeBody, x_portal_token: str = Heade
                 started,
                 len(questions),
                 str(body.domain or ""),
-                json.dumps(
-                    {
-                        "question_ids": [q["id"] for q in questions],
-                        "correct_map": {str(q["id"]): q["correct"] for q in questions},
-                        "seconds": cfg["seconds"],
-                        "xp_mult": cfg["xp_mult"],
-                        "powerups_left": {"fifty": 1, "hint": 1, "freeze": 1},
-                    },
-                    ensure_ascii=False,
-                ),
+                json.dumps(detail, ensure_ascii=False),
             ),
         )
         run_id = int(cur.lastrowid)
         connection.commit()
-        return {
+        payload = {
             "run_id": run_id,
             "mode": mode,
             "label": cfg["label"],
@@ -680,6 +835,41 @@ def portal_challenge_start(body: StartChallengeBody, x_portal_token: str = Heade
             "xp_mult": cfg["xp_mult"],
             "questions": [_public_question(q) for q in questions],
             "powerups_left": {"fifty": 1, "hint": 1, "freeze": 1},
+        }
+        if ghost:
+            payload["ghost"] = ghost
+            payload["duel"] = True
+        return payload
+    finally:
+        connection.close()
+
+
+@router.get("/api/portal/challenge/duel-progress")
+def portal_duel_progress(run_id: int, elapsed_sec: float = 0, answered: int = 0, x_portal_token: str = Header(default="")):
+    """شريط تقدم الخصم الشبح في المبارزة حسب الزمن المنقضي."""
+    session = _require_portal(x_portal_token, ("student",))
+    connection = connect()
+    try:
+        _ensure(connection)
+        row = connection.execute(
+            "SELECT student_nid, mode, detail_json, total_questions FROM portal_challenge_runs WHERE id = ?",
+            (run_id,),
+        ).fetchone()
+        if not row or row[0] != session["student_nid"]:
+            raise HTTPException(status_code=404, detail="جولة غير موجودة.")
+        detail = json.loads(row[2] or "{}")
+        ghost = detail.get("ghost") or {}
+        pace = ghost.get("ghost_pace_sec") or []
+        ghost_answered = sum(1 for t in pace if float(elapsed_sec) >= float(t))
+        total = max(int(row[3] or len(pace) or 1), 1)
+        return {
+            "run_id": run_id,
+            "you_answered": int(answered),
+            "you_pct": round(100.0 * int(answered) / total, 1),
+            "ghost_name": ghost.get("ghost_name") or "زميل",
+            "ghost_answered": min(ghost_answered, total),
+            "ghost_pct": round(100.0 * min(ghost_answered, total) / total, 1),
+            "ghost_target_score": ghost.get("ghost_target_score"),
         }
     finally:
         connection.close()
@@ -716,15 +906,20 @@ def portal_challenge_powerup(body: PowerupBody, x_portal_token: str = Header(def
             result["remove"] = options[:2]
             result["keep"] = [correct, options[2]]
         elif key == "hint" and qid:
-            qrow = connection.execute(
-                "SELECT rationale, skill FROM nafs_question_bank WHERE id = ?",
-                (qid,),
-            ).fetchone()
-            result["hint"] = (qrow[1] if qrow else "") or "راجع المهارة المستهدفة ثم استبعد الخيارات البعيدة."
-            if qrow and qrow[0]:
-                # تلميح جزئي بلا كشف الإجابة كاملة
-                text = str(qrow[0])
+            q_full = (detail.get("questions_full") or {}).get(str(qid)) or {}
+            if q_full.get("rationale") or q_full.get("skill"):
+                text = str(q_full.get("rationale") or q_full.get("skill") or "")
                 result["hint"] = text[:48] + ("…" if len(text) > 48 else "")
+            else:
+                qrow = connection.execute(
+                    "SELECT rationale, skill FROM nafs_question_bank WHERE id = ?",
+                    (qid,),
+                ).fetchone()
+                result["hint"] = (qrow[1] if qrow else "") or "راجع المهارة المستهدفة ثم استبعد الخيارات البعيدة."
+                if qrow and qrow[0]:
+                    # تلميح جزئي بلا كشف الإجابة كاملة
+                    text = str(qrow[0])
+                    result["hint"] = text[:48] + ("…" if len(text) > 48 else "")
         elif key == "freeze":
             result["extra_seconds"] = 15
         connection.execute(
@@ -787,18 +982,29 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
                 xp += gain
             else:
                 streak = 0
-            qrow = connection.execute(
-                "SELECT stem, rationale, choice_a, choice_b, choice_c, choice_d FROM nafs_question_bank WHERE id = ?",
-                (int(qid) if qid.isdigit() else 0,),
-            ).fetchone()
+            q_full = (detail.get("questions_full") or {}).get(qid) or {}
+            stem = q_full.get("stem") or ""
+            rationale = q_full.get("rationale") or ""
+            qid_int = 0
+            try:
+                qid_int = int(qid)
+            except ValueError:
+                qid_int = 0
+            if not stem and qid_int > 0:
+                qrow = connection.execute(
+                    "SELECT stem, rationale, choice_a, choice_b, choice_c, choice_d FROM nafs_question_bank WHERE id = ?",
+                    (qid_int,),
+                ).fetchone()
+                stem = (qrow[0] if qrow else "") or ""
+                rationale = (qrow[1] if qrow else "") or rationale
             reviewed.append(
                 {
-                    "question_id": int(qid) if qid.isdigit() else 0,
+                    "question_id": qid_int,
                     "choice": choice,
                     "correct": expected,
                     "ok": is_ok,
-                    "rationale": (qrow[1] if qrow else "") or "",
-                    "stem": (qrow[0] if qrow else "") or "",
+                    "rationale": rationale,
+                    "stem": stem,
                 }
             )
         total = max(int(row[3] or len(answers) or 1), 1)
@@ -815,6 +1021,16 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
         badge = _badge_for(score_pct, prev_best)
         detail["badge"] = badge
         detail["review"] = reviewed
+        ghost = detail.get("ghost") or {}
+        duel_result = None
+        if row[1] == MODE_DUEL and ghost:
+            duel_result = {
+                "ghost_name": ghost.get("ghost_name") or "زميل",
+                "ghost_target_score": ghost.get("ghost_target_score"),
+                "you_score": score_pct,
+                "won": score_pct >= float(ghost.get("ghost_target_score") or 0),
+            }
+            detail["duel_result"] = duel_result
         finished = _iso()
         started = datetime.fromisoformat(str(row[2]))
         if started.tzinfo is None:
@@ -852,6 +1068,31 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
                 """,
                 (session["student_nid"], finished),
             )
+        if score_pct >= 80 and best_streak >= 3:
+            connection.execute(
+                """
+                INSERT INTO portal_behavior_points(student_nid, program, points, note, created_at)
+                VALUES (?, 'رفق', 1, 'سلسلة إجابات صحيحة متواصلة', ?)
+                """,
+                (session["student_nid"], finished),
+            )
+        behavior_totals = _behavior_totals(connection, session["student_nid"])
+        voucher = _ensure_cafeteria_voucher(connection, session["student_nid"], int(behavior_totals.get("total") or 0))
+        talent_flag = None
+        risk_flag = None
+        try:
+            from .portal_radar_api import (
+                ensure_radar_tables,
+                evaluate_performance_risk,
+                maybe_nominate_talent,
+            )
+
+            ensure_radar_tables(connection)
+            talent_flag = maybe_nominate_talent(connection, session["student_nid"], score_pct, body.run_id)
+            risk_flag = evaluate_performance_risk(connection, session["student_nid"])
+        except Exception:
+            talent_flag = None
+            risk_flag = None
         connection.commit()
         return {
             "run_id": body.run_id,
@@ -863,6 +1104,11 @@ def portal_challenge_finish(body: FinishBody, x_portal_token: str = Header(defau
             "streak_best": best_streak,
             "badge": badge,
             "review": reviewed,
+            "duel": duel_result,
+            "behavior_totals": behavior_totals,
+            "cafeteria_voucher": voucher,
+            "talent": talent_flag,
+            "risk_alert": risk_flag,
         }
     finally:
         connection.close()

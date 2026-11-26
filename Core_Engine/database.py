@@ -1007,6 +1007,12 @@ def init_db():
         from .portal_owner_api import ensure_on_boot as ensure_portal_owner
 
         ensure_portal_owner(connection)
+        from .portal_identity_api import ensure_on_boot as ensure_portal_identity
+
+        ensure_portal_identity(connection)
+        from .portal_radar_api import ensure_on_boot as ensure_portal_radar
+
+        ensure_portal_radar(connection)
         approval_path = Path(__file__).resolve().parent.parent / "Print_Canvas" / "banks" / "approval_authorities.json"
         if approval_path.is_file():
             approval_text = approval_path.read_text(encoding="utf-8").strip()

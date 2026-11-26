@@ -339,6 +339,62 @@ body.portal-student {
   font-size: 13px;
 }
 
+.behavior-totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.behavior-totals .portal-chip {
+  background: #e7f3f1;
+  color: var(--portal-ink);
+}
+
+.duel-rails {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f4faf8;
+  border: 1px solid #d7e8e3;
+}
+
+.duel-rail {
+  display: grid;
+  grid-template-columns: 64px 1fr 48px;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #24312c;
+}
+
+.duel-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: #dfecea;
+  overflow: hidden;
+}
+
+.duel-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #0b5e56;
+  transition: width 0.35s ease;
+}
+
+.duel-bar.ghost i {
+  background: #c47b2b;
+}
+
+#portal-talent {
+  background: #fff4d6;
+  color: #7a5a00;
+}
+
 @media (max-width: 860px) {
   .portal-grid {
     grid-template-columns: 1fr;

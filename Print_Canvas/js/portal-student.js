@@ -16,7 +16,9 @@
     secondsLeft: 0,
     streak: 0,
     questionStartedAt: 0,
-    boardTab: "day"
+    boardTab: "day",
+    duelPoll: null,
+    runStartedAt: 0
   };
 
   function toEastern(text) {
@@ -46,7 +48,7 @@
       return "\uE000" + (tokens.length - 1) + "\uE001";
     }
     var text = source;
-    text = text.replace(/(^|[^\w⁰¹²³⁴⁵⁶⁷⁸⁹])(\d+)\s*\/\s*(\d+)(?!\w)/g, function (_m, lead, num, den) {
+    text = text.replace(/(^|[^\w⁰¹²³⁴⁵⁶⁷⁸⁹٠-٩])([0-9٠-٩]+)\s*\/\s*([0-9٠-٩]+)(?!\w)/g, function (_m, lead, num, den) {
       return (
         lead +
         keep(
@@ -58,7 +60,7 @@
         )
       );
     });
-    text = text.replace(/([0-9٠-٩أ-يA-Za-zسصقع])\^(\d+)/g, function (_m, base, exp) {
+    text = text.replace(/([0-9٠-٩أ-يA-Za-zسصقع])\^([0-9٠-٩]+)/g, function (_m, base, exp) {
       return keep(toEastern(base) + "<sup>" + toEastern(exp) + "</sup>");
     });
     text = text.replace(/([0-9٠-٩أ-يA-Za-zس])([²³⁴⁵⁶⁷⁸⁹⁰¹])/g, function (_m, base, exp) {
@@ -151,7 +153,8 @@
     modeHost.innerHTML = [
       ["daily", modes.daily],
       ["mock", modes.mock],
-      ["rescue", modes.rescue]
+      ["rescue", modes.rescue],
+      ["duel", modes.duel]
     ]
       .map(function (pair) {
         var key = pair[0];
@@ -191,6 +194,16 @@
         "</ul>"
       : "<p class=\"portal-empty\">لا عيادات علاجية مسندة حالياً.</p>";
 
+    var totals = home.behavior_totals || {};
+    document.getElementById("behavior-totals").innerHTML =
+      '<span class="portal-chip">قدوة: ' +
+      toEastern(totals["قدوة"] || 0) +
+      '</span><span class="portal-chip">رفق: ' +
+      toEastern(totals["رفق"] || 0) +
+      '</span><span class="portal-chip">الإجمالي: ' +
+      toEastern(totals.total || 0) +
+      "</span>";
+
     var beh = home.behavior || [];
     document.getElementById("behavior-box").innerHTML = beh.length
       ? "<ul class=\"portal-list\">" +
@@ -209,6 +222,33 @@
           .join("") +
         "</ul>"
       : "<p class=\"portal-empty\">نقاط «قدوة» و«رفق» تظهر عند التميز السلوكي والتحصيلي.</p>";
+
+    var vouchers = home.cafeteria_vouchers || [];
+    document.getElementById("cafeteria-box").innerHTML = vouchers.length
+      ? "<ul class=\"portal-list\">" +
+        vouchers
+          .map(function (row) {
+            return (
+              "<li>" +
+              escapeHtml(row.title || "قسيمة مقصف") +
+              " · " +
+              escapeHtml(row.status === "available" ? "مستحقة" : row.status || "") +
+              "</li>"
+            );
+          })
+          .join("") +
+        "</ul>"
+      : "<p class=\"portal-empty\">اجمع ٥ نقاط سلوك إيجابي للحصول على قسيمة مقصف.</p>";
+
+    var talentChip = document.getElementById("portal-talent");
+    if (talentChip) {
+      var nominated = home.talent && home.talent.nominated;
+      talentChip.hidden = !nominated;
+      if (nominated) {
+        talentChip.textContent =
+          "مرشّح موهوبون · " + toEastern(home.talent.best_score || "") + "٪";
+      }
+    }
   }
 
   function paintBoards() {
@@ -264,6 +304,45 @@
       clearInterval(state.timer);
       state.timer = null;
     }
+    if (state.duelPoll) {
+      clearInterval(state.duelPoll);
+      state.duelPoll = null;
+    }
+  }
+
+  function updateDuelRails(pack) {
+    var rails = document.getElementById("duel-rails");
+    if (!rails || rails.hidden) {
+      return;
+    }
+    var youPct = pack && pack.you_pct != null ? pack.you_pct : 0;
+    var ghostPct = pack && pack.ghost_pct != null ? pack.ghost_pct : 0;
+    document.getElementById("duel-you-bar").style.width = youPct + "%";
+    document.getElementById("duel-ghost-bar").style.width = ghostPct + "%";
+    document.getElementById("duel-you-label").textContent = toEastern(youPct) + "٪";
+    document.getElementById("duel-ghost-label").textContent = toEastern(ghostPct) + "٪";
+    if (pack && pack.ghost_name) {
+      document.getElementById("duel-ghost-name").textContent = pack.ghost_name;
+    }
+  }
+
+  function pollDuel() {
+    if (!state.run || !state.run.duel) {
+      return;
+    }
+    var elapsed = Math.max(0, (Date.now() - state.runStartedAt) / 1000);
+    var answered = Object.keys(state.answers || {}).length;
+    fetchJson(
+      "/api/portal/challenge/duel-progress?run_id=" +
+        encodeURIComponent(state.run.run_id) +
+        "&elapsed_sec=" +
+        encodeURIComponent(elapsed) +
+        "&answered=" +
+        encodeURIComponent(answered),
+      { headers: authHeaders(), cache: "no-store" }
+    )
+      .then(updateDuelRails)
+      .catch(function () {});
   }
 
   function tick() {
@@ -274,6 +353,9 @@
       var s = Math.max(0, state.secondsLeft % 60);
       el.textContent = toEastern(m) + ":" + toEastern(String(s).padStart(2, "0"));
       el.classList.toggle("is-low", state.secondsLeft <= 30);
+    }
+    if (state.run && state.run.duel) {
+      pollDuel();
     }
     if (state.secondsLeft <= 0) {
       stopTimer();
@@ -369,12 +451,26 @@
         state.answers = {};
         state.streak = 0;
         state.secondsLeft = Number(pack.seconds || 600);
+        state.runStartedAt = Date.now();
         stopTimer();
+        var rails = document.getElementById("duel-rails");
+        if (rails) {
+          rails.hidden = !pack.duel;
+          if (pack.duel && pack.ghost) {
+            document.getElementById("duel-ghost-name").textContent = pack.ghost.ghost_name || "الخصم";
+            updateDuelRails({ you_pct: 0, ghost_pct: 0, ghost_name: pack.ghost.ghost_name });
+            state.duelPoll = setInterval(pollDuel, 2000);
+          }
+        }
         state.timer = setInterval(tick, 1000);
         tick();
         document.getElementById("result-box").innerHTML = "";
         paintQuestion();
-        status("بدأت الجولة — بالتوفيق فارس نافس.");
+        status(
+          pack.duel
+            ? "بدأت المبارزة ضد " + ((pack.ghost && pack.ghost.ghost_name) || "زميل") + " — بالتوفيق!"
+            : "بدأت الجولة — بالتوفيق فارس نافس."
+        );
       })
       .catch(function (error) {
         status(error.message || "تعذر بدء التحدي.", true);
@@ -417,6 +513,24 @@
       body: JSON.stringify({ run_id: state.run.run_id, answers: answers })
     })
       .then(function (result) {
+        var duelLine = "";
+        if (result.duel) {
+          duelLine =
+            "<br>المبارزة ضد " +
+            escapeHtml(result.duel.ghost_name || "زميل") +
+            ": " +
+            (result.duel.won ? "فوز" : "خسارة") +
+            " (خصم " +
+            toEastern(result.duel.ghost_target_score || "") +
+            "٪)";
+        }
+        var extra = "";
+        if (result.talent) {
+          extra += "<br>ترشيح الموهوبين: نتيجتك ≥ ٩٥٪.";
+        }
+        if (result.cafeteria_voucher) {
+          extra += "<br>حصلت على قسيمة مقصف مستحقة.";
+        }
         var box = document.getElementById("result-box");
         box.innerHTML =
           "<div class=\"result-box\"><strong>انتهت الجولة</strong><br>النتيجة: " +
@@ -430,6 +544,8 @@
           " · الإجمالي " +
           toEastern(result.xp_total) +
           (result.badge ? " · وسام: " + escapeHtml(result.badge) : "") +
+          duelLine +
+          extra +
           "</div>" +
           "<ul class=\"portal-list\">" +
           (result.review || [])
@@ -447,6 +563,9 @@
             })
             .join("") +
           "</ul>";
+        document.getElementById("arena-stage").classList.remove("is-open");
+        document.getElementById("arena-hub").style.display = "";
+        document.getElementById("duel-rails").hidden = true;
         status("تم تحديث نقاطك ولوحات الصدارة.");
         return refresh();
       })
