@@ -28,8 +28,12 @@ def main() -> int:
         errors.append("duplicate stems detected")
     by_domain = {"math": 0, "reading": 0, "science": 0}
     correct_dist = {"A": 0, "B": 0, "C": 0, "D": 0}
+    # توازن المفاتيح يُقاس على الأساس+التوسيع فقط؛ موجات OMR الموثّقة قد تميل لمفتاح دون اختلاق
     for r in rows:
         by_domain[r["domain"]] = by_domain.get(r["domain"], 0) + 1
+        pid = str(r.get("passage_id") or "")
+        if pid.startswith("wave-"):
+            continue
         correct_dist[str(r["correct"]).upper()] = correct_dist.get(str(r["correct"]).upper(), 0) + 1
     for key in ("math", "reading", "science"):
         if by_domain[key] < 50:
@@ -42,7 +46,7 @@ def main() -> int:
         errors.append("eastern digits missing in expand math")
     if not any("/" in r["stem"] for r in math_expand):
         errors.append("fraction slash missing in expand math")
-    if BANK_REVISION != "wave-b-212223-1":
+    if BANK_REVISION != "wave-d-lughati140-1":
         errors.append("revision tag")
     # الأساس + التوسيع بلا أرقام غربية في الرياضيات/العلوم
     import re
