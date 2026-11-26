@@ -821,6 +821,13 @@ def portal_student_home(x_portal_token: str = Header(default="")):
             )
         ]
         behavior_totals = _behavior_totals(connection, nid)
+        behavior_explain = None
+        try:
+            from .nafs_counsel_boost import student_boost_explain
+
+            behavior_explain = student_boost_explain()
+        except Exception:
+            behavior_explain = None
         vouchers = [
             {"id": r[0], "title": r[1], "points_cost": r[2], "status": r[3], "created_at": r[4]}
             for r in connection.execute(
@@ -907,6 +914,7 @@ def portal_student_home(x_portal_token: str = Header(default="")):
             "remedial": remedial,
             "behavior": behavior,
             "behavior_totals": behavior_totals,
+            "behavior_explain": behavior_explain,
             "cafeteria_vouchers": vouchers,
             "talent": (
                 {"nominated": True, "best_score": talent[0], "status": talent[1]}

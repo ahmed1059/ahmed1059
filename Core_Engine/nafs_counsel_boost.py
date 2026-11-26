@@ -15,6 +15,25 @@ router = APIRouter(tags=["nafs-counsel-boost"])
 EASTERN = "٠١٢٣٤٥٦٧٨٩"
 ETEC_BEHAVIOR = {"code": "2-1-1-5", "code_ar": "٢-١-١-٥", "label": "السلوك والانضباط الإيجابي"}
 
+# بطاقة شرح للطالب — نصوص من قواعد التحفيز المحفوظة فقط (بلا مفاتيح تقنية).
+CAFETERIA_POINTS_PER_VOUCHER = 5
+STUDENT_BOOST_LEGEND = {
+    "قدوة": "تميّز وتحصيل وانضباط إيجابي",
+    "رفق": "التزام يومي ومساندة زميل أو أسرة",
+    "مقصف": "قسيمة مقصف لكل ٥ نقاط مجموع من قدوة ورفق",
+}
+STUDENT_BOOST_HOWTO = {
+    "قدوة": (
+        "نتيجة عالية في التحدي، أو تصفية أخطاء جيدة، أو استعادة مهارة، أو صدارة أسبوعية في الفصل."
+    ),
+    "رفق": (
+        "التزام يومي مناسب، أو سلسلة جيدة مع نتيجة مرتفعة، أو إتقان بطاقة ذهبية."
+    ),
+    "مقصف": (
+        "كل ٥ نقاط مجموع (قدوة + رفق) تمنحك قسيمة مقصف مستحقة مرة لكل عتبة."
+    ),
+}
+
 COUNSEL_SCHEMA = """
 CREATE TABLE IF NOT EXISTS portal_counseling (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -445,11 +464,45 @@ def build_counselor_inbox(connection, limit: int = 40) -> dict:
         "vault_hot": heat_items,
         "etec_behavior": ETEC_BEHAVIOR,
         "legend": {
-            "قدوة": "تميز وتحصيل وانضباط إيجابي",
-            "رفق": "التزام يومي ومساندة زميل/أسرة",
-            "مقصف": "قسيمة لكل ٥ نقاط سلوك",
+            "قدوة": STUDENT_BOOST_LEGEND["قدوة"],
+            "رفق": STUDENT_BOOST_LEGEND["رفق"],
+            "مقصف": STUDENT_BOOST_LEGEND["مقصف"],
             "نخبة": "صدارة أسبوعية داخل الفصل",
         },
+    }
+
+
+def student_boost_explain() -> dict[str, Any]:
+    """بطاقة شرح مبسّطة للطالب من القواعد المحفوظة — بلا اختلاق مفاتيح تقنية."""
+    threshold = CAFETERIA_POINTS_PER_VOUCHER
+    return {
+        "ok": True,
+        "title": "قدوة ورفق والمقصف",
+        "blurb": "نقاط سلوك حقيقية تُسجَّل عند إنجازك — لا مفاتيح تقنية هنا.",
+        "etec": ETEC_BEHAVIOR,
+        "etec_ar": ETEC_BEHAVIOR.get("code_ar") or _e(ETEC_BEHAVIOR.get("code") or ""),
+        "programs": [
+            {
+                "id": "qodwa",
+                "title": "قدوة",
+                "meaning": STUDENT_BOOST_LEGEND["قدوة"],
+                "howto": STUDENT_BOOST_HOWTO["قدوة"],
+            },
+            {
+                "id": "rifq",
+                "title": "رفق",
+                "meaning": STUDENT_BOOST_LEGEND["رفق"],
+                "howto": STUDENT_BOOST_HOWTO["رفق"],
+            },
+            {
+                "id": "cafeteria",
+                "title": "المقصف",
+                "meaning": STUDENT_BOOST_LEGEND["مقصف"],
+                "howto": STUDENT_BOOST_HOWTO["مقصف"],
+                "threshold": threshold,
+                "threshold_ar": _e(threshold),
+            },
+        ],
     }
 
 
@@ -604,6 +657,20 @@ def api_boost_rules(x_session_token: str = Header(default="")):
             {"when": "استعادة من vault", "award": "قدوة +١", "cap": "مرة/يوم"},
             {"when": "إتقان بطاقة ذهبية", "award": "رفق +١", "cap": "مرة/بطاقة"},
             {"when": "نخبة الصف (أعلى ٣ أسبوعياً)", "award": "قدوة +١", "cap": "مرة/أسبوع/فصل"},
-            {"when": "كل ٥ نقاط سلوك", "award": "قسيمة مقصف", "cap": "حسب العتبات"},
+            {
+                "when": f"كل {_e(CAFETERIA_POINTS_PER_VOUCHER)} نقاط سلوك",
+                "award": "قسيمة مقصف",
+                "cap": "حسب العتبات",
+            },
         ],
+        "student_card": student_boost_explain(),
     }
+
+
+@router.get("/api/portal/boost/explain")
+def api_boost_explain(x_portal_token: str = Header(default="")):
+    """شرح مبسّط للطالب — من القواعد المحفوظة فقط."""
+    from .portal_session_api import _require_portal
+
+    _require_portal(x_portal_token, ("student",))
+    return student_boost_explain()
