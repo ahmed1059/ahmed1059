@@ -22,6 +22,8 @@
     mainTab: "play",
     trapDoor: "math",
     trapAlbum: null,
+    trapIndex: 0,
+    trapSwipeX: 0,
     golden: null,
     checked: {},
     rescueActive: null
@@ -897,6 +899,7 @@
     fetchJson("/api/portal/misconceptions/album", { headers: authHeaders(), cache: "no-store" })
       .then(function (pack) {
         state.trapAlbum = pack;
+        state.trapIndex = 0;
         paintTrapAlbum();
       })
       .catch(function (error) {
@@ -904,33 +907,56 @@
       });
   }
 
-  function paintTrapAlbum() {
+  function trapRows() {
     var pack = state.trapAlbum || { doors: {} };
-    var rows = (pack.doors && pack.doors[state.trapDoor]) || [];
+    return (pack.doors && pack.doors[state.trapDoor]) || [];
+  }
+
+  function paintTrapAlbum() {
+    var rows = trapRows();
     var host = document.getElementById("trap-album");
-    host.innerHTML = rows
-      .map(function (row) {
-        var etec = (row.etec && (row.etec.code_ar || row.etec.code)) || "";
-        return (
-          "<article class=\"trap-tile\"><strong>" +
-          escapeHtml(row.prompt || row.skill || "") +
-          "</strong><div class=\"mistake\">الفخ: " +
-          escapeHtml(row.common_mistake || "") +
-          "</div><div class=\"rule\">القاعدة: " +
-          escapeHtml(row.golden_rule || "") +
-          "</div><div class=\"trap-examples\">" +
-          "<div class=\"trap-ex wrong\"><b>❌ الخطأ الشائع</b>" +
-          renderArabicMath(row.wrong_example || "") +
-          "</div><div class=\"trap-ex correct\"><b>✅ الحل الصحيح</b>" +
-          renderArabicMath(row.correct_example || "") +
-          "</div></div><small>الجذر " +
-          toEastern(row.grade_root || "") +
-          " · " +
-          formatEtecCode(etec) +
-          "</small></article>"
-        );
-      })
-      .join("");
+    var counter = document.getElementById("trap-counter");
+    if (!host) return;
+    if (!rows.length) {
+      host.innerHTML = "<p class=\"portal-empty\">لا بطاقات في هذا الباب حالياً.</p>";
+      if (counter) counter.textContent = toEastern(0) + " / " + toEastern(0);
+      return;
+    }
+    if (state.trapIndex < 0) state.trapIndex = 0;
+    if (state.trapIndex >= rows.length) state.trapIndex = rows.length - 1;
+    var row = rows[state.trapIndex] || {};
+    var etec = (row.etec && (row.etec.code_ar || row.etec.code)) || "";
+    host.innerHTML =
+      "<article class=\"trap-tile trap-tile-focus\" data-trap-index=\"" +
+      state.trapIndex +
+      "\"><div class=\"trap-badge\">بطاقة " +
+      toEastern(state.trapIndex + 1) +
+      "</div><strong>" +
+      escapeHtml(row.prompt || row.skill || "") +
+      "</strong><div class=\"mistake\">الفخ: " +
+      escapeHtml(row.common_mistake || "") +
+      "</div><div class=\"rule\">القاعدة: " +
+      escapeHtml(row.golden_rule || "") +
+      "</div><div class=\"trap-examples\">" +
+      "<div class=\"trap-ex wrong\"><b>❌ الخطأ الشائع</b>" +
+      renderArabicMath(row.wrong_example || "") +
+      "</div><div class=\"trap-ex correct\"><b>✅ الحل الصحيح</b>" +
+      renderArabicMath(row.correct_example || "") +
+      "</div></div><small>الجذر " +
+      toEastern(row.grade_root || "") +
+      " · " +
+      formatEtecCode(etec) +
+      "</small></article>";
+    if (counter) {
+      counter.textContent = toEastern(state.trapIndex + 1) + " / " + toEastern(rows.length);
+    }
+  }
+
+  function stepTrap(delta) {
+    var rows = trapRows();
+    if (!rows.length) return;
+    state.trapIndex = (state.trapIndex + delta + rows.length) % rows.length;
+    paintTrapAlbum();
   }
 
   function loadGoldenDeck() {
@@ -947,6 +973,11 @@
   function paintGoldenDeck() {
     var cards = (state.golden && state.golden.cards) || [];
     var host = document.getElementById("golden-deck");
+    if (!host) return;
+    if (!cards.length) {
+      host.innerHTML = "<p class=\"portal-empty\">الحقيبة فارغة مؤقتاً — حدّث الصفحة بعد قليل.</p>";
+      return;
+    }
     host.innerHTML = cards
       .map(function (card) {
         return (
@@ -955,9 +986,9 @@
           (card.mastered ? " is-mastered" : "") +
           "\" data-card=\"" +
           escapeHtml(card.id) +
-          "\" role=\"button\" tabindex=\"0\"><span class=\"flip-inner\"><span class=\"flip-face front\">" +
+          "\" role=\"button\" tabindex=\"0\"><span class=\"flip-inner\"><span class=\"flip-face front\"><span class=\"flip-kicker\">بطاقة ذهبية</span><span class=\"flip-title\">" +
           escapeHtml(card.front || card.title || "") +
-          "</span><span class=\"flip-face back\"><span class=\"flip-body\">" +
+          "</span><span class=\"flip-hint\">اضغط للتقليب</span></span><span class=\"flip-face back\"><span class=\"flip-body\">" +
           renderArabicMath(card.back || "") +
           "</span><button type=\"button\" class=\"flip-master-btn\" data-master=\"" +
           escapeHtml(card.id) +
@@ -969,6 +1000,18 @@
         );
       })
       .join("");
+  }
+
+  function setCollapseOpen(key, open) {
+    var card = document.querySelector('.collapsible-card[data-collapse="' + key + '"]');
+    if (!card) return;
+    var btn = card.querySelector(".collapse-launcher");
+    var body = card.querySelector(".collapse-body");
+    open = !!open;
+    card.classList.toggle("is-collapsed", !open);
+    card.classList.toggle("is-open", open);
+    if (body) body.hidden = !open;
+    if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
   function setSettingsOpen(open) {
@@ -1060,15 +1103,53 @@
         showMainTab(btn.getAttribute("data-main-tab"));
       });
     });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-collapse] .collapse-launcher"), function (btn) {
+      btn.addEventListener("click", function () {
+        var card = btn.closest("[data-collapse]");
+        if (!card) return;
+        var key = card.getAttribute("data-collapse");
+        var open = card.classList.contains("is-collapsed");
+        setCollapseOpen(key, open);
+      });
+    });
     Array.prototype.forEach.call(document.querySelectorAll("[data-trap-door]"), function (btn) {
       btn.addEventListener("click", function () {
         state.trapDoor = btn.getAttribute("data-trap-door");
+        state.trapIndex = 0;
         Array.prototype.forEach.call(document.querySelectorAll("[data-trap-door]"), function (el) {
           el.classList.toggle("is-active", el === btn);
         });
         paintTrapAlbum();
       });
     });
+    var trapPrev = document.getElementById("trap-prev");
+    var trapNext = document.getElementById("trap-next");
+    if (trapPrev) trapPrev.addEventListener("click", function () { stepTrap(-1); });
+    if (trapNext) trapNext.addEventListener("click", function () { stepTrap(1); });
+    var trapHost = document.getElementById("trap-carousel") || document.getElementById("trap-album");
+    if (trapHost && !trapHost._swipeBound) {
+      trapHost._swipeBound = true;
+      trapHost.addEventListener(
+        "touchstart",
+        function (event) {
+          var t = event.changedTouches && event.changedTouches[0];
+          state.trapSwipeX = t ? t.clientX : 0;
+        },
+        { passive: true }
+      );
+      trapHost.addEventListener(
+        "touchend",
+        function (event) {
+          var t = event.changedTouches && event.changedTouches[0];
+          if (!t) return;
+          var dx = t.clientX - (state.trapSwipeX || 0);
+          if (Math.abs(dx) < 40) return;
+          /* RTL: السحب لليسار → التالي */
+          stepTrap(dx < 0 ? 1 : -1);
+        },
+        { passive: true }
+      );
+    }
     var goldenHost = document.getElementById("golden-deck");
     if (goldenHost) {
       goldenHost.addEventListener("click", function (event) {

@@ -435,6 +435,40 @@ body.portal-student {
   gap: 12px;
   margin-top: 12px;
 }
+.trap-album-carousel {
+  display: block;
+  touch-action: pan-y;
+}
+.trap-carousel {
+  margin-top: 8px;
+}
+.trap-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+.trap-counter {
+  font-weight: 800;
+  color: #0b5e56;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.trap-tile-focus {
+  min-height: 220px;
+  box-shadow: 0 10px 28px rgba(11, 94, 86, 0.08);
+}
+.trap-badge {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #0b5e56;
+  font-size: 12px;
+  font-weight: 800;
+}
 
 .trap-tile {
   padding: 14px;
@@ -465,20 +499,22 @@ body.portal-student {
 
 .golden-deck {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 16px;
   margin-top: 14px;
   perspective: 1200px;
+  min-height: 240px;
 }
 
 .flip-card {
-  min-height: 210px;
-  height: 210px;
+  min-height: 230px;
+  height: 230px;
   cursor: pointer;
   border: 0;
   background: transparent;
   padding: 0;
   position: relative;
+  overflow: visible;
 }
 
 .flip-inner {
@@ -509,6 +545,22 @@ body.portal-student {
   overflow: hidden;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
 }
+.flip-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+.flip-title {
+  font-size: 17px;
+  line-height: 1.35;
+}
+.flip-hint {
+  margin-top: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  opacity: 0.8;
+}
 
 .flip-face.back {
   transform: rotateY(180deg);
@@ -517,14 +569,17 @@ body.portal-student {
   line-height: 1.55;
   justify-content: space-between;
   gap: 8px;
+  overflow: hidden;
 }
 .flip-face.back .flip-body {
   flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   overflow: auto;
-  max-height: 130px;
+  max-height: 150px;
   padding: 0 4px;
+  width: 100%;
 }
 .flip-master-btn {
   border: 0;
@@ -690,7 +745,82 @@ body.portal-gamer {
 .play-grid .card-play:nth-child(3) { border-top: 4px solid #c9a227; }
 .play-grid .card-play:nth-child(4) { border-top: 4px solid #a33b32; }
 
-.mini-games { display: grid; gap: 8px; }
+.mini-games {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.game-tile {
+  text-align: right;
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+}
+.game-tile-icon {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+.game-tile-icon svg { width: 100%; height: 100%; display: block; }
+.game-tile strong { color: #0b5e56; font-size: 15px; }
+.section-hint {
+  margin: 0 0 8px;
+  color: #5c675f;
+  font-size: 13px;
+}
+
+.collapsible-card {
+  padding-top: 12px;
+}
+.collapse-launcher {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  background: transparent;
+  padding: 4px 2px;
+  font: inherit;
+  cursor: pointer;
+  text-align: right;
+  color: inherit;
+}
+.collapse-glyph {
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
+}
+.tile-svg { width: 100%; height: 100%; display: block; }
+.collapse-copy {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.collapse-copy strong {
+  color: #0b5e56;
+  font-size: 16px;
+}
+.collapse-copy small {
+  color: #5c675f;
+  font-size: 12.5px;
+}
+.collapse-chevron {
+  font-size: 18px;
+  color: #0b5e56;
+  transition: transform 0.2s ease;
+}
+.collapsible-card.is-open .collapse-chevron {
+  transform: rotate(180deg);
+}
+.collapsible-card.is-collapsed .collapse-body {
+  display: none !important;
+}
+.collapse-body {
+  margin-top: 12px;
+  padding-top: 4px;
+  border-top: 1px dashed #c9d7d3;
+}
 .mini-game-stage {
   margin-top: 12px;
   padding: 12px;
