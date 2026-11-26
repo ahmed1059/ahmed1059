@@ -98,7 +98,10 @@ def main() -> int:
         if "updateFoundationTimerHud" not in body:
             errors.append("mental tick missing updateFoundationTimerHud")
 
-    if not re.search(r"function enterLiveDuel\([\s\S]*?stopFoundationGames\(\)", src):
+    if not re.search(
+        r"function enterLiveDuel\([\s\S]*?(stopFoundationGames|exitFoundationUi)\(\)",
+        src,
+    ):
         errors.append("enterLiveDuel must stop foundation games")
 
     try:
