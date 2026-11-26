@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>بوابة ولي الأمر</title>
+  <link rel="stylesheet" href="css/fonts.css?v=font1">
+  <link rel="stylesheet" href="css/portal-student.css?v=p1">
+</head>
+<body class="portal-student">
+  <div class="portal-shell">
+    <header class="portal-top">
+      <div class="portal-brand">
+        <h1>بوابة ولي الأمر</h1>
+        <p>أبناؤك المسجّلون في متوسطة سعد بن الربيع الأنصاري</p>
+      </div>
+      <div class="portal-actions">
+        <button type="button" class="portal-btn secondary" id="parent-logout">خروج</button>
+      </div>
+    </header>
+    <p class="portal-status" id="parent-status"></p>
+    <div id="parent-children" class="portal-grid"></div>
+  </div>
+  <script>
+  (function () {
+    var TOKEN_KEY = "portalSession";
+    var EASTERN = "٠١٢٣٤٥٦٧٨٩";
+    function toEastern(t) {
+      return String(t == null ? "" : t).replace(/[0-9]/g, function (d) { return EASTERN.charAt(Number(d)); });
+    }
+    function escapeHtml(t) {
+      return String(t == null ? "" : t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+    var raw = null;
+    try { raw = JSON.parse(sessionStorage.getItem(TOKEN_KEY) || "null"); } catch (e) {}
+    if (!raw || !raw.token || raw.actor_type !== "parent") {
+      location.href = "login.html";
+      return;
+    }
+    var headers = { Accept: "application/json", "X-Portal-Token": raw.token };
+    fetch("/api/portal/parent/home", { headers: headers, cache: "no-store" })
+      .then(function (r) { return r.json().then(function (b) { if (!r.ok) throw new Error(b.detail || "تعذر التحميل"); return b; }); })
+      .then(function (pack) {
+        var host = document.getElementById("parent-children");
+        var kids = pack.children || [];
+        if (!kids.length) {
+          host.innerHTML = "<p class=\"portal-empty\">لا أبناء مرتبطون بهذا الجوال.</p>";
+          return;
+        }
+        host.innerHTML = kids.map(function (row) {
+          var s = row.student || {};
+          var runs = row.runs || [];
+          var rem = row.remedial || [];
+          return "<section class=\"portal-card\"><h2>" + escapeHtml(s.name || "") +
+            "</h2><p>" + escapeHtml(s.grade || "") + " / فصل " + toEastern(s.section || "") +
+            " · XP " + toEastern(row.xp || 0) + "</p><h2>آخر تحديات نافس</h2>" +
+            (runs.length ? "<ul class=\"portal-list\">" + runs.map(function (r) {
+              return "<li>" + escapeHtml(r.label || r.mode) + ": " + toEastern(r.score_pct) + "٪ · +" + toEastern(r.xp_earned) + " XP</li>";
+            }).join("") + "</ul>" : "<p class=\"portal-empty\">لا جولات بعد.</p>") +
+            "<h2>العيادات العلاجية</h2>" +
+            (rem.length ? "<ul class=\"portal-list\">" + rem.map(function (r) {
+              return "<li>" + escapeHtml(r.subject || "") + " — " + escapeHtml(r.skill || "") + " · " + escapeHtml(r.status || "") + "</li>";
+            }).join("") + "</ul>" : "<p class=\"portal-empty\">لا مهام علاجية حالياً.</p>") +
+            "</section>";
+        }).join("");
+      })
+      .catch(function (err) {
+        document.getElementById("parent-status").textContent = err.message || "خطأ";
+        document.getElementById("parent-status").classList.add("is-error");
+      });
+    document.getElementById("parent-logout").onclick = function () {
+      fetch("/api/portal/logout", { method: "POST", headers: Object.assign({ "Content-Type": "application/json" }, headers), body: "{}" })
+        .finally(function () { sessionStorage.removeItem(TOKEN_KEY); location.href = "login.html"; });
+    };
+  })();
+  </script>
+</body>
+</html>

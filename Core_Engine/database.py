@@ -1001,6 +1001,9 @@ def init_db():
 
         ensure_nafs_bank(connection)
         ensure_noor_students_enrichment_columns(connection)
+        from .portal_session_api import ensure_on_boot as ensure_portal_ssot
+
+        ensure_portal_ssot(connection)
         approval_path = Path(__file__).resolve().parent.parent / "Print_Canvas" / "banks" / "approval_authorities.json"
         if approval_path.is_file():
             approval_text = approval_path.read_text(encoding="utf-8").strip()

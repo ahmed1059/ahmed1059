@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>بوابة الطالب — ميدان نافس</title>
+  <link rel="stylesheet" href="css/fonts.css?v=font1">
+  <link rel="stylesheet" href="css/portal-student.css?v=p1">
+</head>
+<body class="portal-student">
+  <div class="portal-shell">
+    <header class="portal-top">
+      <div class="portal-brand">
+        <h1>ميدان تحدي نافس</h1>
+        <p><span id="portal-name">…</span> — <span id="portal-meta"></span></p>
+      </div>
+      <div class="portal-actions">
+        <span class="portal-chip" id="portal-xp">٠ XP</span>
+        <button type="button" class="portal-btn secondary" id="portal-logout">خروج</button>
+      </div>
+    </header>
+    <p class="portal-status" id="portal-status"></p>
+
+    <div id="arena-hub" class="portal-grid">
+      <section class="portal-card">
+        <h2>اختر نمط التحدي</h2>
+        <div class="mode-grid" id="mode-grid"></div>
+        <div id="result-box"></div>
+      </section>
+
+      <section class="portal-card">
+        <h2>لوحات الصدارة الحية</h2>
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab is-active" data-board="day">أبطال اليوم</button>
+          <button type="button" class="tab" data-board="week">فرسان الأسبوع</button>
+          <button type="button" class="tab" data-board="month">نخبة الشهر</button>
+          <button type="button" class="tab" data-board="classes">دوري الفصول</button>
+        </div>
+        <div id="board-list"></div>
+      </section>
+
+      <section class="portal-card">
+        <h2>العيادات العلاجية والمهام</h2>
+        <div id="remedial-box"></div>
+      </section>
+
+      <section class="portal-card">
+        <h2>قدوة ورفق</h2>
+        <div id="behavior-box"></div>
+        <h2 style="margin-top:14px;">استشارة سرية للموجه الطلابي</h2>
+        <textarea id="counsel-text" rows="3" style="width:100%;border:1px solid #c9d7d3;border-radius:10px;padding:10px;font:inherit;" placeholder="اكتب استشارتك بسرية…"></textarea>
+        <div class="portal-actions" style="margin-top:8px;">
+          <button type="button" class="portal-btn" id="counsel-send">إرسال سري</button>
+        </div>
+      </section>
+    </div>
+
+    <section class="portal-card arena-stage" id="arena-stage">
+      <div class="arena-meta">
+        <div>
+          <strong id="arena-title">التحدي</strong>
+          <div id="arena-progress"></div>
+        </div>
+        <div class="arena-timer" id="arena-timer">١٠:٠٠</div>
+      </div>
+      <div class="powerups" id="powerups"></div>
+      <div id="q-box"></div>
+      <div class="portal-actions" style="margin-top:12px;">
+        <button type="button" class="portal-btn" id="arena-next">التالي / إنهاء</button>
+        <button type="button" class="portal-btn secondary" id="arena-exit">العودة للميدان</button>
+      </div>
+    </section>
+  </div>
+  <script src="js/portal-student.js?v=p1"></script>
+</body>
+</html>

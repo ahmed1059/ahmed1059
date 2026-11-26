@@ -392,3 +392,33 @@ body.login-opening .login-message {
         padding: 20px 16px 32px;
     }
 }
+
+/* بوابة الدخول الثلاثية — الوحدة 3-ج-1 */
+.portal-gate-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 14px;
+}
+.portal-gate-tab {
+  border: 1px solid #c9d7d3;
+  background: #fff;
+  color: #5c675f;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.portal-gate-tab.is-active {
+  background: #0b5e56;
+  border-color: #0b5e56;
+  color: #fff;
+  font-weight: 700;
+}
+.portal-gate-panel {
+  display: none;
+}
+.portal-gate-panel.is-active {
+  display: block;
+}

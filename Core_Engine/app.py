@@ -218,6 +218,16 @@ def login_page():
     return FileResponse(CANVAS_DIR / "login.html")
 
 
+@app.get("/portal-student.html")
+def portal_student_page():
+    return FileResponse(CANVAS_DIR / "portal-student.html")
+
+
+@app.get("/portal-parent.html")
+def portal_parent_page():
+    return FileResponse(CANVAS_DIR / "portal-parent.html")
+
+
 class LoginBody(BaseModel):
     national_id: str = ""
     password: str = ""
@@ -432,6 +442,10 @@ app.include_router(accreditation_session_router)
 from .nafs_session_api import router as nafs_session_router
 
 app.include_router(nafs_session_router)
+
+from .portal_session_api import router as portal_session_router
+
+app.include_router(portal_session_router)
 
 
 @app.get("/api/users")
