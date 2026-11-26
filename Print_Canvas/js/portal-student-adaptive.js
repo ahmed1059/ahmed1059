@@ -16,7 +16,33 @@
     return document.getElementById(id);
   }
 
+  function east(value) {
+    if (!api || typeof api.toEastern !== "function") {
+      return value == null ? "" : String(value);
+    }
+    return api.toEastern(value == null ? "" : value);
+  }
+
+  function etecHtml(code) {
+    if (api && typeof api.formatEtecCode === "function") {
+      return api.formatEtecCode(code);
+    }
+    var raw = east(code);
+    return raw ? '<span class="etec-code" dir="ltr">' + raw + "</span>" : "";
+  }
+
+  function esc(value) {
+    if (!api || typeof api.escapeHtml !== "function") {
+      return value == null ? "" : String(value);
+    }
+    return api.escapeHtml(value == null ? "" : value);
+  }
+
   function paintHomeExtras(home) {
+    if (!api) {
+      return;
+    }
+    home = home || {};
     var vault = home.error_vault || {};
     var mastery = home.mastery || {};
     var banner = el("purge-banner");
@@ -34,26 +60,24 @@
               var visual = row.visual || {};
               return (
                 "<article class=\"vault-tile domain-" +
-                api.escapeHtml(row.domain || "") +
+                esc(row.domain || "") +
                 "\"><strong>" +
-                api.escapeHtml(row.skill || "") +
+                esc(row.skill || "") +
                 " · حرارة " +
-                api.toEastern(row.trap_heat || 1) +
+                east(row.trap_heat || 1) +
                 "</strong><div class=\"trap-examples\">" +
-                "<div class=\"trap-ex wrong\"><b>❌ " +
-                api.escapeHtml(visual.title ? "الخطأ" : "الخطأ") +
-                "</b>" +
+                "<div class=\"trap-ex wrong\"><b>❌ الخطأ</b>" +
                 (api.renderArabicMath
                   ? api.renderArabicMath(row.wrong_example || row.common_mistake || "")
-                  : api.escapeHtml(row.wrong_example || row.common_mistake || "")) +
+                  : esc(row.wrong_example || row.common_mistake || "")) +
                 "</div><div class=\"trap-ex correct\"><b>✅ الصواب</b>" +
                 (api.renderArabicMath
                   ? api.renderArabicMath(row.correct_example || row.golden_rule || "")
-                  : api.escapeHtml(row.correct_example || row.golden_rule || "")) +
+                  : esc(row.correct_example || row.golden_rule || "")) +
                 "</div></div><small>" +
-                api.escapeHtml((visual && visual.hint) || "") +
+                esc((visual && visual.hint) || "") +
                 " · " +
-                api.toEastern(((row.etec || {}).code_ar || (row.etec || {}).code || "")) +
+                etecHtml(((row.etec || {}).code_ar || (row.etec || {}).code || "")) +
                 "</small></article>"
               );
             })
@@ -65,7 +89,7 @@
       var domains = mastery.domains || {};
       bars.innerHTML =
         "<div class=\"mastery-overall\">مؤشر الإتقان العام: <strong>" +
-        api.toEastern(mastery.overall || 0) +
+        east(mastery.overall || 0) +
         "٪</strong></div>" +
         ["reading", "math", "science"]
           .map(function (key) {
@@ -73,15 +97,15 @@
             var pct = Number(d.mastery_index || 0);
             return (
               "<div class=\"mastery-row\"><span>" +
-              api.escapeHtml(((d.etec || {}).label) || key) +
+              esc(((d.etec || {}).label) || key) +
               " · " +
-              api.toEastern(((d.etec || {}).code_ar || (d.etec || {}).code || "")) +
+              etecHtml(((d.etec || {}).code_ar || (d.etec || {}).code || "")) +
               "</span><div class=\"mastery-track\"><i style=\"width:" +
               pct +
               "%\"></i></div><strong>" +
-              api.toEastern(pct) +
+              east(pct) +
               "٪</strong><small>استعادة " +
-              api.toEastern(d.recovery_rate || 0) +
+              east(d.recovery_rate || 0) +
               "٪</small></div>"
             );
           })
@@ -106,6 +130,7 @@
   }
 
   function loadReadalongList() {
+    if (!api) return;
     api
       .fetchJson("/api/portal/readalong/passages", { headers: api.authHeaders(), cache: "no-store" })
       .then(function (pack) {
@@ -115,15 +140,15 @@
           .map(function (p) {
             return (
               "<button type=\"button\" class=\"ra-card\" data-passage=\"" +
-              api.escapeHtml(p.id) +
+              esc(p.id) +
               "\">" +
               sceneSvg((p.image && p.image.scene) || "", (p.image && p.image.gradient) || null) +
               "<strong>" +
-              api.escapeHtml(p.title || "") +
+              esc(p.title || "") +
               "</strong><span>" +
-              api.escapeHtml(p.kind || "") +
+              esc(p.kind || "") +
               " · " +
-              api.toEastern(p.questions_count || 5) +
+              east(p.questions_count || 5) +
               " أسئلة" +
               (p.completed ? " · مكتملة" : "") +
               "</span></button>"
@@ -190,11 +215,11 @@
       "<div class=\"ra-visual\">" +
       sceneSvg((passage.image && passage.image.scene) || "", (passage.image && passage.image.gradient) || null) +
       "<p>" +
-      api.escapeHtml((passage.image && passage.image.alt) || "") +
+      esc((passage.image && passage.image.alt) || "") +
       "</p></div>" +
       "<div class=\"ra-text-pane\">" +
       "<h3>" +
-      api.escapeHtml(passage.title || "") +
+      esc(passage.title || "") +
       "</h3>" +
       "<div class=\"ra-controls\">" +
       "<button type=\"button\" class=\"portal-btn\" id=\"ra-play\">تشغيل القراءة</button>" +
@@ -206,7 +231,7 @@
       "<div class=\"ra-sentences\">" +
       sentences
         .map(function (s, i) {
-          return "<p class=\"ra-sentence\" data-si=\"" + i + "\">" + api.escapeHtml(s) + "</p>";
+          return "<p class=\"ra-sentence\" data-si=\"" + i + "\">" + esc(s) + "</p>";
         })
         .join("") +
       "</div>" +
@@ -215,13 +240,13 @@
         .map(function (v) {
           return (
             "<button type=\"button\" class=\"ra-word\" data-word=\"" +
-            api.escapeHtml(v.word) +
+            esc(v.word) +
             "\" data-meaning=\"" +
-            api.escapeHtml(v.meaning || "") +
+            esc(v.meaning || "") +
             "\" data-antonym=\"" +
-            api.escapeHtml(v.antonym || "") +
+            esc(v.antonym || "") +
             "\">" +
-            api.escapeHtml(v.word) +
+            esc(v.word) +
             "</button>"
           );
         })
@@ -236,9 +261,9 @@
             "<article class=\"ra-q\" data-qid=\"" +
             q.id +
             "\"><strong>" +
-            api.escapeHtml(q.level || "") +
+            esc(q.level || "") +
             "</strong><p>" +
-            api.escapeHtml(q.stem || "") +
+            esc(q.stem || "") +
             "</p><div class=\"q-choices\">" +
             ["A", "B", "C", "D"]
               .map(function (L) {
@@ -250,7 +275,7 @@
                   "\"><span class=\"letter\">" +
                   ({ A: "أ", B: "ب", C: "ج", D: "د" }[L] || L) +
                   "</span>" +
-                  api.escapeHtml((q.choices && q.choices[L]) || "") +
+                  esc((q.choices && q.choices[L]) || "") +
                   "</button>"
                 );
               })
@@ -301,11 +326,11 @@
         if (host) {
           host.innerHTML =
             "<p class=\"portal-empty\">النتيجة: " +
-            api.toEastern(pack.score || 0) +
+            east(pack.score || 0) +
             " / " +
-            api.toEastern(pack.total || 5) +
+            east(pack.total || 5) +
             " · +" +
-            api.toEastern(pack.xp_earned || 0) +
+            east(pack.xp_earned || 0) +
             " XP</p>" +
             (pack.review || [])
               .map(function (r) {
@@ -314,7 +339,7 @@
                   "<div class=\"trap-ex wrong\" data-jump-sentence=\"" +
                   (r.sentence_index || 0) +
                   "\">أعد قراءة الجملة المظللة: " +
-                  api.escapeHtml(r.evidence || "") +
+                  esc(r.evidence || "") +
                   "</div>"
                 );
               })
@@ -339,23 +364,23 @@
     var body =
       "<h2 style=\"color:#0b5e56;text-align:center;\">اختبار منزلي بإشراف ولي الأمر</h2>" +
       "<p><strong>الطالب:</strong> " +
-      api.escapeHtml(pack.student_name || "") +
+      esc(pack.student_name || "") +
       " · الصف " +
-      api.escapeHtml(pack.grade || "") +
+      esc(pack.grade || "") +
       " / فصل " +
-      api.toEastern(pack.section || "") +
+      east(pack.section || "") +
       " · المدرسة " +
-      api.escapeHtml(pack.school || "") +
+      esc(pack.school || "") +
       " (" +
-      api.toEastern(pack.code || "40341") +
+      east(pack.code || "40341") +
       ")</p>" +
       items
         .map(function (q) {
           return (
             "<p style=\"margin:10px 0;\"><strong>" +
-            api.toEastern(q.n) +
+            east(q.n) +
             ".</strong> " +
-            api.escapeHtml(q.stem || "") +
+            esc(q.stem || "") +
             "<br>" +
             ["A", "B", "C", "D"]
               .map(function (L) {
@@ -363,7 +388,7 @@
                   "<span style=\"margin-left:10px;\">" +
                   letters[L] +
                   ") " +
-                  api.escapeHtml((q.choices || {})[L] || "") +
+                  esc((q.choices || {})[L] || "") +
                   "</span>"
                 );
               })
@@ -379,7 +404,7 @@
         .map(function (q) {
           return (
             "<div style=\"border:1px solid #ccc;padding:8px;font-size:12px;\">" +
-            api.toEastern(q.n) +
+            east(q.n) +
             "<br>أ ○ ب ○ ج ○ د ○</div>"
           );
         })
@@ -392,19 +417,19 @@
         .map(function (r) {
           return (
             "<li>" +
-            api.toEastern(r.n) +
+            east(r.n) +
             " → " +
-            api.escapeHtml(r.answer || "") +
+            esc(r.answer || "") +
             " · " +
-            api.escapeHtml(r.skill || "") +
+            esc(r.skill || "") +
             "</li>"
           );
         })
         .join("") +
       "</ol>" +
-      "<h3 style=\"color:#0b5e56;\">إقرار ولي الأمر المراقب (شاهد ١-٣-١-٢)</h3>" +
+      "<h3 style=\"color:#0b5e56;\">إقرار ولي الأمر المراقب (شاهد <span class=\"etec-code\" dir=\"ltr\">١-٣-١-٢</span>)</h3>" +
       "<p>" +
-      api.escapeHtml(pack.parent_pledge || "") +
+      esc(pack.parent_pledge || "") +
       "</p>" +
       "<p style=\"margin-top:28px;\">اسم ولي الأمر: ........................ &nbsp;&nbsp; التوقيع: ........................ &nbsp;&nbsp; التاريخ: ............</p>";
 
@@ -484,11 +509,11 @@
           card.hidden = false;
           card.innerHTML =
             "<strong>" +
-            api.escapeHtml(word.getAttribute("data-word") || "") +
+            esc(word.getAttribute("data-word") || "") +
             "</strong><div>المعنى: " +
-            api.escapeHtml(word.getAttribute("data-meaning") || "") +
+            esc(word.getAttribute("data-meaning") || "") +
             "</div><div>الضد: " +
-            api.escapeHtml(word.getAttribute("data-antonym") || "") +
+            esc(word.getAttribute("data-antonym") || "") +
             "</div><button type=\"button\" class=\"portal-btn secondary\" id=\"ra-say-word\">سماع النطق</button>";
           var say = el("ra-say-word");
           if (say && window.speechSynthesis) {

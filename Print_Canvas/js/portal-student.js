@@ -36,11 +36,23 @@
   ];
 
   function toEastern(text) {
-    return String(text == null ? "" : text)
+    if (text == null || text === "") {
+      return "";
+    }
+    return String(text)
       .replace(/[0-9]/g, function (d) {
         return EASTERN.charAt(Number(d));
       })
       .replace(/%/g, "٪");
+  }
+
+  /** مؤشرات ETEC مثل ٣-١-١-٣ تُعرض LTR منعًا لعكس الأجزاء في RTL */
+  function formatEtecCode(code) {
+    var raw = toEastern(code == null ? "" : code);
+    if (!raw) {
+      return "";
+    }
+    return '<span class="etec-code" dir="ltr">' + escapeHtml(raw) + "</span>";
   }
 
   function escapeHtml(text) {
@@ -163,13 +175,10 @@
     document.getElementById("portal-xp").textContent = toEastern(home.xp || 0) + " XP";
     paintRank(Number(home.xp || 0));
     paintPlayerCard();
-    if (window.PortalStudentAdaptive && typeof window.PortalStudentAdaptive.paintHomeExtras === "function") {
-      window.PortalStudentAdaptive.paintHomeExtras(home);
-    }
 
     var modes = home.modes || {};
     var modeHost = document.getElementById("mode-grid");
-    modeHost.innerHTML = [
+    if (modeHost) modeHost.innerHTML = [
       ["daily", modes.daily],
       ["mock", modes.mock],
       ["rescue", modes.rescue],
@@ -197,69 +206,81 @@
       .join("");
 
     var rem = home.remedial || [];
-    document.getElementById("remedial-box").innerHTML = rem.length
-      ? "<ul class=\"portal-list\">" +
-        rem
-          .map(function (row) {
-            return (
-              "<li><strong>" +
-              escapeHtml(row.subject || "") +
-              "</strong> — " +
-              escapeHtml(row.skill || "") +
-              " · " +
-              escapeHtml(row.status || "") +
-              "</li>"
-            );
-          })
-          .join("") +
-        "</ul>"
-      : "<p class=\"portal-empty\">لا عيادات علاجية مسندة حالياً.</p>";
+    var remBox = document.getElementById("remedial-box");
+    if (remBox) {
+      remBox.innerHTML = rem.length
+        ? "<ul class=\"portal-list\">" +
+          rem
+            .map(function (row) {
+              return (
+                "<li><strong>" +
+                escapeHtml(row.subject || "") +
+                "</strong> — " +
+                escapeHtml(row.skill || "") +
+                " · " +
+                escapeHtml(row.status || "") +
+                "</li>"
+              );
+            })
+            .join("") +
+          "</ul>"
+        : "<p class=\"portal-empty\">لا عيادات علاجية مسندة حالياً.</p>";
+    }
 
     var totals = home.behavior_totals || {};
-    document.getElementById("behavior-totals").innerHTML =
-      '<span class="portal-chip">قدوة: ' +
-      toEastern(totals["قدوة"] || 0) +
-      '</span><span class="portal-chip">رفق: ' +
-      toEastern(totals["رفق"] || 0) +
-      '</span><span class="portal-chip">الإجمالي: ' +
-      toEastern(totals.total || 0) +
-      "</span>";
+    var behTotals = document.getElementById("behavior-totals");
+    if (behTotals) {
+      behTotals.innerHTML =
+        '<span class="portal-chip">قدوة: ' +
+        toEastern(totals["قدوة"] || 0) +
+        '</span><span class="portal-chip">رفق: ' +
+        toEastern(totals["رفق"] || 0) +
+        '</span><span class="portal-chip">الإجمالي: ' +
+        toEastern(totals.total || 0) +
+        "</span>";
+    }
 
     var beh = home.behavior || [];
-    document.getElementById("behavior-box").innerHTML = beh.length
-      ? "<ul class=\"portal-list\">" +
-        beh
-          .map(function (row) {
-            return (
-              "<li>" +
-              escapeHtml(row.program || "") +
-              ": +" +
-              toEastern(row.points || 0) +
-              " — " +
-              escapeHtml(row.note || "") +
-              "</li>"
-            );
-          })
-          .join("") +
-        "</ul>"
-      : "<p class=\"portal-empty\">نقاط «قدوة» و«رفق» تظهر عند التميز السلوكي والتحصيلي.</p>";
+    var behBox = document.getElementById("behavior-box");
+    if (behBox) {
+      behBox.innerHTML = beh.length
+        ? "<ul class=\"portal-list\">" +
+          beh
+            .map(function (row) {
+              return (
+                "<li>" +
+                escapeHtml(row.program || "") +
+                ": +" +
+                toEastern(row.points || 0) +
+                " — " +
+                escapeHtml(row.note || "") +
+                "</li>"
+              );
+            })
+            .join("") +
+          "</ul>"
+        : "<p class=\"portal-empty\">نقاط «قدوة» و«رفق» تظهر عند التميز السلوكي والتحصيلي.</p>";
+    }
 
     var vouchers = home.cafeteria_vouchers || [];
-    document.getElementById("cafeteria-box").innerHTML = vouchers.length
-      ? "<ul class=\"portal-list\">" +
-        vouchers
-          .map(function (row) {
-            return (
-              "<li>" +
-              escapeHtml(row.title || "قسيمة مقصف") +
-              " · " +
-              escapeHtml(row.status === "available" ? "مستحقة" : row.status || "") +
-              "</li>"
-            );
-          })
-          .join("") +
-        "</ul>"
-      : "<p class=\"portal-empty\">اجمع ٥ نقاط سلوك إيجابي للحصول على قسيمة مقصف.</p>";
+    var cafBox = document.getElementById("cafeteria-box");
+    if (cafBox) {
+      cafBox.innerHTML = vouchers.length
+        ? "<ul class=\"portal-list\">" +
+          vouchers
+            .map(function (row) {
+              return (
+                "<li>" +
+                escapeHtml(row.title || "قسيمة مقصف") +
+                " · " +
+                escapeHtml(row.status === "available" ? "مستحقة" : row.status || "") +
+                "</li>"
+              );
+            })
+            .join("") +
+          "</ul>"
+        : "<p class=\"portal-empty\">اجمع ٥ نقاط سلوك إيجابي للحصول على قسيمة مقصف.</p>";
+    }
 
     var talentChip = document.getElementById("portal-talent");
     if (talentChip) {
@@ -268,6 +289,14 @@
       if (nominated) {
         talentChip.textContent =
           "مرشّح موهوبون · " + toEastern(home.talent.best_score || "") + "٪";
+      }
+    }
+
+    if (window.PortalStudentAdaptive && typeof window.PortalStudentAdaptive.paintHomeExtras === "function") {
+      try {
+        window.PortalStudentAdaptive.paintHomeExtras(home);
+      } catch (err) {
+        console.warn("paintHomeExtras", err);
       }
     }
   }
@@ -858,7 +887,7 @@
         var etec = (row.etec && (row.etec.code_ar || row.etec.code)) || "";
         return (
           "<article class=\"trap-tile\"><strong>" +
-          toEastern(escapeHtml(row.prompt || row.skill || "")) +
+          escapeHtml(row.prompt || row.skill || "") +
           "</strong><div class=\"mistake\">الفخ: " +
           escapeHtml(row.common_mistake || "") +
           "</div><div class=\"rule\">القاعدة: " +
@@ -869,9 +898,9 @@
           "</div><div class=\"trap-ex correct\"><b>✅ الحل الصحيح</b>" +
           renderArabicMath(row.correct_example || "") +
           "</div></div><small>الجذر " +
-          toEastern(escapeHtml(row.grade_root || "")) +
+          toEastern(row.grade_root || "") +
           " · " +
-          toEastern(escapeHtml(etec)) +
+          formatEtecCode(etec) +
           "</small></article>"
         );
       })
@@ -920,10 +949,21 @@
     var panel = document.getElementById("player-settings-panel");
     var btn = document.getElementById("btn-settings");
     if (!panel || !btn) return;
-    panel.hidden = !open;
-    panel.classList.toggle("is-collapsed", !open);
+    open = !!open;
+    if (open) {
+      panel.hidden = false;
+      panel.removeAttribute("hidden");
+      panel.classList.remove("is-collapsed");
+      panel.setAttribute("aria-hidden", "false");
+      panel.style.display = "";
+    } else {
+      panel.hidden = true;
+      panel.setAttribute("hidden", "");
+      panel.classList.add("is-collapsed");
+      panel.setAttribute("aria-hidden", "true");
+    }
     btn.setAttribute("aria-expanded", open ? "true" : "false");
-    btn.classList.toggle("is-open", !!open);
+    btn.classList.toggle("is-open", open);
   }
 
   function paintPlayerCard() {
@@ -960,6 +1000,35 @@
   }
 
   function bind() {
+    /* إعداداتي عبر تفويض أحداث — يعمل حتى لو أُعيد رسم الزر */
+    if (!document.documentElement._portalSettingsDelegated) {
+      document.documentElement._portalSettingsDelegated = true;
+      document.addEventListener(
+        "click",
+        function (event) {
+          var openBtn = event.target.closest("#btn-settings");
+          if (openBtn) {
+            event.preventDefault();
+            var panel = document.getElementById("player-settings-panel");
+            var currentlyClosed =
+              !panel ||
+              panel.hasAttribute("hidden") ||
+              panel.hidden ||
+              panel.classList.contains("is-collapsed") ||
+              getComputedStyle(panel).display === "none";
+            setSettingsOpen(currentlyClosed);
+            return;
+          }
+          if (event.target.closest("#player-settings-close")) {
+            event.preventDefault();
+            setSettingsOpen(false);
+          }
+        },
+        false
+      );
+    }
+    setSettingsOpen(false);
+
     Array.prototype.forEach.call(document.querySelectorAll("[data-main-tab]"), function (btn) {
       btn.addEventListener("click", function () {
         showMainTab(btn.getAttribute("data-main-tab"));
@@ -974,47 +1043,36 @@
         paintTrapAlbum();
       });
     });
-    document.getElementById("golden-deck").addEventListener("click", function (event) {
-      var masterBtn = event.target.closest("[data-master]");
-      if (masterBtn) {
-        event.stopPropagation();
-        var cardEl = masterBtn.closest("[data-card]");
-        if (!cardEl || cardEl.classList.contains("is-mastered")) return;
-        fetchJson("/api/portal/golden-deck/master", {
-          method: "POST",
-          headers: authHeaders(),
-          body: JSON.stringify({ card_id: masterBtn.getAttribute("data-master") })
-        })
-          .then(function (pack) {
-            cardEl.classList.add("is-mastered");
-            masterBtn.textContent = "مُتقَنة ✓";
-            if (pack.xp_earned) {
-              status("أتقنت القاعدة · +" + toEastern(pack.xp_earned) + " XP");
-              if (window.PortalStudentFx) window.PortalStudentFx.confetti();
-              return refresh();
-            }
+    var goldenHost = document.getElementById("golden-deck");
+    if (goldenHost) {
+      goldenHost.addEventListener("click", function (event) {
+        var masterBtn = event.target.closest("[data-master]");
+        if (masterBtn) {
+          event.stopPropagation();
+          var cardEl = masterBtn.closest("[data-card]");
+          if (!cardEl || cardEl.classList.contains("is-mastered")) return;
+          fetchJson("/api/portal/golden-deck/master", {
+            method: "POST",
+            headers: authHeaders(),
+            body: JSON.stringify({ card_id: masterBtn.getAttribute("data-master") })
           })
-          .catch(function (err) {
-            status(err.message || "تعذر تسجيل الإتقان.", true);
-          });
-        return;
-      }
-      var card = event.target.closest("[data-card]");
-      if (!card) return;
-      card.classList.toggle("is-flipped");
-    });
-    var settingsBtn = document.getElementById("btn-settings");
-    if (settingsBtn) {
-      settingsBtn.addEventListener("click", function () {
-        var panel = document.getElementById("player-settings-panel");
-        var open = panel && panel.hidden;
-        setSettingsOpen(!!open);
-      });
-    }
-    var closeSettings = document.getElementById("player-settings-close");
-    if (closeSettings) {
-      closeSettings.addEventListener("click", function () {
-        setSettingsOpen(false);
+            .then(function (pack) {
+              cardEl.classList.add("is-mastered");
+              masterBtn.textContent = "مُتقَنة ✓";
+              if (pack.xp_earned) {
+                status("أتقنت القاعدة · +" + toEastern(pack.xp_earned) + " XP");
+                if (window.PortalStudentFx) window.PortalStudentFx.confetti();
+                return refresh();
+              }
+            })
+            .catch(function (err) {
+              status(err.message || "تعذر تسجيل الإتقان.", true);
+            });
+          return;
+        }
+        var card = event.target.closest("[data-card]");
+        if (!card) return;
+        card.classList.toggle("is-flipped");
       });
     }
     var savePlayer = document.getElementById("player-save");
@@ -1053,44 +1111,64 @@
         if (window.PortalStudentFx) window.PortalStudentFx.setTheme(btn.getAttribute("data-theme"));
       });
     });
-    document.getElementById("national-map").addEventListener("click", function (event) {
-      var btn = event.target.closest("[data-jump]");
-      if (!btn || !state.run) return;
-      state.index = Number(btn.getAttribute("data-jump") || 0);
-      paintQuestion();
-    });
-    document.getElementById("mode-grid").addEventListener("click", function (event) {
-      var btn = event.target.closest("[data-mode]");
-      if (btn) {
-        startMode(btn.getAttribute("data-mode"));
-      }
-    });
-    document.getElementById("q-box").addEventListener("click", function (event) {
-      var btn = event.target.closest("[data-choice]");
-      if (btn) {
-        selectChoice(btn.getAttribute("data-choice"));
-      }
-    });
-    document.getElementById("powerups").addEventListener("click", function (event) {
-      var btn = event.target.closest("[data-powerup]");
-      if (btn && !btn.disabled) {
-        usePowerup(btn.getAttribute("data-powerup"));
-      }
-    });
-    document.getElementById("arena-next").addEventListener("click", nextQuestion);
-    document.getElementById("arena-exit").addEventListener("click", function () {
-      stopTimer();
-      document.getElementById("arena-stage").classList.remove("is-open");
-      document.getElementById("arena-hub").style.display = "";
-      refresh();
-    });
-    document.getElementById("counsel-send").addEventListener("click", sendCounsel);
-    document.getElementById("portal-logout").addEventListener("click", function () {
-      fetchJson("/api/portal/logout", { method: "POST", headers: authHeaders(), body: "{}" }).finally(function () {
-        sessionStorage.removeItem(TOKEN_KEY);
-        window.location.href = "login.html";
+    var nationalMap = document.getElementById("national-map");
+    if (nationalMap) {
+      nationalMap.addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-jump]");
+        if (!btn || !state.run) return;
+        state.index = Number(btn.getAttribute("data-jump") || 0);
+        paintQuestion();
       });
-    });
+    }
+    var modeGrid = document.getElementById("mode-grid");
+    if (modeGrid) {
+      modeGrid.addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-mode]");
+        if (btn) {
+          startMode(btn.getAttribute("data-mode"));
+        }
+      });
+    }
+    var qBox = document.getElementById("q-box");
+    if (qBox) {
+      qBox.addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-choice]");
+        if (btn) {
+          selectChoice(btn.getAttribute("data-choice"));
+        }
+      });
+    }
+    var powerups = document.getElementById("powerups");
+    if (powerups) {
+      powerups.addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-powerup]");
+        if (btn && !btn.disabled) {
+          usePowerup(btn.getAttribute("data-powerup"));
+        }
+      });
+    }
+    var arenaNext = document.getElementById("arena-next");
+    if (arenaNext) arenaNext.addEventListener("click", nextQuestion);
+    var arenaExit = document.getElementById("arena-exit");
+    if (arenaExit) {
+      arenaExit.addEventListener("click", function () {
+        stopTimer();
+        document.getElementById("arena-stage").classList.remove("is-open");
+        document.getElementById("arena-hub").style.display = "";
+        refresh();
+      });
+    }
+    var counselSend = document.getElementById("counsel-send");
+    if (counselSend) counselSend.addEventListener("click", sendCounsel);
+    var logoutBtn = document.getElementById("portal-logout");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function () {
+        fetchJson("/api/portal/logout", { method: "POST", headers: authHeaders(), body: "{}" }).finally(function () {
+          sessionStorage.removeItem(TOKEN_KEY);
+          window.location.href = "login.html";
+        });
+      });
+    }
     Array.prototype.forEach.call(document.querySelectorAll("[data-board]"), function (btn) {
       btn.addEventListener("click", function () {
         state.boardTab = btn.getAttribute("data-board");
@@ -1102,6 +1180,27 @@
     });
   }
 
+  function bootHelpers() {
+    var helpers = {
+      token: state.token,
+      fetchJson: fetchJson,
+      authHeaders: authHeaders,
+      status: status,
+      toEastern: toEastern,
+      formatEtecCode: formatEtecCode,
+      escapeHtml: escapeHtml,
+      renderArabicMath: renderArabicMath,
+      refresh: refresh,
+      startMode: startMode
+    };
+    if (window.PortalStudentGames && typeof window.PortalStudentGames.boot === "function") {
+      window.PortalStudentGames.boot(helpers);
+    }
+    if (window.PortalStudentAdaptive && typeof window.PortalStudentAdaptive.boot === "function") {
+      window.PortalStudentAdaptive.boot(helpers);
+    }
+  }
+
   function boot() {
     var session = loadToken();
     if (!session) {
@@ -1109,42 +1208,32 @@
       return;
     }
     bind();
-    refresh()
-      .then(function () {
-        showMainTab("play");
-        if (window.PortalStudentGames && typeof window.PortalStudentGames.boot === "function") {
-          window.PortalStudentGames.boot({
-            token: state.token,
-            fetchJson: fetchJson,
-            authHeaders: authHeaders,
-            status: status,
-            toEastern: toEastern,
-            escapeHtml: escapeHtml,
-            refresh: refresh
-          });
-        }
-        if (window.PortalStudentAdaptive && typeof window.PortalStudentAdaptive.boot === "function") {
-          window.PortalStudentAdaptive.boot({
-            token: state.token,
-            fetchJson: fetchJson,
-            authHeaders: authHeaders,
-            status: status,
-            toEastern: toEastern,
-            escapeHtml: escapeHtml,
-            renderArabicMath: renderArabicMath,
-            refresh: refresh,
-            startMode: startMode
-          });
-        }
-      })
-      .catch(function (error) {
-        status(error.message || "تعذر تحميل البوابة.", true);
-        if (error.status === 401) {
-          sessionStorage.removeItem(TOKEN_KEY);
-          window.location.href = "login.html";
-        }
-      });
+    /*
+     * portal-student.js يُحمَّل قبل games/adaptive.
+     * نؤجّل bootHelpers+refresh لماكروتامسك تالٍ حتى تُعرَّف الوحدات،
+     * ثم نهيّئ api قبل أول paintHomeExtras لتفادي null.toEastern.
+     */
+    setTimeout(function () {
+      bootHelpers();
+      refresh()
+        .then(function () {
+          showMainTab("play");
+        })
+        .catch(function (error) {
+          status(error.message || "تعذر تحميل البوابة.", true);
+          if (error.status === 401) {
+            sessionStorage.removeItem(TOKEN_KEY);
+            window.location.href = "login.html";
+          }
+        });
+    }, 0);
   }
+
+  window.PortalStudentUI = {
+    setSettingsOpen: setSettingsOpen,
+    toEastern: toEastern,
+    formatEtecCode: formatEtecCode
+  };
 
   boot();
 })();
