@@ -354,6 +354,8 @@
 
   function renderRankGap(rank) {
     if (!rank || !rank.visible) return "";
+    var avgRound =
+      rank.round_avg_score != null ? rank.round_avg_score : rank.avg_metric;
     return (
       '<section class="end-round-rank" aria-label="الترتيب الآمن">' +
       '<p class="end-round-rank-msg">' +
@@ -363,9 +365,11 @@
       '<span>المركز <strong class="foundation-hud-num" dir="ltr">' +
       east(rank.rank) +
       "</strong></span>" +
-      '<span>المتوسط <strong class="foundation-hud-num" dir="ltr">' +
-      east(rank.avg_metric) +
-      "</strong></span>" +
+      (avgRound != null
+        ? '<span>متوسط الجولة <strong class="foundation-hud-num" dir="ltr">' +
+          east(avgRound) +
+          "</strong></span>"
+        : "") +
       (rank.gap_to_next != null && Number(rank.gap_to_next) > 0
         ? '<span>الفارق للقفزة <strong class="foundation-hud-num" dir="ltr">' +
           east(rank.gap_to_next) +
