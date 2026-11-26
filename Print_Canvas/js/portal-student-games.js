@@ -18,9 +18,40 @@
     challenger: "",
     opponent: ""
   };
-  var words = { rounds: [], index: 0, answers: [], combo: 0, best: 0, timer: null, left: 60, started: 0, track: "lang" };
-  var mental = { items: [], index: 0, answers: [], level: 1, mode: "solo", timer: null, left: 60, started: 0 };
+  var words = { rounds: [], index: 0, answers: [], combo: 0, best: 0, timer: null, left: 60, started: 0, track: "lang", sessionId: 0 };
+  var mental = { items: [], index: 0, answers: [], level: 1, mode: "solo", timer: null, left: 60, started: 0, sessionId: 0 };
+  var foundation = { activeKey: "", sessionId: 0 };
   var scratch = { ink: "#111827", erasing: false, drawing: false, expanded: false };
+
+  function stopWordsTimer() {
+    if (words.timer) clearInterval(words.timer);
+    words.timer = null;
+  }
+
+  function stopMentalTimer() {
+    if (mental.timer) clearInterval(mental.timer);
+    mental.timer = null;
+  }
+
+  /** إيقاف كل ألعاب التأسيس السريع (كلمات / قرآن / حساب) ومنع نبضات قديمة */
+  function stopFoundationGames() {
+    stopWordsTimer();
+    stopMentalTimer();
+    foundation.activeKey = "";
+    foundation.sessionId += 1;
+  }
+
+  function beginFoundationSession(key) {
+    stopWordsTimer();
+    stopMentalTimer();
+    foundation.activeKey = key;
+    foundation.sessionId += 1;
+    return foundation.sessionId;
+  }
+
+  function isFoundationSession(key, sessionId) {
+    return foundation.activeKey === key && foundation.sessionId === sessionId;
+  }
 
   function el(id) {
     return document.getElementById(id);
@@ -213,6 +244,7 @@
 
   function enterLiveDuel(pack) {
     stopLiveTimers();
+    stopFoundationGames();
     live.duelId = pack.duel_id;
     live.questions = pack.questions || [];
     live.index = 0;
@@ -319,6 +351,7 @@
   }
 
   function paintWords() {
+    if (foundation.activeKey !== "words") return;
     var host = stageHost();
     var r = words.rounds[words.index];
     if (!host || !r) return;
@@ -355,10 +388,18 @@
       "</div>";
   }
 
-  function finishWords() {
-    if (words.timer) clearInterval(words.timer);
-    words.timer = null;
+  function finishWords(sessionId) {
+    if (sessionId != null && !isFoundationSession("words", sessionId)) {
+      stopWordsTimer();
+      return;
+    }
+    stopWordsTimer();
+    if (foundation.activeKey === "words") {
+      foundation.activeKey = "";
+      foundation.sessionId += 1;
+    }
     var total = Math.max(words.rounds.length, 1);
+    var trackLabel = words.track === "quran" ? "جولة ألفاظ القرآن" : "لعبة الكلمات";
     api
       .fetchJson("/api/portal/games/words/finish", {
         method: "POST",
@@ -370,9 +411,10 @@
         })
       })
       .then(function (pack) {
+        if (foundation.activeKey) return;
         stageHost().innerHTML =
           "<p class=\"portal-empty\">انتهت " +
-          (words.track === "quran" ? "جولة ألفاظ القرآن" : "لعبة الكلمات") +
+          trackLabel +
           " · " +
           east(pack.score || 0) +
           " / " +
@@ -389,12 +431,15 @@
 
   function startWords(track) {
     track = track || "lang";
+    var sessionId = beginFoundationSession("words");
+    words.sessionId = sessionId;
     api
       .fetchJson("/api/portal/games/words/start?track=" + encodeURIComponent(track), {
         headers: api.authHeaders(),
         cache: "no-store"
       })
       .then(function (pack) {
+        if (!isFoundationSession("words", sessionId)) return;
         words.rounds = pack.rounds || [];
         words.index = 0;
         words.answers = [];
@@ -403,20 +448,28 @@
         words.track = pack.track || track;
         words.left = Number(pack.seconds || 60);
         words.started = Date.now();
-        if (words.timer) clearInterval(words.timer);
+        stopWordsTimer();
         words.timer = setInterval(function () {
+          if (!isFoundationSession("words", sessionId)) {
+            stopWordsTimer();
+            return;
+          }
           words.left -= 1;
           paintWords();
-          if (words.left <= 0) finishWords();
+          if (words.left <= 0) finishWords(sessionId);
         }, 1000);
         paintWords();
       })
       .catch(function (err) {
+        if (isFoundationSession("words", sessionId)) {
+          stopFoundationGames();
+        }
         api.status(err.message || "تعذر بدء لعبة الكلمات.", true);
       });
   }
 
   function paintMental() {
+    if (foundation.activeKey !== "mental") return;
     var host = stageHost();
     var item = mental.items[mental.index];
     if (!host || !item) return;
@@ -452,9 +505,16 @@
       "</div>";
   }
 
-  function finishMental() {
-    if (mental.timer) clearInterval(mental.timer);
-    mental.timer = null;
+  function finishMental(sessionId) {
+    if (sessionId != null && !isFoundationSession("mental", sessionId)) {
+      stopMentalTimer();
+      return;
+    }
+    stopMentalTimer();
+    if (foundation.activeKey === "mental") {
+      foundation.activeKey = "";
+      foundation.sessionId += 1;
+    }
     api
       .fetchJson("/api/portal/games/mental/finish", {
         method: "POST",
@@ -467,6 +527,7 @@
         })
       })
       .then(function (pack) {
+        if (foundation.activeKey) return;
         stageHost().innerHTML =
           "<p class=\"portal-empty\">انتهى الحساب الذهني · " +
           east(pack.score || 0) +
@@ -483,6 +544,8 @@
   function startMental(level, mode) {
     mental.level = Number(level || 1);
     mental.mode = mode || "solo";
+    var sessionId = beginFoundationSession("mental");
+    mental.sessionId = sessionId;
     api
       .fetchJson(
         "/api/portal/games/mental/start?level=" +
@@ -491,20 +554,28 @@
         { headers: api.authHeaders(), cache: "no-store" }
       )
       .then(function (pack) {
+        if (!isFoundationSession("mental", sessionId)) return;
         mental.items = pack.items || [];
         mental.index = 0;
         mental.answers = [];
         mental.left = Number(pack.seconds || 60);
         mental.started = Date.now();
-        if (mental.timer) clearInterval(mental.timer);
+        stopMentalTimer();
         mental.timer = setInterval(function () {
+          if (!isFoundationSession("mental", sessionId)) {
+            stopMentalTimer();
+            return;
+          }
           mental.left -= 1;
           paintMental();
-          if (mental.left <= 0) finishMental();
+          if (mental.left <= 0) finishMental(sessionId);
         }, 1000);
         paintMental();
       })
       .catch(function (err) {
+        if (isFoundationSession("mental", sessionId)) {
+          stopFoundationGames();
+        }
         api.status(err.message || "تعذر بدء الحساب الذهني.", true);
       });
   }
@@ -632,6 +703,7 @@
       stage.addEventListener("click", function (event) {
         var wc = event.target.closest("[data-word-choice]");
         if (wc) {
+          if (foundation.activeKey !== "words") return;
           var r = words.rounds[words.index];
           var choice = wc.getAttribute("data-word-choice");
           var ok = r && choice === r.correct;
@@ -639,18 +711,19 @@
           words.combo = ok ? words.combo + 1 : 0;
           if (words.combo > words.best) words.best = words.combo;
           words.index += 1;
-          if (words.index >= words.rounds.length) finishWords();
+          if (words.index >= words.rounds.length) finishWords(words.sessionId);
           else paintWords();
           return;
         }
         var mc = event.target.closest("[data-mental-choice]");
         if (mc) {
+          if (foundation.activeKey !== "mental") return;
           var item = mental.items[mental.index];
           var ch = mc.getAttribute("data-mental-choice");
           var good = item && ch === item.correct;
           mental.answers.push({ id: item.id, choice: ch, ok: !!good });
           mental.index += 1;
-          if (mental.index >= mental.items.length) finishMental();
+          if (mental.index >= mental.items.length) finishMental(mental.sessionId);
           else paintMental();
           return;
         }
