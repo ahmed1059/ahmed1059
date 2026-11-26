@@ -78,6 +78,11 @@
       .replace(/"/g, "&quot;");
   }
 
+  /** عزل الأساس+الأس في عقدة واحدة حتى لا يفرّقها flex/RTL */
+  function wrapMathAtom(innerHtml) {
+    return '<span class="math-atom" dir="ltr">' + innerHtml + "</span>";
+  }
+
   function renderArabicMath(raw) {
     var source = String(raw == null ? "" : raw);
     if (!source) {
@@ -102,7 +107,7 @@
       );
     });
     text = text.replace(/([0-9٠-٩أ-يA-Za-zπΩµα])\^([0-9٠-٩]+)/g, function (_m, base, exp) {
-      return keep(toEastern(base) + "<sup>" + toEastern(exp) + "</sup>");
+      return keep(wrapMathAtom(toEastern(base) + "<sup>" + toEastern(exp) + "</sup>"));
     });
     text = text.replace(/([0-9٠-٩أ-يA-Za-zπΩµα])([²³⁴⁵⁶⁷⁸⁹⁰¹]+)/g, function (_m, base, exp) {
       var map = { "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9", "⁰": "0" };
@@ -112,7 +117,7 @@
           return map[ch] || ch;
         })
         .join("");
-      return keep(toEastern(base) + "<sup>" + toEastern(easternExp) + "</sup>");
+      return keep(wrapMathAtom(toEastern(base) + "<sup>" + toEastern(easternExp) + "</sup>"));
     });
     text = text.replace(/\uE000\d+\uE001|[^\uE000]+/g, function (part) {
       if (part.charAt(0) === "\uE000") {

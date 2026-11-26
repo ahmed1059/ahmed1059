@@ -687,13 +687,13 @@ body.portal-student {
   color: #fff;
 }
 .flip-face.back .flip-body {
+  /* تدفق نصي — لا flex على الأطفال حتى لا يتفكك الأساس عن <sup> */
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  text-align: center;
   overflow: auto;
   max-height: 150px;
-  padding: 0 4px;
+  padding: 8px 4px 0;
   width: 100%;
   line-height: 1.85;
   text-wrap: pretty;
@@ -711,7 +711,25 @@ body.portal-student {
 .flip-face.back .flip-body .frac .num {
   margin-bottom: 1px;
 }
-.flip-face.back .flip-body sup {
+.math-atom {
+  display: inline-block;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+.flip-face.back .flip-body .math-atom,
+.q-stem .math-atom,
+.q-choice .math-atom,
+.trap-ex .math-atom,
+.trap-rationale .math-atom {
+  margin-inline: 1px;
+}
+.flip-face.back .flip-body .math-atom sup,
+.flip-face.back .flip-body > sup,
+.q-stem .math-atom sup,
+.q-choice .math-atom sup,
+.trap-ex .math-atom sup {
   font-size: 0.72em;
   line-height: 0;
   vertical-align: super;
