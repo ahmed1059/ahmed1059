@@ -658,6 +658,15 @@
             })
             .join("") +
           "</ul>" +
+          (pack.week_goal
+            ? "<h3>هدف الأسبوع " +
+              toEastern(pack.week_goal.current_week_ar || pack.week_goal.current_week || "") +
+              "</h3><p style=\"line-height:1.65;font-weight:700;\">" +
+              escapeHtml(pack.week_goal.teacher_goal || "") +
+              "</p><p style=\"font-size:12px;direction:ltr;unicode-bidi:isolate;color:#0b5e56;\">" +
+              escapeHtml(pack.week_goal.barcode || "") +
+              "</p>"
+            : "") +
           "<p style=\"font-size:12px;color:#5c675f;\">ربط شواهد: " +
           escapeHtml((pack.evidence_hooks || []).join(" · ")) +
           "</p></div>";

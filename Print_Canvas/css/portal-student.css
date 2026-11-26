@@ -339,6 +339,52 @@ body.portal-student {
   font-size: 13px;
 }
 
+.week-goal-card {
+  margin-bottom: 14px;
+  border-color: #fcd34d;
+  background: linear-gradient(135deg, #fffbeb, #ffffff 55%);
+}
+.week-goal-text {
+  margin: 0;
+  line-height: 1.7;
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 14.5px;
+}
+.week-goal-barcode {
+  margin: 10px 0 0;
+  font-size: 12px;
+  font-weight: 800;
+  color: #0b5e56;
+  letter-spacing: 0.04em;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
+.week-goal-card {
+  margin-bottom: 14px;
+  border-color: #fcd34d;
+  background: linear-gradient(135deg, #fffbeb, #ffffff 55%);
+}
+.week-goal-text {
+  margin: 0;
+  line-height: 1.7;
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 14.5px;
+}
+.week-goal-barcode {
+  margin: 10px 0 0;
+  font-size: 12px;
+  font-weight: 800;
+  color: #0b5e56;
+  letter-spacing: 0.04em;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+}
+
 .behavior-totals {
   display: flex;
   flex-wrap: wrap;

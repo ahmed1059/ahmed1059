@@ -618,7 +618,7 @@ def morning_brief(x_session_token: str = Header(default="")):
         ).fetchall()
         _audit(connection, user, "morning.brief.view", today)
         connection.commit()
-        return {
+        payload = {
             "date": today,
             "challenges_today": int(challenges[0] or 0),
             "xp_today": int(challenges[1] or 0),
@@ -635,8 +635,23 @@ def morning_brief(x_session_token: str = Header(default="")):
                 }
                 for r in top
             ],
-            "evidence_hooks": ["3-1-1-1", "3-1-1-2", "3-1-1-3", "1-3-1-2"],
+            "evidence_hooks": ["3-1-1-1", "3-1-1-2", "3-1-1-3", "1-3-1-2", "2-1-1-5"],
         }
+        try:
+            from .nafs_weekly_etec import build_week_goal
+
+            wg = build_week_goal(connection)
+            payload["week_goal"] = {
+                "current_week": wg["current_week"],
+                "current_week_ar": wg["current_week_ar"],
+                "teacher_goal": wg["teacher_goal"],
+                "student_goal": wg["student_goal"],
+                "focus": (wg.get("current") or {}).get("focus") or "",
+                "barcode": (wg.get("current") or {}).get("barcode") or "",
+            }
+        except Exception:
+            pass
+        return payload
     finally:
         connection.close()
 

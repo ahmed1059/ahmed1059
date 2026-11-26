@@ -809,12 +809,29 @@ def portal_student_home(x_portal_token: str = Header(default="")):
         except Exception:
             vault = None
             mastery = None
+        week_goal = None
+        try:
+            from .nafs_weekly_etec import build_week_goal
+
+            wg = build_week_goal(connection)
+            week_goal = {
+                "current_week": wg["current_week"],
+                "current_week_ar": wg["current_week_ar"],
+                "student_goal": wg["student_goal"],
+                "teacher_goal": wg["teacher_goal"],
+                "focus": (wg.get("current") or {}).get("focus") or "",
+                "barcode": (wg.get("current") or {}).get("barcode") or "",
+                "mock_label": (wg.get("current") or {}).get("mock_label") or "",
+            }
+        except Exception:
+            week_goal = None
         return {
             "student": student,
             "xp": xp,
             "player": player,
             "error_vault": vault,
             "mastery": mastery,
+            "week_goal": week_goal,
             "modes": MODE_CONFIG,
             "recent_runs": runs,
             "remedial": remedial,

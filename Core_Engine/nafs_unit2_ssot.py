@@ -1,10 +1,8 @@
 # الوحدة الثانية: مصفوفة تراكمية + خطة ٨ أسابيع + ميثاق ٢٠ دقيقة + تصدير Word.
 from __future__ import annotations
 
-import io
 import json
 from datetime import datetime, timezone
-from pathlib import Path
 
 from fastapi import APIRouter, Header, HTTPException
 from fastapi.responses import StreamingResponse
@@ -127,14 +125,17 @@ def weekly_plan(x_session_token: str = Header(default="")):
         require_user(str(x_session_token or "").strip())
     except PermissionError as error:
         raise HTTPException(status_code=401, detail=str(error)) from error
-    # أسبوع حالي تقريبي داخل الخطة الثمانية (١–٨)
-    iso_week = datetime.now(timezone.utc).isocalendar().week
-    current = ((iso_week - 1) % 8) + 1
+    from .nafs_weekly_etec import build_week_goal
+
+    pack = build_week_goal()
     return {
         "ok": True,
-        "current_week": current,
-        "weeks": WEEKLY_PLAN_8,
-        "current": WEEKLY_PLAN_8[current - 1],
+        "current_week": pack["current_week"],
+        "weeks": pack["weeks"],
+        "current": pack["current"],
+        "teacher_goal": pack["teacher_goal"],
+        "student_goal": pack["student_goal"],
+        "schedule_engine": pack["schedule_engine"],
     }
 
 
@@ -236,69 +237,16 @@ def family_weekly_save(body: FamilyWeeklyBody, x_portal_token: str = Header(defa
 
 @router.get("/api/session/nafs/export-docx")
 def export_nafs_docx(kind: str = "weekly", x_session_token: str = Header(default="")):
-    """تصدير Word رسمي (خط Tahoma كبديل محلي للمهند) مع ترويسة ثلاثية."""
+    """تصدير Word رسمي (خط تجوال/المهند) مع ترويسة ثلاثية وباركود حي — عبر محرك المرحلة ٥."""
     from .access import require_user
 
     try:
         require_user(str(x_session_token or "").strip())
     except PermissionError as error:
         raise HTTPException(status_code=401, detail=str(error)) from error
-    try:
-        import docx
-        from docx.enum.text import WD_ALIGN_PARAGRAPH
-        from docx.oxml import parse_xml
-        from docx.oxml.ns import nsdecls, qn
-        from docx.shared import Pt, RGBColor
-    except ImportError as error:
-        raise HTTPException(status_code=500, detail="مكتبة python-docx غير متاحة على الخادم.") from error
+    from .nafs_weekly_etec import build_official_docx
 
-    doc = docx.Document()
-    # ترويسة ثلاثية نصية
-    header = doc.add_paragraph()
-    header.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    run = header.add_run(
-        "المملكة العربية السعودية\nوزارة التعليم\nالإدارة العامة للتعليم بمنطقة المدينة المنورة\nمتوسطة سعد بن الربيع الأنصاري"
-    )
-    run.bold = True
-    run.font.size = Pt(12)
-    run.font.name = "Tahoma"
-    run.font.color.rgb = RGBColor(0x0B, 0x5E, 0x56)
-    rPr = run._r.get_or_add_rPr()
-    rPr.append(parse_xml(f'<w:rFonts {nsdecls("w")} w:ascii="Tahoma" w:hAnsi="Tahoma" w:cs="Tahoma"/>'))
-    rPr.append(parse_xml(f'<w:rtl {nsdecls("w")}/>'))
-
-    title = doc.add_paragraph()
-    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    tr = title.add_run("تقرير نافس التشغيلي — قابل للتعديل")
-    tr.bold = True
-    tr.font.size = Pt(16)
-    tr.font.name = "Tahoma"
-    tr.font.color.rgb = RGBColor(0x0B, 0x5E, 0x56)
-
-    kind = (kind or "weekly").lower()
-    if kind == "matrix":
-        doc.add_paragraph("مصفوفة المهارات التراكمية (١م–٣م)")
-        for domain, block in SKILLS_MATRIX.items():
-            doc.add_paragraph(f"{block['label']} — مؤشر {block['etec']}")
-            for sk in block["skills"]:
-                doc.add_paragraph(f"• {sk['name']} | الجذر {sk['root']} | الصف {sk['grade']}", style=None)
-    else:
-        doc.add_paragraph("الخطة التشغيلية الأسبوعية (٨ أسابيع)")
-        for w in WEEKLY_PLAN_8:
-            doc.add_paragraph(
-                f"الأسبوع {w['week']}: {w['focus']} | رياضيات: {w['math']} | علوم: {w['science']} | قراءة: {w['reading']} | الشاهد: {w['evidence']}"
-            )
-
-    footer = doc.add_paragraph()
-    footer.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    fr = footer.add_run(f"باركود مرجعي: NAFS-1059-{_iso()[:10]} | شاهد مرتبط بمؤشرات 3-1-1-1 / 3-1-1-2 / 3-1-1-3")
-    fr.font.size = Pt(9)
-    fr.font.name = "Tahoma"
-
-    buf = io.BytesIO()
-    doc.save(buf)
-    buf.seek(0)
-    filename = f"nafs_{kind}_{_iso()[:10]}.docx"
+    buf, filename = build_official_docx(kind=kind or "weekly")
     return StreamingResponse(
         buf,
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
