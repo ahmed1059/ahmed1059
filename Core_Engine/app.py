@@ -488,6 +488,10 @@ from .nafs_remedial_clinics import router as nafs_remedial_clinics_router
 
 app.include_router(nafs_remedial_clinics_router)
 
+from .nafs_family_loop import router as nafs_family_loop_router
+
+app.include_router(nafs_family_loop_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):
