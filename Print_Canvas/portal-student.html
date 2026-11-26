@@ -121,8 +121,12 @@
         </div>
 
         <section class="portal-card station-panel card-play" data-station="games" hidden>
-          <h2>ألعاب التأسيس السريع</h2>
-          <div class="mini-games">
+          <h2 id="foundation-section-title">ألعاب التأسيس السريع</h2>
+          <div id="foundation-session-bar" class="foundation-session-bar" hidden>
+            <button type="button" class="portal-btn secondary" id="btn-foundation-back">العودة</button>
+            <h3 id="foundation-active-title" class="foundation-active-title"></h3>
+          </div>
+          <div class="mini-games" id="foundation-game-tiles">
             <button type="button" class="mode-card game-tile" id="btn-words">
               <span class="game-tile-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#ecfdf5"/><path d="M10 14h28v4H10zm0 8h20v4H10zm0 8h24v4H10z" fill="#0b5e56"/></svg></span>
               <strong>لعبة الكلمات</strong>

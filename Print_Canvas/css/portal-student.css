@@ -1101,6 +1101,33 @@ body.portal-gamer {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px;
 }
+.foundation-session-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  flex-wrap: wrap;
+}
+.foundation-session-bar[hidden] {
+  display: none !important;
+}
+.foundation-active-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0b5e56;
+  line-height: 1.35;
+}
+.foundation-hud-num,
+.mini-hud .etec-code,
+#foundation-timer,
+#foundation-combo {
+  display: inline-block;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
 .game-tile {
   text-align: right;
   display: grid;

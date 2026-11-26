@@ -20,7 +20,7 @@
   };
   var words = { rounds: [], index: 0, answers: [], combo: 0, best: 0, timer: null, left: 60, started: 0, track: "lang", sessionId: 0 };
   var mental = { items: [], index: 0, answers: [], level: 1, mode: "solo", timer: null, left: 60, started: 0, sessionId: 0 };
-  var foundation = { activeKey: "", sessionId: 0 };
+  var foundation = { activeKey: "", sessionId: 0, uiOpen: false, label: "" };
   var scratch = { ink: "#111827", erasing: false, drawing: false, expanded: false };
 
   function stopWordsTimer() {
@@ -31,6 +31,50 @@
   function stopMentalTimer() {
     if (mental.timer) clearInterval(mental.timer);
     mental.timer = null;
+  }
+
+  function foundationLabel(key, track) {
+    if (key === "mental") return "الحساب الذهني";
+    if (key === "words" && track === "quran") return "ألفاظ القرآن الكريم";
+    return "لعبة الكلمات";
+  }
+
+  /** عزل واجهة الجلسة: إخفاء بطاقات الألعاب الأخرى وإظهار العنوان + زر العودة */
+  function enterFoundationUi(key, track) {
+    foundation.uiOpen = true;
+    foundation.label = foundationLabel(key, track);
+    var tiles = el("foundation-game-tiles");
+    var bar = el("foundation-session-bar");
+    var title = el("foundation-active-title");
+    var sectionTitle = el("foundation-section-title");
+    if (tiles) tiles.hidden = true;
+    if (bar) bar.hidden = false;
+    if (title) title.textContent = foundation.label;
+    if (sectionTitle) sectionTitle.hidden = true;
+  }
+
+  /** العودة لقائمة الألعاب: إلغاء المؤقت وإغلاق النطاق */
+  function exitFoundationUi() {
+    stopFoundationGames();
+    foundation.uiOpen = false;
+    foundation.label = "";
+    var tiles = el("foundation-game-tiles");
+    var bar = el("foundation-session-bar");
+    var sectionTitle = el("foundation-section-title");
+    var stage = document.getElementById("mini-game-stage");
+    if (tiles) tiles.hidden = false;
+    if (bar) bar.hidden = true;
+    if (sectionTitle) {
+      sectionTitle.hidden = false;
+      sectionTitle.textContent = "ألعاب التأسيس السريع";
+    }
+    if (stage) {
+      stage.hidden = true;
+      stage.innerHTML = "";
+      stage.removeAttribute("data-active-game");
+      stage.removeAttribute("data-session");
+      stage.removeAttribute("data-qid");
+    }
   }
 
   /** إيقاف كل ألعاب التأسيس السريع (كلمات / قرآن / حساب) ومنع نبضات قديمة */
@@ -47,11 +91,12 @@
     }
   }
 
-  function beginFoundationSession(key) {
+  function beginFoundationSession(key, track) {
     stopWordsTimer();
     stopMentalTimer();
     foundation.activeKey = key;
     foundation.sessionId += 1;
+    enterFoundationUi(key, track || (key === "words" ? words.track : ""));
     return foundation.sessionId;
   }
 
@@ -263,7 +308,7 @@
 
   function enterLiveDuel(pack) {
     stopLiveTimers();
-    stopFoundationGames();
+    exitFoundationUi();
     live.duelId = pack.duel_id;
     live.questions = pack.questions || [];
     live.index = 0;
@@ -381,10 +426,10 @@
     host.setAttribute("data-qid", String(r.id || words.index));
     host.innerHTML =
       "<div class=\"mini-hud\"><strong>" +
-      (words.track === "quran" ? "ألفاظ القرآن الكريم" : "لعبة الكلمات") +
-      "</strong><span id=\"foundation-combo\">Combo ×" +
+      esc(foundation.label || (words.track === "quran" ? "ألفاظ القرآن الكريم" : "لعبة الكلمات")) +
+      "</strong><span id=\"foundation-combo\" class=\"foundation-hud-num\" dir=\"ltr\">Combo ×" +
       east(words.combo) +
-      "</span><span id=\"foundation-timer\">" +
+      "</span><span id=\"foundation-timer\" class=\"foundation-hud-num\" dir=\"ltr\">" +
       east(words.left) +
       " ث</span><span dir=\"ltr\" class=\"etec-code\">٣-١-١-١</span></div>" +
       "<div class=\"word-card " +
@@ -434,7 +479,10 @@
       })
       .then(function (pack) {
         if (foundation.activeKey) return;
-        stageHost().innerHTML =
+        var host = stageHost();
+        if (!host) return;
+        host.hidden = false;
+        host.innerHTML =
           "<p class=\"portal-empty\">انتهت " +
           trackLabel +
           " · " +
@@ -443,7 +491,10 @@
           east(total) +
           " · +" +
           east(pack.xp_earned || 0) +
-          " XP</p>";
+          " XP</p>" +
+          "<div class=\"portal-actions\" style=\"margin-top:10px;\">" +
+          "<button type=\"button\" class=\"portal-btn secondary\" data-foundation-exit=\"1\">العودة للألعاب</button>" +
+          "</div>";
         if (api.refresh) api.refresh();
       })
       .catch(function (err) {
@@ -453,7 +504,7 @@
 
   function startWords(track) {
     track = track || "lang";
-    var sessionId = beginFoundationSession("words");
+    var sessionId = beginFoundationSession("words", track);
     words.sessionId = sessionId;
     api
       .fetchJson("/api/portal/games/words/start?track=" + encodeURIComponent(track), {
@@ -483,8 +534,8 @@
         paintWords();
       })
       .catch(function (err) {
-        if (isFoundationSession("words", sessionId)) {
-          stopFoundationGames();
+        if (isFoundationSession("words", sessionId) || foundation.uiOpen) {
+          exitFoundationUi();
         }
         api.status(err.message || "تعذر بدء لعبة الكلمات.", true);
       });
@@ -500,9 +551,11 @@
     host.setAttribute("data-session", String(mental.sessionId || foundation.sessionId));
     host.setAttribute("data-qid", String(item.id || mental.index));
     host.innerHTML =
-      "<div class=\"mini-hud\"><strong>حساب ذهني · مستوى " +
+      "<div class=\"mini-hud\"><strong>" +
+      esc(foundation.label || "الحساب الذهني") +
+      " · مستوى " +
       east(mental.level) +
-      "</strong><span id=\"foundation-timer\">" +
+      "</strong><span id=\"foundation-timer\" class=\"foundation-hud-num\" dir=\"ltr\">" +
       east(mental.left) +
       " ث</span><span dir=\"ltr\" class=\"etec-code\">٣-١-١-٢</span></div>" +
       "<p class=\"q-stem mental-stem\">" +
@@ -553,12 +606,18 @@
       })
       .then(function (pack) {
         if (foundation.activeKey) return;
-        stageHost().innerHTML =
+        var host = stageHost();
+        if (!host) return;
+        host.hidden = false;
+        host.innerHTML =
           "<p class=\"portal-empty\">انتهى الحساب الذهني · " +
           east(pack.score || 0) +
           " صحيحة · +" +
           east(pack.xp_earned || 0) +
-          " XP</p>";
+          " XP</p>" +
+          "<div class=\"portal-actions\" style=\"margin-top:10px;\">" +
+          "<button type=\"button\" class=\"portal-btn secondary\" data-foundation-exit=\"1\">العودة للألعاب</button>" +
+          "</div>";
         if (api.refresh) api.refresh();
       })
       .catch(function (err) {
@@ -598,8 +657,8 @@
         paintMental();
       })
       .catch(function (err) {
-        if (isFoundationSession("mental", sessionId)) {
-          stopFoundationGames();
+        if (isFoundationSession("mental", sessionId) || foundation.uiOpen) {
+          exitFoundationUi();
         }
         api.status(err.message || "تعذر بدء الحساب الذهني.", true);
       });
@@ -723,9 +782,19 @@
         startMental(1, "solo");
       });
     }
+    var backBtn = el("btn-foundation-back");
+    if (backBtn) {
+      backBtn.addEventListener("click", function () {
+        exitFoundationUi();
+      });
+    }
     var stage = stageHost();
     if (stage) {
       stage.addEventListener("click", function (event) {
+        if (event.target.closest("[data-foundation-exit]")) {
+          exitFoundationUi();
+          return;
+        }
         var wc = event.target.closest("[data-word-choice]");
         if (wc) {
           if (foundation.activeKey !== "words") return;
