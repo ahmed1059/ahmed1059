@@ -197,3 +197,53 @@ def fetch_runs_for_game(connection, student_nid: str, game: str) -> list[dict]:
     )
     cols = [d[0] for d in cur.description]
     return [dict(zip(cols, row)) for row in cur.fetchall()]
+
+
+def fetch_challenge_runs(connection, student_nid: str) -> list[dict]:
+    """
+    امتداد آمن لـ portal_challenge_runs (المرحلة ٤ الخفيفة).
+    يُحوَّل إلى شكل صفوف متوافق مع normalize_attempt دون اختلاق.
+    """
+    cur = connection.execute(
+        """
+        SELECT id, mode, correct_count, total_questions, score_pct,
+               streak_best, duration_sec, finished_at, detail_json
+        FROM portal_challenge_runs
+        WHERE student_nid = ? AND finished_at != ''
+        ORDER BY datetime(finished_at) ASC, id ASC
+        """,
+        (student_nid,),
+    )
+    rows = []
+    for row in cur.fetchall():
+        detail = parse_detail(row[8])
+        total = int(row[3] or 0)
+        score = int(row[2] or 0)
+        # إن غاب العدّ نترك total=0 لسلوك legacy النسبي — لا نخترع أسئلة
+        detail_out = {
+            "total": total,
+            "elapsed": float(row[6] or 0) or None,
+            "tier": detail.get("tier") or "",
+            "mode": row[1] or "",
+            "score_pct": float(row[4] or 0),
+            "source": "challenge_runs",
+        }
+        rows.append(
+            {
+                "id": row[0],
+                "game_type": f"challenge:{row[1] or 'run'}",
+                "score": score,
+                "combo_best": int(row[5] or 0),
+                "detail_json": detail_out,
+                "created_at": row[7] or "",
+            }
+        )
+    return rows
+
+
+def fetch_runs(connection, student_nid: str, game: str) -> list[dict]:
+    """توجيه موحّد: challenges|tests → challenge_runs؛ وإلا ألعاب التأسيس."""
+    key = (game or "").strip().lower()
+    if key in ("challenge", "challenges", "tests", "mock", "modes"):
+        return fetch_challenge_runs(connection, student_nid)
+    return fetch_runs_for_game(connection, student_nid, game)

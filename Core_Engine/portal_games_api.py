@@ -686,31 +686,84 @@ def progress_pulse(
     limit: int = 7,
     x_portal_token: str = Header(default=""),
 ):
-    """ملخص محاولات الطالب للعبة الحالية من portal_game_runs فقط."""
+    """ملخص محاولات الطالب: ألعاب التأسيس أو امتداد challenges من السجلات الحقيقية."""
     session = _require_student(x_portal_token)
-    from .nafs_endround_progress import build_progress_pulse, fetch_runs_for_game
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs
 
     connection = connect()
     try:
         ensure_on_boot(connection)
-        rows = fetch_runs_for_game(connection, session["student_nid"], game)
+        rows = fetch_runs(connection, session["student_nid"], game)
         pulse = build_progress_pulse(rows, limit=limit)
+        g = (game or "words").strip().lower()
+        etec = "3-1-1-2" if g.startswith("mental") else "3-1-1-1"
         return {
             "ok": True,
-            "game": (game or "words").strip().lower(),
-            "etec": "3-1-1-1" if not str(game).startswith("mental") else "3-1-1-2",
-            "etec_ar": "٣-١-١-١" if not str(game).startswith("mental") else "٣-١-١-٢",
+            "game": g,
+            "etec": etec,
+            "etec_ar": "٣-١-١-٢" if etec.endswith("2") else "٣-١-١-١",
             **pulse,
         }
     finally:
         connection.close()
 
 
-def _attach_progress_pulse(connection, student_nid: str, game: str, limit: int = 7) -> dict:
-    from .nafs_endround_progress import build_progress_pulse, fetch_runs_for_game
+@router.get("/api/portal/games/endround-context")
+def endround_context(
+    game: str = "words",
+    accuracy: float | None = None,
+    x_portal_token: str = Header(default=""),
+):
+    """حزمة المرحلة ٣: أسطورة نافس + فارق القفزة + إشارة مسار عند التعثر."""
+    session = _require_student(x_portal_token)
+    from .nafs_endround_legend import build_endround_context
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs
+    from .portal_session_api import _period_start
 
-    rows = fetch_runs_for_game(connection, student_nid, game)
+    connection = connect()
+    try:
+        ensure_on_boot(connection)
+        rows = fetch_runs(connection, session["student_nid"], game)
+        pulse = build_progress_pulse(rows, limit=7)
+        ctx = build_endround_context(
+            connection,
+            student_nid=session["student_nid"],
+            game=game,
+            accuracy_pct=accuracy,
+            attempts_asc=pulse.get("attempts") or [],
+            period_start=_period_start("week"),
+        )
+        return {"ok": True, "game": (game or "words").strip().lower(), **ctx}
+    finally:
+        connection.close()
+
+
+def _attach_progress_pulse(connection, student_nid: str, game: str, limit: int = 7) -> dict:
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs
+
+    rows = fetch_runs(connection, student_nid, game)
     return build_progress_pulse(rows, limit=limit)
+
+
+def _attach_endround_context(
+    connection,
+    student_nid: str,
+    game: str,
+    *,
+    accuracy_pct: float | None = None,
+    attempts_asc: list | None = None,
+) -> dict:
+    from .nafs_endround_legend import build_endround_context
+    from .portal_session_api import _period_start
+
+    return build_endround_context(
+        connection,
+        student_nid=student_nid,
+        game=game,
+        accuracy_pct=accuracy_pct,
+        attempts_asc=attempts_asc or [],
+        period_start=_period_start("week"),
+    )
 
 
 @router.post("/api/portal/games/words/finish")
@@ -772,6 +825,14 @@ def words_finish(body: WordFinishBody, x_portal_token: str = Header(default=""))
             tier_label=tier.get("label") or "",
         )
         pulse = _attach_progress_pulse(connection, session["student_nid"], "words")
+        acc = round(100.0 * score / max(1, total), 1)
+        ctx = _attach_endround_context(
+            connection,
+            session["student_nid"],
+            "words",
+            accuracy_pct=acc,
+            attempts_asc=pulse.get("attempts") or [],
+        )
         return {
             "ok": True,
             "score": score,
@@ -783,6 +844,7 @@ def words_finish(body: WordFinishBody, x_portal_token: str = Header(default=""))
             "tier": tier,
             "coaching": coach,
             "progress_pulse": pulse,
+            "endround": ctx,
             "etec": "3-1-1-1",
             "etec_ar": "٣-١-١-١",
         }
@@ -911,6 +973,14 @@ def mental_finish(body: MentalFinishBody, x_portal_token: str = Header(default="
             tier_label=tier.get("label") or "",
         )
         pulse = _attach_progress_pulse(connection, session["student_nid"], "mental")
+        acc = round(100.0 * score / max(1, total), 1)
+        ctx = _attach_endround_context(
+            connection,
+            session["student_nid"],
+            "mental",
+            accuracy_pct=acc,
+            attempts_asc=pulse.get("attempts") or [],
+        )
         return {
             "ok": True,
             "score": score,
@@ -923,6 +993,7 @@ def mental_finish(body: MentalFinishBody, x_portal_token: str = Header(default="
             "tier": tier,
             "coaching": coach,
             "progress_pulse": pulse,
+            "endround": ctx,
             "etec": "3-1-1-2",
             "etec_ar": "٣-١-١-٢",
         }
