@@ -1452,11 +1452,20 @@ def portal_counseling(body: CounselBody, x_portal_token: str = Header(default=""
 
 @router.get("/api/portal/parent/home")
 def portal_parent_home(x_portal_token: str = Header(default="")):
+    """منزل ولي الأمر — يُثرى بحزمة إغلاق الحلقة الأسرية (المرحلة ٣) عند التوفر."""
     session = _require_portal(x_portal_token, ("parent",))
     children = (session.get("payload") or {}).get("children") or []
+    phone = (session.get("payload") or {}).get("phone_norm") or session.get("actor_key") or ""
     connection = connect()
     try:
         _ensure(connection)
+        try:
+            from .nafs_family_loop import build_child_loop, ensure_family_loop
+
+            ensure_family_loop(connection)
+            use_loop = True
+        except Exception:
+            use_loop = False
         out = []
         for child in children:
             nid = child.get("national_id") or ""
@@ -1469,6 +1478,26 @@ def portal_parent_home(x_portal_token: str = Header(default="")):
                 """,
                 (nid,),
             ).fetchall()
+            run_rows = [
+                {
+                    "mode": r[0],
+                    "label": MODE_CONFIG.get(r[0], {}).get("label", r[0]),
+                    "score_pct": r[1],
+                    "xp_earned": r[2],
+                    "finished_at": r[3],
+                }
+                for r in runs
+            ]
+            if use_loop:
+                pack = build_child_loop(
+                    connection,
+                    phone,
+                    child,
+                    xp=_xp_total(connection, nid),
+                    runs=run_rows,
+                )
+                out.append(pack)
+                continue
             remedial = connection.execute(
                 """
                 SELECT subject, skill, status, follow_up_date
@@ -1480,22 +1509,17 @@ def portal_parent_home(x_portal_token: str = Header(default="")):
                 {
                     "student": child,
                     "xp": _xp_total(connection, nid),
-                    "runs": [
-                        {
-                            "mode": r[0],
-                            "label": MODE_CONFIG.get(r[0], {}).get("label", r[0]),
-                            "score_pct": r[1],
-                            "xp_earned": r[2],
-                            "finished_at": r[3],
-                        }
-                        for r in runs
-                    ],
+                    "runs": run_rows,
                     "remedial": [
                         {"subject": r[0], "skill": r[1], "status": r[2], "follow_up_date": r[3]}
                         for r in remedial
                     ],
                 }
             )
-        return {"children": out}
+        return {
+            "children": out,
+            "evidence_code": "1-3-1-2",
+            "evidence_code_ar": "١-٣-١-٢",
+        }
     finally:
         connection.close()

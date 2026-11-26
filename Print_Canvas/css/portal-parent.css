@@ -1,0 +1,185 @@
+/* بوابة ولي الأمر — بطاقة الشراكة الأسرية (المرحلة ٣) */
+.family-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.family-child-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.family-child-head h2 {
+  margin: 0 0 4px;
+  color: #0b5e56;
+  font-size: 22px;
+}
+
+.family-child-head p {
+  margin: 0;
+  color: #5c675f;
+  font-size: 13px;
+}
+
+.family-loop-chip {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #ecfdf5;
+  border: 1px solid #b7e4d8;
+  color: #0b5e56;
+  font-weight: 800;
+  font-size: 13px;
+  text-align: center;
+}
+
+.family-partnership,
+.family-pledge-box,
+.family-omr-box {
+  margin: 0 0 14px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #d7e8e3;
+  background: #fafcfb;
+}
+
+.family-partnership h3,
+.family-pledge-box h3,
+.family-omr-box h3 {
+  margin: 0 0 6px;
+  color: #0b5e56;
+  font-size: 16px;
+}
+
+.family-sub {
+  margin: 0 0 10px;
+  color: #5c675f;
+  font-size: 13px;
+}
+
+.family-steps {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.family-step {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #c9d7d3;
+  background: #fff;
+  cursor: pointer;
+}
+
+.family-step.is-done {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.family-step strong {
+  display: block;
+  color: #0b5e56;
+  font-size: 14px;
+}
+
+.family-step small {
+  display: block;
+  color: #5c675f;
+  margin-top: 2px;
+}
+
+.family-train {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.family-train-card {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #c9d7d3;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+}
+
+.family-train-card strong {
+  color: #0b5e56;
+  font-size: 14px;
+}
+
+.family-train-card span,
+.family-train-card small {
+  color: #5c675f;
+  font-size: 12px;
+}
+
+.family-qr {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 4px;
+}
+
+.family-qr svg {
+  width: 72px;
+  height: 72px;
+  display: block;
+}
+
+.family-pledge-box input,
+.family-omr-box input,
+.family-more input,
+.family-more textarea,
+.family-partnership textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 10px;
+  border: 1px solid #c9d7d3;
+  border-radius: 8px;
+  font: inherit;
+  margin-top: 6px;
+}
+
+.family-signed {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  color: #065f46;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.family-link-note {
+  margin: 8px 0 0;
+  color: #5c675f;
+  font-size: 13px;
+}
+
+.family-more {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px dashed #c9d7d3;
+  background: #fff;
+}
+
+.family-more summary {
+  cursor: pointer;
+  color: #0b5e56;
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .family-child-head {
+    flex-direction: column;
+  }
+}

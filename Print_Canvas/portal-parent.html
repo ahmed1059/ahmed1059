@@ -3,271 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>بوابة ولي الأمر الذكية</title>
+  <title>بوابة ولي الأمر — الشراكة الأسرية</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p5">
+  <link rel="stylesheet" href="css/portal-student.css?v=p14">
+  <link rel="stylesheet" href="css/portal-parent.css?v=f3">
 </head>
 <body class="portal-student">
   <div class="portal-shell">
     <header class="portal-top">
       <div class="portal-brand">
         <h1>بوابة ولي الأمر الذكية</h1>
-        <p>أبناؤك في متوسطة سعد بن الربيع الأنصاري — الهوية مقنّعة</p>
+        <p>الشراكة الأسرية وخطوات الـ ٢٠ دقيقة اليومية — شاهد <span class="etec-code" dir="ltr">١-٣-١-٢</span></p>
       </div>
       <div class="portal-actions">
         <button type="button" class="portal-btn secondary" id="parent-logout">خروج</button>
       </div>
     </header>
     <p class="portal-status" id="parent-status"></p>
-    <div id="parent-children" class="portal-grid"></div>
+    <div id="parent-children" class="portal-grid family-grid"></div>
   </div>
   <script src="js/print-engine.js?v=pe1"></script>
   <script src="js/national-id-mask.js?v=m1"></script>
-  <script>
-  (function () {
-    var TOKEN_KEY = "portalSession";
-    var EASTERN = "٠١٢٣٤٥٦٧٨٩";
-    function toEastern(t) {
-      return String(t == null ? "" : t).replace(/[0-9]/g, function (d) { return EASTERN.charAt(Number(d)); });
-    }
-    function escapeHtml(t) {
-      return String(t == null ? "" : t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-    }
-    function maskId(id) {
-      return window.NationalIdMask ? window.NationalIdMask.mask(id, 3) : toEastern(String(id || "").slice(-3));
-    }
-    var raw = null;
-    try { raw = JSON.parse(sessionStorage.getItem(TOKEN_KEY) || "null"); } catch (e) {}
-    if (!raw || !raw.token || raw.actor_type !== "parent") {
-      location.href = "login.html";
-      return;
-    }
-    var headers = {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "X-Portal-Token": raw.token
-    };
-    function status(msg, err) {
-      var el = document.getElementById("parent-status");
-      el.textContent = msg || "";
-      el.classList.toggle("is-error", !!err);
-    }
-    function post(path, body) {
-      return fetch(path, { method: "POST", headers: headers, body: JSON.stringify(body || {}) })
-        .then(function (r) {
-          return r.json().then(function (b) {
-            if (!r.ok) throw new Error(b.detail || "تعذر التنفيذ");
-            return b;
-          });
-        });
-    }
-    fetch("/api/portal/parent/home", { headers: headers, cache: "no-store" })
-      .then(function (r) { return r.json().then(function (b) { if (!r.ok) throw new Error(b.detail || "تعذر التحميل"); return b; }); })
-      .then(function (pack) {
-        var host = document.getElementById("parent-children");
-        var kids = pack.children || [];
-        if (!kids.length) {
-          host.innerHTML = "<p class=\"portal-empty\">لا أبناء مرتبطون بهذا الجوال.</p>";
-          return;
-        }
-        host.innerHTML = kids.map(function (row, idx) {
-          var s = row.student || {};
-          var nid = s.national_id || "";
-          var runs = row.runs || [];
-          var rem = row.remedial || [];
-          return "<section class=\"portal-card\" data-child=\"" + escapeHtml(nid) + "\">" +
-            "<h2>" + escapeHtml(s.name || "") + "</h2>" +
-            "<p>" + escapeHtml(s.grade || "") + " / فصل " + toEastern(s.section || "") +
-            " · هوية: " + maskId(nid) + " · XP " + toEastern(row.xp || 0) + "</p>" +
-            "<h2>تطور درجات نافس (القبلي ← المحاكاة)</h2>" +
-            (runs.length ? "<ul class=\"portal-list\">" + runs.map(function (r) {
-              return "<li>" + escapeHtml(r.label || r.mode) + ": " + toEastern(r.score_pct) + "٪ · +" + toEastern(r.xp_earned) + " XP</li>";
-            }).join("") + "</ul>" : "<p class=\"portal-empty\">لا جولات بعد.</p>") +
-            "<h2>المهام والعيادات العلاجية</h2>" +
-            (rem.length ? "<ul class=\"portal-list\">" + rem.map(function (r) {
-              return "<li>" + escapeHtml(r.subject || "") + " — " + escapeHtml(r.skill || "") + " · " + escapeHtml(r.status || "") + "</li>";
-            }).join("") + "</ul>" : "<p class=\"portal-empty\">لا مهام علاجية حالياً.</p>") +
-            "<h2>ميثاق الـ ٢٠ دقيقة اليومية (شاهد ١-٣-١-٢)</h2>" +
-            "<p class=\"portal-empty\" style=\"margin-bottom:8px;\">نشارك ابننا في مراجعة قصيرة يومياً، وقراءة حرة، ومتابعة تحدي نافس الأسبوعي، مع الالتزام بالحضور.</p>" +
-            "<div class=\"family-weekly\" data-weekly-nid=\"" + escapeHtml(nid) + "\">جارٍ تحميل قائمة التحقق…</div>" +
-            "<div class=\"portal-actions\" style=\"margin-top:8px;\"><button type=\"button\" class=\"portal-btn\" data-weekly-save=\"" + escapeHtml(nid) + "\">حفظ التحقق الأسبوعي</button></div>" +
-            "<h2>اختبار منزلي ورقي بإشراف ولي الأمر (OMR)</h2>" +
-            "<p class=\"portal-empty\">ولّد ورقة باسم الطالب + OMR + مفتاح تصحيح، ثم أقرّ بالمراقبة لتوثيق شاهد ١-٣-١-٢.</p>" +
-            "<input class=\"home-ack-name\" style=\"width:100%;padding:8px;border:1px solid #c9d7d3;border-radius:8px;margin:6px 0;\" placeholder=\"اسم ولي الأمر للإقرار\">" +
-            "<div class=\"portal-actions\" style=\"margin-top:8px;\">" +
-            "<button type=\"button\" class=\"portal-btn\" data-home-mock=\"" + escapeHtml(nid) + "\">توليد وطباعة الاختبار المنزلي</button>" +
-            "<button type=\"button\" class=\"portal-btn secondary\" data-home-ack=\"" + escapeHtml(nid) + "\">تأكيد المراقبة والتوثيق</button></div>" +
-            "<input type=\"hidden\" class=\"home-pack-id\" value=\"\">" +
-            "<h2>ميثاق الشراكة الأسرية — التوقيع</h2>" +
-            "<label>اسم الموقّع</label><input class=\"pact-name\" style=\"width:100%;padding:8px;border:1px solid #c9d7d3;border-radius:8px;\" placeholder=\"اسم ولي الأمر\">" +
-            "<div class=\"portal-actions\" style=\"margin-top:8px;\"><button type=\"button\" class=\"portal-btn\" data-pact=\"" + escapeHtml(nid) + "\">تأكيد الاطلاع والتوقيع الإلكتروني</button></div>" +
-            "<h2>رفع عذر غياب إلكتروني</h2>" +
-            "<input class=\"excuse-date\" type=\"text\" placeholder=\"تاريخ العذر (هجري/ميلادي)\" style=\"width:100%;padding:8px;margin:4px 0;border:1px solid #c9d7d3;border-radius:8px;\">" +
-            "<textarea class=\"excuse-reason\" rows=\"2\" placeholder=\"سبب العذر\" style=\"width:100%;padding:8px;border:1px solid #c9d7d3;border-radius:8px;\"></textarea>" +
-            "<div class=\"portal-actions\" style=\"margin-top:8px;\"><button type=\"button\" class=\"portal-btn secondary\" data-absence=\"" + escapeHtml(nid) + "\">رفع العذر</button></div>" +
-            "<h2>طلب تحديث الجوال</h2>" +
-            "<input class=\"phone-new\" type=\"text\" placeholder=\"الجوال الجديد\" style=\"width:100%;padding:8px;border:1px solid #c9d7d3;border-radius:8px;\">" +
-            "<div class=\"portal-actions\" style=\"margin-top:8px;\"><button type=\"button\" class=\"portal-btn secondary\" data-phone=\"" + escapeHtml(nid) + "\">إرسال الطلب للقيادة</button></div>" +
-            "</section>";
-        }).join("");
-
-        kids.forEach(function (row) {
-          var nid = (row.student && row.student.national_id) || "";
-          if (!nid) return;
-          fetch("/api/portal/parent/family-weekly?student_nid=" + encodeURIComponent(nid), {
-            headers: headers,
-            cache: "no-store"
-          })
-            .then(function (r) {
-              return r.json().then(function (b) {
-                if (!r.ok) throw new Error(b.detail || "تعذر التحميل");
-                return b;
-              });
-            })
-            .then(function (pack) {
-              var box = host.querySelector('[data-weekly-nid="' + nid + '"]');
-              if (!box) return;
-              var checks = pack.checks || {};
-              box.innerHTML =
-                "<small>أسبوع " +
-                escapeHtml(pack.week_key || "") +
-                "</small>" +
-                (pack.checklist || [])
-                  .map(function (item) {
-                    return (
-                      "<label style=\"display:flex;gap:8px;align-items:flex-start;margin:6px 0;\">" +
-                      "<input type=\"checkbox\" data-check=\"" +
-                      escapeHtml(item.id) +
-                      "\"" +
-                      (checks[item.id] ? " checked" : "") +
-                      "> <span>" +
-                      escapeHtml(item.label || "") +
-                      "</span></label>"
-                    );
-                  })
-                  .join("") +
-                "<textarea class=\"weekly-note\" rows=\"2\" placeholder=\"ملاحظة أسبوعية اختيارية\" style=\"width:100%;margin-top:6px;padding:8px;border:1px solid #c9d7d3;border-radius:8px;\">" +
-                escapeHtml(pack.note || "") +
-                "</textarea>";
-            })
-            .catch(function () {});
-        });
-
-        host.addEventListener("click", function (event) {
-          var pact = event.target.closest("[data-pact]");
-          var absence = event.target.closest("[data-absence]");
-          var phone = event.target.closest("[data-phone]");
-          var weekly = event.target.closest("[data-weekly-save]");
-          var homeMock = event.target.closest("[data-home-mock]");
-          var homeAck = event.target.closest("[data-home-ack]");
-          var card = event.target.closest(".portal-card");
-          if (!card) return;
-          if (homeMock) {
-            fetch("/api/portal/parent/home-mock?student_nid=" + encodeURIComponent(homeMock.getAttribute("data-home-mock")), {
-              headers: headers,
-              cache: "no-store"
-            })
-              .then(function (r) {
-                return r.json().then(function (b) {
-                  if (!r.ok) throw new Error(b.detail || "تعذر التوليد");
-                  return b;
-                });
-              })
-              .then(function (pack) {
-                var p = pack.pack || {};
-                var idInput = card.querySelector(".home-pack-id");
-                if (idInput) idInput.value = String(p.pack_id || "");
-                var body = "<h2>اختبار منزلي — " + escapeHtml(p.student_name || "") + "</h2>" +
-                  "<p>" + escapeHtml(p.parent_pledge || "") + "</p>" +
-                  (p.items || []).map(function (q) {
-                    return "<p><strong>" + toEastern(q.n) + ".</strong> " + escapeHtml(q.stem || "") + "</p>";
-                  }).join("") +
-                  "<h3>مفتاح التصحيح</h3><ol>" +
-                  (p.answer_key || []).map(function (r) {
-                    return "<li>" + toEastern(r.n) + " → " + escapeHtml(r.answer || "") + "</li>";
-                  }).join("") + "</ol>" +
-                  "<h3>OMR</h3><div>" +
-                  (p.items || []).map(function (q) {
-                    return "<div>" + toEastern(q.n) + ": أ ○ ب ○ ج ○ د ○</div>";
-                  }).join("") + "</div>";
-                if (window.PrintEngine && window.PrintEngine.open) {
-                  window.PrintEngine.open("master-sheet", {
-                    docTitle: "اختبار منزلي",
-                    title: "اختبار منزلي بإشراف ولي الأمر",
-                    kind: "document",
-                    orientation: "portrait",
-                    multiPage: true,
-                    school: p.school || "متوسطة سعد بن الربيع الأنصاري",
-                    bodyHtml: body,
-                    signoff: true,
-                    pageTotal: 2
-                  });
-                } else {
-                  var w = window.open("", "_blank");
-                  if (w) {
-                    w.document.write("<html lang=ar dir=rtl><body>" + body + "</body></html>");
-                    w.document.close();
-                    w.print();
-                  }
-                }
-                status("تم توليد الاختبار المنزلي ومفتاح التصحيح.");
-              })
-              .catch(function (e) { status(e.message, true); });
-          }
-          if (homeAck) {
-            post("/api/portal/parent/home-mock/ack", {
-              student_nid: homeAck.getAttribute("data-home-ack"),
-              pack_id: Number((card.querySelector(".home-pack-id") || {}).value || 0),
-              parent_name: (card.querySelector(".home-ack-name") || {}).value || ""
-            })
-              .then(function (b) { status(b.message || "وُثّق الإقرار."); })
-              .catch(function (e) { status(e.message, true); });
-          }
-          if (weekly) {
-            var checks = {};
-            Array.prototype.forEach.call(card.querySelectorAll("[data-check]"), function (input) {
-              checks[input.getAttribute("data-check")] = !!input.checked;
-            });
-            post("/api/portal/parent/family-weekly", {
-              student_nid: weekly.getAttribute("data-weekly-save"),
-              checks: checks,
-              note: (card.querySelector(".weekly-note") || {}).value || ""
-            })
-              .then(function (b) { status(b.message || "حُفظ التحقق الأسبوعي."); })
-              .catch(function (e) { status(e.message, true); });
-          }
-          if (pact) {
-            var signed = (card.querySelector(".pact-name") || {}).value || "";
-            post("/api/portal/parent/pact", { student_nid: pact.getAttribute("data-pact"), signed_name: signed })
-              .then(function (b) { status(b.message || "تم التوقيع."); })
-              .catch(function (e) { status(e.message, true); });
-          }
-          if (absence) {
-            post("/api/portal/parent/absence", {
-              student_nid: absence.getAttribute("data-absence"),
-              excuse_date: (card.querySelector(".excuse-date") || {}).value || "",
-              reason: (card.querySelector(".excuse-reason") || {}).value || ""
-            }).then(function (b) { status(b.message || "تم رفع العذر."); })
-              .catch(function (e) { status(e.message, true); });
-          }
-          if (phone) {
-            post("/api/portal/parent/phone-request", {
-              student_nid: phone.getAttribute("data-phone"),
-              new_phone: (card.querySelector(".phone-new") || {}).value || "",
-              note: "طلب تحديث من بوابة ولي الأمر"
-            }).then(function (b) { status(b.message || "تم إرسال الطلب."); })
-              .catch(function (e) { status(e.message, true); });
-          }
-        });
-      })
-      .catch(function (err) {
-        status(err.message || "خطأ", true);
-      });
-    document.getElementById("parent-logout").onclick = function () {
-      fetch("/api/portal/logout", { method: "POST", headers: headers, body: "{}" })
-        .finally(function () { sessionStorage.removeItem(TOKEN_KEY); location.href = "login.html"; });
-    };
-  })();
-  </script>
+  <script src="js/portal-parent.js?v=f3"></script>
 </body>
 </html>
