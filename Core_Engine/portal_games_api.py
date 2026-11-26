@@ -680,6 +680,39 @@ def challenge_tiers_catalog(x_portal_token: str = Header(default="")):
     return {"ok": True, **taxonomy_snapshot()}
 
 
+@router.get("/api/portal/games/progress-pulse")
+def progress_pulse(
+    game: str = "words",
+    limit: int = 7,
+    x_portal_token: str = Header(default=""),
+):
+    """ملخص محاولات الطالب للعبة الحالية من portal_game_runs فقط."""
+    session = _require_student(x_portal_token)
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs_for_game
+
+    connection = connect()
+    try:
+        ensure_on_boot(connection)
+        rows = fetch_runs_for_game(connection, session["student_nid"], game)
+        pulse = build_progress_pulse(rows, limit=limit)
+        return {
+            "ok": True,
+            "game": (game or "words").strip().lower(),
+            "etec": "3-1-1-1" if not str(game).startswith("mental") else "3-1-1-2",
+            "etec_ar": "٣-١-١-١" if not str(game).startswith("mental") else "٣-١-١-٢",
+            **pulse,
+        }
+    finally:
+        connection.close()
+
+
+def _attach_progress_pulse(connection, student_nid: str, game: str, limit: int = 7) -> dict:
+    from .nafs_endround_progress import build_progress_pulse, fetch_runs_for_game
+
+    rows = fetch_runs_for_game(connection, student_nid, game)
+    return build_progress_pulse(rows, limit=limit)
+
+
 @router.post("/api/portal/games/words/finish")
 def words_finish(body: WordFinishBody, x_portal_token: str = Header(default="")):
     session = _require_student(x_portal_token)
@@ -738,6 +771,7 @@ def words_finish(body: WordFinishBody, x_portal_token: str = Header(default=""))
             seconds_budget=60.0,
             tier_label=tier.get("label") or "",
         )
+        pulse = _attach_progress_pulse(connection, session["student_nid"], "words")
         return {
             "ok": True,
             "score": score,
@@ -748,6 +782,7 @@ def words_finish(body: WordFinishBody, x_portal_token: str = Header(default=""))
             "seconds_budget": 60,
             "tier": tier,
             "coaching": coach,
+            "progress_pulse": pulse,
             "etec": "3-1-1-1",
             "etec_ar": "٣-١-١-١",
         }
@@ -875,6 +910,7 @@ def mental_finish(body: MentalFinishBody, x_portal_token: str = Header(default="
             seconds_budget=budget,
             tier_label=tier.get("label") or "",
         )
+        pulse = _attach_progress_pulse(connection, session["student_nid"], "mental")
         return {
             "ok": True,
             "score": score,
@@ -886,6 +922,7 @@ def mental_finish(body: MentalFinishBody, x_portal_token: str = Header(default="
             "level": level,
             "tier": tier,
             "coaching": coach,
+            "progress_pulse": pulse,
             "etec": "3-1-1-2",
             "etec_ar": "٣-١-١-٢",
         }
