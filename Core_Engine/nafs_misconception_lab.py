@@ -210,41 +210,10 @@ def enrich_question_traps(connection) -> int:
 
 
 def build_trap_album() -> list[dict]:
-    """ألبوم ٦٦ فخاً (٢٢ لكل مجال) للتصفح في بوابة الطالب."""
-    album = []
-    domains = [
-        ("math", "أفخاخ الرياضيات", "الجبر"),
-        ("science", "أفخاخ العلوم", "العلوم الفيزيائية"),
-        ("reading", "أفخاخ لغتي والقراءة", "الفهم الحرفي"),
-    ]
-    skill_pools = {
-        "math": ["الجبر", "الأعداد", "الهندسة", "الإحصاء", "النسب"],
-        "science": ["العلوم الفيزيائية", "العلوم الكيميائية", "علوم الحياة", "الأرض والفضاء", "القياس"],
-        "reading": ["دلالات الألفاظ", "الفهم الحرفي", "الفهم الاستنتاجي", "الفهم الناقد", "التذوق"],
-    }
-    idx = 1
-    for domain, title, _ in domains:
-        skills = skill_pools[domain]
-        for i in range(22):
-            skill = skills[i % len(skills)]
-            rule, mistake = SKILL_TRAPS.get(skill, ("راجع القاعدة.", "خطأ شائع."))
-            album.append(
-                {
-                    "id": f"trap-{domain}-{i+1}",
-                    "domain": domain,
-                    "door": title,
-                    "skill": skill,
-                    "etec": ETEC_INDICATORS[domain],
-                    "grade_root": SKILL_ROOTS.get(skill, "٣م"),
-                    "common_mistake": mistake,
-                    "golden_rule": rule,
-                    "prompt": f"فخ {_e(idx)}: {skill}",
-                    "sort": idx,
-                }
-            )
-            idx += 1
-    assert len(album) == 66
-    return album
+    """ألبوم ٦٦ فخاً فريداً (٢٢ لكل مجال) مع مثال الخطأ والصواب."""
+    from .nafs_trap_bank_66 import build_unique_trap_album
+
+    return build_unique_trap_album()
 
 
 def ensure_on_boot(connection) -> dict:

@@ -181,11 +181,12 @@
           var win = pack.winner === live.you;
           api.status(
             win
-              ? "فزت بالمبارزة · +٥٠ XP ولقب بطل الجولة!"
+              ? "فزت بالمبارزة · +" + api.toEastern(50) + " XP ولقب بطل الجولة!"
               : pack.winner
                 ? "انتهت المبارزة — حاول مرة أخرى."
                 : "تعادل شريف!"
           );
+          if (win && window.PortalStudentFx) window.PortalStudentFx.confetti();
           if (api.refresh) api.refresh();
         }
       })

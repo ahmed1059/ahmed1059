@@ -162,6 +162,7 @@
       maskedId;
     document.getElementById("portal-xp").textContent = toEastern(home.xp || 0) + " XP";
     paintRank(Number(home.xp || 0));
+    paintPlayerCard();
 
     var modes = home.modes || {};
     var modeHost = document.getElementById("mode-grid");
@@ -543,6 +544,14 @@
       return;
     }
     host.hidden = false;
+    var examples =
+      trap.wrong_example || trap.correct_example
+        ? "<div class=\"trap-examples\"><div class=\"trap-ex wrong\"><b>❌ الخطأ الشائع</b>" +
+          renderArabicMath(trap.wrong_example || "") +
+          "</div><div class=\"trap-ex correct\"><b>✅ الحل الصحيح</b>" +
+          renderArabicMath(trap.correct_example || "") +
+          "</div></div>"
+        : "";
     host.innerHTML =
       "<h3>" +
       escapeHtml(trap.title || "احذر الفخ!") +
@@ -550,8 +559,10 @@
       escapeHtml(trap.common_mistake || "") +
       "</p><div class=\"rule\">القاعدة الذهبية: " +
       escapeHtml(trap.golden_rule || "") +
-      (trap.grade_root ? " · الجذر: " + escapeHtml(trap.grade_root) : "") +
-      "</div><div class=\"portal-actions\" style=\"margin-top:10px;\"><button type=\"button\" class=\"portal-btn\" id=\"rescue-btn\">سؤال إنقاذ فوري (نظير رقمي)</button></div>";
+      (trap.grade_root ? " · الجذر: " + toEastern(escapeHtml(trap.grade_root)) : "") +
+      "</div>" +
+      examples +
+      "<div class=\"portal-actions\" style=\"margin-top:10px;\"><button type=\"button\" class=\"portal-btn\" id=\"rescue-btn\">سؤال إنقاذ فوري (نظير رقمي)</button></div>";
     var btn = document.getElementById("rescue-btn");
     if (btn) {
       btn.onclick = function () {
@@ -840,17 +851,23 @@
     var host = document.getElementById("trap-album");
     host.innerHTML = rows
       .map(function (row) {
+        var etec = (row.etec && (row.etec.code_ar || row.etec.code)) || "";
         return (
           "<article class=\"trap-tile\"><strong>" +
-          escapeHtml(row.prompt || row.skill || "") +
+          toEastern(escapeHtml(row.prompt || row.skill || "")) +
           "</strong><div class=\"mistake\">الفخ: " +
           escapeHtml(row.common_mistake || "") +
           "</div><div class=\"rule\">القاعدة: " +
           escapeHtml(row.golden_rule || "") +
-          "</div><small>الجذر " +
-          escapeHtml(row.grade_root || "") +
+          "</div><div class=\"trap-examples\">" +
+          "<div class=\"trap-ex wrong\"><b>❌ الخطأ الشائع</b>" +
+          renderArabicMath(row.wrong_example || "") +
+          "</div><div class=\"trap-ex correct\"><b>✅ الحل الصحيح</b>" +
+          renderArabicMath(row.correct_example || "") +
+          "</div></div><small>الجذر " +
+          toEastern(escapeHtml(row.grade_root || "")) +
           " · " +
-          escapeHtml(((row.etec || {}).code) || "") +
+          toEastern(escapeHtml(etec)) +
           "</small></article>"
         );
       })
@@ -874,21 +891,46 @@
     host.innerHTML = cards
       .map(function (card) {
         return (
-          "<button type=\"button\" class=\"flip-card domain-" +
+          "<div class=\"flip-card domain-" +
           escapeHtml(card.domain || "math") +
           (card.mastered ? " is-mastered" : "") +
           "\" data-card=\"" +
           escapeHtml(card.id) +
-          "\"><span class=\"flip-inner\"><span class=\"flip-face front\">" +
+          "\" role=\"button\" tabindex=\"0\"><span class=\"flip-inner\"><span class=\"flip-face front\">" +
           escapeHtml(card.front || card.title || "") +
-          "</span><span class=\"flip-face back\">" +
-          escapeHtml(card.back || "") +
-          "<br><br><em>تم الإتقان (+" +
-          toEastern(card.xp || 5) +
-          " XP)</em></span></span></button>"
+          "</span><span class=\"flip-face back\"><span class=\"flip-body\">" +
+          renderArabicMath(card.back || "") +
+          "</span><button type=\"button\" class=\"flip-master-btn\" data-master=\"" +
+          escapeHtml(card.id) +
+          "\">" +
+          (card.mastered
+            ? "مُتقَنة ✓"
+            : "أتقنت القاعدة (+" + toEastern(card.xp || 5) + " XP)") +
+          "</button></span></span></div>"
         );
       })
       .join("");
+  }
+
+  function paintPlayerCard() {
+    var player = (state.home && state.home.player) || {};
+    var nick = document.getElementById("player-nickname");
+    if (nick && document.activeElement !== nick) {
+      nick.value = player.nickname || "";
+    }
+    var avatarId = player.avatar_id || "a1";
+    var theme = player.theme || "royal";
+    if (window.PortalStudentFx) {
+      window.PortalStudentFx.setAvatar(avatarId);
+      window.PortalStudentFx.setTheme(theme);
+      window.PortalStudentFx.renderAvatarGrid(avatarId, player.avatars);
+    }
+    var shown = player.nickname || ((state.home.student || {}).name || "").split(" ")[0] || "لاعب";
+    var nameEl = document.getElementById("portal-name");
+    if (nameEl && player.nickname) {
+      nameEl.textContent = player.nickname + " · " + ((state.home.student || {}).name || "");
+    }
+    return shown;
   }
 
   function bind() {
@@ -907,24 +949,68 @@
       });
     });
     document.getElementById("golden-deck").addEventListener("click", function (event) {
-      var card = event.target.closest("[data-card]");
-      if (!card) return;
-      card.classList.toggle("is-flipped");
-      if (card.classList.contains("is-flipped") && !card.classList.contains("is-mastered")) {
+      var masterBtn = event.target.closest("[data-master]");
+      if (masterBtn) {
+        event.stopPropagation();
+        var cardEl = masterBtn.closest("[data-card]");
+        if (!cardEl || cardEl.classList.contains("is-mastered")) return;
         fetchJson("/api/portal/golden-deck/master", {
           method: "POST",
           headers: authHeaders(),
-          body: JSON.stringify({ card_id: card.getAttribute("data-card") })
+          body: JSON.stringify({ card_id: masterBtn.getAttribute("data-master") })
         })
           .then(function (pack) {
+            cardEl.classList.add("is-mastered");
+            masterBtn.textContent = "مُتقَنة ✓";
             if (pack.xp_earned) {
-              card.classList.add("is-mastered");
-              status("أتقنت البطاقة · +" + toEastern(pack.xp_earned) + " XP");
+              status("أتقنت القاعدة · +" + toEastern(pack.xp_earned) + " XP");
+              if (window.PortalStudentFx) window.PortalStudentFx.confetti();
               return refresh();
             }
           })
-          .catch(function () {});
+          .catch(function (err) {
+            status(err.message || "تعذر تسجيل الإتقان.", true);
+          });
+        return;
       }
+      var card = event.target.closest("[data-card]");
+      if (!card) return;
+      card.classList.toggle("is-flipped");
+    });
+    var savePlayer = document.getElementById("player-save");
+    if (savePlayer) {
+      savePlayer.addEventListener("click", function () {
+        var avatarId =
+          (document.querySelector(".avatar-pick.is-active") &&
+            document.querySelector(".avatar-pick.is-active").getAttribute("data-avatar")) ||
+          "a1";
+        var themeBtn = document.querySelector(".theme-switch button.is-active");
+        fetchJson("/api/portal/player/profile", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            nickname: (document.getElementById("player-nickname") || {}).value || "",
+            avatar_id: avatarId,
+            theme: themeBtn ? themeBtn.getAttribute("data-theme") : "royal"
+          })
+        })
+          .then(function (pack) {
+            if (state.home) state.home.player = pack;
+            paintPlayerCard();
+            status("حُفظت هوية اللاعب.");
+          })
+          .catch(function (err) {
+            status(err.message || "تعذر حفظ الهوية.", true);
+          });
+      });
+    }
+    Array.prototype.forEach.call(document.querySelectorAll(".theme-switch [data-theme]"), function (btn) {
+      btn.addEventListener("click", function () {
+        Array.prototype.forEach.call(document.querySelectorAll(".theme-switch [data-theme]"), function (el) {
+          el.classList.toggle("is-active", el === btn);
+        });
+        if (window.PortalStudentFx) window.PortalStudentFx.setTheme(btn.getAttribute("data-theme"));
+      });
     });
     document.getElementById("national-map").addEventListener("click", function (event) {
       var btn = event.target.closest("[data-jump]");

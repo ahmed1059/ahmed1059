@@ -431,7 +431,7 @@ body.portal-student {
 
 .trap-album {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 12px;
   margin-top: 12px;
 }
@@ -446,28 +446,47 @@ body.portal-student {
 .trap-tile strong { color: #0b5e56; display: block; margin-bottom: 6px; }
 .trap-tile .mistake { color: #8a3b32; font-size: 13px; margin: 6px 0; }
 .trap-tile .rule { color: #24312c; font-size: 13px; }
+.trap-examples {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.trap-ex {
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  min-height: 72px;
+}
+.trap-ex.wrong { background: #fef2f2; border: 1px solid #fecaca; color: #7f1d1d; }
+.trap-ex.correct { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+.trap-ex b { display: block; margin-bottom: 4px; }
 
 .golden-deck {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
   margin-top: 14px;
-  perspective: 1000px;
+  perspective: 1200px;
 }
 
 .flip-card {
-  height: 180px;
+  min-height: 210px;
+  height: 210px;
   cursor: pointer;
   border: 0;
   background: transparent;
   padding: 0;
+  position: relative;
 }
 
 .flip-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.55s;
+  min-height: 210px;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
   transform-style: preserve-3d;
 }
 
@@ -476,9 +495,10 @@ body.portal-student {
 .flip-face {
   position: absolute;
   inset: 0;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 16px;
-  padding: 14px;
+  padding: 16px 14px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -486,6 +506,8 @@ body.portal-student {
   text-align: center;
   color: #fff;
   font-weight: 800;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
 }
 
 .flip-face.back {
@@ -493,13 +515,39 @@ body.portal-student {
   font-weight: 600;
   font-size: 13px;
   line-height: 1.55;
+  justify-content: space-between;
+  gap: 8px;
+}
+.flip-face.back .flip-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: auto;
+  max-height: 130px;
+  padding: 0 4px;
+}
+.flip-master-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+  background: #fbbf24;
+  color: #78350f;
+}
+.flip-card.is-mastered .flip-master-btn {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  cursor: default;
 }
 
 .flip-card.domain-math .flip-face { background: linear-gradient(145deg, #0b5e56, #147a70); }
 .flip-card.domain-science .flip-face { background: linear-gradient(145deg, #0e7490, #155e75); }
 .flip-card.domain-reading .flip-face { background: linear-gradient(145deg, #7f1d1d, #991b1b); }
 
-.flip-card.is-mastered { outline: 2px solid #c9a227; }
+.flip-card.is-mastered { outline: 3px solid #c9a227; outline-offset: 2px; }
 
 .national-map {
   display: flex;
@@ -725,4 +773,123 @@ body.portal-gamer {
 @media (max-width: 860px) {
   .gamer-tabs { grid-template-columns: 1fr 1fr; }
   .play-grid { grid-template-columns: 1fr; }
+}
+
+/* هوية اللاعب + ثيمات + جسيمات */
+.player-id-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  margin: 0 0 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.88);
+  border: 1px solid #c9d7d3;
+}
+.player-avatar-preview {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 2px solid #0b5e56;
+  background: #ecfdf5;
+  flex: 0 0 auto;
+}
+.player-avatar-preview svg { width: 100%; height: 100%; display: block; }
+.player-id-fields { flex: 1; min-width: 220px; }
+.player-id-fields label { display: block; font-size: 13px; color: #5c675f; margin-bottom: 4px; }
+.player-id-fields input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #c9d7d3;
+  font: inherit;
+}
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.avatar-pick {
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 4px;
+  background: #fff;
+  cursor: pointer;
+  aspect-ratio: 1;
+}
+.avatar-pick.is-active { border-color: #0b5e56; box-shadow: 0 0 0 2px rgba(11,94,86,0.2); }
+.avatar-pick svg { width: 100%; height: 100%; display: block; }
+.theme-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.theme-switch button {
+  border-radius: 999px;
+  border: 1px solid #c9d7d3;
+  background: #fff;
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  color: #0b5e56;
+}
+.theme-switch button.is-active { background: #0b5e56; color: #fff; border-color: #0b5e56; }
+
+#portal-particles {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
+.portal-shell { position: relative; z-index: 1; }
+#portal-confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+body.theme-neon.portal-gamer {
+  background: radial-gradient(900px 500px at 10% 0%, rgba(34,211,238,0.22), transparent 55%),
+    radial-gradient(700px 400px at 90% 20%, rgba(168,85,247,0.2), transparent 50%),
+    linear-gradient(180deg, #0b1220 0%, #111827 55%, #0f172a 100%);
+  color: #e5e7eb;
+}
+body.theme-neon .portal-card,
+body.theme-neon .player-id-card { background: rgba(15,23,42,0.88); border-color: #334155; color: #e5e7eb; }
+body.theme-neon .portal-card h2,
+body.theme-neon .portal-brand h1 { color: #67e8f9; }
+body.theme-neon .gamer-tabs .tab { background: #1e293b; color: #67e8f9; border-color: #334155; }
+body.theme-neon .gamer-tabs .tab.is-active { background: linear-gradient(145deg,#0891b2,#7c3aed); color:#fff; }
+body.theme-neon .portal-top-gamer { background: linear-gradient(120deg,#0e7490,#7c3aed); }
+
+body.theme-royal.portal-gamer {
+  background:
+    radial-gradient(900px 420px at 0% 0%, rgba(14,165,233,0.14), transparent 55%),
+    radial-gradient(800px 400px at 100% 10%, rgba(245,158,11,0.12), transparent 50%),
+    linear-gradient(180deg, #e6f4f1 0%, #eef2ff 45%, #f3f7f6 100%);
+}
+
+body.theme-day.portal-gamer {
+  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 40%, #f1f5f9 100%);
+}
+body.theme-day .portal-top-gamer {
+  background: linear-gradient(120deg, #0f766e, #147a70);
+}
+
+.frac { display: inline-block; vertical-align: middle; text-align: center; line-height: 1.05; margin: 0 2px; }
+.frac .num, .frac .den { display: block; padding: 0 4px; }
+.frac .num { border-bottom: 1.5px solid currentColor; }
+
+@media (max-width: 860px) {
+  .avatar-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .trap-examples { grid-template-columns: 1fr; }
 }

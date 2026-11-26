@@ -20,6 +20,18 @@ class Unit2SmokeTests(unittest.TestCase):
         self.assertEqual(len(FAMILY_CHECKLIST), 4)
         self.assertEqual(WEEKLY_PLAN_8[0]["week"], 1)
 
+    def test_unique_trap_album_66(self):
+        from .nafs_misconception_lab import build_trap_album
+
+        album = build_trap_album()
+        self.assertEqual(len(album), 66)
+        self.assertEqual(len({t["common_mistake"] for t in album}), 66)
+        self.assertEqual(len({t["wrong_example"] for t in album}), 66)
+        self.assertEqual(len({t["correct_example"] for t in album}), 66)
+        for domain in ("math", "science", "reading"):
+            self.assertEqual(len([t for t in album if t["domain"] == domain]), 22)
+            self.assertTrue(all(t.get("wrong_example") and t.get("correct_example") for t in album if t["domain"] == domain))
+
     def test_schema_boot(self):
         import sqlite3
 
@@ -36,6 +48,7 @@ class Unit2SmokeTests(unittest.TestCase):
         self.assertIn("portal_live_duels", tables)
         self.assertIn("portal_game_runs", tables)
         self.assertIn("portal_family_weekly", tables)
+        self.assertIn("portal_player_profile", tables)
         connection.close()
 
 
