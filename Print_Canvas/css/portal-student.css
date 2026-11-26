@@ -1143,6 +1143,107 @@ body.portal-gamer {
   gap: 10px;
   justify-content: center;
 }
+.foundation-tier-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.end-round-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px 14px 12px;
+  border-radius: 16px;
+  background:
+    linear-gradient(165deg, rgba(236, 253, 245, 0.92), rgba(255, 255, 255, 0.96)),
+    #fff;
+  border: 1px solid #a7f3d0;
+  box-shadow: 0 10px 28px rgba(11, 94, 86, 0.08);
+}
+.end-round-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+.end-round-head h3 {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0b5e56;
+}
+.end-round-tier {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0b5e56;
+  background: #ecfdf5;
+  border: 1px solid #6ee7b7;
+}
+.end-round-tier[data-tier="pro"] {
+  color: #075985;
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+}
+.end-round-tier[data-tier="elite"] {
+  color: #7c2d12;
+  background: #fff7ed;
+  border-color: #fdba74;
+}
+.end-round-etec {
+  margin-inline-start: auto;
+}
+.end-round-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+  gap: 8px;
+}
+.end-round-metric {
+  display: grid;
+  gap: 2px;
+  padding: 10px 8px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+.end-round-metric .lbl {
+  font-size: 12px;
+  color: #5c675f;
+}
+.end-round-metric strong {
+  font-size: 18px;
+  color: #0b5e56;
+}
+.end-round-message {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #134e4a;
+  font-weight: 600;
+}
+.end-round-coach {
+  margin: 0;
+  padding: 0 18px 0 0;
+  color: #5c675f;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.end-round-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.end-round-footnote {
+  margin: 0;
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+}
 .foundation-active-title {
   margin: 0;
   font-size: 18px;

@@ -672,14 +672,34 @@ def words_start(track: str = "lang", x_portal_token: str = Header(default="")):
     }
 
 
+@router.get("/api/portal/games/challenge-tiers")
+def challenge_tiers_catalog(x_portal_token: str = Header(default="")):
+    _require_student(x_portal_token)
+    from .nafs_challenge_tiers import taxonomy_snapshot
+
+    return {"ok": True, **taxonomy_snapshot()}
+
+
 @router.post("/api/portal/games/words/finish")
 def words_finish(body: WordFinishBody, x_portal_token: str = Header(default="")):
     session = _require_student(x_portal_token)
     connection = connect()
     try:
         ensure_on_boot(connection)
+        from .nafs_challenge_tiers import coaching_from_round, resolve_tier
+
         score = sum(1 for a in body.answers if a.get("ok"))
+        total = max(1, len(body.answers or []))
         xp = score * 3 + (5 if body.combo_best >= 3 else 0)
+        # أغلب أنواع الجولة يحدد المستوى غير المباشر؛ وإلا معنى = هواة
+        kinds = [str(a.get("kind") or "") for a in (body.answers or []) if a.get("kind")]
+        kind = "meaning"
+        if kinds:
+            counts: dict[str, int] = {}
+            for k in kinds:
+                counts[k] = counts.get(k, 0) + 1
+            kind = max(counts.items(), key=lambda kv: kv[1])[0]
+        tier = resolve_tier(word_kind=kind, default="amateur")
         connection.execute(
             """
             INSERT INTO portal_game_runs(student_nid, game_type, score, combo_best, detail_json, created_at)
@@ -689,7 +709,15 @@ def words_finish(body: WordFinishBody, x_portal_token: str = Header(default=""))
                 session["student_nid"],
                 score,
                 int(body.combo_best or 0),
-                json.dumps({"answers": body.answers, "elapsed": body.elapsed_sec}, ensure_ascii=False),
+                json.dumps(
+                    {
+                        "answers": body.answers,
+                        "elapsed": body.elapsed_sec,
+                        "tier": tier.get("id"),
+                        "total": total,
+                    },
+                    ensure_ascii=False,
+                ),
                 _iso(),
             ),
         )
@@ -702,7 +730,27 @@ def words_finish(body: WordFinishBody, x_portal_token: str = Header(default=""))
                 (session["student_nid"], xp, _iso()),
             )
         connection.commit()
-        return {"ok": True, "score": score, "xp_earned": xp, "etec": "3-1-1-1"}
+        coach = coaching_from_round(
+            score=score,
+            total=total,
+            combo_best=int(body.combo_best or 0),
+            elapsed_sec=float(body.elapsed_sec or 0),
+            seconds_budget=60.0,
+            tier_label=tier.get("label") or "",
+        )
+        return {
+            "ok": True,
+            "score": score,
+            "total": total,
+            "xp_earned": xp,
+            "combo_best": int(body.combo_best or 0),
+            "elapsed_sec": float(body.elapsed_sec or 0),
+            "seconds_budget": 60,
+            "tier": tier,
+            "coaching": coach,
+            "etec": "3-1-1-1",
+            "etec_ar": "٣-١-١-١",
+        }
     finally:
         connection.close()
 
@@ -743,17 +791,32 @@ def _mental_item(level: int) -> dict:
 
 
 @router.get("/api/portal/games/mental/start")
-def mental_start(level: int = 1, count: int = 10, x_portal_token: str = Header(default="")):
+def mental_start(
+    level: int = 1,
+    count: int = 10,
+    tier: str = "",
+    x_portal_token: str = Header(default=""),
+):
     _require_student(x_portal_token)
+    from .nafs_challenge_tiers import TIER_TO_MENTAL_LEVEL, resolve_tier, tier_by_id
+
+    if tier in TIER_TO_MENTAL_LEVEL:
+        level = int(TIER_TO_MENTAL_LEVEL[tier])
+    level = max(1, min(5, int(level or 1)))
+    tier_meta = resolve_tier(mental_level=level)
     items = [_mental_item(level) for _ in range(max(5, min(20, count)))]
     for i, it in enumerate(items):
         it["id"] = i + 1
+        it["tier"] = tier_meta.get("id")
     return {
         "ok": True,
         "level": level,
+        "tier": tier_meta,
+        "tiers": [tier_by_id(t) for t in ("amateur", "pro", "elite")],
         "seconds": 90 if level >= 3 else 60,
         "items": items,
         "etec": "3-1-1-2",
+        "etec_ar": "٣-١-١-٢",
         "modes": {"solo": "تسلق المستويات", "tournament": "بطولة الفصول"},
     }
 
@@ -764,8 +827,14 @@ def mental_finish(body: MentalFinishBody, x_portal_token: str = Header(default="
     connection = connect()
     try:
         ensure_on_boot(connection)
+        from .nafs_challenge_tiers import coaching_from_round, resolve_tier
+
         score = sum(1 for a in body.answers if a.get("ok"))
-        xp = score * 2 + (int(body.level or 1) * 2)
+        total = max(1, len(body.answers or []))
+        level = max(1, min(5, int(body.level or 1)))
+        xp = score * 2 + (level * 2)
+        tier = resolve_tier(mental_level=level)
+        budget = 90.0 if level >= 3 else 60.0
         connection.execute(
             """
             INSERT INTO portal_game_runs(student_nid, game_type, score, combo_best, detail_json, created_at)
@@ -773,10 +842,17 @@ def mental_finish(body: MentalFinishBody, x_portal_token: str = Header(default="
             """,
             (
                 session["student_nid"],
-                f"mental:{body.mode}:{body.level}",
+                f"mental:{body.mode}:{level}",
                 score,
                 json.dumps(
-                    {"answers": body.answers, "elapsed": body.elapsed_sec, "mode": body.mode},
+                    {
+                        "answers": body.answers,
+                        "elapsed": body.elapsed_sec,
+                        "mode": body.mode,
+                        "tier": tier.get("id"),
+                        "total": total,
+                        "level": level,
+                    },
                     ensure_ascii=False,
                 ),
                 _iso(),
@@ -791,6 +867,27 @@ def mental_finish(body: MentalFinishBody, x_portal_token: str = Header(default="
                 (session["student_nid"], xp, _iso()),
             )
         connection.commit()
-        return {"ok": True, "score": score, "xp_earned": xp, "etec": "3-1-1-2", "level": body.level}
+        coach = coaching_from_round(
+            score=score,
+            total=total,
+            combo_best=0,
+            elapsed_sec=float(body.elapsed_sec or 0),
+            seconds_budget=budget,
+            tier_label=tier.get("label") or "",
+        )
+        return {
+            "ok": True,
+            "score": score,
+            "total": total,
+            "xp_earned": xp,
+            "combo_best": 0,
+            "elapsed_sec": float(body.elapsed_sec or 0),
+            "seconds_budget": int(budget),
+            "level": level,
+            "tier": tier,
+            "coaching": coach,
+            "etec": "3-1-1-2",
+            "etec_ar": "٣-١-١-٢",
+        }
     finally:
         connection.close()
