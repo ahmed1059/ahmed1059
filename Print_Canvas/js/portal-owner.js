@@ -69,6 +69,93 @@
     });
   }
 
+  function formatEtecCode(code) {
+    var raw = toEastern(code == null ? "" : code);
+    if (!raw) return "";
+    return '<span class="peek-etec" dir="ltr">' + escapeHtml(raw) + "</span>";
+  }
+
+  function loadTeacherPeek() {
+    var grade = (document.getElementById("peek-grade") || {}).value || "";
+    var section = (document.getElementById("peek-section") || {}).value || "";
+    var qs = [];
+    if (grade) qs.push("grade=" + encodeURIComponent(grade.trim()));
+    if (section) qs.push("section=" + encodeURIComponent(section.trim()));
+    var url = "/api/portal/teacher/peek" + (qs.length ? "?" + qs.join("&") : "");
+    return fetchJson(url, { headers: headers(), cache: "no-store" }).then(function (pack) {
+      var summary = document.getElementById("peek-summary");
+      var box = document.getElementById("peek-box");
+      var byRoot = pack.by_root || {};
+      var legend = pack.legend || {};
+      if (summary) {
+        summary.hidden = false;
+        summary.innerHTML =
+          "<span class=\"peek-chip is-hot\">متعثرون: " +
+          toEastern(pack.count || 0) +
+          "</span>" +
+          Object.keys(byRoot)
+            .map(function (root) {
+              return (
+                "<span class=\"peek-chip\" title=\"" +
+                escapeHtml(legend[root] || "") +
+                "\">جذر " +
+                toEastern(root) +
+                ": " +
+                toEastern(byRoot[root] || 0) +
+                "</span>"
+              );
+            })
+            .join("");
+      }
+      var items = pack.items || [];
+      if (!box) return pack;
+      if (!items.length) {
+        box.innerHTML = "<p class=\"portal-empty\">لا تعثرات مفتوحة حالياً — مخزن الإتقان نظيف.</p>";
+        return pack;
+      }
+      box.innerHTML =
+        "<table class=\"owner-table\"><thead><tr>" +
+        "<th>الطالب</th><th>الصف/الفصل</th><th>المهارة</th><th>الجذر</th>" +
+        "<th>الحرارة</th><th>التطهير</th><th>ETEC</th><th>توجيه</th>" +
+        "</tr></thead><tbody>" +
+        items
+          .map(function (row) {
+            var etec = (row.etec && (row.etec.code_ar || row.etec.code)) || "";
+            var st = row.status || "open";
+            return (
+              "<tr><td>" +
+              escapeHtml(row.name || "طالب") +
+              "<br><small>" +
+              escapeHtml(row.student_nid_masked || "") +
+              "</small></td><td>" +
+              escapeHtml(row.grade || "—") +
+              " / " +
+              escapeHtml(row.section || "—") +
+              "</td><td>" +
+              escapeHtml(row.skill || "") +
+              "<br><small>" +
+              escapeHtml(row.common_mistake || "") +
+              "</small></td><td><strong>" +
+              toEastern(row.grade_root || "٣م") +
+              "</strong></td><td>" +
+              toEastern(row.trap_heat || 0) +
+              "</td><td><span class=\"peek-status is-" +
+              escapeHtml(st) +
+              "\">" +
+              escapeHtml(row.status_ar || st) +
+              "</span></td><td>" +
+              formatEtecCode(etec) +
+              "</td><td>" +
+              escapeHtml(row.remedial_hint || "") +
+              "</td></tr>"
+            );
+          })
+          .join("") +
+        "</tbody></table>";
+      return pack;
+    });
+  }
+
   function paintSettings(pack) {
     state.settings = pack;
     var s = pack.settings || {};
@@ -553,9 +640,30 @@
             status(e.message, true);
           });
         }
+        if (id === "panel-peek") {
+          loadTeacherPeek()
+            .then(function () {
+              status("معاينة التعثر محدّثة.");
+            })
+            .catch(function (e) {
+              status(e.message, true);
+            });
+        }
       });
     });
     document.getElementById("btn-save-settings").addEventListener("click", saveSettings);
+    var peekBtn = document.getElementById("btn-peek-refresh");
+    if (peekBtn) {
+      peekBtn.addEventListener("click", function () {
+        loadTeacherPeek()
+          .then(function () {
+            status("معاينة التعثر محدّثة.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
+      });
+    }
     document.getElementById("btn-save-identity").addEventListener("click", saveIdentity);
     document.getElementById("btn-radar-talent").addEventListener("click", function () {
       loadRadarTalent().catch(function (e) {

@@ -429,6 +429,48 @@ body.portal-student {
   font-weight: 700;
 }
 
+.trap-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+.trap-root-chip,
+.trap-etec-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: #ecfdf5;
+  color: #0b5e56;
+  border: 1px solid #b7e4d8;
+}
+
+.trap-etec-chip .etec-code {
+  margin-inline-start: 2px;
+}
+
+.trap-rationale {
+  margin: 6px 0;
+  color: #5c2b26;
+  line-height: 1.55;
+}
+
+.trap-remedial {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  font-weight: 700;
+  font-size: 13px;
+}
+
 .trap-album {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
