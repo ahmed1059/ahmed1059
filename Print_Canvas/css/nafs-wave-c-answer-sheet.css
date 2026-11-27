@@ -102,12 +102,15 @@
 }
 
 .nafs-c-banner .etec-ltr,
-.nafs-c-etec-row .etec-ltr {
-  direction: ltr;
-  unicode-bidi: isolate;
+.nafs-c-etec-row .etec-ltr,
+.etec-force,
+.etec-ltr.etec-force {
+  direction: ltr !important;
+  unicode-bidi: bidi-override !important;
   display: inline-block;
   font-weight: 700;
   letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .nafs-c-etec-row {
@@ -338,16 +341,30 @@
   opacity: 0.75;
 }
 
+/* تسمية أفقية أسفل الورقة — بعيدة عن علامات التوقيت على الحافة */
 .nafs-c-vlabel {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
+  writing-mode: horizontal-tb;
+  transform: none;
   position: absolute;
-  inset-inline-end: 5mm;
-  top: 40mm;
-  font-size: 10px;
+  left: 50%;
+  right: auto;
+  inset-inline-end: auto;
+  top: auto;
+  bottom: 3.5mm;
+  translate: -50% 0;
+  font-size: 9px;
   color: var(--nafs-c-sky);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
+  white-space: nowrap;
+  max-width: 72%;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.nafs-c-omr-host .nafs-c-vlabel {
+  bottom: 3mm;
 }
 
 .nafs-c-q-item {

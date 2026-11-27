@@ -6,6 +6,8 @@
   "use strict";
 
   var EASTERN = "٠١٢٣٤٥٦٧٨٩";
+  /** أرقام فارسية → هندية عربية (٠–٩) حتى لا يظهر ۸ الفارسي في العدادات */
+  var PERSIAN = "۰۱۲۳۴۵۶۷۸۹";
   var DOMAIN_ORDER = ["math", "science", "reading"];
   var DOMAIN_META = {
     math: { title: "الرياضيات", key: "math" },
@@ -49,10 +51,30 @@
 
   function east(value) {
     return String(value == null ? "" : value)
-      .replace(/\d/g, function (d) {
-        return EASTERN[Number(d)] || d;
+      .replace(/[۰-۹]/g, function (d) {
+        var i = PERSIAN.indexOf(d);
+        return i >= 0 ? EASTERN.charAt(i) : d;
+      })
+      .replace(/[0-9]/g, function (d) {
+        return EASTERN.charAt(Number(d)) || d;
       })
       .replace(/%/g, "٪");
+  }
+
+  /**
+   * عزل قسري LTR يمنع عكس الأرقام المتعددة في Chrome/Skia PDF داخل فقرة RTL.
+   * unicode-bidi: bidi-override عبر الصنف etec-force.
+   */
+  function ltrForce(text) {
+    var raw = east(text);
+    if (!raw) return "";
+    return (
+      '<span class="etec-ltr etec-force" dir="ltr">' +
+      "\u2066" +
+      esc(raw) +
+      "\u2069" +
+      "</span>"
+    );
   }
 
   function esc(value) {
@@ -68,13 +90,125 @@
       .replace(/\u00a0/g, " ")
       .replace(/[ \t]+/g, " ")
       .replace(/\s*\n\s*/g, "\n")
+      .replace(/^[|\-–—:\s]+/, "")
+      .replace(/[|\-–—]+$/g, "")
       .trim();
+  }
+
+  /** كسور/أسس محلية إن لم يُمرَّر renderArabicMath من البوابة */
+  function renderBookletMathLocal(raw) {
+    var source = cleanDisplay(raw);
+    if (!source) return "";
+    var tokens = [];
+    function keep(html) {
+      tokens.push(html);
+      return "\uE000" + (tokens.length - 1) + "\uE001";
+    }
+    var text = source;
+    text = text.replace(
+      /(^|[^\w⁰¹²³⁴⁵⁶⁷⁸⁹٠-٩۰-۹])([0-9٠-٩۰-۹]+)\s*\/\s*([0-9٠-٩۰-۹]+)(?!\w)/g,
+      function (_m, lead, num, den) {
+        return (
+          lead +
+          keep(
+            '<span class="frac" dir="ltr"><span class="num">' +
+              east(num) +
+              '</span><span class="den">' +
+              east(den) +
+              "</span></span>"
+          )
+        );
+      }
+    );
+    text = text.replace(/([0-9٠-٩۰-۹A-Za-zπµαأ-ي])\^([0-9٠-٩۰-۹]+)/g, function (_m, base, exp) {
+      return keep(
+        '<span class="math-atom" dir="ltr">' +
+          east(base) +
+          "<sup>" +
+          east(exp) +
+          "</sup></span>"
+      );
+    });
+    text = text.replace(/([0-9٠-٩۰-۹A-Za-zπµαأ-ي])([²³⁴⁵⁶⁷⁸⁹⁰¹]+)/g, function (_m, base, exp) {
+      var map = {
+        "¹": "1",
+        "²": "2",
+        "³": "3",
+        "⁴": "4",
+        "⁵": "5",
+        "⁶": "6",
+        "⁷": "7",
+        "⁸": "8",
+        "⁹": "9",
+        "⁰": "0"
+      };
+      var easternExp = String(exp)
+        .split("")
+        .map(function (ch) {
+          return map[ch] || ch;
+        })
+        .join("");
+      return keep(
+        '<span class="math-atom" dir="ltr">' +
+          east(base) +
+          "<sup>" +
+          east(easternExp) +
+          "</sup></span>"
+      );
+    });
+    // معادلات ووحدات القياس داخل math-atom LTR
+    text = text.replace(
+      /([0-9٠-٩۰-۹]+(?:\s*[سص]\s*)?(?:\s*[+\-−×÷=]\s*[0-9٠-٩۰-۹سص]+)+)/g,
+      function (m) {
+        return keep('<span class="math-atom" dir="ltr">' + east(m) + "</span>");
+      }
+    );
+    text = text.replace(
+      /([0-9٠-٩۰-۹]+(?:[.,][0-9٠-٩۰-۹]+)?)\s*(سم|مم|م|غ|كغ|نيوتن|ث)([²³٢٣]?)/g,
+      function (_m, num, unit, exp) {
+        var expHtml = exp
+          ? "<sup>" + east(exp.replace("٢", "2").replace("٣", "3")) + "</sup>"
+          : "";
+        return keep(
+          '<span class="math-atom" dir="ltr">' + east(num) + " " + unit + expHtml + "</span>"
+        );
+      }
+    );
+    text = text.replace(/\uE000\d+\uE001|[^\uE000]+/g, function (part) {
+      if (part.charAt(0) === "\uE000") return part;
+      return east(esc(part));
+    });
+    return text.replace(/\uE000(\d+)\uE001/g, function (_m, idx) {
+      return tokens[Number(idx)] || "";
+    });
+  }
+
+  function wrapMathRuns(html) {
+    var out = String(html == null ? "" : html);
+    // عزل أي تسلسل أرقام هندية متعددة بقيت خارج frac/math-atom
+    out = out.replace(
+      /(?![^<]*>)([٠-٩]{2,}(?:[.,][٠-٩]+)?)/g,
+      function (m) {
+        if (m.indexOf("math-atom") >= 0) return m;
+        return '<span class="math-atom" dir="ltr">' + m + "</span>";
+      }
+    );
+    return out;
   }
 
   function mathOrEsc(text, renderMath) {
     var cleaned = cleanDisplay(text);
-    if (typeof renderMath === "function") return renderMath(cleaned);
-    return esc(cleaned);
+    var needsFrac = /[0-9٠-٩۰-۹]+\s*\/\s*[0-9٠-٩۰-۹]+/.test(cleaned);
+    var needsEq = /[0-9٠-٩۰-۹][^.]{0,12}[+\-−×÷=]/.test(cleaned);
+    var needsUnit = /[0-9٠-٩۰-۹]\s*(سم|مم|م|غ|كغ|نيوتن|ث)/.test(cleaned);
+    if (needsFrac || needsEq || needsUnit || typeof renderMath !== "function") {
+      return renderBookletMathLocal(cleaned);
+    }
+    var html = renderMath(cleaned);
+    if (html.indexOf("frac") === -1 && html.indexOf("math-atom") === -1) {
+      html = wrapMathRuns(html);
+    }
+    return html;
   }
 
   function domainOf(item) {
@@ -143,13 +277,15 @@
     return errors;
   }
 
-  /** نطاق الأسئلة داخل span LTR حتى لا يندمج ٢٠–٤ إلى ٢٠٠٤ في RTL/PDF */
+  /** نطاق الأسئلة داخل span LTR قسري حتى لا يندمج ٢٠–٤ إلى ٢٠٠٤ في RTL/PDF */
   function rangeHtml(fromN, toN) {
     return (
-      '<span class="nafs-b-range etec-ltr" dir="ltr">' +
+      '<span class="nafs-b-range etec-ltr etec-force" dir="ltr">' +
+      "\u2066" +
       east(fromN) +
       " – " +
       east(toN) +
+      "\u2069" +
       "</span>"
     );
   }
@@ -244,10 +380,10 @@
       '<div class="nafs-b-cover-hero">' +
       "<h1>اختبار منزلي بإشراف ولي الأمر</h1>" +
       "<p>نماذج تدريبية على طراز الاختبارات الوطنية (نافس)</p>" +
-      "<p>متوسطة سعد بن الربيع الأنصاري · الرقم الوزاري " +
-      '<bdi class="etec-ltr etec-code" dir="ltr">' +
-      esc(pack.ministry_id_ar || pack.code_ar || east(pack.code || "40341")) +
-      "</bdi></p>" +
+      "<p>متوسطة سعد بن الربيع الأنصاري</p>" +
+      "<p>الرقم الوزاري " +
+      ltrForce(pack.ministry_id_ar || pack.ministry_id || pack.code_ar || "S-40341") +
+      "</p>" +
       "</div>" +
       '<div class="nafs-b-cover-meta">' +
       "<div><strong>الطالب:</strong> " +
@@ -256,16 +392,14 @@
       "<div><strong>الصف / الفصل:</strong> " +
       esc(pack.grade || "") +
       " / " +
-      east(pack.section || "") +
+      ltrForce(pack.section || "") +
       "</div>" +
       "<div><strong>عدد الأسئلة:</strong> " +
-      '<bdi class="etec-ltr" dir="ltr">' +
-      east((pack.items || []).length) +
-      "</bdi></div>" +
+      ltrForce((pack.items || []).length) +
+      "</div>" +
       "<div><strong>الشاهد:</strong> " +
-      '<bdi class="etec-ltr etec-code" dir="ltr">' +
-      esc(pack.evidence_code_ar || "١-٣-١-٢") +
-      "</bdi></div>" +
+      ltrForce(pack.evidence_code_ar || pack.evidence_code || "1-3-1-2") +
+      "</div>" +
       "</div></section>"
     );
   }
@@ -293,9 +427,8 @@
       east(items.length) +
       " )</span></p>" +
       "<p>الزمن: " +
-      '<span class="etec-ltr" dir="ltr">' +
-      east(mins) +
-      "</span> دقيقة</p>" +
+      ltrForce(mins) +
+      " دقيقة</p>" +
       "</div>" +
       '<div class="nafs-b-divider-instructions">' +
       "<h3>تعليمات</h3><ul>" +
@@ -316,9 +449,11 @@
         .map(function (L) {
           var ar = { A: "أ", B: "ب", C: "ج", D: "د" }[L];
           return (
-            '<div class="nafs-b-choice"><span class="lbl">' +
+            '<div class="nafs-b-choice">' +
+            '<span class="lbl" aria-hidden="false">' +
             ar +
-            '</span><span class="txt">' +
+            "</span>" +
+            '<span class="txt">' +
             mathOrEsc(map[L] || "", renderMath) +
             "</span></div>"
           );
@@ -361,8 +496,8 @@
       '<article class="nafs-b-qblock">' +
       passage +
       '<div class="nafs-b-qhead">' +
-      '<span class="nafs-b-qnum etec-ltr" dir="ltr">' +
-      east(item.n) +
+      '<span class="nafs-b-qnum">' +
+      ltrForce(item.n) +
       "</span>" +
       '<div class="nafs-b-qstem">' +
       mathOrEsc(item.stem || "", renderMath) +
@@ -440,11 +575,11 @@
     var total = (pack.items || []).length || key.length;
     var items =
       '<div class="nafs-b-key-banner">مفتاح التصحيح لولي الأمر</div>' +
-      '<p class="nafs-b-key-meta">عدد الأسئلة: <bdi class="etec-ltr" dir="ltr">' +
-      east(total) +
-      "</bdi> · ترقيم متصل <bdi class=\"etec-ltr\" dir=\"ltr\">١…" +
-      east(total || 1) +
-      "</bdi></p>" +
+      '<p class="nafs-b-key-meta">عدد الأسئلة: ' +
+      ltrForce(total) +
+      " · ترقيم متصل " +
+      ltrForce("1…" + String(total || 1)) +
+      "</p>" +
       (key.length
         ? '<ol class="nafs-b-key-grid nafs-b-key-list" start="1">' +
           key
@@ -453,8 +588,8 @@
                 '<li class="nafs-b-key-item" value="' +
                 Number(r.n || 0) +
                 '">' +
-                '<span class="n etec-ltr" dir="ltr">' +
-                east(r.n) +
+                '<span class="n">' +
+                ltrForce(r.n) +
                 "</span>" +
                 '<span class="ans" aria-label="الإجابة">' +
                 esc(answerLetterAr(r.answer)) +
@@ -474,9 +609,9 @@
       schoolHeader() +
       items +
       '<div class="nafs-b-pledge">' +
-      "<h3>إقرار ولي الأمر المراقب (شاهد <bdi class=\"etec-ltr etec-code\" dir=\"ltr\">" +
-      esc(pack.evidence_code_ar || "١-٣-١-٢") +
-      "</bdi>)</h3>" +
+      "<h3>إقرار ولي الأمر المراقب (شاهد " +
+      ltrForce(pack.evidence_code_ar || pack.evidence_code || "1-3-1-2") +
+      ")</h3>" +
       "<p>" +
       esc(pack.parent_pledge || "") +
       "</p>" +
@@ -522,8 +657,10 @@
 
   global.NafsHomeMockBooklet = {
     east: east,
+    ltrForce: ltrForce,
     assetUrl: assetUrl,
     cleanDisplay: cleanDisplay,
+    renderBookletMathLocal: renderBookletMathLocal,
     nRange: nRange,
     rangeHtml: rangeHtml,
     sortByN: sortByN,
