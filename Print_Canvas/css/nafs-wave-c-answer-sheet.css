@@ -22,6 +22,20 @@
   margin: 10px 0 16px;
 }
 
+.nafs-c-train-hint {
+  margin: 0 0 10px;
+  font-size: 12.5px;
+  color: #475569;
+}
+
+/* شاشة التدريب: تمرير حر بدل قصّ ارتفاع الورقة */
+.nafs-c-train-host .nafs-c-page {
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  overflow: visible;
+}
+
 .nafs-c-page {
   position: relative;
   width: 210mm;
@@ -513,6 +527,7 @@
   }
 
   .nafs-c-toolbar,
+  .nafs-c-train-hint,
   .aj-nafs-toolbar,
   .portal-actions {
     display: none !important;

@@ -39,18 +39,24 @@ def main() -> int:
 
     if 'data-station="sim"' not in html:
         errors.append("html missing sim panel")
-    if 'id="btn-home-mock"' not in html or 'id="btn-nafs-answer-sheet"' not in html:
-        errors.append("action button ids must remain for adaptive bind")
-    # الزرّان داخل محطة sim لا purge
+    if 'id="btn-home-mock"' not in html:
+        errors.append("home-mock button missing")
+    if 'id="btn-nafs-answer-sheet-train"' not in html or 'id="btn-nafs-answer-sheet-print"' not in html:
+        errors.append("answer-sheet train/print buttons missing")
+    # الأزرار داخل محطة sim لا purge
     purge_chunk = html.split('data-station="purge"')[1].split("data-station=")[0]
     if "btn-home-mock" in purge_chunk or "btn-nafs-answer-sheet" in purge_chunk:
         errors.append("OMR/answer-sheet buttons must leave purge station")
     sim_chunk = html.split('data-station="sim"')[1].split("data-station=")[0]
-    if "btn-home-mock" not in sim_chunk or "btn-nafs-answer-sheet" not in sim_chunk:
-        errors.append("both actions must live inside sim station")
+    if "btn-home-mock" not in sim_chunk:
+        errors.append("home-mock must live inside sim station")
+    if "btn-nafs-answer-sheet-train" not in sim_chunk or "btn-nafs-answer-sheet-print" not in sim_chunk:
+        errors.append("train/print actions must live inside sim station")
 
-    if 'btn-home-mock' not in adaptive or "btn-nafs-answer-sheet" not in adaptive:
-        errors.append("adaptive must still bind action ids")
+    if "btn-home-mock" not in adaptive:
+        errors.append("adaptive must bind home-mock")
+    if "btn-nafs-answer-sheet-train" not in adaptive or "btn-nafs-answer-sheet-print" not in adaptive:
+        errors.append("adaptive must bind train/print actions")
 
     if "tone-indigo" not in css or "sim-action-grid" not in css:
         errors.append("css missing indigo tone / sim-action-grid")

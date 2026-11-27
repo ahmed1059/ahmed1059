@@ -496,10 +496,12 @@
     if (!host) return null;
     host.innerHTML =
       "<div class=\"nafs-c-toolbar\">" +
-      "<button type=\"button\" class=\"aj-detail-btn\" data-nafs-c-print>طباعة النموذج A4 (١-٤…٤-٤)</button>" +
-      "<button type=\"button\" class=\"aj-detail-btn aj-detail-btn-secondary\" data-nafs-c-reset>مسح التظليل</button>" +
+      "<button type=\"button\" class=\"aj-detail-btn portal-btn\" data-nafs-c-print>طباعة النموذج A4 (١-٤…٤-٤)</button>" +
+      "<button type=\"button\" class=\"aj-detail-btn aj-detail-btn-secondary portal-btn secondary\" data-nafs-c-reset>مسح التظليل</button>" +
       "</div>" +
+      "<p class=\"nafs-c-train-hint\">وضع تدريب تفاعلي: اضغط الدوائر للتظليل كما في الورقة الرسمية.</p>" +
       renderPack(pack);
+    host.classList.add("nafs-c-train-host");
     bindBubbles(host);
     var printBtn = host.querySelector("[data-nafs-c-print]");
     if (printBtn) {
