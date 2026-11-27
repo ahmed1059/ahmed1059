@@ -451,11 +451,15 @@
   print-color-adjust: exact;
 }
 
-.nafs-b-key-grid {
+/* عمود واحد متسلسل ١…ن كما في مفاتيح نماذج أ/ب الرسمية */
+.nafs-b-key-grid,
+.nafs-b-key-list {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 14px;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
 }
 
 .nafs-b-key-item {

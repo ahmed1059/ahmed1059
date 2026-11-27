@@ -78,6 +78,8 @@
   }
 
   function domainOf(item) {
+    var block = String((item && item.block) || "").toLowerCase();
+    if (DOMAIN_META[block]) return block;
     var d = String((item && item.domain) || "").toLowerCase();
     if (DOMAIN_META[d]) return d;
     if (d.indexOf("math") >= 0 || d.indexOf("رياض") >= 0) return "math";
@@ -99,6 +101,46 @@
       return Number(it.n) || 0;
     });
     return { from: Math.min.apply(null, nums), to: Math.max.apply(null, nums) };
+  }
+
+  /**
+   * عقد α: تحقق أن الترقيم ١…ن متصل عالميًا وأن كتل المجالات متجاورة بلا تداخل.
+   * يفترض أن الحزمة بُنيت بـ block-first (ترتيب الكتل ثم إسناد n).
+   */
+  function assertBlockFirstContiguous(items) {
+    var errors = [];
+    var list = sortByN(items);
+    var allN = list.map(function (it) {
+      return Number(it.n) || 0;
+    });
+    for (var i = 0; i < allN.length; i += 1) {
+      if (allN[i] !== i + 1) {
+        errors.push("global n not 1..N");
+        break;
+      }
+    }
+    var order = DOMAIN_ORDER.concat(["other"]);
+    var blocks = { math: [], science: [], reading: [], other: [] };
+    list.forEach(function (it) {
+      blocks[domainOf(it)].push(Number(it.n) || 0);
+    });
+    var seen = [];
+    order.forEach(function (key) {
+      var nums = blocks[key];
+      if (!nums.length) return;
+      var expected = [];
+      for (var k = nums[0]; k < nums[0] + nums.length; k += 1) expected.push(k);
+      if (nums.join(",") !== expected.join(",")) {
+        errors.push(key + " not contiguous");
+      }
+      seen.forEach(function (prev) {
+        if (!(nums[nums.length - 1] < prev.from || nums[0] > prev.to)) {
+          errors.push(key + " overlaps " + prev.key);
+        }
+      });
+      seen.push({ key: key, from: nums[0], to: nums[nums.length - 1] });
+    });
+    return errors;
   }
 
   /** نطاق الأسئلة داخل span LTR حتى لا يندمج ٢٠–٤ إلى ٢٠٠٤ في RTL/PDF */
@@ -203,9 +245,9 @@
       "<h1>اختبار منزلي بإشراف ولي الأمر</h1>" +
       "<p>نماذج تدريبية على طراز الاختبارات الوطنية (نافس)</p>" +
       "<p>متوسطة سعد بن الربيع الأنصاري · الرقم الوزاري " +
-      '<span class="etec-ltr" dir="ltr">' +
+      '<bdi class="etec-ltr etec-code" dir="ltr">' +
       esc(pack.ministry_id_ar || pack.code_ar || east(pack.code || "40341")) +
-      "</span></p>" +
+      "</bdi></p>" +
       "</div>" +
       '<div class="nafs-b-cover-meta">' +
       "<div><strong>الطالب:</strong> " +
@@ -217,12 +259,13 @@
       east(pack.section || "") +
       "</div>" +
       "<div><strong>عدد الأسئلة:</strong> " +
+      '<bdi class="etec-ltr" dir="ltr">' +
       east((pack.items || []).length) +
-      "</div>" +
+      "</bdi></div>" +
       "<div><strong>الشاهد:</strong> " +
-      '<span class="etec-ltr etec-code" dir="ltr">' +
+      '<bdi class="etec-ltr etec-code" dir="ltr">' +
       esc(pack.evidence_code_ar || "١-٣-١-٢") +
-      "</span></div>" +
+      "</bdi></div>" +
       "</div></section>"
     );
   }
@@ -397,15 +440,19 @@
     var total = (pack.items || []).length || key.length;
     var items =
       '<div class="nafs-b-key-banner">مفتاح التصحيح لولي الأمر</div>' +
-      '<p class="nafs-b-key-meta">عدد الأسئلة: <span class="etec-ltr" dir="ltr">' +
+      '<p class="nafs-b-key-meta">عدد الأسئلة: <bdi class="etec-ltr" dir="ltr">' +
       east(total) +
-      "</span></p>" +
+      "</bdi> · ترقيم متصل <bdi class=\"etec-ltr\" dir=\"ltr\">١…" +
+      east(total || 1) +
+      "</bdi></p>" +
       (key.length
-        ? '<div class="nafs-b-key-grid" role="list">' +
+        ? '<ol class="nafs-b-key-grid nafs-b-key-list" start="1">' +
           key
             .map(function (r) {
               return (
-                '<div class="nafs-b-key-item" role="listitem">' +
+                '<li class="nafs-b-key-item" value="' +
+                Number(r.n || 0) +
+                '">' +
                 '<span class="n etec-ltr" dir="ltr">' +
                 east(r.n) +
                 "</span>" +
@@ -415,11 +462,11 @@
                 '<span class="skill">' +
                 esc(cleanDisplay(r.skill || "")) +
                 "</span>" +
-                "</div>"
+                "</li>"
               );
             })
             .join("") +
-          "</div>"
+          "</ol>"
         : '<p class="nafs-b-key-empty">لا مفتاح محفوظ لهذه الحزمة — تُعرض الإجابات المعتمدة فقط عند توفرها في البنك.</p>');
 
     return (
@@ -427,9 +474,9 @@
       schoolHeader() +
       items +
       '<div class="nafs-b-pledge">' +
-      "<h3>إقرار ولي الأمر المراقب (شاهد <span class=\"etec-ltr etec-code\" dir=\"ltr\">" +
+      "<h3>إقرار ولي الأمر المراقب (شاهد <bdi class=\"etec-ltr etec-code\" dir=\"ltr\">" +
       esc(pack.evidence_code_ar || "١-٣-١-٢") +
-      "</span>)</h3>" +
+      "</bdi>)</h3>" +
       "<p>" +
       esc(pack.parent_pledge || "") +
       "</p>" +
@@ -445,8 +492,13 @@
     pack = pack || {};
     opts = opts || {};
     var renderMath = opts.renderArabicMath;
-    var sections = groupByDomain(pack.items || []);
-    var html = '<div class="nafs-b-host" dir="rtl" lang="ar">' + coverPage(pack);
+    var items = pack.items || [];
+    // α: لا نعيد ترقيمًا هنا؛ نعتمد n من الحزمة بعد ترتيب الكتل في الخادم
+    assertBlockFirstContiguous(items);
+    var sections = groupByDomain(items);
+    var html =
+      '<div class="nafs-b-host" dir="rtl" lang="ar" data-sequencing="block-first">' +
+      coverPage(pack);
     sections.forEach(function (section, idx) {
       html += dividerPage(section, idx);
       html += questionPages(section.items, renderMath);
@@ -475,6 +527,8 @@
     nRange: nRange,
     rangeHtml: rangeHtml,
     sortByN: sortByN,
+    domainOf: domainOf,
+    assertBlockFirstContiguous: assertBlockFirstContiguous,
     renderBooklet: renderBooklet,
     renderAnswerKey: renderAnswerKey,
     schoolHeader: schoolHeader,
@@ -483,6 +537,7 @@
     cssHref: cssHref,
     INSTR_COMMON: INSTR_COMMON,
     INSTR_READING: INSTR_READING,
-    IDENTITY: IDENTITY
+    IDENTITY: IDENTITY,
+    DOMAIN_ORDER: DOMAIN_ORDER
   };
 })(typeof window !== "undefined" ? window : globalThis);

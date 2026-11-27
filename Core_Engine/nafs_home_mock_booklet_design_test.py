@@ -114,6 +114,12 @@ def main() -> int:
     adaptive_py = ADAPTIVE_PY.read_text(encoding="utf-8")
     if 'row["diagram_svg"]' not in adaptive_py and "diagram_svg" not in adaptive_py:
         errors.append("home mock pack must pass saved diagram_svg")
+    if "block_first_order" not in adaptive_py or 'sequencing": "block-first"' not in adaptive_py:
+        errors.append("home mock pack must use block-first sequencing (wave α)")
+    if "assertBlockFirstContiguous" not in js:
+        errors.append("booklet must expose assertBlockFirstContiguous")
+    if "nafs-b-key-list" not in js:
+        errors.append("answer key must use sequential key list")
 
     html = PORTAL.read_text(encoding="utf-8")
     if "nafs-home-mock-booklet.css" not in html or "nafs-home-mock-booklet.js" not in html:

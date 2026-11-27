@@ -544,6 +544,60 @@ def apply_run_outcomes(connection, student_nid: str, mode: str, reviewed: list[d
         )
 
 
+def _home_mock_domain_key(question: dict) -> str:
+    """تصنيف مجال السؤال لكتل طراز نافس أ/ب (رياضيات → علوم → قراءة)."""
+    d = str((question or {}).get("domain") or "").strip().lower()
+    if d in {"math", "science", "reading"}:
+        return d
+    if "math" in d or "رياض" in d:
+        return "math"
+    if "sci" in d or "علوم" in d:
+        return "science"
+    if "read" in d or "قراء" in d or "لغ" in d:
+        return "reading"
+    return "other"
+
+
+def block_first_order(questions: list[dict]) -> list[dict]:
+    """
+    خوارزمية α: الكتلة أولاً ثم الترقيم.
+    ترتيب رسمي مستوحى من نموذجي أ/ب: رياضيات ثم علوم ثم قراءة ثم أخرى.
+    لا يُسند n هنا — يُسند بعد اكتمال الترتيب في build_home_mock_pack.
+    """
+    order = ("math", "science", "reading", "other")
+    buckets: dict[str, list[dict]] = {k: [] for k in order}
+    for q in questions or []:
+        buckets[_home_mock_domain_key(q)].append(q)
+    ordered: list[dict] = []
+    for key in order:
+        ordered.extend(buckets[key])
+    return ordered
+
+
+def assert_block_first_contiguous(items: list[dict]) -> list[str]:
+    """تحقق اختبار: داخل كل مجال الأرقام متصلة بلا قفز، والمجالات غير متداخلة."""
+    errors: list[str] = []
+    order = ("math", "science", "reading", "other")
+    blocks: dict[str, list[int]] = {k: [] for k in order}
+    for it in items or []:
+        blocks[_home_mock_domain_key(it)].append(int(it.get("n") or 0))
+    seen_ranges: list[tuple[int, int, str]] = []
+    for key in order:
+        nums = blocks[key]
+        if not nums:
+            continue
+        if nums != list(range(nums[0], nums[0] + len(nums))):
+            errors.append(f"{key} not contiguous: {nums}")
+        for a, b, label in seen_ranges:
+            if not (nums[-1] < a or nums[0] > b):
+                errors.append(f"{key} overlaps {label}: {nums[0]}-{nums[-1]} vs {a}-{b}")
+        seen_ranges.append((nums[0], nums[-1], key))
+    all_n = [int(it.get("n") or 0) for it in items or []]
+    if all_n and all_n != list(range(1, len(all_n) + 1)):
+        errors.append(f"global n not 1..N: {all_n}")
+    return errors
+
+
 def build_home_mock_pack(connection, student_nid: str, count: int = 20) -> dict:
     from .portal_session_api import _pick_questions, _row_to_question  # noqa: F401
     from .portal_ssot import find_student
@@ -558,18 +612,22 @@ def build_home_mock_pack(connection, student_nid: str, count: int = 20) -> dict:
         count,
         _pick_questions,
     )
+    # α: رتّب كتل المجالات قبل إسناد أي رقم عرض
+    questions = block_first_order(list(questions or []))
     letters = {"A": "أ", "B": "ب", "C": "ج", "D": "د"}
     items = []
     key_rows = []
     for i, q in enumerate(questions, start=1):
+        domain_key = _home_mock_domain_key(q)
         row = {
             "n": i,
             "stem": q.get("stem") or "",
             "choices": q.get("choices") or {},
-            "domain": q.get("domain") or "",
+            "domain": domain_key if domain_key != "other" else (q.get("domain") or ""),
             "skill": q.get("skill") or "",
             "passage_title": q.get("passage_title") or "",
             "passage_text": q.get("passage_text") or "",
+            "block": domain_key,
         }
         # رسوم محفوظة فقط — لا اختلاق أشكال
         if q.get("diagram_svg"):
@@ -584,6 +642,7 @@ def build_home_mock_pack(connection, student_nid: str, count: int = 20) -> dict:
                     "n": i,
                     "answer": answer_ar,
                     "skill": q.get("skill") or "",
+                    "domain": row["domain"],
                 }
             )
     from .nafs_wave_c_answer_sheet import (
@@ -616,6 +675,8 @@ def build_home_mock_pack(connection, student_nid: str, count: int = 20) -> dict:
         "created_at": _iso(),
         "evidence_code": "1-3-1-2",
         "evidence_code_ar": eastern_digits("1-3-1-2"),
+        "sequencing": "block-first",
+        "wave": "alpha-block-first",
         "items": items,
         "answer_key": key_rows,
         "omr_sheet": omr_sheet,
