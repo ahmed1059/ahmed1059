@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بوابة الطالب — ميدان نافس</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p18">
+  <link rel="stylesheet" href="css/portal-student.css?v=p19">
   <link rel="stylesheet" href="css/nafs-wave-c-answer-sheet.css?v=c2">
   <link rel="stylesheet" href="css/nafs-home-mock-booklet.css?v=b5">
 </head>
@@ -102,8 +102,27 @@
           <div id="vault-list" class="vault-list"></div>
           <div class="portal-actions">
             <button type="button" class="portal-btn" data-mode="purge" id="btn-purge">تحدي تصفية الأخطاء</button>
-            <button type="button" class="portal-btn secondary" id="btn-home-mock">اختبار منزلي ورقي (OMR)</button>
-            <button type="button" class="portal-btn secondary" id="btn-nafs-answer-sheet">نموذج الإجابة التدريبي (١-٤…٤-٤)</button>
+          </div>
+        </section>
+
+        <section class="portal-card station-panel sim-station" data-station="sim" hidden>
+          <h2>اختبار محاكي</h2>
+          <p class="section-hint">نماذج ورقية للتدريب المنزلي والمحاكاة الوطنية — منفصلة عن أنماط التحدي التفاعلية</p>
+          <div class="sim-action-grid" role="list">
+            <button type="button" class="mode-card sim-action" id="btn-home-mock" role="listitem">
+              <span class="sim-action-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#eef2ff"/><rect x="12" y="10" width="24" height="28" rx="3" fill="#fff" stroke="#6366f1" stroke-width="1.5"/><circle cx="17" cy="22" r="2" fill="#6366f1"/><circle cx="24" cy="22" r="2" fill="none" stroke="#6366f1" stroke-width="1.2"/><circle cx="31" cy="22" r="2" fill="none" stroke="#6366f1" stroke-width="1.2"/><circle cx="17" cy="29" r="2" fill="none" stroke="#6366f1" stroke-width="1.2"/><circle cx="24" cy="29" r="2" fill="#6366f1"/><circle cx="31" cy="29" r="2" fill="none" stroke="#6366f1" stroke-width="1.2"/></svg>
+              </span>
+              <strong>اختبار منزلي ورقي (OMR)</strong>
+              <span>كراسة + ورقة تظليل + مفتاح لولي الأمر</span>
+            </button>
+            <button type="button" class="mode-card sim-action" id="btn-nafs-answer-sheet" role="listitem">
+              <span class="sim-action-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><rect width="48" height="48" rx="12" fill="#ecfeff"/><text x="10" y="28" font-size="11" font-family="Tajawal,sans-serif" fill="#0e7490" font-weight="700">١-٤</text><path d="M14 34h20" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"/></svg>
+              </span>
+              <strong>نموذج الإجابة التدريبي (<span class="etec-code" dir="ltr">١-٤…٤-٤</span>)</strong>
+              <span>ورقة إجابة واستبانة الطالب المعتمدة</span>
+            </button>
           </div>
         </section>
 
@@ -271,7 +290,7 @@
   <script src="js/print-engine.js?v=pe3"></script>
   <script src="js/nafs-wave-c-answer-sheet.js?v=c2"></script>
   <script src="js/nafs-home-mock-booklet.js?v=b5"></script>
-  <script src="js/portal-student-stations.js?v=st1"></script>
+  <script src="js/portal-student-stations.js?v=st2"></script>
   <script src="js/portal-student-games.js?v=g4"></script>
   <script src="js/portal-student-fx.js?v=fx2"></script>
   <script src="js/portal-student-adaptive.js?v=ad8"></script>
