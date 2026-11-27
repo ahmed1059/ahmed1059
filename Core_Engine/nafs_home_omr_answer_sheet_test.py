@@ -126,8 +126,8 @@ def main() -> int:
     if "Array.from({ length: 66 })" in analytics:
         errors.append("crude 66 OMR grid must be removed")
 
-    if ANSWER_ITEM_COUNT != 75:
-        errors.append("training answer count must stay 75")
+    if ANSWER_ITEM_COUNT != 66:
+        errors.append("training answer count must match official form (66)")
 
     for path in FORTIFIED:
         if not path.exists():
