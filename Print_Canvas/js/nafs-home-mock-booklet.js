@@ -63,9 +63,18 @@
       .replace(/"/g, "&quot;");
   }
 
+  function cleanDisplay(text) {
+    return String(text == null ? "" : text)
+      .replace(/\u00a0/g, " ")
+      .replace(/[ \t]+/g, " ")
+      .replace(/\s*\n\s*/g, "\n")
+      .trim();
+  }
+
   function mathOrEsc(text, renderMath) {
-    if (typeof renderMath === "function") return renderMath(text || "");
-    return esc(text || "");
+    var cleaned = cleanDisplay(text);
+    if (typeof renderMath === "function") return renderMath(cleaned);
+    return esc(cleaned);
   }
 
   function domainOf(item) {
@@ -77,6 +86,32 @@
     return "other";
   }
 
+  function sortByN(items) {
+    return (items || []).slice().sort(function (a, b) {
+      return Number(a && a.n) - Number(b && b.n);
+    });
+  }
+
+  function nRange(items) {
+    var list = sortByN(items);
+    if (!list.length) return { from: 1, to: 1 };
+    var nums = list.map(function (it) {
+      return Number(it.n) || 0;
+    });
+    return { from: Math.min.apply(null, nums), to: Math.max.apply(null, nums) };
+  }
+
+  /** نطاق الأسئلة داخل span LTR حتى لا يندمج ٢٠–٤ إلى ٢٠٠٤ في RTL/PDF */
+  function rangeHtml(fromN, toN) {
+    return (
+      '<span class="nafs-b-range etec-ltr" dir="ltr">' +
+      east(fromN) +
+      " – " +
+      east(toN) +
+      "</span>"
+    );
+  }
+
   function groupByDomain(items) {
     var buckets = { math: [], science: [], reading: [], other: [] };
     (items || []).forEach(function (item) {
@@ -84,12 +119,27 @@
     });
     var sections = [];
     DOMAIN_ORDER.forEach(function (key) {
-      if (buckets[key].length) sections.push({ key: key, items: buckets[key] });
+      if (buckets[key].length) {
+        sections.push({ key: key, items: sortByN(buckets[key]) });
+      }
     });
     if (buckets.other.length) {
-      sections.push({ key: "other", items: buckets.other, title: "أسئلة عامة" });
+      sections.push({
+        key: "other",
+        items: sortByN(buckets.other),
+        title: "أسئلة عامة"
+      });
     }
     return sections;
+  }
+
+  function itemWeight(item) {
+    var w = 1;
+    if (item && item.passage_text) w += 2;
+    if (item && item.diagram_svg) w += 2;
+    var stemLen = String((item && item.stem) || "").length;
+    if (stemLen > 180) w += 1;
+    return w;
   }
 
   function minutesForCount(count) {
@@ -126,7 +176,7 @@
       '<div class="logo logo-vision">' +
       '<img src="' +
       esc(assetUrl(IDENTITY.visionLogo)) +
-      '" alt="رؤية 2030" width="140" height="52" loading="eager" decoding="sync">' +
+      '" alt="رؤية ٢٠٣٠" width="140" height="52" loading="eager" decoding="sync">' +
       "</div>" +
       "</header>"
     );
@@ -181,8 +231,7 @@
     var meta = DOMAIN_META[section.key] || { title: section.title || "قسم" };
     var ordinal = SECTION_ORDINAL[index] || east(index + 1);
     var items = section.items || [];
-    var fromN = items[0] && items[0].n != null ? items[0].n : 1;
-    var toN = items.length ? items[items.length - 1].n : fromN;
+    var range = nRange(items);
     var mins = minutesForCount(items.length);
     var instr = section.key === "reading" ? INSTR_READING : INSTR_COMMON;
     return (
@@ -196,13 +245,14 @@
       esc(meta.title) +
       "</h2>" +
       "<p>الأسئلة: " +
-      east(fromN) +
-      " – " +
-      east(toN) +
-      "</p>" +
+      rangeHtml(range.from, range.to) +
+      " <span class=\"nafs-b-count\">( " +
+      east(items.length) +
+      " )</span></p>" +
       "<p>الزمن: " +
+      '<span class="etec-ltr" dir="ltr">' +
       east(mins) +
-      " دقيقة</p>" +
+      "</span> دقيقة</p>" +
       "</div>" +
       '<div class="nafs-b-divider-instructions">' +
       "<h3>تعليمات</h3><ul>" +
@@ -235,15 +285,24 @@
     );
   }
 
-  function questionBlock(item, renderMath) {
+  function passageKey(item) {
+    return (
+      String((item && item.passage_title) || "").trim() +
+      "\n" +
+      String((item && item.passage_text) || "").trim()
+    );
+  }
+
+  function questionBlock(item, renderMath, opts) {
+    opts = opts || {};
     var passage = "";
-    if (item.passage_text) {
+    if (item.passage_text && !opts.hidePassage) {
       passage =
         '<div class="nafs-b-passage">' +
         (item.passage_title
-          ? "<strong>" + esc(item.passage_title) + "</strong>"
+          ? "<strong>" + esc(cleanDisplay(item.passage_title)) + "</strong>"
           : "") +
-        esc(item.passage_text) +
+        esc(cleanDisplay(item.passage_text)) +
         "</div>";
     }
     var diagram = "";
@@ -259,7 +318,7 @@
       '<article class="nafs-b-qblock">' +
       passage +
       '<div class="nafs-b-qhead">' +
-      '<span class="nafs-b-qnum">' +
+      '<span class="nafs-b-qnum etec-ltr" dir="ltr">' +
       east(item.n) +
       "</span>" +
       '<div class="nafs-b-qstem">' +
@@ -271,11 +330,34 @@
     );
   }
 
+  function paginateSection(sectionItems) {
+    var pages = [];
+    var current = [];
+    var weight = 0;
+    var maxWeight = 5;
+    (sectionItems || []).forEach(function (item) {
+      var w = itemWeight(item);
+      if (current.length && weight + w > maxWeight) {
+        pages.push(current);
+        current = [];
+        weight = 0;
+      }
+      current.push(item);
+      weight += w;
+      if (weight >= maxWeight) {
+        pages.push(current);
+        current = [];
+        weight = 0;
+      }
+    });
+    if (current.length) pages.push(current);
+    return pages;
+  }
+
   function questionPages(sectionItems, renderMath) {
     var pages = [];
-    var perPage = 4;
-    for (var i = 0; i < sectionItems.length; i += perPage) {
-      var slice = sectionItems.slice(i, i + perPage);
+    var lastPassage = "";
+    paginateSection(sectionItems).forEach(function (slice) {
       pages.push(
         '<section class="nafs-b-page is-flow nafs-b-qpage">' +
           schoolHeader() +
@@ -284,12 +366,15 @@
           "</div>" +
           slice
             .map(function (it) {
-              return questionBlock(it, renderMath);
+              var key = passageKey(it);
+              var hide = !!(it.passage_text && key && key === lastPassage);
+              if (it.passage_text && key) lastPassage = key;
+              return questionBlock(it, renderMath, { hidePassage: hide });
             })
             .join("") +
           "</section>"
       );
-    }
+    });
     return pages.join("");
   }
 
@@ -308,23 +393,27 @@
 
   function renderAnswerKey(pack) {
     pack = pack || {};
-    var key = pack.answer_key || [];
+    var key = sortByN(pack.answer_key || []);
+    var total = (pack.items || []).length || key.length;
     var items =
       '<div class="nafs-b-key-banner">مفتاح التصحيح لولي الأمر</div>' +
+      '<p class="nafs-b-key-meta">عدد الأسئلة: <span class="etec-ltr" dir="ltr">' +
+      east(total) +
+      "</span></p>" +
       (key.length
-        ? '<div class="nafs-b-key-grid">' +
+        ? '<div class="nafs-b-key-grid" role="list">' +
           key
             .map(function (r) {
               return (
-                '<div class="nafs-b-key-item">' +
-                '<span class="n">' +
+                '<div class="nafs-b-key-item" role="listitem">' +
+                '<span class="n etec-ltr" dir="ltr">' +
                 east(r.n) +
                 "</span>" +
-                '<span class="ans">' +
+                '<span class="ans" aria-label="الإجابة">' +
                 esc(answerLetterAr(r.answer)) +
                 "</span>" +
                 '<span class="skill">' +
-                esc(r.skill || "") +
+                esc(cleanDisplay(r.skill || "")) +
                 "</span>" +
                 "</div>"
               );
@@ -382,6 +471,10 @@
   global.NafsHomeMockBooklet = {
     east: east,
     assetUrl: assetUrl,
+    cleanDisplay: cleanDisplay,
+    nRange: nRange,
+    rangeHtml: rangeHtml,
+    sortByN: sortByN,
     renderBooklet: renderBooklet,
     renderAnswerKey: renderAnswerKey,
     schoolHeader: schoolHeader,

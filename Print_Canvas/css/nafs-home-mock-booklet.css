@@ -198,9 +198,9 @@
   flex-direction: column;
   justify-content: center;
   gap: 16px;
-  min-height: 150mm;
-  max-height: 200mm;
-  padding: 14mm 12mm;
+  min-height: 110mm;
+  max-height: 160mm;
+  padding: 12mm 12mm;
   background: var(--nafs-b-purple);
   color: #fff;
   overflow: hidden;
@@ -282,10 +282,62 @@
   border-bottom: 1px solid var(--nafs-b-line);
   break-inside: avoid;
   page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
 }
 
 .nafs-b-qblock:last-child {
   border-bottom: 0;
+}
+
+.nafs-b-qblock .nafs-b-qhead,
+.nafs-b-qblock .nafs-b-choices,
+.nafs-b-qblock .nafs-b-passage,
+.nafs-b-qblock .nafs-b-diagram {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.nafs-b-range,
+.nafs-b-qnum,
+.etec-ltr {
+  unicode-bidi: isolate;
+}
+
+/* أسس وكسور داخل الكراسة (مسار الطباعة لا يحمّل portal-student.css) */
+.nafs-b-host .math-atom {
+  display: inline;
+  direction: ltr;
+  unicode-bidi: isolate;
+  white-space: nowrap;
+}
+.nafs-b-host .math-atom sup {
+  font-size: 0.75em;
+  vertical-align: super;
+  line-height: 0;
+}
+.nafs-b-host .frac {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 1.05;
+  margin: 0 2px;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.nafs-b-host .frac .num,
+.nafs-b-host .frac .den {
+  display: block;
+  padding: 0 4px;
+}
+.nafs-b-host .frac .num {
+  border-bottom: 1.5px solid currentColor;
+}
+
+.nafs-b-key-meta {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #475569;
+  text-align: center;
 }
 
 .nafs-b-qhead {
@@ -517,16 +569,26 @@
 
   .nafs-b-cover-hero {
     flex: 0 0 auto !important;
-    min-height: 90mm;
-    max-height: 120mm;
-    padding: 12mm 8mm;
+    min-height: 70mm;
+    max-height: 100mm;
+    padding: 10mm 8mm;
   }
 
   .nafs-b-divider-panel {
     flex: 0 0 auto !important;
-    min-height: 140mm;
-    max-height: 185mm;
-    padding: 12mm 10mm;
+    min-height: 95mm;
+    max-height: 140mm;
+    padding: 10mm 10mm;
+  }
+
+  .nafs-b-qblock {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .nafs-b-diagram svg,
+  .nafs-b-diagram img {
+    max-height: 120px !important;
   }
 
   .nafs-b-cover-meta,

@@ -37,6 +37,8 @@ def main() -> int:
         ".nafs-b-school-header",
         ".nafs-b-key-grid",
         ".nafs-b-key-banner",
+        ".math-atom",
+        "break-inside: avoid",
         "is-sheet",
         "is-flow",
         "@media print",
@@ -65,22 +67,31 @@ def main() -> int:
         "function schoolHeader",
         "function dividerPage",
         "function choiceGrid",
+        "function nRange",
+        "function rangeHtml",
+        "function paginateSection",
+        "hidePassage",
         "nafs-b-choices",
         "nafs-b-school-header",
+        "nafs-b-range",
         "INSTR_READING",
         "diagram_svg",
         "groupByDomain",
+        "sortByN",
         "القسم ",
         "نموذج تدريبي",
         "/assets/ministry_logo.png",
         "/assets/vision_2030.png",
         "/assets/nafs_logo.png",
         "function assetUrl",
+        "dir=\"ltr\"",
         "الإدارة العامة للتعليم بمنطقة المدينة المنورة",
         "متوسطة سعد بن الربيع الأنصاري",
     ):
         if needle not in js:
             errors.append(f"js missing: {needle}")
+    if "items[0].n" in js and "nRange" not in js:
+        errors.append("section range must use min/max nRange not first/last only")
     if not (ROOT / "School_Data" / "assets" / "nafs_logo.png").is_file():
         errors.append("missing School_Data/assets/nafs_logo.png")
     # لا اختلاق رسوم: لا مسارات صور وهمية
