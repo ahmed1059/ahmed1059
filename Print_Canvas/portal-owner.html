@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>لوحة مالك المنظومة والدعم السريع</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-owner.css?v=o6">
+  <link rel="stylesheet" href="css/portal-owner.css?v=o7">
 </head>
 <body class="portal-student">
   <div class="portal-shell owner-layout">
@@ -28,6 +28,7 @@
       <button type="button" class="tab" data-owner-panel="panel-radar">مرصد الموهوبين</button>
       <button type="button" class="tab" data-owner-panel="panel-enrich">جسر الإثراء والموهبة</button>
       <button type="button" class="tab" data-owner-panel="panel-counselor">صندوق الموجّه</button>
+      <button type="button" class="tab" data-owner-panel="panel-survey-stats">تقرير الاستبانة</button>
       <button type="button" class="tab" data-owner-panel="panel-peek">معاينة التعثر</button>
       <button type="button" class="tab" data-owner-panel="panel-clinics">عيادات علاجية</button>
       <button type="button" class="tab" data-owner-panel="panel-rbac">هرم الصلاحيات</button>
@@ -128,6 +129,24 @@
       <h3 style="margin-top:14px;color:#0b5e56;font-size:16px;">حرارة مخزن الإتقان (≥٢)</h3>
       <div id="counselor-heat-box"></div>
       <div id="boost-rules-box" class="counselor-rules" hidden></div>
+    </section>
+
+    <section class="portal-card owner-panel" id="panel-survey-stats">
+      <h2>التقرير الإحصائي لاستبانة نافس</h2>
+      <p class="portal-empty" style="margin:0 0 10px;">لقطات معتمدة فقط (بلا مسودات وبلا تظليل تدريبي). مقارنة Δ بين جولتين على مستوى العنصر والفصل والصف. الأرقام هندية ومحور ETEC باتجاه LTR. بلا كشف هويات طلاب.</p>
+      <div class="owner-form peek-filters survey-stats-filters">
+        <label>الجولة أ</label>
+        <select id="survey-round-a"></select>
+        <label>الجولة ب</label>
+        <select id="survey-round-b"></select>
+        <label class="survey-sensitive-toggle"><input type="checkbox" id="survey-include-teacher" checked> تضمين بنود المعلمين الحساسة (مجمّعة)</label>
+        <div class="portal-actions">
+          <button type="button" class="portal-btn" id="btn-survey-stats-refresh">تحديث التقرير</button>
+        </div>
+      </div>
+      <div id="survey-stats-summary" class="peek-summary" hidden></div>
+      <div id="survey-stats-groups" class="survey-stats-groups"></div>
+      <div id="survey-stats-items" class="survey-stats-items"></div>
     </section>
 
     <section class="portal-card owner-panel" id="panel-peek">
@@ -240,6 +259,6 @@
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe12"></script>
   <script src="/cores/print-master-core.js?v=c308"></script>
-  <script src="js/portal-owner.js?v=o7"></script>
+  <script src="js/portal-owner.js?v=o8"></script>
 </body>
 </html>

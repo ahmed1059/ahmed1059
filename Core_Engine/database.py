@@ -1034,6 +1034,9 @@ def init_db():
         from .nafs_enrich_bridge import ensure_enrich_bridge
 
         ensure_enrich_bridge(connection)
+        from .nafs_survey_stats import ensure_on_boot as ensure_nafs_survey_stats
+
+        ensure_nafs_survey_stats(connection)
         from .nafs_readalong_api import ensure_on_boot as ensure_nafs_readalong
 
         ensure_nafs_readalong(connection)

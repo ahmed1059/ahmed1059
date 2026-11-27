@@ -509,6 +509,57 @@
       if (stage) stage.hidden = !show;
     }
 
+    function bindSurveyDraftTools(host) {
+      if (!host) return;
+      var draftBtn = host.querySelector("[data-nafs-c-draft]");
+      var snapBtn = host.querySelector("[data-nafs-c-snapshot]");
+      function payloadFromHost() {
+        var answers =
+          window.NafsWaveCAnswerSheet && typeof window.NafsWaveCAnswerSheet.collectSurveyAnswers === "function"
+            ? window.NafsWaveCAnswerSheet.collectSurveyAnswers(host)
+            : {};
+        return { answers: answers };
+      }
+      if (draftBtn) {
+        draftBtn.addEventListener("click", function () {
+          api.status("جارٍ حفظ مسودة الاستبانة…");
+          api
+            .fetchJson("/api/portal/survey/draft", {
+              method: "PUT",
+              headers: Object.assign({ "Content-Type": "application/json" }, api.authHeaders()),
+              body: JSON.stringify(payloadFromHost())
+            })
+            .then(function () {
+              api.status("حُفظت مسودة الاستبانة في ملفك — قابلة للتعديل دائمًا.");
+            })
+            .catch(function (err) {
+              api.status(err.message || "تعذر حفظ المسودة.", true);
+            });
+        });
+      }
+      if (snapBtn) {
+        snapBtn.addEventListener("click", function () {
+          api.status("جارٍ اعتماد لقطة الاستبانة…");
+          api
+            .fetchJson("/api/portal/survey/snapshot", {
+              method: "POST",
+              headers: Object.assign({ "Content-Type": "application/json" }, api.authHeaders()),
+              body: JSON.stringify(payloadFromHost())
+            })
+            .then(function (res) {
+              api.status(
+                "اعتُمدت لقطة الاستبانة (" +
+                  (res.round_key_ar || res.round_key || "") +
+                  ") — المسودة ما زالت قابلة للتعديل."
+              );
+            })
+            .catch(function (err) {
+              api.status(err.message || "تعذر اعتماد اللقطة.", true);
+            });
+        });
+      }
+    }
+
     function openAnswerSheetTraining() {
       var host = el("portal-nafs-answer-sheet-host");
       if (!host) {
@@ -516,15 +567,28 @@
         return;
       }
       api.status("جارٍ تجهيز شاشة التدريب على النموذج…");
-      fetchAnswerSheetPack()
-        .then(function (pack) {
+      Promise.all([
+        fetchAnswerSheetPack(),
+        api
+          .fetchJson("/api/portal/survey/draft", { headers: api.authHeaders(), cache: "no-store" })
+          .catch(function () {
+            return { answers: {} };
+          })
+      ])
+        .then(function (pair) {
+          var pack = pair[0];
+          var draft = pair[1] || {};
           if (!window.NafsWaveCAnswerSheet || typeof window.NafsWaveCAnswerSheet.mountInteractive !== "function") {
             api.status("وحدة النموذج غير محمّلة.", true);
             return;
           }
           showAnswerSheetTrainStage(true);
-          window.NafsWaveCAnswerSheet.mountInteractive(host, pack);
-          api.status("شاشة التدريب جاهزة — ظلّل الإجابات للتدرّب على التعبئة.");
+          window.NafsWaveCAnswerSheet.mountInteractive(host, pack, {
+            surveyTools: true,
+            surveyDraft: draft.answers || {}
+          });
+          bindSurveyDraftTools(host);
+          api.status("شاشة التدريب جاهزة — احفظ مسودة الاستبانة أو اعتمد لقطة عند الجاهزية.");
           try {
             host.scrollIntoView({ behavior: "smooth", block: "start" });
           } catch (err) {}

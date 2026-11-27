@@ -676,6 +676,184 @@
       });
   }
 
+  function fillSurveyRoundSelects(rounds, preferredA, preferredB) {
+    var a = document.getElementById("survey-round-a");
+    var b = document.getElementById("survey-round-b");
+    if (!a || !b) return;
+    var opts =
+      (rounds || [])
+        .map(function (r) {
+          return (
+            "<option value=\"" +
+            escapeHtml(r.key) +
+            "\">" +
+            escapeHtml(r.key_ar || toEastern(r.key)) +
+            "</option>"
+          );
+        })
+        .join("") || "<option value=\"\">—</option>";
+    a.innerHTML = opts;
+    b.innerHTML = opts;
+    if (preferredA) a.value = preferredA;
+    if (preferredB) b.value = preferredB;
+    else if ((rounds || []).length >= 2) {
+      a.value = rounds[0].key;
+      b.value = rounds[1].key;
+    }
+  }
+
+  function paintSurveyGroups(title, rowsA, rowsB) {
+    var list = function (rows) {
+      if (!(rows || []).length) return "<p class=\"portal-empty\">لا بيانات</p>";
+      return (
+        "<ul class=\"portal-list\">" +
+        rows
+          .map(function (r) {
+            return (
+              "<li>" +
+              escapeHtml(r.key_ar || r.key) +
+              " — " +
+              toEastern(r.count_ar || r.count) +
+              "</li>"
+            );
+          })
+          .join("") +
+        "</ul>"
+      );
+    };
+    return (
+      "<div class=\"survey-stats-card\"><h3>" +
+      escapeHtml(title) +
+      "</h3><div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;\"><div><strong>الجولة أ</strong>" +
+      list(rowsA) +
+      "</div><div><strong>الجولة ب</strong>" +
+      list(rowsB) +
+      "</div></div></div>"
+    );
+  }
+
+  function deltaClass(v) {
+    var n = Number(v);
+    if (n > 0) return "delta-up";
+    if (n < 0) return "delta-down";
+    return "delta-flat";
+  }
+
+  function paintSurveyStats(pack) {
+    var summary = document.getElementById("survey-stats-summary");
+    var groups = document.getElementById("survey-stats-groups");
+    var itemsHost = document.getElementById("survey-stats-items");
+    if (!summary || !groups || !itemsHost) return;
+    if (pack.empty) {
+      summary.hidden = false;
+      summary.innerHTML = "<p>" + escapeHtml(pack.message || "لا لقطات معتمدة.") + "</p>";
+      groups.innerHTML = "";
+      itemsHost.innerHTML = "";
+      return;
+    }
+    fillSurveyRoundSelects(pack.rounds_available || [], pack.round_a, pack.round_b);
+    summary.hidden = false;
+    summary.innerHTML =
+      "<ul class=\"portal-list\">" +
+      "<li>المحور: " +
+      formatEtecCode(pack.etec_axis || "1-3-1") +
+      " · المدرسة: " +
+      formatEtecCode("S-" + (pack.school_code || "40341")) +
+      "</li>" +
+      "<li>الجولة أ: " +
+      escapeHtml(pack.round_a_ar || pack.round_a) +
+      " — مستجيبون: " +
+      toEastern(pack.respondents_a_ar || pack.respondents_a) +
+      "</li>" +
+      "<li>الجولة ب: " +
+      escapeHtml(pack.round_b_ar || pack.round_b) +
+      " — مستجيبون: " +
+      toEastern(pack.respondents_b_ar || pack.respondents_b) +
+      "</li>" +
+      "<li>المصدر: لقطات معتمدة فقط · المسودات وتدريب التظليل مستبعدان</li>" +
+      "<li>هويات الطلاب: غير مُدرجة</li>" +
+      "</ul>";
+    groups.innerHTML =
+      paintSurveyGroups("حسب الصف", pack.by_grade_a, pack.by_grade_b) +
+      paintSurveyGroups("حسب الفصل", pack.by_section_a, pack.by_section_b);
+    itemsHost.innerHTML = (pack.items || [])
+      .map(function (it) {
+        var sens = it.sensitive_teacher
+          ? "<span class=\"survey-sensitive-badge\">حساس — معلمون</span>"
+          : "";
+        var tables = (it.slots || [])
+          .map(function (slot) {
+            var head =
+              slot.slot !== "main"
+                ? "<p style=\"margin:6px 0;font-size:12px;color:#5c675f;\">صف المصفوفة " +
+                  escapeHtml(slot.slot_ar || slot.slot) +
+                  "</p>"
+                : "";
+            return (
+              head +
+              "<table><thead><tr><th>الخيار</th><th>أ</th><th>٪أ</th><th>ب</th><th>٪ب</th><th>Δ</th></tr></thead><tbody>" +
+              (slot.choices || [])
+                .map(function (c) {
+                  return (
+                    "<tr><td>" +
+                    escapeHtml(c.label || c.choice) +
+                    "</td><td>" +
+                    toEastern(c.count_a_ar || c.count_a) +
+                    "</td><td>" +
+                    toEastern(c.pct_a_ar || c.pct_a) +
+                    "٪</td><td>" +
+                    toEastern(c.count_b_ar || c.count_b) +
+                    "</td><td>" +
+                    toEastern(c.pct_b_ar || c.pct_b) +
+                    "٪</td><td class=\"" +
+                    deltaClass(c.delta_pp) +
+                    "\">" +
+                    toEastern(c.delta_pp_ar || c.delta_pp) +
+                    "</td></tr>"
+                  );
+                })
+                .join("") +
+              "</tbody></table>"
+            );
+          })
+          .join("");
+        return (
+          "<article><strong>" +
+          toEastern(it.n_ar || it.n) +
+          ".</strong> " +
+          escapeHtml(it.stem || "") +
+          sens +
+          "<div style=\"font-size:12px;color:#5c675f;margin:4px 0 8px;\">" +
+          escapeHtml(it.section || "") +
+          " · " +
+          escapeHtml(it.page || "") +
+          "</div>" +
+          tables +
+          "</article>"
+        );
+      })
+      .join("");
+  }
+
+  function loadSurveyStats() {
+    var a = document.getElementById("survey-round-a");
+    var b = document.getElementById("survey-round-b");
+    var sens = document.getElementById("survey-include-teacher");
+    var qs =
+      "?round_a=" +
+      encodeURIComponent((a && a.value) || "") +
+      "&round_b=" +
+      encodeURIComponent((b && b.value) || "") +
+      "&include_teacher_sensitive=" +
+      (sens && sens.checked ? "true" : "false");
+    return fetchJson("/api/portal/owner/survey-stats" + qs, { headers: headers(), cache: "no-store" }).then(
+      function (pack) {
+        paintSurveyStats(pack);
+        return pack;
+      }
+    );
+  }
+
   function makeWorksheet() {
     var nids = (document.getElementById("ws-nids").value || "")
       .split(/[\s,]+/)
@@ -1267,6 +1445,15 @@
               status(e.message, true);
             });
         }
+        if (id === "panel-survey-stats") {
+          loadSurveyStats()
+            .then(function () {
+              status("تقرير الاستبانة جاهز (لقطات معتمدة فقط).");
+            })
+            .catch(function (e) {
+              status(e.message, true);
+            });
+        }
         if (id === "panel-peek") {
           loadTeacherPeek()
             .then(function () {
@@ -1427,6 +1614,18 @@
         ackAlert(ack.getAttribute("data-alert-ack"))
           .then(function () {
             status("تم استلام التنبيه.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
+      });
+    }
+    var surveyRefresh = document.getElementById("btn-survey-stats-refresh");
+    if (surveyRefresh) {
+      surveyRefresh.addEventListener("click", function () {
+        loadSurveyStats()
+          .then(function () {
+            status("تقرير الاستبانة محدّث من اللقطات المعتمدة.");
           })
           .catch(function (e) {
             status(e.message, true);
