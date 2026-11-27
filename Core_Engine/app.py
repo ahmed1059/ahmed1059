@@ -508,6 +508,10 @@ from .nafs_survey_stats import router as nafs_survey_stats_router
 
 app.include_router(nafs_survey_stats_router)
 
+from .beneficiary_satisfaction import router as beneficiary_satisfaction_router
+
+app.include_router(beneficiary_satisfaction_router)
+
 
 @app.get("/api/users")
 def users_api(x_session_token: str = Header(default="")):

@@ -18,7 +18,9 @@
     live:
       '<svg viewBox="0 0 96 96" aria-hidden="true"><defs><linearGradient id="stLv" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0f766e"/><stop offset="100%" stop-color="#5eead4"/></linearGradient></defs><rect width="96" height="96" rx="28" fill="url(#stLv)"/><circle cx="36" cy="40" r="10" fill="#fff"/><circle cx="62" cy="40" r="10" fill="#ecfdf5"/><path d="M20 68c2-12 10-18 16-18s14 6 16 18" fill="#fff"/><path d="M48 68c2-10 8-16 14-16s12 6 14 16" fill="#ccfbf1"/><circle cx="70" cy="28" r="6" fill="#ef4444"/><circle cx="70" cy="28" r="3" fill="#fecaca"/></svg>',
     sim:
-      '<svg viewBox="0 0 96 96" aria-hidden="true"><defs><linearGradient id="stSim" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3730a3"/><stop offset="100%" stop-color="#818cf8"/></linearGradient></defs><rect width="96" height="96" rx="28" fill="url(#stSim)"/><rect x="24" y="20" width="48" height="56" rx="6" fill="#fff"/><rect x="30" y="28" width="20" height="4" rx="2" fill="#c7d2fe"/><rect x="30" y="36" width="28" height="3" rx="1.5" fill="#e0e7ff"/><circle cx="34" cy="48" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><circle cx="44" cy="48" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><circle cx="54" cy="48" r="3.2" fill="#4f46e5"/><circle cx="64" cy="48" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><circle cx="34" cy="58" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><circle cx="44" cy="58" r="3.2" fill="#4f46e5"/><circle cx="54" cy="58" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><circle cx="64" cy="58" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><path d="M30 68h28" stroke="#a5b4fc" stroke-width="3" stroke-linecap="round"/></svg>'
+      '<svg viewBox="0 0 96 96" aria-hidden="true"><defs><linearGradient id="stSim" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3730a3"/><stop offset="100%" stop-color="#818cf8"/></linearGradient></defs><rect width="96" height="96" rx="28" fill="url(#stSim)"/><rect x="24" y="20" width="48" height="56" rx="6" fill="#fff"/><rect x="30" y="28" width="20" height="4" rx="2" fill="#c7d2fe"/><rect x="30" y="36" width="28" height="3" rx="1.5" fill="#e0e7ff"/><circle cx="34" cy="48" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><circle cx="44" cy="48" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><circle cx="54" cy="48" r="3.2" fill="#4f46e5"/><circle cx="64" cy="48" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><circle cx="34" cy="58" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><circle cx="44" cy="58" r="3.2" fill="#4f46e5"/><circle cx="54" cy="58" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><circle cx="64" cy="58" r="3.2" fill="none" stroke="#4f46e5" stroke-width="1.6"/><path d="M30 68h28" stroke="#a5b4fc" stroke-width="3" stroke-linecap="round"/></svg>',
+    satisfaction:
+      '<svg viewBox="0 0 96 96" aria-hidden="true"><defs><linearGradient id="stSat" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0f766e"/><stop offset="100%" stop-color="#5eead4"/></linearGradient></defs><rect width="96" height="96" rx="28" fill="url(#stSat)"/><path d="M30 52l10 10 26-28" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="48" cy="48" r="26" fill="none" stroke="#ccfbf1" stroke-width="4"/></svg>'
   };
 
   var STATIONS = [
@@ -42,6 +44,13 @@
       subtitle: "OMR · نموذج ١-٤…٤-٤",
       tone: "indigo",
       icon: "sim"
+    },
+    {
+      id: "satisfaction",
+      title: "قياس رضا المستفيد",
+      subtitle: "مسودة · لقطة · شاهد ١-٣-١-٣",
+      tone: "teal",
+      icon: "satisfaction"
     },
     {
       id: "games",

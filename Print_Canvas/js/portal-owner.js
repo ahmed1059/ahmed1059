@@ -854,6 +854,150 @@
     );
   }
 
+  function fillBenefRoundSelects(rounds, preferredA, preferredB) {
+    var a = document.getElementById("benef-round-a");
+    var b = document.getElementById("benef-round-b");
+    if (!a || !b) return;
+    var opts =
+      (rounds || [])
+        .map(function (r) {
+          return (
+            "<option value=\"" +
+            escapeHtml(r.key) +
+            "\">" +
+            escapeHtml(r.key_ar || toEastern(r.key)) +
+            "</option>"
+          );
+        })
+        .join("") || "<option value=\"\">—</option>";
+    a.innerHTML = opts;
+    b.innerHTML = opts;
+    if (preferredA) a.value = preferredA;
+    if (preferredB) b.value = preferredB;
+    else if ((rounds || []).length >= 2) {
+      a.value = rounds[0].key;
+      b.value = rounds[1].key;
+    }
+  }
+
+  function paintBenefSat(pack) {
+    var summary = document.getElementById("benef-sat-summary");
+    var axesHost = document.getElementById("benef-sat-axes");
+    var groups = document.getElementById("benef-sat-groups");
+    var itemsHost = document.getElementById("benef-sat-items");
+    if (!summary || !axesHost || !groups || !itemsHost) return;
+    if (pack.empty) {
+      summary.hidden = false;
+      summary.innerHTML = "<p>" + escapeHtml(pack.message || "لا لقطات.") + "</p>";
+      axesHost.innerHTML = "";
+      groups.innerHTML = "";
+      itemsHost.innerHTML = "";
+      return;
+    }
+    fillBenefRoundSelects(pack.rounds_available || [], pack.round_a, pack.round_b);
+    summary.hidden = false;
+    summary.innerHTML =
+      "<ul class=\"portal-list\">" +
+      "<li>الشاهد: " +
+      formatEtecCode(pack.evidence_code || "1-3-1-3") +
+      " · المدرسة: " +
+      formatEtecCode("S-" + (pack.school_code || "40341")) +
+      "</li>" +
+      "<li>الجولة أ: " +
+      escapeHtml(pack.round_a_ar || pack.round_a) +
+      " — " +
+      toEastern(pack.respondents_a_ar || pack.respondents_a) +
+      "</li>" +
+      "<li>الجولة ب: " +
+      escapeHtml(pack.round_b_ar || pack.round_b) +
+      " — " +
+      toEastern(pack.respondents_b_ar || pack.respondents_b) +
+      "</li>" +
+      "<li>منفصل عن استبانة نافس وعن مؤشر الإتقان · بلا هويات</li>" +
+      "</ul>";
+    axesHost.innerHTML =
+      "<div class=\"survey-stats-card\"><h3>متوسط المحاور (١–٤)</h3><table style=\"width:100%;border-collapse:collapse;font-size:13px;\">" +
+      "<thead><tr><th>المحور</th><th>أ</th><th>ب</th><th>Δ</th><th>ETEC</th></tr></thead><tbody>" +
+      (pack.axes || [])
+        .map(function (ax) {
+          return (
+            "<tr><td>" +
+            escapeHtml(ax.title || "") +
+            "</td><td>" +
+            toEastern(ax.score_a_ar || ax.score_a) +
+            "</td><td>" +
+            toEastern(ax.score_b_ar || ax.score_b) +
+            "</td><td class=\"" +
+            deltaClass(ax.delta) +
+            "\">" +
+            toEastern(ax.delta_ar || ax.delta) +
+            "</td><td>" +
+            formatEtecCode(ax.etec_hint || "") +
+            "</td></tr>"
+          );
+        })
+        .join("") +
+      "</tbody></table></div>";
+    groups.innerHTML =
+      paintSurveyGroups("حسب الصف", pack.by_grade_a, pack.by_grade_b) +
+      paintSurveyGroups("حسب الفصل", pack.by_section_a, pack.by_section_b) +
+      paintSurveyGroups("حسب نوع المستفيد", pack.by_actor_a, pack.by_actor_b);
+    itemsHost.innerHTML = (pack.items || [])
+      .map(function (it) {
+        return (
+          "<article><strong>" +
+          toEastern(it.n_ar || it.n) +
+          ".</strong> " +
+          escapeHtml(it.stem || "") +
+          "<div style=\"font-size:12px;color:#5c675f;margin:4px 0 8px;\">" +
+          escapeHtml(it.axis_title || "") +
+          " · " +
+          formatEtecCode(it.etec_hint || "") +
+          "</div><table><thead><tr><th>الخيار</th><th>أ</th><th>٪أ</th><th>ب</th><th>٪ب</th><th>Δ</th></tr></thead><tbody>" +
+          (it.choices || [])
+            .map(function (c) {
+              return (
+                "<tr><td>" +
+                escapeHtml(c.label || c.choice) +
+                "</td><td>" +
+                toEastern(c.count_a_ar || c.count_a) +
+                "</td><td>" +
+                toEastern(c.pct_a_ar || c.pct_a) +
+                "٪</td><td>" +
+                toEastern(c.count_b_ar || c.count_b) +
+                "</td><td>" +
+                toEastern(c.pct_b_ar || c.pct_b) +
+                "٪</td><td class=\"" +
+                deltaClass(c.delta_pp) +
+                "\">" +
+                toEastern(c.delta_pp_ar || c.delta_pp) +
+                "</td></tr>"
+              );
+            })
+            .join("") +
+          "</tbody></table></article>"
+        );
+      })
+      .join("");
+  }
+
+  function loadBenefSatStats() {
+    var a = document.getElementById("benef-round-a");
+    var b = document.getElementById("benef-round-b");
+    var qs =
+      "?round_a=" +
+      encodeURIComponent((a && a.value) || "") +
+      "&round_b=" +
+      encodeURIComponent((b && b.value) || "");
+    return fetchJson("/api/portal/owner/beneficiary-satisfaction" + qs, {
+      headers: headers(),
+      cache: "no-store"
+    }).then(function (pack) {
+      paintBenefSat(pack);
+      return pack;
+    });
+  }
+
   function makeWorksheet() {
     var nids = (document.getElementById("ws-nids").value || "")
       .split(/[\s,]+/)
@@ -1454,6 +1598,15 @@
               status(e.message, true);
             });
         }
+        if (id === "panel-benef-sat") {
+          loadBenefSatStats()
+            .then(function () {
+              status("تقرير رضا المستفيد جاهز (لقطات معتمدة فقط).");
+            })
+            .catch(function (e) {
+              status(e.message, true);
+            });
+        }
         if (id === "panel-peek") {
           loadTeacherPeek()
             .then(function () {
@@ -1626,6 +1779,18 @@
         loadSurveyStats()
           .then(function () {
             status("تقرير الاستبانة محدّث من اللقطات المعتمدة.");
+          })
+          .catch(function (e) {
+            status(e.message, true);
+          });
+      });
+    }
+    var benefRefresh = document.getElementById("btn-benef-sat-refresh");
+    if (benefRefresh) {
+      benefRefresh.addEventListener("click", function () {
+        loadBenefSatStats()
+          .then(function () {
+            status("تقرير رضا المستفيد محدّث من اللقطات المعتمدة.");
           })
           .catch(function (e) {
             status(e.message, true);

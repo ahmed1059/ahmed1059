@@ -934,6 +934,7 @@ body.portal-student {
 .field-icon.tone-sky .field-icon-copy strong { color: #0369a1; }
 .field-icon.tone-orange .field-icon-copy strong { color: #c2410c; }
 .field-icon.tone-indigo .field-icon-copy strong { color: #3730a3; }
+.field-icon.tone-teal .field-icon-copy strong { color: #0f766e; }
 
 .sim-action-grid {
   display: grid;
