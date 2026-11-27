@@ -494,23 +494,76 @@
     }
     var homeMock = el("btn-home-mock");
     if (homeMock) homeMock.addEventListener("click", requestHomeMock);
-    var answerSheetBtn = el("btn-nafs-answer-sheet");
-    if (answerSheetBtn) {
-      answerSheetBtn.addEventListener("click", function () {
-        api.status("جارٍ تجهيز نموذج الإجابة التدريبي…");
-        api
-          .fetchJson("/api/portal/answer-sheet-training", { headers: api.authHeaders(), cache: "no-store" })
-          .then(function (pack) {
-            if (window.NafsWaveCAnswerSheet && typeof window.NafsWaveCAnswerSheet.openPrint === "function") {
-              window.NafsWaveCAnswerSheet.openPrint(pack);
-              api.status("نموذج الإجابة واستبانة الطالب جاهزان للطباعة/التدريب.");
-              return;
-            }
+
+    function fetchAnswerSheetPack() {
+      return api.fetchJson("/api/portal/answer-sheet-training", {
+        headers: api.authHeaders(),
+        cache: "no-store"
+      });
+    }
+
+    function showAnswerSheetTrainStage(show) {
+      var hub = el("sim-action-hub");
+      var stage = el("answer-sheet-train-stage");
+      if (hub) hub.hidden = !!show;
+      if (stage) stage.hidden = !show;
+    }
+
+    function openAnswerSheetTraining() {
+      var host = el("portal-nafs-answer-sheet-host");
+      if (!host) {
+        api.status("شاشة التدريب غير جاهزة.", true);
+        return;
+      }
+      api.status("جارٍ تجهيز شاشة التدريب على النموذج…");
+      fetchAnswerSheetPack()
+        .then(function (pack) {
+          if (!window.NafsWaveCAnswerSheet || typeof window.NafsWaveCAnswerSheet.mountInteractive !== "function") {
             api.status("وحدة النموذج غير محمّلة.", true);
-          })
-          .catch(function (err) {
-            api.status(err.message || "تعذر تجهيز النموذج.", true);
-          });
+            return;
+          }
+          showAnswerSheetTrainStage(true);
+          window.NafsWaveCAnswerSheet.mountInteractive(host, pack);
+          api.status("شاشة التدريب جاهزة — ظلّل الإجابات للتدرّب على التعبئة.");
+          try {
+            host.scrollIntoView({ behavior: "smooth", block: "start" });
+          } catch (err) {}
+        })
+        .catch(function (err) {
+          api.status(err.message || "تعذر تجهيز شاشة التدريب.", true);
+        });
+    }
+
+    function openAnswerSheetPrint() {
+      api.status("جارٍ تجهيز طباعة نموذج الإجابة…");
+      fetchAnswerSheetPack()
+        .then(function (pack) {
+          if (window.NafsWaveCAnswerSheet && typeof window.NafsWaveCAnswerSheet.openPrint === "function") {
+            window.NafsWaveCAnswerSheet.openPrint(pack);
+            api.status("نموذج الإجابة واستبانة الطالب جاهزان للطباعة.");
+            return;
+          }
+          api.status("وحدة النموذج غير محمّلة.", true);
+        })
+        .catch(function (err) {
+          api.status(err.message || "تعذر تجهيز الطباعة.", true);
+        });
+    }
+
+    var trainBtn = el("btn-nafs-answer-sheet-train");
+    if (trainBtn) trainBtn.addEventListener("click", openAnswerSheetTraining);
+    var printBtn = el("btn-nafs-answer-sheet-print");
+    if (printBtn) printBtn.addEventListener("click", openAnswerSheetPrint);
+    // توافق خلفي إن بقي زر قديم بنفس المعرّف
+    var legacyBtn = el("btn-nafs-answer-sheet");
+    if (legacyBtn) legacyBtn.addEventListener("click", openAnswerSheetTraining);
+    var trainBack = el("btn-answer-sheet-train-back");
+    if (trainBack) {
+      trainBack.addEventListener("click", function () {
+        showAnswerSheetTrainStage(false);
+        var host = el("portal-nafs-answer-sheet-host");
+        if (host) host.innerHTML = "";
+        api.status("عدتَ إلى محطة اختبار محاكي.");
       });
     }
 

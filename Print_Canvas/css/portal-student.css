@@ -968,6 +968,42 @@ body.portal-student {
   line-height: 1.4;
 }
 
+.answer-sheet-train-stage {
+  margin-top: 8px;
+}
+.answer-sheet-train-stage[hidden] {
+  display: none !important;
+}
+.portal-nafs-answer-sheet-host {
+  margin-top: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #f8fafc;
+  padding: 10px;
+  max-height: min(78vh, 920px);
+  overflow: auto;
+}
+.portal-nafs-answer-sheet-host .nafs-c-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f8fafc;
+  padding: 6px 0;
+}
+.portal-nafs-answer-sheet-host .nafs-c-train-hint {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #475569;
+}
+.portal-nafs-answer-sheet-host .nafs-c-page {
+  margin: 0 auto 12px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
 .station-shell {
   margin-top: 8px;
 }
