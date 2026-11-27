@@ -24,6 +24,14 @@
     "اقرأ الأسئلة بهدوء، ثم اختر الإجابة التي ترى أنها صحيحة.",
     "حاول الإجابة على جميع الأسئلة، وعدم ترك أي سؤال دون إجابة."
   ];
+  var IDENTITY = {
+    kingdom: "المملكة العربية السعودية",
+    ministry: "وزارة التعليم",
+    admin: "الإدارة العامة للتعليم بمنطقة المدينة المنورة",
+    school: "متوسطة سعد بن الربيع الأنصاري",
+    ministryLogo: "/assets/ministry_logo.png",
+    visionLogo: "/assets/vision_2030.png"
+  };
 
   function east(value) {
     return String(value == null ? "" : value)
@@ -75,9 +83,45 @@
     return Math.max(8, Math.round(n * 1.8));
   }
 
+  /** ترويسة المدرسة الثلاثية لكراسة نافس المنزلية (هوية + شعاران، خارج القالب الرسمي المحصّن). */
+  function schoolHeader(extraClass) {
+    var cls = "nafs-b-school-header" + (extraClass ? " " + extraClass : "");
+    return (
+      '<header class="' +
+      cls +
+      '">' +
+      '<div class="logo logo-ministry">' +
+      '<img src="' +
+      esc(IDENTITY.ministryLogo) +
+      '" alt="وزارة التعليم" width="140" height="52">' +
+      "</div>" +
+      '<div class="identity">' +
+      "<span>" +
+      esc(IDENTITY.kingdom) +
+      "</span>" +
+      "<span>" +
+      esc(IDENTITY.ministry) +
+      "</span>" +
+      "<span>" +
+      esc(IDENTITY.admin) +
+      "</span>" +
+      '<span class="school">' +
+      esc(IDENTITY.school) +
+      "</span>" +
+      "</div>" +
+      '<div class="logo logo-vision">' +
+      '<img src="' +
+      esc(IDENTITY.visionLogo) +
+      '" alt="رؤية 2030" width="140" height="52">' +
+      "</div>" +
+      "</header>"
+    );
+  }
+
   function coverPage(pack) {
     return (
-      '<section class="nafs-b-page nafs-b-cover">' +
+      '<section class="nafs-b-page is-sheet nafs-b-cover">' +
+      schoolHeader() +
       '<div class="nafs-b-cover-hero">' +
       "<h1>اختبار منزلي بإشراف ولي الأمر</h1>" +
       "<p>نماذج تدريبية على طراز الاختبارات الوطنية (نافس)</p>" +
@@ -115,8 +159,8 @@
     var mins = minutesForCount(items.length);
     var instr = section.key === "reading" ? INSTR_READING : INSTR_COMMON;
     return (
-      '<section class="nafs-b-page nafs-b-divider">' +
-      '<div class="nafs-b-divider-mark">نموذج تدريبي</div>' +
+      '<section class="nafs-b-page is-sheet nafs-b-divider">' +
+      schoolHeader("is-on-divider") +
       '<div class="nafs-b-divider-panel">' +
       '<div class="nafs-b-divider-title">' +
       "<h2>القسم " +
@@ -202,14 +246,15 @@
 
   function questionPages(sectionItems, renderMath) {
     var pages = [];
-    var perPage = 5;
+    var perPage = 4;
     for (var i = 0; i < sectionItems.length; i += perPage) {
       var slice = sectionItems.slice(i, i + perPage);
       pages.push(
-        '<section class="nafs-b-page nafs-b-qpage">' +
-          '<header class="nafs-b-qpage-head">' +
+        '<section class="nafs-b-page is-flow nafs-b-qpage">' +
+          schoolHeader() +
+          '<div class="nafs-b-qpage-head">' +
           '<div class="brand"><span>الاختبارات الوطنية (نافس)</span><span>نموذج تدريبي</span></div>' +
-          "</header>" +
+          "</div>" +
           slice
             .map(function (it) {
               return questionBlock(it, renderMath);
@@ -219,6 +264,65 @@
       );
     }
     return pages.join("");
+  }
+
+  function answerLetterAr(ans) {
+    var s = String(ans || "").trim();
+    var map = { A: "أ", B: "ب", C: "ج", D: "د", a: "أ", b: "ب", c: "ج", d: "د" };
+    if (map[s]) return map[s];
+    if (/^[أاببججدد]$/.test(s)) {
+      if (s === "ا" || s === "أ") return "أ";
+      if (s === "ب") return "ب";
+      if (s === "ج") return "ج";
+      if (s === "د") return "د";
+    }
+    return s || "—";
+  }
+
+  function renderAnswerKey(pack) {
+    pack = pack || {};
+    var key = pack.answer_key || [];
+    var items =
+      '<div class="nafs-b-key-banner">مفتاح التصحيح لولي الأمر</div>' +
+      (key.length
+        ? '<div class="nafs-b-key-grid">' +
+          key
+            .map(function (r) {
+              return (
+                '<div class="nafs-b-key-item">' +
+                '<span class="n">' +
+                east(r.n) +
+                "</span>" +
+                '<span class="ans">' +
+                esc(answerLetterAr(r.answer)) +
+                "</span>" +
+                '<span class="skill">' +
+                esc(r.skill || "") +
+                "</span>" +
+                "</div>"
+              );
+            })
+            .join("") +
+          "</div>"
+        : '<p class="nafs-b-key-empty">لا مفتاح محفوظ لهذه الحزمة — تُعرض الإجابات المعتمدة فقط عند توفرها في البنك.</p>');
+
+    return (
+      '<section class="nafs-b-page is-flow is-last nafs-b-key" dir="rtl">' +
+      schoolHeader() +
+      items +
+      '<div class="nafs-b-pledge">' +
+      "<h3>إقرار ولي الأمر المراقب (شاهد <span class=\"etec-ltr etec-code\" dir=\"ltr\">" +
+      esc(pack.evidence_code_ar || "١-٣-١-٢") +
+      "</span>)</h3>" +
+      "<p>" +
+      esc(pack.parent_pledge || "") +
+      "</p>" +
+      '<div class="nafs-b-pledge-signs">' +
+      "<div>اسم ولي الأمر<span></span></div>" +
+      "<div>التوقيع<span></span></div>" +
+      "<div>التاريخ<span></span></div>" +
+      "</div></div></section>"
+    );
   }
 
   function renderBooklet(pack, opts) {
@@ -233,7 +337,7 @@
     });
     if (!sections.length) {
       html +=
-        '<section class="nafs-b-page"><p>لا أسئلة محفوظة في هذه الحزمة.</p></section>';
+        '<section class="nafs-b-page is-flow"><p>لا أسئلة محفوظة في هذه الحزمة.</p></section>';
     }
     html += "</div>";
     return html;
@@ -251,9 +355,12 @@
   global.NafsHomeMockBooklet = {
     east: east,
     renderBooklet: renderBooklet,
+    renderAnswerKey: renderAnswerKey,
+    schoolHeader: schoolHeader,
     groupByDomain: groupByDomain,
     cssHref: cssHref,
     INSTR_COMMON: INSTR_COMMON,
-    INSTR_READING: INSTR_READING
+    INSTR_READING: INSTR_READING,
+    IDENTITY: IDENTITY
   };
 })(typeof window !== "undefined" ? window : globalThis);
