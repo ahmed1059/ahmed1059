@@ -1,6 +1,6 @@
 # موجة ج: نموذج إجابة نافس التدريبي + استبانة الطالب (A4)
-# مرجع بصري: دليل تطبيق نافس 2026 (ETEC) — ورقة الإجابة وجهان.
-# بلا مفاتيح إجابة، وبلا اختلاق نصوص بنود الاستبانة.
+# مرجع: نموذج الإجابة الرسمي الممسوح (١-٤…٤-٤) للثالث المتوسط + دليل نافس/ETEC.
+# بلا مفاتيح إجابة. نصوص الاستبانة من الأصل الرسمي فقط (لا اختلاق).
 from __future__ import annotations
 
 from typing import Any
@@ -13,32 +13,31 @@ SCHOOL_NAME = "متوسطة سعد بن الربيع الأنصاري"
 GRADE = "الثالث المتوسط"
 EDUCATION_OFFICE = "الإدارة العامة للتعليم بمنطقة المدينة المنورة"
 
-# شبكة إجابات التدريب: ١–٧٥ في ٥ أعمدة رأسية (RTL)
-ANSWER_ITEM_COUNT = 75
+# شبكة إجابات النموذج الرسمي للثالث المتوسط: ١–٦٦ في ٥ أعمدة رأسية (RTL)
+ANSWER_ITEM_COUNT = 66
 ANSWER_COLUMNS = 5
 ANSWER_CHOICES = ("أ", "ب", "ج", "د")
 
-# شبكات التظليل العمودية
-SCHOOL_CODE_DIGITS = 6
+# شبكات التظليل العمودية (رمز المدرسة ٥ خانات في النموذج الرسمي)
+SCHOOL_CODE_DIGITS = 5
 NATIONAL_ID_DIGITS = 10
 
 FORM_LABELS = {
     "1-4": "ورقة الإجابات",
     "2-4": "استبانة الطالب — عن الطالب",
-    "3-4": "استبانة الطالب — عن المدرسة",
+    "3-4": "استبانة الطالب — عن المدرسة والمعلمين",
     "4-4": "استبانة الطالب — عن المعلمين والمواد الدراسية",
 }
 
-# بنود الاستبانة ١–٢٢: هيكل موثّق من مواصفات الموجة فقط.
-# نصوص الأسئلة (stem) تُترك فارغة عمداً — مصدرها كتيب نافس الرسمي، لا تُختلق هنا.
-# أنواع الخيارات والأنماط (تعدد / مصفوفة) وفق مواصفات الطلب والمرجع البصري.
 MULTI_SELECT_BANNER = "يمكن للطالب تعبئة أكثر من إجابة"
-CLOSING_PHRASE = "انتهت استبانة الطالب — راجع تظليلك وفق تعليمات الملاحظ قبل التسليم."
+CLOSING_PHRASE = "شكرًا لإجابتكم على هذه الاستبانة"
 
 SOURCE_REF = (
-    "دليل تطبيق الاختبارات الوطنية نافس 2026 · هيئة تقويم التعليم والتدريب / المركز الوطني للقياس"
+    "نموذج الإجابة اختبار نافس (مسح رسمي ١-٤…٤-٤) · "
+    "هيئة تقويم التعليم والتدريب / المركز الوطني للقياس"
 )
 WAVE_TAG = "wave-c-answer-sheet"
+STEM_SOURCE = "نموذج الإجابة اختبار نافس الرسمي — استبانة الطالب"
 
 
 def _e(value: Any) -> str:
@@ -63,94 +62,269 @@ def _item(
     section: str,
     page: str,
     kind: str,
-    choices: tuple[str, ...] | list[str],
+    stem: str,
+    choices: tuple[str, ...] | list[str] = ANSWER_CHOICES,
+    choice_labels: tuple[str, ...] | list[str] | None = None,
     multi: bool = False,
-    matrix_rows: int = 0,
     matrix_cols: tuple[str, ...] | list[str] | None = None,
+    matrix_row_labels: tuple[str, ...] | list[str] | None = None,
 ) -> dict[str, Any]:
-    """بند استبانة هيكلي — stem فارغ (لا اختلاق)."""
+    """بند استبانة من النص الرسمي — بلا اختلاق."""
+    labels = list(choice_labels) if choice_labels is not None else list(choices)
+    if choice_labels is not None and kind != "matrix":
+        keys = list(ANSWER_CHOICES[: len(labels)]) if len(choices) != len(labels) else list(choices)
+        if len(keys) != len(labels):
+            keys = list(ANSWER_CHOICES[: len(labels)])
+    else:
+        keys = list(choices)
     row: dict[str, Any] = {
         "n": n,
         "n_ar": _e(n),
         "section": section,
         "page": page,
         "kind": kind,
-        "choices": list(choices),
+        "choices": keys,
+        "choice_labels": labels,
         "multi": bool(multi),
-        "stem": "",
-        "stem_source": "كتيب استبانة نافس الرسمي — يُعرض عند التوفر دون اختلاق",
+        "stem": stem,
+        "stem_source": STEM_SOURCE,
     }
     if multi:
         row["banner"] = MULTI_SELECT_BANNER
     if kind == "matrix":
-        rows = max(0, int(matrix_rows))
-        cols = list(matrix_cols or ANSWER_CHOICES)
+        row_labels = list(matrix_row_labels or [])
+        cols = list(matrix_cols or ("صفر", "١", "٢", "٣ أو أكثر"))
         row["matrix"] = {
-            "rows": [{"i": i + 1, "i_ar": _e(i + 1), "label": ""} for i in range(rows)],
+            "rows": [
+                {
+                    "i": i + 1,
+                    "i_ar": _e(i + 1),
+                    "label": row_labels[i] if i < len(row_labels) else "",
+                    "key": ANSWER_CHOICES[i] if i < len(ANSWER_CHOICES) else _e(i + 1),
+                }
+                for i in range(len(row_labels))
+            ],
             "cols": cols,
         }
+        # مفاتيح تظليل الأعمدة أ…د بعدد أعمدة المصفوفة
+        row["choices"] = list(ANSWER_CHOICES[: len(cols)])
     return row
 
 
 def questionnaire_items() -> list[dict[str, Any]]:
-    """٢٢ بنداً موزّعة على ٣ صفحات استبانة (٢-٤…٤-٤)."""
-    # عن الطالب — صفحة ٢-٤ · بنود ١–٨
-    # ٢ و٥ متعددة الاختيار · ٨ مصفوفة
+    """٢٢ بنداً بنصوص النموذج الرسمي — صفحات ٢-٤…٤-٤."""
+    freq4 = ("دائمًا", "غالبًا", "أحيانًا", "مطلقًا")
+    abs_late = ("أسبوعيًا", "شهريًا", "نادرًا", "لا أتغيب")
+    late4 = ("أسبوعيًا", "شهريًا", "نادرًا", "لا أتأخر")
+    enjoy4 = ("كبير", "متوسط", "ضعيف", "لا أستمتع بدراستها")
+    benefit4 = ("كبير", "متوسط", "ضعيف", "لا أستفيد منه")
+    difficulty3 = ("صعبة", "متوسطة الصعوبة", "سهلة")
+    count4 = ("صفر", "١", "٢", "٣ أو أكثر")
+    peer4 = ("أسبوعيًا", "شهريًا", "نادرًا", "أبدًا")
+
     student = [
-        _item(1, section="عن الطالب", page="2-4", kind="yn", choices=("أ", "ب")),
-        _item(2, section="عن الطالب", page="2-4", kind="multi", choices=("أ", "ب", "ج", "د"), multi=True),
-        _item(3, section="عن الطالب", page="2-4", kind="single", choices=("أ", "ب", "ج", "د")),
-        _item(4, section="عن الطالب", page="2-4", kind="single", choices=("أ", "ب", "ج", "د")),
-        _item(5, section="عن الطالب", page="2-4", kind="multi", choices=("أ", "ب", "ج", "د"), multi=True),
-        _item(6, section="عن الطالب", page="2-4", kind="single", choices=("أ", "ب", "ج", "د")),
-        _item(7, section="عن الطالب", page="2-4", kind="single", choices=("أ", "ب", "ج", "د")),
+        _item(
+            1,
+            section="عن الطالب",
+            page="2-4",
+            kind="single",
+            stem="أتحدث باللغة العربية في المنزل:",
+            choice_labels=freq4,
+        ),
+        _item(
+            2,
+            section="عن الطالب",
+            page="2-4",
+            kind="multi",
+            multi=True,
+            stem="أي مما يلي لديك في المنزل؟",
+            choice_labels=("حاسب آلي", "جوال", "إنترنت", "ألعاب إلكترونية"),
+        ),
+        _item(
+            3,
+            section="عن الطالب",
+            page="2-4",
+            kind="single",
+            stem="أستخدم الإنترنت في الأغراض الدراسية:",
+            choice_labels=freq4,
+        ),
+        _item(
+            4,
+            section="عن الطالب",
+            page="2-4",
+            kind="yn",
+            stem="هل درست في مرحلة التمهيدي؟",
+            choices=("أ", "ب"),
+            choice_labels=("نعم", "لا"),
+        ),
+        _item(
+            5,
+            section="عن الطالب",
+            page="2-4",
+            kind="multi",
+            multi=True,
+            stem="أسكن مع:",
+            choice_labels=("أبي", "أمي", "إخواني وأخواتي", "أشخاص آخرين"),
+        ),
+        _item(
+            6,
+            section="عن الطالب",
+            page="2-4",
+            kind="single",
+            stem="أتغيب عن المدرسة:",
+            choice_labels=abs_late,
+        ),
+        _item(
+            7,
+            section="عن الطالب",
+            page="2-4",
+            kind="single",
+            stem="أتأخر عن المدرسة:",
+            choice_labels=late4,
+        ),
         _item(
             8,
             section="عن الطالب",
             page="2-4",
             kind="matrix",
-            choices=ANSWER_CHOICES,
-            matrix_rows=4,
-            matrix_cols=ANSWER_CHOICES,
+            stem="كم عندكم في المنزل مما يلي؟",
+            matrix_cols=count4,
+            matrix_row_labels=("أ. سيارة", "ب. عاملة منزلية", "ج. سائق"),
         ),
     ]
-    # عن المدرسة — صفحة ٣-٤ · بنود ٩–١٥ · ١٠ مصفوفة
+
+    # صفحة ٣-٤: عن المدرسة (٩–١٠) ثم بداية المعلمين (١١–١٦)
     school = [
-        _item(9, section="عن المدرسة", page="3-4", kind="single", choices=("أ", "ب", "ج", "د")),
+        _item(
+            9,
+            section="عن المدرسة",
+            page="3-4",
+            kind="single",
+            stem="أحب مدرستي بشكل:",
+            choices=("أ", "ب", "ج"),
+            choice_labels=("قوي", "متوسط", "ضعيف"),
+        ),
         _item(
             10,
             section="عن المدرسة",
             page="3-4",
             kind="matrix",
-            choices=ANSWER_CHOICES,
-            matrix_rows=4,
-            matrix_cols=ANSWER_CHOICES,
+            stem="خلال هذه السنة الدراسية، هل قام زملاؤك في المدرسة بتصرفات غير جيدة معك؟",
+            matrix_cols=peer4,
+            matrix_row_labels=(
+                "أ. سخروا مني",
+                "ب. ضربوني أو هددوني",
+                "ج. نشروا معلومات محرجة عني",
+            ),
         ),
-        _item(11, section="عن المدرسة", page="3-4", kind="yn", choices=("أ", "ب")),
-        _item(12, section="عن المدرسة", page="3-4", kind="single", choices=("أ", "ب", "ج", "د")),
-        _item(13, section="عن المدرسة", page="3-4", kind="single", choices=("أ", "ب", "ج", "د")),
-        _item(14, section="عن المدرسة", page="3-4", kind="yn", choices=("أ", "ب")),
-        _item(15, section="عن المدرسة", page="3-4", kind="single", choices=("أ", "ب", "ج", "د")),
     ]
-    # عن المعلمين والمواد — صفحة ٤-٤ · بنود ١٦–٢٢ · ٢٢ مصفوفة
-    teachers = [
-        _item(16, section="عن المعلمين والمواد الدراسية", page="4-4", kind="single", choices=("أ", "ب", "ج", "د")),
-        _item(17, section="عن المعلمين والمواد الدراسية", page="4-4", kind="single", choices=("أ", "ب", "ج", "د")),
-        _item(18, section="عن المعلمين والمواد الدراسية", page="4-4", kind="single", choices=("أ", "ب", "ج", "د")),
-        _item(19, section="عن المعلمين والمواد الدراسية", page="4-4", kind="yn", choices=("أ", "ب")),
-        _item(20, section="عن المعلمين والمواد الدراسية", page="4-4", kind="single", choices=("أ", "ب", "ج", "د")),
-        _item(21, section="عن المعلمين والمواد الدراسية", page="4-4", kind="single", choices=("أ", "ب", "ج", "د")),
+    teachers_p3 = [
+        _item(
+            11,
+            section="عن المعلمين والمواد الدراسية",
+            page="3-4",
+            kind="single",
+            stem="أستمتع بدراسة اللغة العربية بشكل:",
+            choice_labels=enjoy4,
+        ),
+        _item(
+            12,
+            section="عن المعلمين والمواد الدراسية",
+            page="3-4",
+            kind="single",
+            stem="أستمتع بدراسة الرياضيات بشكل:",
+            choice_labels=enjoy4,
+        ),
+        _item(
+            13,
+            section="عن المعلمين والمواد الدراسية",
+            page="3-4",
+            kind="single",
+            stem="أستمتع بدراسة العلوم بشكل:",
+            choice_labels=enjoy4,
+        ),
+        _item(
+            14,
+            section="عن المعلمين والمواد الدراسية",
+            page="3-4",
+            kind="single",
+            stem="أستفيد من معلم اللغة العربية بشكل:",
+            choice_labels=benefit4,
+        ),
+        _item(
+            15,
+            section="عن المعلمين والمواد الدراسية",
+            page="3-4",
+            kind="single",
+            stem="أستفيد من معلم الرياضيات بشكل:",
+            choice_labels=benefit4,
+        ),
+        _item(
+            16,
+            section="عن المعلمين والمواد الدراسية",
+            page="3-4",
+            kind="single",
+            stem="أستفيد من معلم العلوم بشكل:",
+            choice_labels=benefit4,
+        ),
+    ]
+
+    teachers_p4 = [
+        _item(
+            17,
+            section="عن المعلمين والمواد الدراسية",
+            page="4-4",
+            kind="single",
+            stem="تُعد مادة اللغة العربية بالنسبة لي:",
+            choices=("أ", "ب", "ج"),
+            choice_labels=difficulty3,
+        ),
+        _item(
+            18,
+            section="عن المعلمين والمواد الدراسية",
+            page="4-4",
+            kind="single",
+            stem="تُعد مادة الرياضيات بالنسبة لي:",
+            choices=("أ", "ب", "ج"),
+            choice_labels=difficulty3,
+        ),
+        _item(
+            19,
+            section="عن المعلمين والمواد الدراسية",
+            page="4-4",
+            kind="single",
+            stem="تُعد مادة العلوم بالنسبة لي:",
+            choices=("أ", "ب", "ج"),
+            choice_labels=difficulty3,
+        ),
+        _item(
+            20,
+            section="عن المعلمين والمواد الدراسية",
+            page="4-4",
+            kind="single",
+            stem="كم مرة يعطيك المعلمون واجبًا منزليًا؟",
+            choice_labels=("يوميًا", "أسبوعيًا", "شهريًا", "لا يعطونني أي واجب"),
+        ),
+        _item(
+            21,
+            section="عن المعلمين والمواد الدراسية",
+            page="4-4",
+            kind="single",
+            stem="كم تقضي من الوقت في حل الواجبات المنزلية؟",
+            choices=("أ", "ب", "ج"),
+            choice_labels=("ساعة", "أكثر من ساعة", "لا شيء"),
+        ),
         _item(
             22,
             section="عن المعلمين والمواد الدراسية",
             page="4-4",
             kind="matrix",
-            choices=ANSWER_CHOICES,
-            matrix_rows=5,
-            matrix_cols=ANSWER_CHOICES,
+            stem="خلال آخر فصل دراسي، كم درسًا خصوصيًا أو إضافيًا حضرته للمواد التالية؟",
+            matrix_cols=count4,
+            matrix_row_labels=("أ. الرياضيات", "ب. العلوم", "ج. اللغة العربية"),
         ),
     ]
-    return student + school + teachers
+    return student + school + teachers_p3 + teachers_p4
 
 
 def answer_columns(item_count: int | None = None) -> list[dict[str, Any]]:
@@ -377,6 +551,7 @@ def build_training_form_pack(
             "multi_banner": MULTI_SELECT_BANNER,
             "closing": CLOSING_PHRASE,
             "stems_invented": False,
+            "stems_from_official": True,
         },
         "labels_ar": {
             "full_name": "الاسم الرباعي",

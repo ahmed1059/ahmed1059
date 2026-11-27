@@ -60,7 +60,7 @@
   }
 
   function digitGridHtml(grid, prefix) {
-    var cols = Number(grid.columns) || 6;
+    var cols = Number(grid.columns) || 5;
     var digits = grid.digits || [];
     var colHtml = "";
     for (var c = 0; c < cols; c += 1) {
@@ -213,12 +213,12 @@
       "</div></div></div>" +
       "<div class=\"nafs-c-grids\">" +
       digitGridHtml(sheet.national_id_grid || { columns: 10, label: "رقم السجل المدني / رقم الإقامة", digits: [] }, "nid") +
-      digitGridHtml(sheet.school_code_grid || { columns: 6, label: "رمز المدرسة", digits: [] }, "scode") +
+      digitGridHtml(sheet.school_code_grid || { columns: 5, label: "رمز المدرسة", digits: [] }, "scode") +
       "</div>" +
       "<div class=\"nafs-c-sky-bar\">" +
       esc(labels.answers || "إجابات الأسئلة") +
       " ( " +
-      ltrForce(sheet.item_count_ar || sheet.item_count || 75) +
+      ltrForce(sheet.item_count_ar || sheet.item_count || 66) +
       " )</div>" +
       "<div class=\"nafs-c-answer-block\"><div class=\"nafs-c-answer-cols\">" +
       colHtml +
@@ -239,14 +239,13 @@
       "<div class=\"nafs-c-stem-slot\" title=\"" +
       esc(item.stem_source || "") +
       "\">" +
-      (item.stem
-        ? esc(item.stem)
-        : "نص البند من كتيب الاستبانة الرسمي — خانة تدريب بلا اختلاق") +
+      esc(item.stem || "") +
       "</div>";
 
     var body = "";
     if (item.kind === "matrix" && item.matrix) {
-      var cols = item.matrix.cols || ["أ", "ب", "ج", "د"];
+      var cols = item.matrix.cols || ["صفر", "١", "٢", "٣ أو أكثر"];
+      var colKeys = item.choices || ["أ", "ب", "ج", "د"];
       var head =
         "<tr><th></th>" +
         cols
@@ -258,12 +257,17 @@
       var rows = (item.matrix.rows || [])
         .map(function (r) {
           return (
-            "<tr><td>" +
-            esc(r.i_ar || east(r.i)) +
+            "<tr><td class=\"nafs-c-matrix-label\">" +
+            esc(r.label || r.i_ar || east(r.i)) +
             "</td>" +
             cols
-              .map(function (c) {
-                return "<td>" + bubble(c, "q:" + item.n + ":r" + r.i + ":" + c) + "</td>";
+              .map(function (_c, idx) {
+                var key = colKeys[idx] || east(idx + 1);
+                return (
+                  "<td>" +
+                  bubble("·", "q:" + item.n + ":r" + r.i + ":" + key) +
+                  "</td>"
+                );
               })
               .join("") +
             "</tr>"
@@ -272,15 +276,16 @@
         .join("");
       body = "<table class=\"nafs-c-matrix\"><thead>" + head + "</thead><tbody>" + rows + "</tbody></table>";
     } else {
-      var yn = item.kind === "yn";
+      var keys = item.choices || ["أ", "ب", "ج", "د"];
+      var labels = item.choice_labels || [];
       body =
         "<div class=\"nafs-c-choices\">" +
-        (item.choices || ["أ", "ب", "ج", "د"])
+        keys
           .map(function (ch, idx) {
-            var label = yn ? (idx === 0 ? "نعم" : "لا") : "";
+            var label = labels[idx] || "";
             return (
               "<span class=\"nafs-c-choice\">" +
-              (label ? "<span>" + esc(label) + "</span>" : "") +
+              (label ? "<span class=\"nafs-c-choice-label\">" + esc(label) + "</span>" : "") +
               bubble(ch, "q:" + item.n + ":" + ch) +
               "</span>"
             );
@@ -292,6 +297,8 @@
     return (
       "<article class=\"nafs-c-q-item\" data-item=\"" +
       esc(item.n) +
+      "\" data-section=\"" +
+      esc(item.section || "") +
       "\">" +
       multi +
       "<div class=\"nafs-c-q-head\"><span class=\"nafs-c-badge\">" +
@@ -311,11 +318,22 @@
     var pageMeta = (pack.pages || []).filter(function (p) {
       return p.code === pageCode;
     })[0] || {};
-    var section = pageMeta.section || items[0] && items[0].section || "";
     var closing =
       pageCode === "4-4"
-        ? "<div class=\"nafs-c-closing\">" + esc(q.closing || "") + "</div>"
+        ? "<div class=\"nafs-c-closing\">" + esc(q.closing || "شكرًا لإجابتكم على هذه الاستبانة") + "</div>"
         : "";
+
+    var bodyHtml = "";
+    var lastSection = "";
+    items.forEach(function (it) {
+      var sec = it.section || "";
+      if (sec && sec !== lastSection) {
+        bodyHtml +=
+          "<div class=\"nafs-c-sky-bar nafs-c-section-banner\">" + esc(sec) + "</div>";
+        lastSection = sec;
+      }
+      bodyHtml += questionnaireItemHtml(it);
+    });
 
     return (
       "<section class=\"nafs-c-page\" data-page=\"" +
@@ -330,16 +348,13 @@
       esc(pageMeta.code_ar || east(String(pageCode || "").replace("-", "–"))) +
       "</div>" +
       "<div class=\"nafs-c-etec-row\">" +
-      "<div class=\"nafs-c-sky-bar\" style=\"flex:1;margin:0\">" +
-      esc(section) +
-      "</div>" +
       "<div class=\"nafs-c-page-box\">صفحة رقم ( " +
       east(pageIndex) +
       " ) · " +
       esc(pageMeta.code_ar || east(String(pageCode || "").replace("-", "–"))) +
       "</div></div>" +
-      "<p class=\"nafs-c-note\">تظليل تفاعلي للتدريب. نصوص البنود تُقرأ من كتيب نافس الرسمي ولا تُختلق في النظام.</p>" +
-      items.map(questionnaireItemHtml).join("") +
+      "<p class=\"nafs-c-note\">نصوص البنود من نموذج نافس الرسمي — صيغة موحّدة لجميع الطلاب.</p>" +
+      bodyHtml +
       closing +
       "</section>"
     );

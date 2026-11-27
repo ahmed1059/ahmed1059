@@ -342,8 +342,10 @@ def verify_answer_sheet_a4() -> dict[str, Any]:
     items = questionnaire_items()
     if len(items) != 22:
         errors.append("questionnaire count")
-    if any((it.get("stem") or "").strip() for it in items):
-        errors.append("invented questionnaire stems")
+    if any(not (it.get("stem") or "").strip() for it in items):
+        errors.append("questionnaire stems missing official text")
+    if pack.get("questionnaire", {}).get("stems_invented") is not False:
+        errors.append("stems_invented must be false")
     sheet = pack.get("answer_sheet") or {}
     if sheet.get("item_count") != ANSWER_ITEM_COUNT:
         errors.append("answer items")

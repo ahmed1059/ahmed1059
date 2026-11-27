@@ -42,14 +42,22 @@ def main() -> int:
     if SCHOOL_CODE != "40341" or "سعد بن الربيع" not in SCHOOL_NAME:
         errors.append("school identity")
 
-    if eastern_digits(75) != "٧٥" or eastern_digits("40341") != "٤٠٣٤١":
+    if eastern_digits(66) != "٦٦" or eastern_digits("40341") != "٤٠٣٤١":
         errors.append("eastern digits")
 
     items = questionnaire_items()
     if len(items) != 22:
         errors.append(f"questionnaire must be 22 got {len(items)}")
-    if any((it.get("stem") or "").strip() for it in items):
-        errors.append("questionnaire stems must stay empty (no invention)")
+    if any(not (it.get("stem") or "").strip() for it in items):
+        errors.append("questionnaire stems must be filled from official form")
+    # عيّنة من النص الرسمي — لا اختلاق
+    by_n = {it["n"]: it for it in items}
+    if by_n[1].get("stem") != "أتحدث باللغة العربية في المنزل:":
+        errors.append("stem 1 mismatch")
+    if by_n[22].get("stem") != "خلال آخر فصل دراسي، كم درسًا خصوصيًا أو إضافيًا حضرته للمواد التالية؟":
+        errors.append("stem 22 mismatch")
+    if by_n[11].get("page") != "3-4" or by_n[11].get("section") != "عن المعلمين والمواد الدراسية":
+        errors.append("teachers section must start at item 11 on page 3-4")
     multi_ns = {it["n"] for it in items if it.get("multi")}
     if multi_ns != {2, 5}:
         errors.append(f"multi-select items expected {{2,5}} got {multi_ns}")
@@ -70,8 +78,12 @@ def main() -> int:
         errors.append("pack meta / no_answer_key")
     if pack["questionnaire"].get("stems_invented") is not False:
         errors.append("stems_invented flag")
+    if pack["questionnaire"].get("stems_from_official") is not True:
+        errors.append("stems_from_official flag")
     if pack["questionnaire"].get("multi_banner") != MULTI_SELECT_BANNER:
         errors.append("multi banner")
+    if pack["questionnaire"].get("closing") != "شكرًا لإجابتكم على هذه الاستبانة":
+        errors.append("official closing phrase")
     if pack["answer_sheet"]["item_count"] != ANSWER_ITEM_COUNT:
         errors.append("answer item count")
     cols = pack["answer_sheet"]["columns"]
@@ -79,9 +91,9 @@ def main() -> int:
         errors.append("answer columns")
     flat = [n for c in cols for n in (x["n"] for x in c["items"])]
     if flat != list(range(1, ANSWER_ITEM_COUNT + 1)):
-        errors.append("answer numbering 1..75 contiguous RTL columns")
-    if pack["answer_sheet"]["school_code_grid"]["columns"] != 6:
-        errors.append("school code grid width")
+        errors.append("answer numbering 1..66 contiguous RTL columns")
+    if pack["answer_sheet"]["school_code_grid"]["columns"] != 5:
+        errors.append("school code grid width must be 5")
     if pack["answer_sheet"]["national_id_grid"]["columns"] != 10:
         errors.append("national id grid width")
     etec = pack["answer_sheet"].get("etec_ltr") or []
