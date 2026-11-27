@@ -34,35 +34,57 @@ def main() -> int:
         ".nafs-b-choices",
         "grid-template-columns: 1fr 1fr",
         ".nafs-b-qnum",
+        ".nafs-b-school-header",
+        ".nafs-b-key-grid",
+        ".nafs-b-key-banner",
+        "is-sheet",
+        "is-flow",
         "@media print",
         "210mm",
     ):
         if needle not in css:
             errors.append(f"css missing: {needle}")
+    # سبب الصفحات الفارغة السابق: min-height 297mm على كل صفحة أسئلة
+    if "min-height: 297mm" in css and ".nafs-b-page.is-flow" not in css:
+        errors.append("flow pages must not force full A4 min-height (blank pages)")
 
     js = JS.read_text(encoding="utf-8")
     for needle in (
         "function renderBooklet",
+        "function renderAnswerKey",
+        "function schoolHeader",
         "function dividerPage",
         "function choiceGrid",
         "nafs-b-choices",
+        "nafs-b-school-header",
         "INSTR_READING",
         "diagram_svg",
         "groupByDomain",
         "القسم ",
         "نموذج تدريبي",
+        "/assets/ministry_logo.png",
+        "/assets/vision_2030.png",
+        "الإدارة العامة للتعليم بمنطقة المدينة المنورة",
+        "متوسطة سعد بن الربيع الأنصاري",
     ):
         if needle not in js:
             errors.append(f"js missing: {needle}")
     # لا اختلاق رسوم: لا مسارات صور وهمية
     if "placeholder.svg" in js or "fake-diagram" in js:
         errors.append("must not invent diagram assets")
+    # لا استخدام القالب المحصّن في كراسة نافس المنزلية
+    if "doc-official-header" in js or "official-document-frame" in js:
+        errors.append("must not reuse fortified official-frame classes in booklet")
 
     adaptive_js = ADAPTIVE_JS.read_text(encoding="utf-8")
     if "NafsHomeMockBooklet" not in adaptive_js or "renderBooklet" not in adaptive_js:
         errors.append("adaptive must print via NafsHomeMockBooklet")
+    if "renderAnswerKey" not in adaptive_js:
+        errors.append("adaptive must print key via renderAnswerKey")
     if "home-mock-booklet" not in adaptive_js and "nafs-home-mock-booklet.css" not in adaptive_js:
         errors.append("adaptive must load booklet css")
+    if 'مفتاح التصحيح لولي الأمر</h2>' in adaptive_js and "renderAnswerKey" not in adaptive_js:
+        errors.append("legacy inline key markup must be replaced by renderAnswerKey")
 
     adaptive_py = ADAPTIVE_PY.read_text(encoding="utf-8")
     if 'row["diagram_svg"]' not in adaptive_py and "diagram_svg" not in adaptive_py:

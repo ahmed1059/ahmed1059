@@ -373,7 +373,6 @@
   }
 
   function printHomeMock(pack) {
-    var key = pack.answer_key || [];
     var sheetApi = window.NafsWaveCAnswerSheet || {};
     var bookletApi = window.NafsHomeMockBooklet || {};
     var css = homeMockCssHrefs();
@@ -393,33 +392,9 @@
         : "<section dir=\"rtl\"><p>تعذر تحميل قالب الكراسة.</p></section>";
 
     var keyHtml =
-      "<section class=\"home-mock-key nafs-b-page\" dir=\"rtl\">" +
-      "<h2 style=\"color:#0b5e56;\">مفتاح التصحيح لولي الأمر</h2>" +
-      (key.length
-        ? "<ol>" +
-          key
-            .map(function (r) {
-              return (
-                "<li>" +
-                east(r.n) +
-                " → " +
-                esc(r.answer || "") +
-                " · " +
-                esc(r.skill || "") +
-                "</li>"
-              );
-            })
-            .join("") +
-          "</ol>"
-        : "<p>لا مفتاح محفوظ لهذه الحزمة — تُعرض الإجابات المعتمدة فقط عند توفرها في البنك.</p>") +
-      "<h3 style=\"color:#0b5e56;\">إقرار ولي الأمر المراقب (شاهد <span class=\"etec-code\" dir=\"ltr\">" +
-      esc(pack.evidence_code_ar || "١-٣-١-٢") +
-      "</span>)</h3>" +
-      "<p>" +
-      esc(pack.parent_pledge || "") +
-      "</p>" +
-      "<p style=\"margin-top:28px;\">اسم ولي الأمر: ........................ &nbsp;&nbsp; التوقيع: ........................ &nbsp;&nbsp; التاريخ: ............</p>" +
-      "</section>";
+      typeof bookletApi.renderAnswerKey === "function"
+        ? bookletApi.renderAnswerKey(pack)
+        : "<section class=\"nafs-b-page is-flow\" dir=\"rtl\"><p>تعذر تحميل مفتاح التصحيح.</p></section>";
 
     var wrapped =
       "<link rel=\"stylesheet\" href=\"" +

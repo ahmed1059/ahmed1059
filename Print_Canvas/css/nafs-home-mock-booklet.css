@@ -7,35 +7,108 @@
   --nafs-b-ink: #1a1a1a;
   --nafs-b-line: #d0d5dd;
   --nafs-b-soft: #e8f1fb;
+  --nafs-b-teal: #0b5e56;
 }
 
 .nafs-b-host {
   direction: rtl;
   color: var(--nafs-b-ink);
   font-family: "Tajawal", "Segoe UI", Tahoma, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
+@page nafs-home-mock-a4 {
+  size: A4 portrait;
+  margin: 0;
+}
+
+/* صفحات مقصودة فقط — بلا min-height 297mm على صفحات الأسئلة (سبب الصفحات الفارغة) */
 .nafs-b-page {
   position: relative;
   width: 210mm;
-  min-height: 297mm;
   max-width: 100%;
-  margin: 0 auto 12px;
-  padding: 12mm 14mm 14mm;
+  margin: 0 auto 10px;
+  padding: 10mm 12mm 12mm;
   box-sizing: border-box;
   background: #fff;
+  break-after: page;
   page-break-after: always;
 }
 
-.nafs-b-page:last-child {
+.nafs-b-page.is-last {
+  break-after: auto;
   page-break-after: auto;
 }
 
-.nafs-b-cover {
+.nafs-b-page.is-sheet {
+  /* غلاف / فاصل: صفحة واحدة بدون فيضان */
+  height: 277mm;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  min-height: 260mm;
+  gap: 8px;
+}
+
+.nafs-b-page.is-flow {
+  height: auto;
+  min-height: 0;
+}
+
+/* ترويسة المدرسة — تناسب طراز نافس البنفسجي/الأزرق */
+.nafs-b-school-header {
+  display: grid;
+  grid-template-columns: 140px 1fr 140px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 4px 8px;
+  border-bottom: 2px solid var(--nafs-b-purple);
+  margin-bottom: 8px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.nafs-b-school-header .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nafs-b-school-header .logo img {
+  max-height: 52px;
+  max-width: 140px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.nafs-b-school-header .identity {
+  text-align: center;
+  color: var(--nafs-b-purple-deep);
+  line-height: 1.35;
+}
+
+.nafs-b-school-header .identity span {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.nafs-b-school-header .identity .school {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--nafs-b-teal);
+  margin-top: 2px;
+}
+
+.nafs-b-school-header.is-on-divider {
+  border-bottom-color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 6px;
+}
+
+.nafs-b-school-header.is-on-divider .identity {
+  color: var(--nafs-b-purple-deep);
 }
 
 .nafs-b-cover-hero {
@@ -45,54 +118,42 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 12px;
-  padding: 28mm 12mm;
+  gap: 10px;
+  padding: 18mm 10mm;
   border-radius: 4px;
   background: var(--nafs-b-purple);
   color: #fff;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .nafs-b-cover-hero h1 {
   margin: 0;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 800;
 }
 
 .nafs-b-cover-hero p {
   margin: 0;
-  font-size: 15px;
-  line-height: 1.7;
-  opacity: 0.95;
+  font-size: 14px;
+  line-height: 1.65;
+  opacity: 0.96;
 }
 
 .nafs-b-cover-meta {
   border: 1px solid var(--nafs-b-line);
   border-radius: 8px;
-  padding: 12px 14px;
+  padding: 10px 12px;
   font-size: 13px;
-  line-height: 1.8;
+  line-height: 1.75;
   background: #fafbff;
 }
 
-.nafs-b-cover-meta .etec-ltr {
+.nafs-b-cover-meta .etec-ltr,
+.nafs-b-key .etec-ltr {
   direction: ltr;
   unicode-bidi: isolate;
   display: inline-block;
-}
-
-.nafs-b-divider {
-  display: flex;
-  flex-direction: column;
-  min-height: 260mm;
-  padding: 8mm 0 0;
-}
-
-.nafs-b-divider-mark {
-  align-self: flex-start;
-  color: var(--nafs-b-blue);
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 10px;
 }
 
 .nafs-b-divider-panel {
@@ -101,11 +162,13 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 28px;
-  padding: 28mm 16mm;
+  gap: 22px;
+  padding: 18mm 14mm;
   background: var(--nafs-b-purple);
   color: #fff;
   overflow: hidden;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .nafs-b-divider-panel::before {
@@ -131,13 +194,13 @@
 
 .nafs-b-divider-title h2 {
   margin: 0 0 10px;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 800;
 }
 
 .nafs-b-divider-title p {
   margin: 4px 0;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
 }
 
@@ -150,15 +213,15 @@
 
 .nafs-b-divider-instructions h3 {
   margin: 0 0 10px;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
 }
 
 .nafs-b-divider-instructions ul {
   margin: 0;
   padding: 0 18px 0 0;
-  font-size: 14px;
-  line-height: 1.85;
+  font-size: 13px;
+  line-height: 1.8;
 }
 
 .nafs-b-qpage-head {
@@ -166,15 +229,11 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 14px;
+  margin: 0 0 10px;
   color: var(--nafs-b-blue);
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.45;
-}
-
-.nafs-b-qpage-head .brand {
-  text-align: start;
 }
 
 .nafs-b-qpage-head .brand span {
@@ -182,8 +241,10 @@
 }
 
 .nafs-b-qblock {
-  padding: 10px 0 14px;
+  padding: 8px 0 12px;
   border-bottom: 1px solid var(--nafs-b-line);
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .nafs-b-qblock:last-child {
@@ -194,7 +255,7 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .nafs-b-qnum {
@@ -205,43 +266,43 @@
   min-width: 28px;
   color: var(--nafs-b-blue);
   font-weight: 800;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .nafs-b-qnum::before {
   content: "";
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 2px;
   background: var(--nafs-b-blue);
 }
 
 .nafs-b-qstem {
   flex: 1 1 auto;
-  font-size: 14px;
-  line-height: 1.75;
+  font-size: 13.5px;
+  line-height: 1.7;
   font-weight: 600;
 }
 
 .nafs-b-passage {
-  margin: 0 0 10px;
-  padding: 10px 12px;
+  margin: 0 0 8px;
+  padding: 8px 10px;
   border: 1px solid var(--nafs-b-line);
   border-radius: 8px;
   background: #fbfcfe;
-  font-size: 13px;
-  line-height: 1.75;
+  font-size: 12.5px;
+  line-height: 1.7;
   white-space: pre-wrap;
 }
 
 .nafs-b-passage strong {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: var(--nafs-b-blue);
 }
 
 .nafs-b-diagram {
-  margin: 8px 0 10px;
+  margin: 6px 0 8px;
   max-width: 100%;
   overflow: hidden;
 }
@@ -250,7 +311,7 @@
 .nafs-b-diagram img {
   display: block;
   max-width: min(100%, 340px);
-  max-height: 180px;
+  max-height: 160px;
   margin-inline: auto;
   direction: ltr;
 }
@@ -258,10 +319,10 @@
 .nafs-b-choices {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px 18px;
-  margin-top: 8px;
-  font-size: 13px;
-  line-height: 1.55;
+  gap: 6px 16px;
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 1.5;
 }
 
 .nafs-b-choice {
@@ -287,13 +348,123 @@
   font-weight: 700;
 }
 
+/* مفتاح التصحيح لولي الأمر */
+.nafs-b-key-banner {
+  background: var(--nafs-b-purple);
+  color: #fff;
+  text-align: center;
+  font-weight: 800;
+  font-size: 18px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin: 0 0 12px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.nafs-b-key-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.nafs-b-key-item {
+  display: grid;
+  grid-template-columns: 36px 40px 1fr;
+  gap: 6px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid var(--nafs-b-line);
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fff, #f7f8ff);
+  font-size: 13px;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.nafs-b-key-item .n {
+  color: var(--nafs-b-blue);
+  font-weight: 800;
+}
+
+.nafs-b-key-item .ans {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--nafs-b-soft);
+  color: var(--nafs-b-purple-deep);
+  font-weight: 800;
+  border: 1px solid #c5d8f2;
+}
+
+.nafs-b-key-item .skill {
+  color: #334155;
+  font-size: 12px;
+}
+
+.nafs-b-key-empty {
+  padding: 12px;
+  border: 1px dashed var(--nafs-b-line);
+  border-radius: 8px;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+.nafs-b-pledge {
+  border: 1.5px solid var(--nafs-b-purple);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #fafbff;
+}
+
+.nafs-b-pledge h3 {
+  margin: 0 0 8px;
+  color: var(--nafs-b-teal);
+  font-size: 15px;
+}
+
+.nafs-b-pledge p {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.nafs-b-pledge-signs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.nafs-b-pledge-signs span {
+  display: block;
+  border-bottom: 1px dashed #94a3b8;
+  min-height: 28px;
+  padding-top: 18px;
+}
+
 @media print {
+  .nafs-b-host,
   .nafs-b-page {
-    margin: 0;
-    box-shadow: none;
-    page-break-after: always;
+    page: nafs-home-mock-a4;
   }
-  .nafs-b-page:last-child {
-    page-break-after: auto;
+  .nafs-b-page {
+    margin: 0 !important;
+    box-shadow: none !important;
+    width: 210mm;
+  }
+  .nafs-b-page.is-sheet {
+    height: 297mm;
+    padding: 10mm 12mm 12mm;
+    overflow: hidden;
+  }
+  .nafs-b-page.is-flow {
+    height: auto;
+    min-height: 0;
   }
 }
