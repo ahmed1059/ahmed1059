@@ -492,17 +492,77 @@
     return { ok: true };
   }
 
-  function mountInteractive(host, pack) {
+  function collectSurveyAnswers(root) {
+    /* طبقة الاستبانة فقط — يتجاهل ans/nid/scode/sec */
+    var answers = {};
+    if (!root) return answers;
+    root.querySelectorAll(".nafs-c-bubble.is-on[data-nafs-c^=\"q:\"]").forEach(function (btn) {
+      var key = btn.getAttribute("data-nafs-c") || "";
+      var parts = key.split(":");
+      if (parts.length < 3) return;
+      var n = String(parts[1] || "");
+      if (!n) return;
+      if (parts[2] && parts[2].charAt(0) === "r") {
+        var row = String(parts[2]).replace(/^r/, "");
+        var choice = parts[3] || "";
+        if (!answers[n]) answers[n] = { kind: "matrix", rows: {} };
+        answers[n].rows[row] = choice;
+        return;
+      }
+      var ch = parts[2] || "";
+      var item = btn.closest(".nafs-c-q-item");
+      var multi = !!(item && item.querySelector(".nafs-c-multi-banner"));
+      if (!answers[n]) answers[n] = { kind: multi ? "multi" : "single", choices: [] };
+      if (answers[n].choices.indexOf(ch) === -1) answers[n].choices.push(ch);
+    });
+    return answers;
+  }
+
+  function applySurveyAnswers(root, answers) {
+    if (!root || !answers) return;
+    Object.keys(answers).forEach(function (n) {
+      var entry = answers[n] || {};
+      if (entry.kind === "matrix" && entry.rows) {
+        Object.keys(entry.rows).forEach(function (rk) {
+          var ch = entry.rows[rk];
+          var sel =
+            '[data-nafs-c="q:' + n + ":r" + rk + ":" + ch + '"]';
+          var btn = root.querySelector(sel);
+          if (btn) {
+            btn.classList.add("is-on");
+            btn.setAttribute("aria-pressed", "true");
+          }
+        });
+        return;
+      }
+      (entry.choices || []).forEach(function (ch) {
+        var btn = root.querySelector('[data-nafs-c="q:' + n + ":" + ch + '"]');
+        if (btn) {
+          btn.classList.add("is-on");
+          btn.setAttribute("aria-pressed", "true");
+        }
+      });
+    });
+  }
+
+  function mountInteractive(host, pack, opts) {
     if (!host) return null;
+    opts = opts || {};
+    var surveyTools = opts.surveyTools
+      ? "<button type=\"button\" class=\"aj-detail-btn portal-btn\" data-nafs-c-draft>حفظ مسودة الاستبانة</button>" +
+        "<button type=\"button\" class=\"aj-detail-btn portal-btn\" data-nafs-c-snapshot>اعتماد لقطة استبانة</button>"
+      : "";
     host.innerHTML =
       "<div class=\"nafs-c-toolbar\">" +
+      surveyTools +
       "<button type=\"button\" class=\"aj-detail-btn portal-btn\" data-nafs-c-print>طباعة النموذج A4 (١-٤…٤-٤)</button>" +
       "<button type=\"button\" class=\"aj-detail-btn aj-detail-btn-secondary portal-btn secondary\" data-nafs-c-reset>مسح التظليل</button>" +
       "</div>" +
-      "<p class=\"nafs-c-train-hint\">وضع تدريب تفاعلي: اضغط الدوائر للتظليل كما في الورقة الرسمية.</p>" +
+      "<p class=\"nafs-c-train-hint\">وضع تدريب تفاعلي: اضغط الدوائر للتظليل كما في الورقة الرسمية. حفظ المسودة واعتماد اللقطة يخصّان <strong>بنود الاستبانة فقط</strong> ولا يرصدان تظليل صفحة الإجابات.</p>" +
       renderPack(pack);
     host.classList.add("nafs-c-train-host");
     bindBubbles(host);
+    if (opts.surveyDraft) applySurveyAnswers(host, opts.surveyDraft);
     var printBtn = host.querySelector("[data-nafs-c-print]");
     if (printBtn) {
       printBtn.addEventListener("click", function () {
@@ -518,6 +578,17 @@
         });
       });
     }
+    if (typeof opts.onReady === "function") {
+      opts.onReady({
+        host: host,
+        collectSurveyAnswers: function () {
+          return collectSurveyAnswers(host);
+        },
+        applySurveyAnswers: function (a) {
+          applySurveyAnswers(host, a);
+        }
+      });
+    }
     return host;
   }
 
@@ -529,6 +600,8 @@
     openPrint: openPrint,
     openOmrPrint: openOmrPrint,
     mountInteractive: mountInteractive,
-    bindBubbles: bindBubbles
+    bindBubbles: bindBubbles,
+    collectSurveyAnswers: collectSurveyAnswers,
+    applySurveyAnswers: applySurveyAnswers
   };
 })(typeof window !== "undefined" ? window : globalThis);

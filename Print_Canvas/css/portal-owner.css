@@ -248,3 +248,16 @@
   background: #e8f5f1;
   color: #0b5e56;
 }
+
+.survey-stats-filters .survey-sensitive-toggle { display:flex; align-items:center; gap:8px; margin:8px 0; font-size:13px; color:#5c675f; }
+.survey-stats-groups { display:grid; gap:12px; margin:12px 0; }
+.survey-stats-card { border:1px solid #c9d7d3; border-radius:12px; padding:10px 12px; background:#f8fbfa; }
+.survey-stats-card h3 { margin:0 0 8px; font-size:16px; color:#0b5e56; }
+.survey-stats-items article { border:1px solid #e2e8f0; border-radius:12px; padding:10px; margin-bottom:10px; background:#fff; }
+.survey-stats-items .delta-up { color:#15803d; font-weight:700; }
+.survey-stats-items .delta-down { color:#b91c1c; font-weight:700; }
+.survey-stats-items .delta-flat { color:#64748b; }
+.survey-stats-items table { width:100%; border-collapse:collapse; font-size:12.5px; }
+.survey-stats-items th,.survey-stats-items td { border:1px solid #e2e8f0; padding:6px 7px; text-align:right; }
+.survey-stats-items th { background:#eef7f4; color:#0b5e56; }
+.survey-sensitive-badge { display:inline-block; margin-inline-start:6px; font-size:11px; color:#9a3412; background:#ffedd5; padding:2px 6px; border-radius:999px; }
