@@ -43,8 +43,10 @@ def main() -> int:
         errors.append("must not claim ready without open result")
 
     html = PORTAL.read_text(encoding="utf-8")
-    if "print-engine.js?v=pe2" not in html:
+    if "print-engine.js?v=" not in html:
         errors.append("portal-student cache bump for print-engine")
+    if "pageMargin" not in ENGINE.read_text(encoding="utf-8"):
+        errors.append("print-engine must honor arm.pageMargin")
     if "portal-student-adaptive.js?v=" not in html:
         errors.append("portal-student cache bump for adaptive")
 

@@ -44,17 +44,19 @@ def main() -> int:
     ):
         if needle not in css:
             errors.append(f"css missing: {needle}")
-    # عيب PDF المرفق: height:297mm على الغلاف/الفاصل → صفحات فارغة في Chrome
+    # الغلاف/الفواصل بلا ارتفاع A4؛ ورقة OMR تستعيد 297mm مع فصل المفتاح
     import re
 
-    if re.search(r"(?m)^\s*height:\s*297mm", css):
-        errors.append("booklet must not force height:297mm (Chrome blank remnant pages)")
+    if re.search(r"\.nafs-b-page\.is-sheet[^{]*\{[^}]*height:\s*297mm", css, re.S):
+        errors.append("booklet sheet pages must not force height:297mm")
     if "break-inside: avoid" not in css and "page-break-inside: avoid" not in css:
         errors.append("sheet pages need break-inside avoid")
     if "home-mock-print .nafs-c-page" not in css:
-        errors.append("home-mock OMR pages must override fixed A4 height")
-    if "height: auto !important" not in css:
-        errors.append("print sheets must force height:auto")
+        errors.append("home-mock must style OMR pages")
+    if "page-break-before: always" not in css and "break-before: page" not in css:
+        errors.append("answer key must force new page before itself")
+    if ".nafs-b-key" not in css:
+        errors.append("key page styles required")
 
     js = JS.read_text(encoding="utf-8")
     for needle in (
@@ -72,11 +74,15 @@ def main() -> int:
         "نموذج تدريبي",
         "/assets/ministry_logo.png",
         "/assets/vision_2030.png",
+        "/assets/nafs_logo.png",
+        "function assetUrl",
         "الإدارة العامة للتعليم بمنطقة المدينة المنورة",
         "متوسطة سعد بن الربيع الأنصاري",
     ):
         if needle not in js:
             errors.append(f"js missing: {needle}")
+    if not (ROOT / "School_Data" / "assets" / "nafs_logo.png").is_file():
+        errors.append("missing School_Data/assets/nafs_logo.png")
     # لا اختلاق رسوم: لا مسارات صور وهمية
     if "placeholder.svg" in js or "fake-diagram" in js:
         errors.append("must not invent diagram assets")

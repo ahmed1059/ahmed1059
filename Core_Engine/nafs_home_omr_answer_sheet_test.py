@@ -84,6 +84,8 @@ def main() -> int:
     for needle in (
         "ministry_id_ar",
         "function renderOmrOnly",
+        "nafs-c-brand-row",
+        "nafs_logo.png",
         "openOmrPrint",
         "omr_only",
         'dir=\\"ltr\\"',
