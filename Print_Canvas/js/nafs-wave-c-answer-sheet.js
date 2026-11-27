@@ -6,11 +6,28 @@
   "use strict";
 
   var EASTERN = "٠١٢٣٤٥٦٧٨٩";
+  var PERSIAN = "۰۱۲۳۴۵۶۷۸۹";
 
   function east(value) {
-    return String(value == null ? "" : value).replace(/\d/g, function (d) {
-      return EASTERN[Number(d)] || d;
-    }).replace(/%/g, "٪");
+    return String(value == null ? "" : value)
+      .replace(/[۰-۹]/g, function (d) {
+        var i = PERSIAN.indexOf(d);
+        return i >= 0 ? EASTERN.charAt(i) : d;
+      })
+      .replace(/[0-9]/g, function (d) {
+        return EASTERN.charAt(Number(d)) || d;
+      })
+      .replace(/%/g, "٪");
+  }
+
+  function ltrForce(text) {
+    var raw = east(text);
+    if (!raw) return "";
+    return (
+      "<span class=\"etec-ltr etec-force\" dir=\"ltr\">\u2066" +
+      esc(raw) +
+      "\u2069</span>"
+    );
   }
 
   function esc(value) {
@@ -81,7 +98,7 @@
             return (
               "<div class=\"nafs-c-qrow\">" +
               "<span class=\"nafs-c-qnum\">" +
-              esc(it.n_ar || east(it.n)) +
+              ltrForce(it.n_ar || it.n) +
               "</span>" +
               (it.choices || ["أ", "ب", "ج", "د"])
                 .map(function (ch) {
@@ -166,7 +183,7 @@
       "<div><label>" +
       esc(labels.national_id || "السجل المدني") +
       "</label><div class=\"nafs-c-field\">" +
-      esc(student.national_id || "") +
+      ltrForce(student.national_id || "") +
       "</div></div>" +
       "<div><label>" +
       esc(labels.school_name || "اسم المدرسة") +
@@ -175,11 +192,13 @@
       "</div></div>" +
       "<div><label>" +
       esc(labels.ministry_no || "الرقم الوزاري") +
-      "</label><div class=\"nafs-c-field etec-ltr\" dir=\"ltr\">" +
-      esc(
+      "</label><div class=\"nafs-c-field\">" +
+      ltrForce(
         school.ministry_id_ar ||
+          school.ministry_id ||
           school.code_ar ||
-          east(school.ministry_id || school.code || "40341")
+          school.code ||
+          "S-40341"
       ) +
       "</div></div>" +
       "<div><label>" +
@@ -199,12 +218,12 @@
       "<div class=\"nafs-c-sky-bar\">" +
       esc(labels.answers || "إجابات الأسئلة") +
       " ( " +
-      esc(sheet.item_count_ar || east(sheet.item_count || 75)) +
+      ltrForce(sheet.item_count_ar || sheet.item_count || 75) +
       " )</div>" +
       "<div class=\"nafs-c-answer-block\"><div class=\"nafs-c-answer-cols\">" +
       colHtml +
       "</div></div>" +
-      "<div class=\"nafs-c-vlabel\">الاختبارات الوطنية (نافس) — " +
+      "<div class=\"nafs-c-vlabel\" aria-hidden=\"true\">الاختبارات الوطنية (نافس) — " +
       esc(student.grade || school.grade_default || "") +
       "</div>" +
       "</section>"
@@ -487,6 +506,7 @@
 
   global.NafsWaveCAnswerSheet = {
     east: east,
+    ltrForce: ltrForce,
     renderPack: renderPack,
     renderOmrOnly: renderOmrOnly,
     openPrint: openPrint,

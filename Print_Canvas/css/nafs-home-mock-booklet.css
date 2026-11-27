@@ -86,7 +86,11 @@
   width: auto;
   height: auto;
   object-fit: contain;
+  object-position: center;
   display: block;
+  direction: ltr;
+  transform: none !important;
+  unicode-bidi: isolate;
 }
 
 .nafs-b-school-header .logo-nafs img,
@@ -300,7 +304,17 @@
 .nafs-b-range,
 .nafs-b-qnum,
 .etec-ltr {
+  direction: ltr;
   unicode-bidi: isolate;
+}
+
+/* قسري ضد عكس الأرقام في Chrome PDF داخل RTL */
+.etec-force,
+.etec-ltr.etec-force {
+  direction: ltr !important;
+  unicode-bidi: bidi-override !important;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 /* أسس وكسور داخل الكراسة (مسار الطباعة لا يحمّل portal-student.css) */
@@ -431,8 +445,9 @@
   flex: 1 1 auto;
 }
 
+/* قوس إغلاق واضح بدل شرطة | التي تنقلب في RTL وتبدو كحرف زائد */
 .nafs-b-choice .lbl::after {
-  content: " |";
+  content: ")";
   color: var(--nafs-b-blue);
   font-weight: 700;
 }
@@ -619,6 +634,33 @@
     break-after: page !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+  }
+
+  /* إبعاد التسمية عن علامات التوقيت على الحافة */
+  .home-mock-print .nafs-c-vlabel {
+    writing-mode: horizontal-tb !important;
+    transform: none !important;
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    inset-inline-end: auto !important;
+    top: auto !important;
+    bottom: 3.5mm !important;
+    translate: -50% 0;
+    font-size: 9px !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap;
+    max-width: 70%;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .home-mock-print .nafs-c-brand-logo {
+    max-height: 40px !important;
+    max-width: 120px !important;
+    object-fit: contain !important;
+    transform: none !important;
+    direction: ltr;
   }
 
   /* مفتاح التصحيح دائماً صفحة جديدة بعد OMR */
