@@ -120,6 +120,22 @@
       ? esc(pack.title || pack.title_ar || "ورقة التظليل الضوئي (OMR)")
       : "ورقة الإجابة صفحة ( " + east(1) + " ) — إجابات الأسئلة";
 
+    var logoBase = "/assets/";
+    try {
+      if (typeof location !== "undefined" && location.origin) {
+        logoBase = location.origin + "/assets/";
+      }
+    } catch (err) {}
+    var brandRow =
+      "<div class=\"nafs-c-brand-row\">" +
+      "<img class=\"nafs-c-brand-logo\" src=\"" +
+      logoBase +
+      "ministry_logo.png\" alt=\"وزارة التعليم\" width=\"120\" height=\"40\" loading=\"eager\" decoding=\"sync\">" +
+      "<img class=\"nafs-c-brand-logo nafs-c-brand-nafs\" src=\"" +
+      logoBase +
+      "nafs_logo.png\" alt=\"نافس\" width=\"90\" height=\"36\" loading=\"eager\" decoding=\"sync\">" +
+      "</div>";
+
     return (
       "<section class=\"nafs-c-page\" data-page=\"" +
       pageCode +
@@ -127,6 +143,7 @@
       "<div class=\"nafs-c-timing is-start\" aria-hidden=\"true\">" +
       timingMarks(30) +
       "</div>" +
+      brandRow +
       "<div class=\"nafs-c-banner\">" +
       bannerTitle +
       " · <span class=\"etec-ltr\" dir=\"ltr\">ETEC / Qiyas / NAFS</span></div>" +

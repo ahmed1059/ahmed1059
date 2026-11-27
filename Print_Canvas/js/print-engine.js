@@ -58,7 +58,13 @@
     /* الافتراضي طولي؛ العرضي فقط عند arm.orientation === "landscape" صراحةً */
     var landscape = arm.orientation === "landscape";
     var multi = !!(arm.multiPage || arm.list);
-    var margin = multi ? "10mm" : "0";
+    /* الصفحة المنزلية/الكراسات تحتاج هامش ٠ حتى لا يفيض OMR بارتفاع A4 */
+    var margin =
+      arm.pageMargin != null && String(arm.pageMargin).trim() !== ""
+        ? String(arm.pageMargin).trim()
+        : multi
+          ? "10mm"
+          : "0";
     var size = landscape ? "A4 landscape" : "A4 portrait";
     var named = landscape ? "print-master-a4-landscape" : "print-master-a4";
     var footMm = Number(arm.footerHeight);

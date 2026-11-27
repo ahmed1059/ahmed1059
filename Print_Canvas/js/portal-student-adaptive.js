@@ -412,8 +412,15 @@
     function openVisiblePreview() {
       var w = window.open("", "_blank");
       if (!w) return false;
+      var origin = "";
+      try {
+        origin = String(window.location.origin || "");
+      } catch (err) {}
       w.document.write(
-        "<!DOCTYPE html><html lang=\"ar\" dir=\"rtl\"><head><meta charset=\"utf-8\"><title>اختبار منزلي</title>" +
+        "<!DOCTYPE html><html lang=\"ar\" dir=\"rtl\"><head><meta charset=\"utf-8\">" +
+          (origin ? "<base href=\"" + esc(origin) + "/\">" : "") +
+          "<title>اختبار منزلي</title>" +
+          "<style>@page{size:A4 portrait;margin:0;}html,body{margin:0;padding:0;}</style>" +
           "<link rel=\"stylesheet\" href=\"" +
           esc(css.booklet) +
           "\">" +
@@ -425,7 +432,7 @@
           omrHtml +
           keyHtml +
           "</div>" +
-          "<script>window.addEventListener('load',function(){try{window.focus();window.print();}catch(e){}});<\/script>" +
+          "<script>(function(){function go(){try{window.focus();window.print();}catch(e){}}function wait(){var imgs=Array.prototype.slice.call(document.images||[]);var left=imgs.length;if(!left){go();return;}imgs.forEach(function(img){if(img.complete){left--;return;}img.addEventListener('load',done);img.addEventListener('error',done);});function done(){left--;if(left<=0)go();}if(left<=0)go();setTimeout(go,3500);}if(document.readyState==='complete')wait();else window.addEventListener('load',wait);})();<\/script>" +
           "</body></html>"
       );
       w.document.close();
@@ -438,7 +445,7 @@
         docTitle: "اختبار منزلي بإشراف ولي الأمر + OMR",
         multiPage: true,
         orientation: "portrait",
-        arm: { orientation: "portrait", multiPage: true }
+        arm: { orientation: "portrait", multiPage: true, pageMargin: "0" }
       });
       if (opened && opened.ok) {
         return { ok: true, via: opened.via || "print-engine", preview: !!opened.preview };

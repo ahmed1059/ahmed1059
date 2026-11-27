@@ -30,8 +30,22 @@
     admin: "الإدارة العامة للتعليم بمنطقة المدينة المنورة",
     school: "متوسطة سعد بن الربيع الأنصاري",
     ministryLogo: "/assets/ministry_logo.png",
-    visionLogo: "/assets/vision_2030.png"
+    visionLogo: "/assets/vision_2030.png",
+    nafsLogo: "/assets/nafs_logo.png"
   };
+
+  /** روابط مطلقة حتى لا تختفي الصور داخل إطار الطباعة / window.open */
+  function assetUrl(path) {
+    var raw = String(path || "");
+    if (!raw) return "";
+    if (/^(https?:|data:)/i.test(raw)) return raw;
+    try {
+      if (typeof location !== "undefined" && location.origin) {
+        return new URL(raw, location.origin + "/").href;
+      }
+    } catch (err) {}
+    return raw;
+  }
 
   function east(value) {
     return String(value == null ? "" : value)
@@ -92,8 +106,8 @@
       '">' +
       '<div class="logo logo-ministry">' +
       '<img src="' +
-      esc(IDENTITY.ministryLogo) +
-      '" alt="وزارة التعليم" width="140" height="52">' +
+      esc(assetUrl(IDENTITY.ministryLogo)) +
+      '" alt="وزارة التعليم" width="140" height="52" loading="eager" decoding="sync">' +
       "</div>" +
       '<div class="identity">' +
       "<span>" +
@@ -111,10 +125,20 @@
       "</div>" +
       '<div class="logo logo-vision">' +
       '<img src="' +
-      esc(IDENTITY.visionLogo) +
-      '" alt="رؤية 2030" width="140" height="52">' +
+      esc(assetUrl(IDENTITY.visionLogo)) +
+      '" alt="رؤية 2030" width="140" height="52" loading="eager" decoding="sync">' +
       "</div>" +
       "</header>"
+    );
+  }
+
+  function nafsMark() {
+    return (
+      '<div class="logo logo-nafs nafs-b-nafs-mark">' +
+      '<img src="' +
+      esc(assetUrl(IDENTITY.nafsLogo)) +
+      '" alt="نافس" width="100" height="44" loading="eager" decoding="sync">' +
+      "</div>"
     );
   }
 
@@ -122,6 +146,9 @@
     return (
       '<section class="nafs-b-page is-sheet nafs-b-cover">' +
       schoolHeader() +
+      '<div class="nafs-b-brand-row">' +
+      nafsMark() +
+      "</div>" +
       '<div class="nafs-b-cover-hero">' +
       "<h1>اختبار منزلي بإشراف ولي الأمر</h1>" +
       "<p>نماذج تدريبية على طراز الاختبارات الوطنية (نافس)</p>" +
@@ -354,9 +381,11 @@
 
   global.NafsHomeMockBooklet = {
     east: east,
+    assetUrl: assetUrl,
     renderBooklet: renderBooklet,
     renderAnswerKey: renderAnswerKey,
     schoolHeader: schoolHeader,
+    nafsMark: nafsMark,
     groupByDomain: groupByDomain,
     cssHref: cssHref,
     INSTR_COMMON: INSTR_COMMON,
