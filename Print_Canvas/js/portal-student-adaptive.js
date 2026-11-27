@@ -478,6 +478,79 @@
       });
   }
 
+  function authJsonHeaders() {
+    return Object.assign({ "Content-Type": "application/json" }, api.authHeaders());
+  }
+
+  function loadBeneficiarySatisfaction() {
+    var host = el("benef-sat-host");
+    if (!host) return;
+    if (!window.BeneficiarySatisfaction || typeof window.BeneficiarySatisfaction.mount !== "function") {
+      api.status("وحدة قياس رضا المستفيد غير محمّلة.", true);
+      return;
+    }
+    api.status("جارٍ تجهيز قياس رضا المستفيد…");
+    Promise.all([
+      api.fetchJson("/api/portal/beneficiary-satisfaction/form", {
+        headers: api.authHeaders(),
+        cache: "no-store"
+      }),
+      api
+        .fetchJson("/api/portal/beneficiary-satisfaction/draft", {
+          headers: api.authHeaders(),
+          cache: "no-store"
+        })
+        .catch(function () {
+          return { answers: {} };
+        })
+    ])
+      .then(function (pair) {
+        var pack = pair[0] || {};
+        var draft = pair[1] || {};
+        window.BeneficiarySatisfaction.mount(host, pack, {
+          draftAnswers: draft.answers || {},
+          onSaveDraft: function (answers) {
+            api.status("جارٍ حفظ مسودة رضا المستفيد…");
+            api
+              .fetchJson("/api/portal/beneficiary-satisfaction/draft", {
+                method: "PUT",
+                headers: authJsonHeaders(),
+                body: JSON.stringify({ answers: answers })
+              })
+              .then(function () {
+                api.status("حُفظت مسودة قياس الرضا — قابلة للتعديل دائمًا.");
+              })
+              .catch(function (err) {
+                api.status(err.message || "تعذر حفظ المسودة.", true);
+              });
+          },
+          onSnapshot: function (answers) {
+            api.status("جارٍ اعتماد لقطة رضا المستفيد…");
+            api
+              .fetchJson("/api/portal/beneficiary-satisfaction/snapshot", {
+                method: "POST",
+                headers: authJsonHeaders(),
+                body: JSON.stringify({ answers: answers })
+              })
+              .then(function (res) {
+                api.status(
+                  "اعتُمدت لقطة رضا المستفيد (" +
+                    (res.round_key_ar || res.round_key || "") +
+                    ") — المسودة محفوظة."
+                );
+              })
+              .catch(function (err) {
+                api.status(err.message || "تعذر اعتماد اللقطة.", true);
+              });
+          }
+        });
+        api.status("نموذج قياس رضا المستفيد جاهز (منفصل عن استبانة نافس).");
+      })
+      .catch(function (err) {
+        api.status(err.message || "تعذر تحميل النموذج.", true);
+      });
+  }
+
   function bind() {
     var list = el("readalong-list");
     if (list) {
@@ -632,6 +705,10 @@
     }
 
     document.body.addEventListener("click", function (event) {
+      var satOpen = event.target.closest('[data-open-station="satisfaction"]');
+      if (satOpen) {
+        setTimeout(loadBeneficiarySatisfaction, 0);
+      }
       if (!el("readalong-stage") || el("readalong-stage").hidden) return;
       if (event.target.id === "ra-play") {
         speakFrom(readState.sentenceIndex || 0);

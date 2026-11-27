@@ -487,6 +487,59 @@
     });
   }
 
+  function loadBeneficiarySatisfaction() {
+    var host = document.getElementById("parent-benef-sat-host");
+    if (!host) return Promise.resolve(null);
+    if (!window.BeneficiarySatisfaction || typeof window.BeneficiarySatisfaction.mount !== "function") {
+      status("وحدة قياس رضا المستفيد غير محمّلة.", true);
+      return Promise.resolve(null);
+    }
+    return Promise.all([
+      fetchJson("/api/portal/beneficiary-satisfaction/form", { headers: headers(), cache: "no-store" }),
+      fetchJson("/api/portal/beneficiary-satisfaction/draft", { headers: headers(), cache: "no-store" }).catch(
+        function () {
+          return { answers: {} };
+        }
+      )
+    ]).then(function (pair) {
+      window.BeneficiarySatisfaction.mount(host, pair[0] || {}, {
+        draftAnswers: (pair[1] && pair[1].answers) || {},
+        onSaveDraft: function (answers) {
+          fetchJson("/api/portal/beneficiary-satisfaction/draft", {
+            method: "PUT",
+            headers: headers(),
+            body: JSON.stringify({ answers: answers })
+          })
+            .then(function () {
+              status("حُفظت مسودة قياس رضا المستفيد.");
+            })
+            .catch(function (e) {
+              status(e.message, true);
+            });
+        },
+        onSnapshot: function (answers) {
+          fetchJson("/api/portal/beneficiary-satisfaction/snapshot", {
+            method: "POST",
+            headers: headers(),
+            body: JSON.stringify({ answers: answers })
+          })
+            .then(function (res) {
+              status(
+                "اعتُمدت لقطة رضا المستفيد (" +
+                  (res.round_key_ar || res.round_key || "") +
+                  ") · شاهد " +
+                  toEastern(res.evidence_code_ar || "١-٣-١-٣")
+              );
+            })
+            .catch(function (e) {
+              status(e.message, true);
+            });
+        }
+      });
+      return pair[0];
+    });
+  }
+
   function boot() {
     var raw = session();
     if (!raw || !raw.token || raw.actor_type !== "parent") {
@@ -508,13 +561,17 @@
         });
       };
     }
-    loadHome().catch(function (err) {
-      status(err.message || "خطأ", true);
-      if (err.status === 401) {
-        sessionStorage.removeItem(TOKEN_KEY);
-        location.href = "login.html";
-      }
-    });
+    loadHome()
+      .then(function () {
+        return loadBeneficiarySatisfaction();
+      })
+      .catch(function (err) {
+        status(err.message || "خطأ", true);
+        if (err.status === 401) {
+          sessionStorage.removeItem(TOKEN_KEY);
+          location.href = "login.html";
+        }
+      });
   }
 
   boot();

@@ -1037,6 +1037,9 @@ def init_db():
         from .nafs_survey_stats import ensure_on_boot as ensure_nafs_survey_stats
 
         ensure_nafs_survey_stats(connection)
+        from .beneficiary_satisfaction import ensure_on_boot as ensure_beneficiary_satisfaction
+
+        ensure_beneficiary_satisfaction(connection)
         from .nafs_readalong_api import ensure_on_boot as ensure_nafs_readalong
 
         ensure_nafs_readalong(connection)

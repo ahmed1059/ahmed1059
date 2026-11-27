@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>لوحة مالك المنظومة والدعم السريع</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-owner.css?v=o7">
+  <link rel="stylesheet" href="css/portal-owner.css?v=o8">
 </head>
 <body class="portal-student">
   <div class="portal-shell owner-layout">
@@ -29,6 +29,7 @@
       <button type="button" class="tab" data-owner-panel="panel-enrich">جسر الإثراء والموهبة</button>
       <button type="button" class="tab" data-owner-panel="panel-counselor">صندوق الموجّه</button>
       <button type="button" class="tab" data-owner-panel="panel-survey-stats">تقرير الاستبانة</button>
+      <button type="button" class="tab" data-owner-panel="panel-benef-sat">رضا المستفيد</button>
       <button type="button" class="tab" data-owner-panel="panel-peek">معاينة التعثر</button>
       <button type="button" class="tab" data-owner-panel="panel-clinics">عيادات علاجية</button>
       <button type="button" class="tab" data-owner-panel="panel-rbac">هرم الصلاحيات</button>
@@ -149,6 +150,24 @@
       <div id="survey-stats-items" class="survey-stats-items"></div>
     </section>
 
+    <section class="portal-card owner-panel" id="panel-benef-sat">
+      <h2>قياس رضا المستفيد — تقرير Δ</h2>
+      <p class="portal-empty" style="margin:0 0 10px;">لقطات معتمدة فقط · منفصل عن استبانة نافس وعن مؤشر الإتقان · شاهد <span class="peek-etec" dir="ltr">١-٣-١-٣</span> · أرقام هندية وبلا هويات.</p>
+      <div class="owner-form peek-filters survey-stats-filters">
+        <label>الجولة أ</label>
+        <select id="benef-round-a"></select>
+        <label>الجولة ب</label>
+        <select id="benef-round-b"></select>
+        <div class="portal-actions">
+          <button type="button" class="portal-btn" id="btn-benef-sat-refresh">تحديث التقرير</button>
+        </div>
+      </div>
+      <div id="benef-sat-summary" class="peek-summary" hidden></div>
+      <div id="benef-sat-axes" class="survey-stats-groups"></div>
+      <div id="benef-sat-groups" class="survey-stats-groups"></div>
+      <div id="benef-sat-items" class="survey-stats-items"></div>
+    </section>
+
     <section class="portal-card owner-panel" id="panel-peek">
       <h2>معاينة التعثر الحيّة (Teacher Peek)</h2>
       <p class="portal-empty" style="margin:0 0 10px;">مؤشر سريع للطلاب المتعثرين والمهارة والجذر التراكمي وحالة التطهير — من مخزن الإتقان الموحد.</p>
@@ -259,6 +278,6 @@
   <script src="js/national-id-mask.js?v=m1"></script>
   <script src="js/print-engine.js?v=pe12"></script>
   <script src="/cores/print-master-core.js?v=c308"></script>
-  <script src="js/portal-owner.js?v=o8"></script>
+  <script src="js/portal-owner.js?v=o9"></script>
 </body>
 </html>

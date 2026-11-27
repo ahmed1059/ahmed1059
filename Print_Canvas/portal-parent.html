@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بوابة ولي الأمر — الشراكة الأسرية</title>
   <link rel="stylesheet" href="css/fonts.css?v=font1">
-  <link rel="stylesheet" href="css/portal-student.css?v=p14">
-  <link rel="stylesheet" href="css/portal-parent.css?v=f3">
+  <link rel="stylesheet" href="css/portal-student.css?v=p22">
+  <link rel="stylesheet" href="css/portal-parent.css?v=f4">
+  <link rel="stylesheet" href="css/beneficiary-satisfaction.css?v=b1">
 </head>
 <body class="portal-student">
   <div class="portal-shell">
@@ -21,9 +22,15 @@
     </header>
     <p class="portal-status" id="parent-status"></p>
     <div id="parent-children" class="portal-grid family-grid"></div>
+    <section class="portal-card parent-benef-sat" id="parent-benef-sat-card">
+      <h2 style="color:#0b5e56;font-size:22px;border-bottom:2px solid #0b5e56;padding-bottom:6px;">قياس رضا المستفيد</h2>
+      <p class="section-hint">خمس محاور من مرجع التقويم والشواهد — منفصل عن استبانة نافس. مسودة قابلة للتعديل ثم لقطة معتمدة للرصد.</p>
+      <div id="parent-benef-sat-host" class="benef-sat-mount" aria-live="polite"></div>
+    </section>
   </div>
   <script src="js/print-engine.js?v=pe1"></script>
   <script src="js/national-id-mask.js?v=m1"></script>
-  <script src="js/portal-parent.js?v=f3"></script>
+  <script src="js/beneficiary-satisfaction.js?v=b1"></script>
+  <script src="js/portal-parent.js?v=f4"></script>
 </body>
 </html>
