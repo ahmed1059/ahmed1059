@@ -23,15 +23,22 @@
   margin: 0;
 }
 
-/* صفحات مقصودة فقط — بلا min-height 297mm على صفحات الأسئلة (سبب الصفحات الفارغة) */
+/*
+ * عيب PDF المرفق (صفحات ٢/٤/٨/١١/١٨ فارغة):
+ * Chrome يتجاهل overflow:hidden عند التجزئة؛ أي height:297mm + هوامش تلقائية
+ * يفيض سطراً أو شريطاً بنفسجياً إلى صفحة تالية شبه فارغة.
+ * الحل: محتوى مضغوط بلا ارتفاع A4 ثابت، و break-inside:avoid للغلاف/الفاصل.
+ */
 .nafs-b-page {
   position: relative;
   width: 210mm;
   max-width: 100%;
   margin: 0 auto 10px;
-  padding: 10mm 12mm 12mm;
+  padding: 8mm 10mm 10mm;
   box-sizing: border-box;
   background: #fff;
+  height: auto;
+  min-height: 0;
   break-after: page;
   page-break-after: always;
 }
@@ -42,13 +49,11 @@
 }
 
 .nafs-b-page.is-sheet {
-  /* غلاف / فاصل: صفحة واحدة بدون فيضان */
-  height: 277mm;
-  min-height: 0;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .nafs-b-page.is-flow {
@@ -112,14 +117,16 @@
 }
 
 .nafs-b-cover-hero {
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 10px;
-  padding: 18mm 10mm;
+  gap: 8px;
+  min-height: 95mm;
+  max-height: 130mm;
+  padding: 14mm 10mm;
   border-radius: 4px;
   background: var(--nafs-b-purple);
   color: #fff;
@@ -141,12 +148,22 @@
 }
 
 .nafs-b-cover-meta {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 14px;
   border: 1px solid var(--nafs-b-line);
   border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 13px;
-  line-height: 1.75;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  line-height: 1.55;
   background: #fafbff;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.nafs-b-cover-meta > div {
+  min-width: 0;
 }
 
 .nafs-b-cover-meta .etec-ltr,
@@ -158,12 +175,14 @@
 
 .nafs-b-divider-panel {
   position: relative;
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 22px;
-  padding: 18mm 14mm;
+  gap: 16px;
+  min-height: 150mm;
+  max-height: 200mm;
+  padding: 14mm 12mm;
   background: var(--nafs-b-purple);
   color: #fff;
   overflow: hidden;
@@ -449,20 +468,70 @@
 }
 
 @media print {
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   .nafs-b-host,
-  .nafs-b-page {
+  .nafs-b-page,
+  .home-mock-print,
+  .home-mock-print .nafs-c-page {
     page: nafs-home-mock-a4;
   }
+
   .nafs-b-page {
     margin: 0 !important;
     box-shadow: none !important;
     width: 210mm;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 8mm 10mm 10mm !important;
   }
+
   .nafs-b-page.is-sheet {
-    height: 297mm;
-    padding: 10mm 12mm 12mm;
-    overflow: hidden;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
+
+  .nafs-b-cover-hero {
+    flex: 0 0 auto !important;
+    min-height: 90mm;
+    max-height: 120mm;
+    padding: 12mm 8mm;
+  }
+
+  .nafs-b-divider-panel {
+    flex: 0 0 auto !important;
+    min-height: 140mm;
+    max-height: 185mm;
+    padding: 12mm 10mm;
+  }
+
+  .nafs-b-cover-meta,
+  .nafs-b-school-header {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* OMR داخل الحزمة المنزلية: بلا height:297mm (كان يولّد صفحة ١٨ فارغة) */
+  .home-mock-print .nafs-c-page {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    page-break-after: always;
+    break-after: page;
+  }
+
   .nafs-b-page.is-flow {
     height: auto;
     min-height: 0;
