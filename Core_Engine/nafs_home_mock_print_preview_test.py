@@ -34,6 +34,8 @@ def main() -> int:
         "printHomeMock(pack.pack",
         "result.ok",
         "allow بالنوافذ" if False else "النوافذ المنبثقة",
+        'body class=\\"home-mock-print\\"',
+        "home-mock-print",
     ):
         if needle not in adaptive:
             errors.append(f"adaptive missing: {needle}")

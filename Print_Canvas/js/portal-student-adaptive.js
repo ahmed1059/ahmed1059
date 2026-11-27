@@ -419,10 +419,12 @@
           "\">" +
           "<link rel=\"stylesheet\" href=\"" +
           esc(css.omr) +
-          "\"></head><body>" +
+          "\"></head><body class=\"home-mock-print\">" +
+          "<div class=\"nafs-c-print-root home-mock-print\" dir=\"rtl\" lang=\"ar\">" +
           booklet +
           omrHtml +
           keyHtml +
+          "</div>" +
           "<script>window.addEventListener('load',function(){try{window.focus();window.print();}catch(e){}});<\/script>" +
           "</body></html>"
       );

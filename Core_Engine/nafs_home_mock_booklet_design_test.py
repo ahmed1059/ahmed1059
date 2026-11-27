@@ -44,9 +44,17 @@ def main() -> int:
     ):
         if needle not in css:
             errors.append(f"css missing: {needle}")
-    # سبب الصفحات الفارغة السابق: min-height 297mm على كل صفحة أسئلة
-    if "min-height: 297mm" in css and ".nafs-b-page.is-flow" not in css:
-        errors.append("flow pages must not force full A4 min-height (blank pages)")
+    # عيب PDF المرفق: height:297mm على الغلاف/الفاصل → صفحات فارغة في Chrome
+    import re
+
+    if re.search(r"(?m)^\s*height:\s*297mm", css):
+        errors.append("booklet must not force height:297mm (Chrome blank remnant pages)")
+    if "break-inside: avoid" not in css and "page-break-inside: avoid" not in css:
+        errors.append("sheet pages need break-inside avoid")
+    if "home-mock-print .nafs-c-page" not in css:
+        errors.append("home-mock OMR pages must override fixed A4 height")
+    if "height: auto !important" not in css:
+        errors.append("print sheets must force height:auto")
 
     js = JS.read_text(encoding="utf-8")
     for needle in (
