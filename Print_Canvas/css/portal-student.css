@@ -933,6 +933,40 @@ body.portal-student {
 .field-icon.tone-violet .field-icon-copy strong { color: #6d28d9; }
 .field-icon.tone-sky .field-icon-copy strong { color: #0369a1; }
 .field-icon.tone-orange .field-icon-copy strong { color: #c2410c; }
+.field-icon.tone-indigo .field-icon-copy strong { color: #3730a3; }
+
+.sim-action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+.sim-action {
+  text-align: right;
+  align-items: stretch;
+  gap: 8px;
+}
+.sim-action-icon {
+  display: block;
+  width: 48px;
+  height: 48px;
+}
+.sim-action-icon svg {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+.sim-action strong {
+  display: block;
+  color: #3730a3;
+  font-size: 15px;
+}
+.sim-action > span:last-child {
+  display: block;
+  color: #64748b;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
 
 .station-shell {
   margin-top: 8px;
