@@ -562,17 +562,20 @@ def build_home_mock_pack(connection, student_nid: str, count: int = 20) -> dict:
     items = []
     key_rows = []
     for i, q in enumerate(questions, start=1):
-        items.append(
-            {
-                "n": i,
-                "stem": q.get("stem") or "",
-                "choices": q.get("choices") or {},
-                "domain": q.get("domain") or "",
-                "skill": q.get("skill") or "",
-                "passage_title": q.get("passage_title") or "",
-                "passage_text": q.get("passage_text") or "",
-            }
-        )
+        row = {
+            "n": i,
+            "stem": q.get("stem") or "",
+            "choices": q.get("choices") or {},
+            "domain": q.get("domain") or "",
+            "skill": q.get("skill") or "",
+            "passage_title": q.get("passage_title") or "",
+            "passage_text": q.get("passage_text") or "",
+        }
+        # رسوم محفوظة فقط — لا اختلاق أشكال
+        if q.get("diagram_svg"):
+            row["diagram_svg"] = q.get("diagram_svg")
+            row["diagram_alt"] = q.get("diagram_alt") or "شكل توضيحي للسؤال"
+        items.append(row)
         correct = str(q.get("correct") or "").strip().upper()
         answer_ar = letters.get(correct, "")
         if answer_ar:

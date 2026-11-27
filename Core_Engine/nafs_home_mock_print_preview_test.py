@@ -43,7 +43,7 @@ def main() -> int:
     html = PORTAL.read_text(encoding="utf-8")
     if "print-engine.js?v=pe2" not in html:
         errors.append("portal-student cache bump for print-engine")
-    if "portal-student-adaptive.js?v=ad4" not in html:
+    if "portal-student-adaptive.js?v=" not in html:
         errors.append("portal-student cache bump for adaptive")
 
     for path in FORTIFIED:

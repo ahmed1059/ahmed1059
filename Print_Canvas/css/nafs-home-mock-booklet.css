@@ -1,0 +1,299 @@
+/* كراسة الاختبار المنزلي — طراز نماذج نافس التدريبية (أ/ب) ١٤٤٧ */
+:root {
+  --nafs-b-purple: #5c5cb2;
+  --nafs-b-purple-deep: #4a4aa0;
+  --nafs-b-blue: #2f6fb5;
+  --nafs-b-gold: #c9a227;
+  --nafs-b-ink: #1a1a1a;
+  --nafs-b-line: #d0d5dd;
+  --nafs-b-soft: #e8f1fb;
+}
+
+.nafs-b-host {
+  direction: rtl;
+  color: var(--nafs-b-ink);
+  font-family: "Tajawal", "Segoe UI", Tahoma, sans-serif;
+}
+
+.nafs-b-page {
+  position: relative;
+  width: 210mm;
+  min-height: 297mm;
+  max-width: 100%;
+  margin: 0 auto 12px;
+  padding: 12mm 14mm 14mm;
+  box-sizing: border-box;
+  background: #fff;
+  page-break-after: always;
+}
+
+.nafs-b-page:last-child {
+  page-break-after: auto;
+}
+
+.nafs-b-cover {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 260mm;
+}
+
+.nafs-b-cover-hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 28mm 12mm;
+  border-radius: 4px;
+  background: var(--nafs-b-purple);
+  color: #fff;
+}
+
+.nafs-b-cover-hero h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.nafs-b-cover-hero p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  opacity: 0.95;
+}
+
+.nafs-b-cover-meta {
+  border: 1px solid var(--nafs-b-line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.8;
+  background: #fafbff;
+}
+
+.nafs-b-cover-meta .etec-ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+.nafs-b-divider {
+  display: flex;
+  flex-direction: column;
+  min-height: 260mm;
+  padding: 8mm 0 0;
+}
+
+.nafs-b-divider-mark {
+  align-self: flex-start;
+  color: var(--nafs-b-blue);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.nafs-b-divider-panel {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  padding: 28mm 16mm;
+  background: var(--nafs-b-purple);
+  color: #fff;
+  overflow: hidden;
+}
+
+.nafs-b-divider-panel::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 8%;
+  top: 12%;
+  width: 120px;
+  height: 180px;
+  background:
+    linear-gradient(135deg, transparent 46%, var(--nafs-b-gold) 47%, var(--nafs-b-gold) 53%, transparent 54%),
+    linear-gradient(45deg, transparent 46%, var(--nafs-b-gold) 47%, var(--nafs-b-gold) 53%, transparent 54%);
+  background-size: 36px 36px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.nafs-b-divider-title {
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+.nafs-b-divider-title h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.nafs-b-divider-title p {
+  margin: 4px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.nafs-b-divider-instructions {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.nafs-b-divider-instructions h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.nafs-b-divider-instructions ul {
+  margin: 0;
+  padding: 0 18px 0 0;
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.nafs-b-qpage-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: var(--nafs-b-blue);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.nafs-b-qpage-head .brand {
+  text-align: start;
+}
+
+.nafs-b-qpage-head .brand span {
+  display: block;
+}
+
+.nafs-b-qblock {
+  padding: 10px 0 14px;
+  border-bottom: 1px solid var(--nafs-b-line);
+}
+
+.nafs-b-qblock:last-child {
+  border-bottom: 0;
+}
+
+.nafs-b-qhead {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.nafs-b-qnum {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 28px;
+  color: var(--nafs-b-blue);
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.nafs-b-qnum::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--nafs-b-blue);
+}
+
+.nafs-b-qstem {
+  flex: 1 1 auto;
+  font-size: 14px;
+  line-height: 1.75;
+  font-weight: 600;
+}
+
+.nafs-b-passage {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--nafs-b-line);
+  border-radius: 8px;
+  background: #fbfcfe;
+  font-size: 13px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+.nafs-b-passage strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--nafs-b-blue);
+}
+
+.nafs-b-diagram {
+  margin: 8px 0 10px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.nafs-b-diagram svg,
+.nafs-b-diagram img {
+  display: block;
+  max-width: min(100%, 340px);
+  max-height: 180px;
+  margin-inline: auto;
+  direction: ltr;
+}
+
+.nafs-b-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 18px;
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.nafs-b-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.nafs-b-choice .lbl {
+  flex: 0 0 auto;
+  color: var(--nafs-b-blue);
+  font-weight: 800;
+  min-width: 1.4em;
+}
+
+.nafs-b-choice .txt {
+  flex: 1 1 auto;
+}
+
+.nafs-b-choice .lbl::after {
+  content: " |";
+  color: var(--nafs-b-blue);
+  font-weight: 700;
+}
+
+@media print {
+  .nafs-b-page {
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+  }
+  .nafs-b-page:last-child {
+    page-break-after: auto;
+  }
+}
