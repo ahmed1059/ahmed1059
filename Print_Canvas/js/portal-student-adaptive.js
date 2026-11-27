@@ -357,103 +357,43 @@
       });
   }
 
-  function homeMockCssHref() {
+  function homeMockCssHrefs() {
+    var foundOmr = "";
+    var foundBooklet = "";
     var links = document.querySelectorAll("link[rel=\"stylesheet\"]");
     for (var i = 0; i < links.length; i += 1) {
       var href = links[i].getAttribute("href") || "";
-      if (href.indexOf("nafs-wave-c-answer-sheet.css") !== -1) return href;
+      if (!foundOmr && href.indexOf("nafs-wave-c-answer-sheet.css") !== -1) foundOmr = href;
+      if (!foundBooklet && href.indexOf("nafs-home-mock-booklet.css") !== -1) foundBooklet = href;
     }
-    return "css/nafs-wave-c-answer-sheet.css";
+    return {
+      omr: foundOmr || "css/nafs-wave-c-answer-sheet.css",
+      booklet: foundBooklet || "css/nafs-home-mock-booklet.css"
+    };
   }
 
   function printHomeMock(pack) {
-    var items = pack.items || [];
     var key = pack.answer_key || [];
-    var letters = { A: "أ", B: "ب", C: "ج", D: "د" };
     var sheetApi = window.NafsWaveCAnswerSheet || {};
+    var bookletApi = window.NafsHomeMockBooklet || {};
+    var css = homeMockCssHrefs();
     var omrHtml = "";
     if (pack.omr_sheet && typeof sheetApi.renderOmrOnly === "function") {
       omrHtml = sheetApi.renderOmrOnly(pack.omr_sheet);
-    } else if (typeof sheetApi.renderOmrOnly === "function" && items.length) {
-      omrHtml = sheetApi.renderOmrOnly({
-        omr_only: true,
-        title: "ورقة التظليل OMR — اختبار منزلي",
-        school: {
-          name: pack.school || "",
-          code: pack.code || "40341",
-          code_ar: pack.code_ar || east(pack.code || "40341"),
-          ministry_id_ar: pack.ministry_id_ar || ""
-        },
-        student: {
-          name: pack.student_name || "",
-          national_id: pack.student_nid || "",
-          grade: pack.grade || "",
-          section: pack.section || ""
-        },
-        answer_sheet: {
-          item_count: items.length,
-          item_count_ar: east(items.length),
-          columns: [
-            {
-              items: items.map(function (q) {
-                return { n: q.n, n_ar: east(q.n), choices: ["أ", "ب", "ج", "د"] };
-              })
-            }
-          ],
-          school_code_grid: { columns: 6, label: "رمز المدرسة", digits: [] },
-          national_id_grid: { columns: 10, label: "رقم السجل المدني / رقم الإقامة", digits: [] }
-        },
-        labels_ar: { ministry_no: "الرقم الوزاري", answers: "إجابات الأسئلة" }
-      });
     } else {
       omrHtml =
         "<p class=\"portal-empty\">تعذر تحميل قالب OMR المعتمد (Sky Blue). أعد تحميل الصفحة.</p>";
     }
 
     var booklet =
-      "<section class=\"home-mock-booklet\" dir=\"rtl\">" +
-      "<h2 style=\"color:#0b5e56;text-align:center;\">اختبار منزلي بإشراف ولي الأمر</h2>" +
-      "<p><strong>الطالب:</strong> " +
-      esc(pack.student_name || "") +
-      " · الصف " +
-      esc(pack.grade || "") +
-      " / فصل " +
-      east(pack.section || "") +
-      " · المدرسة " +
-      esc(pack.school || "") +
-      " · الرقم الوزاري <span class=\"etec-ltr\" dir=\"ltr\">" +
-      esc(pack.ministry_id_ar || pack.code_ar || east(pack.code || "40341")) +
-      "</span>" +
-      " · شاهد <span class=\"etec-code\" dir=\"ltr\">" +
-      esc(pack.evidence_code_ar || "١-٣-١-٢") +
-      "</span></p>" +
-      items
-        .map(function (q) {
-          return (
-            "<p style=\"margin:10px 0;\"><strong>" +
-            east(q.n) +
-            ".</strong> " +
-            esc(q.stem || "") +
-            "<br>" +
-            ["A", "B", "C", "D"]
-              .map(function (L) {
-                return (
-                  "<span style=\"margin-left:10px;\">" +
-                  letters[L] +
-                  ") " +
-                  esc((q.choices || {})[L] || "") +
-                  "</span>"
-                );
-              })
-              .join(" ") +
-            "</p>"
-          );
-        })
-        .join("") +
-      "</section>";
+      typeof bookletApi.renderBooklet === "function"
+        ? bookletApi.renderBooklet(pack, {
+            renderArabicMath: api && api.renderArabicMath ? api.renderArabicMath : null
+          })
+        : "<section dir=\"rtl\"><p>تعذر تحميل قالب الكراسة.</p></section>";
 
     var keyHtml =
-      "<section class=\"home-mock-key\" dir=\"rtl\" style=\"page-break-before:always\">" +
+      "<section class=\"home-mock-key nafs-b-page\" dir=\"rtl\">" +
       "<h2 style=\"color:#0b5e56;\">مفتاح التصحيح لولي الأمر</h2>" +
       (key.length
         ? "<ol>" +
@@ -483,11 +423,13 @@
 
     var wrapped =
       "<link rel=\"stylesheet\" href=\"" +
-      esc(homeMockCssHref()) +
+      esc(css.booklet) +
+      "\">" +
+      "<link rel=\"stylesheet\" href=\"" +
+      esc(css.omr) +
       "\">" +
       "<div class=\"nafs-c-print-root home-mock-print\" dir=\"rtl\" lang=\"ar\">" +
       booklet +
-      "<div style=\"page-break-before:always\"></div>" +
       omrHtml +
       keyHtml +
       "</div>";
@@ -498,10 +440,12 @@
       w.document.write(
         "<!DOCTYPE html><html lang=\"ar\" dir=\"rtl\"><head><meta charset=\"utf-8\"><title>اختبار منزلي</title>" +
           "<link rel=\"stylesheet\" href=\"" +
-          esc(homeMockCssHref()) +
+          esc(css.booklet) +
+          "\">" +
+          "<link rel=\"stylesheet\" href=\"" +
+          esc(css.omr) +
           "\"></head><body>" +
           booklet +
-          "<div style=\"page-break-before:always\"></div>" +
           omrHtml +
           keyHtml +
           "<script>window.addEventListener('load',function(){try{window.focus();window.print();}catch(e){}});<\/script>" +
